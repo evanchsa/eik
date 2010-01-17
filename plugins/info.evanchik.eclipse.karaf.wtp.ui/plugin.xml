@@ -5,7 +5,15 @@
          point="org.eclipse.wst.common.project.facet.ui.images">
       <image
             path="icons/obj16/felixLogo16x16.gif"
-            runtime-component-type="info.evanchik.eclipse.karaf.server">
+            runtime-component-type="info.evanchik.eclipse.server.karaf">
+      </image>
+      <image
+            category="info.evanchik.eclipse.karaf.wtp.core.category"
+            path="icons/obj16/felixLogo16x16.gif">
+      </image>
+      <image
+            facet="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
+            path="icons/obj16/bundle_obj.gif">
       </image>
    </extension>
    <extension
@@ -19,6 +27,11 @@
             icon="icons/obj16/felixLogo16x16.gif"
             id="info.evanchik.eclipse.server.karaf.12"
             typeIds="info.evanchik.eclipse.server.karaf.12">
+      </image>
+      <image
+            icon="icons/obj16/bundle_obj.gif"
+            id="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
+            typeIds="info.evanchik.eclipse.karaf.wtp.core.facets.bundle">
       </image>
    </extension>
    <extension

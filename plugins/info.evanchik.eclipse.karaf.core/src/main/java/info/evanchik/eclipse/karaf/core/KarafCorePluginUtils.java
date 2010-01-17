@@ -29,6 +29,7 @@ import java.util.jar.Manifest;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.Bundle;
 
@@ -93,6 +94,24 @@ public final class KarafCorePluginUtils {
             throw new IllegalArgumentException(
                     "Invalid platform Missing Karaf or ServiceMix Kernel configuration file: {org.apache.servicemix|org.apache.felix.karaf}.management.cfg");
         }
+    }
+
+    /**
+     * Helper method that returns the {@link Bundle}'s location based on its
+     * symbolic name
+     *
+     * @param bundleSymbolicName
+     *            the symbolic name of the {@code Bundle}
+     * @return the location of the {@code Bundle} or {@code null}
+     */
+    public static String getBundleLocation(String bundleSymbolicName) {
+        final Bundle bundle = Platform.getBundle(bundleSymbolicName);
+        if (bundle == null) {
+            // TODO: Handle this condition better
+            return null;
+        }
+
+        return bundle.getLocation();
     }
 
     /**
@@ -192,14 +211,14 @@ public final class KarafCorePluginUtils {
      *            the string to act as glue in the concatenation
      * @return the concatenation of the specified items
      */
-    public static String join(Collection<String> items, String glue) {
+    public static String join(Collection<? extends Object> items, String glue) {
         final StringBuffer buffer = new StringBuffer();
-        for (String s : items) {
+        for (Object o : items) {
             if (buffer.length() > 0) {
                 buffer.append(glue);
             }
 
-            buffer.append(s);
+            buffer.append(o.toString());
         }
 
         return buffer.toString();
@@ -267,9 +286,7 @@ public final class KarafCorePluginUtils {
 
     }
 
-    /**
-     * Private Constructor that prevents instantiation.
-     */
     private KarafCorePluginUtils() {
+        throw new AssertionError("Cannot instantiate " + KarafCorePluginUtils.class.getName());
     }
 }

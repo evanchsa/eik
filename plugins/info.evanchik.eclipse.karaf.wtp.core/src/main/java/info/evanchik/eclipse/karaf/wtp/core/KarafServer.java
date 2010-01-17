@@ -23,6 +23,19 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
  */
 public class KarafServer extends ServerDelegate {
 
+    /**
+     * Determines if the given {@link IModule} is supported in this Karaf server
+     * instance
+     *
+     * @param module
+     *            the {@code IModule} to test
+     * @return true if the module type is supported, false otherwise
+     */
+    public static boolean isSupportedModuleType(IModule module) {
+        final String type = module.getModuleType().getId();
+        return true;
+    }
+
     public KarafServer() {
         super();
     }
@@ -41,6 +54,14 @@ public class KarafServer extends ServerDelegate {
      */
     @Override
     public IStatus canModifyModules(IModule[] add, IModule[] remove) {
+        if (add != null) {
+
+        }
+
+        if (remove != null) {
+
+        }
+
         return Status.OK_STATUS;
     }
 
@@ -59,8 +80,19 @@ public class KarafServer extends ServerDelegate {
      * modules.
      */
     @Override
-    public void modifyModules(IModule[] add, IModule[] remove, IProgressMonitor monitor)
-                    throws CoreException {
+    public void modifyModules(IModule[] add, IModule[] remove, IProgressMonitor monitor) throws CoreException {
+        final IStatus status = canModifyModules(add, remove);
+        if (status == null || !status.isOK()) {
+            throw new CoreException(status);
+        }
+
+        if (add != null) {
+
+        }
+
+        if (remove != null) {
+
+        }
     }
 
     @Override

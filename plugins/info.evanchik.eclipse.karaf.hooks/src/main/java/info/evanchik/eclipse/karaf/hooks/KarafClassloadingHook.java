@@ -37,6 +37,7 @@ public class KarafClassloadingHook implements ClassLoadingHook {
      * org.eclipse.osgi.baseadaptor.loader.ClasspathManager,
      * org.eclipse.osgi.baseadaptor.BaseData, java.security.ProtectionDomain)
      */
+    @SuppressWarnings("unchecked")
     public boolean addClassPathEntry(ArrayList cpEntries, String cp,
             ClasspathManager hostmanager, BaseData sourcedata,
             ProtectionDomain sourcedomain) {

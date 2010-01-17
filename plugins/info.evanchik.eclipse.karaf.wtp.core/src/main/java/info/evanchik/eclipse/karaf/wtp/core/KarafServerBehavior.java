@@ -17,6 +17,7 @@ import java.io.IOException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugException;
@@ -24,6 +25,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -34,7 +36,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 public class KarafServerBehavior extends ServerBehaviourDelegate implements ServiceTrackerCustomizer {
 
-    private final KarafServerLaunchConfigurationInitializer serverConfigInitializer;
+    public final int SERVER_TERMINATE_JOB_SCHEDULE_DELAY = 5000;
 
     private ServiceTracker serviceTracker;
 
@@ -42,10 +44,11 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
 
     private MBeanProvider mbeanProvider;
 
-    public KarafServerBehavior() {
-        this.serverConfigInitializer = new KarafServerLaunchConfigurationInitializer();
-    }
-
+    /**
+     * Adds the {@link MBeanProvider} service to this server instance. This
+     * service is how the workbench interacts with the running server. It also
+     * serves as a sentry that indicates the server is operational.
+     */
     public Object addingService(ServiceReference reference) {
         final String serviceMemento = (String) reference.getProperty(MBeanProvider.KARAF_WORKBENCH_SERVICES_ID);
         if (serviceMemento.equals(memento)) {
@@ -67,6 +70,14 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
         return null;
     }
 
+    /**
+     * Configures the server for launching.
+     *
+     * @param launch
+     * @param launchMode
+     * @param monitor
+     * @throws CoreException
+     */
     public void configureLaunch(ILaunch launch, String launchMode, IProgressMonitor monitor) throws CoreException {
         setServerRestartState(false);
         setServerState(IServer.STATE_STARTING);
@@ -76,8 +87,8 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
 
         memento = launch.getLaunchConfiguration().getMemento();
 
-        serviceTracker = new ServiceTracker(KarafWtpPluginActivator.getDefault().getBundle().getBundleContext(), MBeanProvider.class
-                .getName(), this);
+        final BundleContext context = KarafWtpPluginActivator.getDefault().getBundle().getBundleContext();
+        serviceTracker = new ServiceTracker(context, MBeanProvider.class.getName(), this);
         serviceTracker.open();
 
         monitor.worked(1);
@@ -93,7 +104,10 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
             if (service instanceof MBeanProvider == false) {
                 // Not possible unless a programming error
             }
+
             mbeanProvider = null;
+
+            terminate();
         }
     }
 
@@ -101,13 +115,19 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
     public void setupLaunchConfiguration(ILaunchConfigurationWorkingCopy workingCopy, IProgressMonitor monitor) throws CoreException {
         super.setupLaunchConfiguration(workingCopy, monitor);
 
-        serverConfigInitializer.initialize(workingCopy);
+        if (monitor == null) {
+            monitor = new NullProgressMonitor();
+        }
+
+        KarafServerLaunchConfigurationInitializer.initializeConfiguration(workingCopy);
 
         monitor.worked(10);
     }
 
     @Override
     public void stop(boolean force) {
+        serviceTracker.close();
+
         if (force) {
             terminate();
             return;
@@ -126,9 +146,9 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
             try {
                 if (mbeanProvider != null) {
                     mbeanProvider.getFrameworkMBean().shutdownFramework();
+                    mbeanProvider.close();
                 }
             } catch (IOException e) {
-
             }
 
             final Job j = new Job("Waiting for server to stop...") {
@@ -151,7 +171,7 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
             };
 
             j.setSystem(true);
-            j.schedule(5000);
+            j.schedule(SERVER_TERMINATE_JOB_SCHEDULE_DELAY);
         }
     }
 
@@ -166,6 +186,9 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
         setServerPublishState(IServer.PUBLISH_STATE_NONE);
     }
 
+    /**
+     * Terminates the launcher forcibly without regard to application state.
+     */
     protected void terminate() {
         if (getServer().getServerState() == IServer.STATE_STOPPED) {
             return;
@@ -179,8 +202,10 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
                 launch.terminate();
             }
 
-            setServerState(IServer.STATE_STOPPED);
         } catch (Exception e) {
+            // Ignore as this is forcibly terminating the server
+        } finally {
+            setServerState(IServer.STATE_STOPPED);
         }
     }
 }

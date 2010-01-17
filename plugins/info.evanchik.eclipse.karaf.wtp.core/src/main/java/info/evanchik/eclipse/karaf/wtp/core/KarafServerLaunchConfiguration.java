@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerUtil;
@@ -40,6 +42,16 @@ public class KarafServerLaunchConfiguration extends KarafLaunchConfigurationDele
      * this launch configuration has been created via the WTP functionality.
      */
     private KarafServerBehavior karafServer;
+
+    @Override
+    public IVMRunner getVMRunner(ILaunchConfiguration configuration, String mode) throws CoreException {
+        if(ILaunchManager.PROFILE_MODE.equals(mode)) {
+            // TODO: Figure out how to setup profiling
+            return super.getVMRunner(configuration, ILaunchManager.RUN_MODE);
+        }
+
+        return super.getVMRunner(configuration, mode);
+    }
 
     @Override
     public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {

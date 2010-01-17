@@ -17,11 +17,10 @@ import info.evanchik.eclipse.karaf.core.configuration.SystemSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.jmx.KarafMBeanProvider;
 import info.evanchik.eclipse.karaf.core.jmx.MBeanProvider;
-import info.evanchik.eclipse.karaf.core.jmx.MBeanServerConnectionDescriptor;
-import info.evanchik.eclipse.karaf.core.jmx.MBeanServerConnectionJob;
 import info.evanchik.eclipse.karaf.core.model.WorkingKarafPlatformModel;
-import info.evanchik.eclipse.karaf.jmx.KarafJMXConnectorActivator;
+import info.evanchik.eclipse.karaf.jmx.KarafJMXPlugin;
 import info.evanchik.eclipse.karaf.ui.internal.KarafLaunchConfigurationUtils;
+import info.evanchik.eclipse.karaf.ui.provider.MBeanServerConnectionJob;
 import info.evanchik.eclipse.karaf.ui.provider.RuntimeDataProvider;
 import info.evanchik.eclipse.karaf.ui.provider.internal.KarafRuntimeDataProvider;
 
@@ -30,10 +29,13 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
+import javax.management.remote.JMXServiceURL;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -53,9 +55,11 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchListener;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.equinox.jmx.client.JMXClientPlugin;
+import org.eclipse.equinox.jmx.client.JMXServiceDescriptor;
+import org.eclipse.equinox.jmx.common.JMXConstants;
 import org.eclipse.jdt.launching.SocketUtil;
 import org.eclipse.pde.internal.ui.launcher.LaunchConfigurationHelper;
-import org.eclipse.pde.internal.ui.launcher.LauncherUtils;
 import org.eclipse.pde.ui.launcher.EquinoxLaunchConfiguration;
 import org.eclipse.pde.ui.launcher.IPDELauncherConstants;
 import org.osgi.framework.Bundle;
@@ -72,7 +76,11 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     /**
      * Eclipse Equinox configuration file name
      */
-    public static String ECLIPSE_CONFIG_INI_FILE = "config.ini"; //$NON-NLS-1$
+    public static final String ECLIPSE_CONFIG_INI_FILE = "config.ini"; //$NON-NLS-1$
+
+    public static final String JMX_DOMAIN_SERVICE_KEY = "jmxDomain"; //$NON-NLS-1$
+
+    public static final String JMX_JMXRMI_DOMAIN = "jmxrmi"; //$NON-NLS-1$
 
     /**
      * From the Equinox runtime documentation:<br>
@@ -84,10 +92,16 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      * <li>app - the application classloader.</li>
      * <li>boot - the boot classloader.</li>
      * <li>ext - the extension classloader.</li>
-     * <li>current - the classloader used to load the equinox launcher.</li>
+     * <li>current - the classloader used to load the Equinox launcher.</li>
      * </ul>
      */
-    public static String OSGI_FRAMEWORK_PARENT_CLASSLOADER_KEY = "osgi.frameworkParentClassloader"; //$NON-NLS-1$
+    public static final String OSGI_FRAMEWORK_PARENT_CLASSLOADER_KEY = "osgi.frameworkParentClassloader"; //$NON-NLS-1$
+
+    /**
+     * The value used to indicate that the application classloader should be
+     * used as the parent for the Framework.
+     */
+    public static final String OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP = "app"; //$NON-NLS-1$
 
     /**
      * From the Equinox runtime documentation:<br>
@@ -96,7 +110,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      * of the basic Eclipse plug-ins and is useful if the Eclipse install is
      * disjoint. See the section on locations for more details.
      */
-    public static String OSGI_INSTALL_AREA_KEY = "osgi.install.area"; //$NON-NLS-1$
+    public static final String OSGI_INSTALL_AREA_KEY = "osgi.install.area"; //$NON-NLS-1$
 
     /**
      * From the Equinox runtime documentation:<br>
@@ -104,7 +118,13 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      * the start level value the framework will be set to at startup. The
      * default value is 6.
      */
-    public static String OSGI_START_LEVEL_KEY = "osgi.startLevel"; //$NON-NLS-1$
+    public static final String OSGI_START_LEVEL_KEY = "osgi.startLevel"; //$NON-NLS-1$
+
+    /**
+     * From the Equinox runtime documentation:<br>
+     * <br>
+     */
+    public static final String OSGI_BUNDLES_KEY = "osgi.bundles"; //$NON-NLS-1$
 
     /**
      * The source Karaf platform model for this launch configuration
@@ -117,20 +137,47 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     protected KarafPlatformModel workingKarafPlatform;
 
     /**
-     * The JMX port setup by this launch configuration
+     * This is a {@link Map} of the deployed {@link Bundle}s. The key is the
+     * {@code Bundle}'s location the value is its complete entry as parsed from
+     * a {@code config.ini}
+     */
+    private final Map<String, BundleEntry> deployedBundles =
+        new HashMap<String, BundleEntry>();
+
+    /**
+     * This is the JMX port for the standard {@code jmxrmi} JMX domain that is
+     * present on all Karaf servers.
      */
     private int jmxPort;
 
+    /**
+     * Provides access to the "standard" MBeans found in a Karaf server
+     */
     private KarafMBeanProvider mbeanProvider;
 
     private MBeanServerConnectionJob mbeanConnectionJob;
+
+    private ServiceRegistration karafMBeanProviderServiceRegistration;
 
     private RuntimeDataProvider runtimeDataProvider;
 
     private ServiceRegistration karafRuntimeDataProviderServiceRegistrtion;
 
     /**
-     * Adds the items typically found in {@code KARAF_HOME/lib} as boot
+     * This is the JMX port for the {@code jmxservice} JMX domain. This domain
+     * is responsible for the advanced workbench management and model for the
+     * running Karaf server
+     */
+    private int jmxServicePort;
+
+    /**
+     * This is the {@link JMXServiceDescriptor} for the {@code
+     * jmxservice} JMX domain
+     */
+    private JMXServiceDescriptor jmxServiceDescriptor;
+
+    /**
+     * Adds the items typically found in {@code KARAF_HOME/lib} as system
      * classpath entries.<br>
      * <br>
      * <b>This requires that
@@ -171,7 +218,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      */
     @Override
     public String[] getVMArguments(ILaunchConfiguration configuration) throws CoreException {
-        final String FRAMEWORK_EXTENSION_PREFIX = "-Dosgi.framework.extensions=";
+        final String FRAMEWORK_EXTENSION_PREFIX = "-Dosgi.framework.extensions="; //$NON-NLS-1$
 
         final String[] vmArguments = super.getVMArguments(configuration);
 
@@ -184,7 +231,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         for (String vmArg : vmArguments) {
             if (vmArg.startsWith(FRAMEWORK_EXTENSION_PREFIX) && !vmArg.contains(KarafLaunchConfigurationInitializer.KARAF_HOOK_PLUGIN_ID)) {
 
-                frameworkExtension = vmArg.concat("," + KarafLaunchConfigurationInitializer.KARAF_HOOK_PLUGIN_ID);
+                frameworkExtension = vmArg.concat("," + KarafLaunchConfigurationInitializer.KARAF_HOOK_PLUGIN_ID); //$NON-NLS-1$
             } else {
                 arguments.add(vmArg);
             }
@@ -200,7 +247,6 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         /*
          * Ensure that the RMI registry port for the JMX connector is unique
          */
-
         final int jmxRegistryPort = SocketUtil.findFreePort();
 
         if (jmxRegistryPort == -1) {
@@ -208,19 +254,19 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
                     "Could not find suitable TCP/IP port for JMX RMI Registry"));
         }
 
-        final ManagementSection managementSection = (ManagementSection) Platform.getAdapterManager().getAdapter(workingKarafPlatform,
-                ManagementSection.class);
+        final ManagementSection managementSection =
+            (ManagementSection) Platform.getAdapterManager().getAdapter(
+                    workingKarafPlatform,
+                    ManagementSection.class
+        );
 
         managementSection.load();
-
         managementSection.setPort(jmxRegistryPort);
-
         managementSection.save();
 
         /*
          * Ensure the Remote JMX connector port is unique
          */
-
         jmxPort = SocketUtil.findFreePort();
 
         if (jmxPort == -1) {
@@ -228,9 +274,21 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
                     "Could not find suitable TCP/IP port for JMX connection"));
         }
 
-        arguments.add("-Dcom.sun.management.jmxremote.authenticate=false");
-        arguments.add("-Dcom.sun.management.jmxremote.port=" + new Integer(jmxPort).toString());
-        arguments.add("-Dcom.sun.management.jmxremote.ssl=false");
+        arguments.add("-Dcom.sun.management.jmxremote.authenticate=false"); //$NON-NLS-1$
+        arguments.add("-Dcom.sun.management.jmxremote.port=" + new Integer(jmxPort).toString()); //$NON-NLS-1$
+        arguments.add("-Dcom.sun.management.jmxremote.ssl=false"); //$NON-NLS-1$
+
+        /*
+         * Establish the JMX connector port for the JMX service "jmxserver"
+         */
+        jmxServicePort = SocketUtil.findFreePort();
+
+        if (jmxServicePort == -1) {
+            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID,
+                    "Could not find suitable TCP/IP port for Karaf JMX Services connection"));
+        }
+
+        arguments.add("-Dorg.eclipse.equinox.jmx.server.port=" + new Integer(jmxServicePort).toString()); //$NON-NLS-1$
 
         return arguments.toArray(new String[0]);
     }
@@ -243,17 +301,13 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
             throws CoreException {
         super.launch(configuration, mode, launch, monitor);
 
-        try {
-            startMBeanConnectionJob(configuration);
-        } catch (MalformedURLException e) {
-            KarafUIPluginActivator.getLogger().error("Unable to connect to JMX endpoint on Karaf instance", e);
-
-            // Terminate? launch.terminate()
-        }
+        startMBeanConnectionJob(configuration);
 
         registerDebugEventListener(launch);
 
         registerLaunchListener(launch);
+
+        JMXClientPlugin.getDefault().getJMXServiceManager().addJMXService(jmxServiceDescriptor);
     }
 
     /**
@@ -328,8 +382,8 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      *             thrown if there is a problem adding to the arguments list
      */
     private void addBootstrapSystemProperties(ILaunchConfiguration configuration, List<String> arguments) throws CoreException {
-        arguments.add("-D" + KarafPlatformModel.KARAF_BASE_PROP + "=" + getKarafBase(configuration));
-        arguments.add("-D" + KarafPlatformModel.KARAF_HOME_PROP + "=" + getKarafHome(configuration));
+        arguments.add("-D" + KarafPlatformModel.KARAF_BASE_PROP + "=" + getKarafBase(configuration)); //$NON-NLS-1$ $NON-NLS-2$
+        arguments.add("-D" + KarafPlatformModel.KARAF_HOME_PROP + "=" + getKarafHome(configuration)); //$NON-NLS-1$ $NON-NLS-2$
     }
 
     /**
@@ -344,15 +398,22 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         final String karafBase = getKarafBase(configuration);
         final String karafHome = getKarafHome(configuration);
 
-        final Boolean startLocalConsole = configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE,
-                true);
-        final Boolean startRemoteConsole = configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE,
-                false);
+        final Boolean startLocalConsole =
+            configuration.getAttribute(
+                    KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE,
+                    true);
+
+        final Boolean startRemoteConsole =
+            configuration.getAttribute(
+                    KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE,
+                    false);
 
         final File javaLoggingFile = new File(karafBase, "java.util.logging.properties"); //$NON-NLS-1$
 
-        final SystemSection systemSection = (SystemSection) Platform.getAdapterManager().getAdapter(workingKarafPlatform,
-                SystemSection.class);
+        final SystemSection systemSection =
+            (SystemSection) Platform.getAdapterManager().getAdapter(
+                    workingKarafPlatform,
+                    SystemSection.class);
 
         systemSection.load();
 
@@ -366,29 +427,42 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     }
 
     /**
-     * Adds the {@link KarafJMXConnectorActivator#PLUGIN_ID} plugin to the
-     * runtime
-     *
-     * @param equinoxProperties
-     *            the {@link Properties} as loaded from the config.ini
+     * Adds the {@link KarafJMXPlugin#PLUGIN_ID} plugin to the runtime
+     * {@link #deployedBundles} {@code Map}.<br>
+     * <br>
+     * This method has side-effects.
      */
-    private void addJMXConnectorServiceBundle(final Properties equinoxProperties) throws CoreException {
+    private void addJMXConnectorService() throws CoreException {
 
-        final Bundle jmxConnectorService = Platform.getBundle(KarafJMXConnectorActivator.PLUGIN_ID);
-        if (jmxConnectorService == null) {
-            throw new CoreException(LauncherUtils.createErrorStatus("Unable to locate Apache Felix Karaf JMX Connector Service bundle: "
-                    + KarafJMXConnectorActivator.PLUGIN_ID));
-        }
+        String[] jmxBundles = {
+                KarafJMXPlugin.PLUGIN_ID,
+                KarafJMXPlugin.JMX_COMMON_PLUGIN_ID,
+                KarafJMXPlugin.JMX_SERVER_PLUGIN_ID,
+                KarafJMXPlugin.JMX_SERVER_RMI_CONNECTOR_PLUGIN_ID,
+                "org.eclipse.equinox.jmx.vm",
+                "org.eclipse.equinox.registry.jmx",
+                "org.eclipse.osgi.jmx",
+                "org.eclipse.core.contenttype",
+                "org.eclipse.core.jobs",
+                "org.eclipse.core.runtime",
+                "org.eclipse.core.runtime.compatibility.auth",
+                "org.eclipse.equinox.app",
+                "org.eclipse.equinox.common",
+                "org.eclipse.equinox.registry",
+                "org.eclipse.equinox.preferences",
+                "org.eclipse.osgi.util"
+        };
 
-        final String bundleLocation = jmxConnectorService.getLocation();
-        String osgiBundles = (String) equinoxProperties.get("osgi.bundles"); //$NON-NLS-1$
+        for(String jmxBundle : jmxBundles) {
+            final String bundleLocation =
+                KarafCorePluginUtils.getBundleLocation(jmxBundle);
 
-        final int locationIndex = osgiBundles.indexOf(bundleLocation);
-        if (locationIndex == -1) {
-            final BundleEntry entry = new BundleEntry.Builder(bundleLocation).startLevel("1").autostart("start").build(); //$NON-NLS-1$ $NON-NLS-2$
+            if(!deployedBundles.containsKey(bundleLocation)) {
+                final BundleEntry entry =
+                    new BundleEntry.Builder(bundleLocation).startLevel("1").autostart("start").build(); //$NON-NLS-1$ $NON-NLS-2$
 
-            osgiBundles = osgiBundles.concat("," + entry.toString()); //$NON-NLS-1$
-            equinoxProperties.put("osgi.bundles", osgiBundles); //$NON-NLS-1$
+                deployedBundles.put(bundleLocation, entry);
+            }
         }
     }
 
@@ -412,37 +486,63 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
                 KarafPlatformModel.KARAF_DEFAULT_CONFIG_PROPERTIES_FILE);
 
         /*
-         * Populate the config.ini wtih all of the typical Karaf properties that
+         * Populate the config.ini with all of the typical Karaf properties that
          * are not found in the System properties
          */
         equinoxProperties.putAll(currentConfig);
 
-        addJMXConnectorServiceBundle(equinoxProperties);
+        /*
+         * Create a Map of all the bundles that we are going to deploy in this
+         * launch of the Karaf
+         */
+        deployedBundles.clear();
+
+        final String osgiBundles = (String) equinoxProperties.get(OSGI_BUNDLES_KEY); //$NON-NLS-1$
+        final List<BundleEntry> bundles = KarafCorePluginUtils.getEquinoxBundles(osgiBundles);
+        for(BundleEntry b : bundles) {
+            deployedBundles.put(b.getBundle(), b);
+        }
+
+        addJMXConnectorService();
+
+        equinoxProperties.put(OSGI_BUNDLES_KEY, KarafCorePluginUtils.join(deployedBundles.values(), ","));
 
         /*
          * Copy these properties so that they can be used to interpolate the
          * values found in Karaf's config.properties
          */
-        final SystemSection systemSection = (SystemSection) Platform.getAdapterManager().getAdapter(workingKarafPlatform,
-                SystemSection.class);
+        final SystemSection systemSection =
+            (SystemSection) Platform.getAdapterManager().getAdapter(
+                    workingKarafPlatform,
+                    SystemSection.class);
 
         systemSection.load();
 
-        equinoxProperties.put(KarafPlatformModel.KARAF_BASE_PROP, systemSection.getProperty(KarafPlatformModel.KARAF_BASE_PROP));
-        equinoxProperties.put(KarafPlatformModel.KARAF_HOME_PROP, systemSection.getProperty(KarafPlatformModel.KARAF_HOME_PROP));
+        equinoxProperties.put(
+                KarafPlatformModel.KARAF_BASE_PROP,
+                systemSection.getProperty(KarafPlatformModel.KARAF_BASE_PROP));
+
+        equinoxProperties.put(
+                KarafPlatformModel.KARAF_HOME_PROP,
+                systemSection.getProperty(KarafPlatformModel.KARAF_HOME_PROP));
 
         /*
          * Adds the $TARGET_HOME/runtimes/karaf/plugins directory to the default
          * bundle.locations search space
          */
-        equinoxProperties.put(KarafPlatformModel.KARAF_BUNDLE_LOCATIONS_PROP, karafPlatform.getPluginRootDirectory().toOSString());
+        equinoxProperties.put(
+                KarafPlatformModel.KARAF_BUNDLE_LOCATIONS_PROP,
+                karafPlatform.getPluginRootDirectory().toOSString());
 
         /*
          * Set the following OSGi / Equinox properties:
          */
-        final Integer defaultStartLevel = configuration.getAttribute(IPDELauncherConstants.DEFAULT_START_LEVEL, new Integer(
-                KarafPlatformModel.KARAF_DEFAULT_BUNDLE_START_LEVEL));
-        equinoxProperties.put(OSGI_START_LEVEL_KEY, defaultStartLevel.toString()); //$NON-NLS-1$
+        final Integer defaultStartLevel =
+            configuration.getAttribute(
+                    IPDELauncherConstants.DEFAULT_START_LEVEL,
+                    new Integer(KarafPlatformModel.KARAF_DEFAULT_BUNDLE_START_LEVEL));
+
+        equinoxProperties.put(OSGI_START_LEVEL_KEY, defaultStartLevel.toString());
 
         /*
          * Set the osgi.install.area to the runtime plugins directory or the
@@ -450,15 +550,15 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
          *
          * "/org/eclipse/osgi/3.5.0.v20090429-1630"
          */
-        final IPath frameworkPath = new Path(karafPlatform.getState().getBundle("org.eclipse.osgi", null).getLocation());
-        equinoxProperties.put(OSGI_INSTALL_AREA_KEY, frameworkPath.removeLastSegments(1).toString()); //$NON-NLS-1$
+        final IPath frameworkPath = new Path(karafPlatform.getState().getBundle("org.eclipse.osgi", null).getLocation()); //$NON-NLS-1$
+        equinoxProperties.put(OSGI_INSTALL_AREA_KEY, frameworkPath.removeLastSegments(1).toString());
 
         /*
          * This is very important as it allows the boot classpath entries to
          * present their classes to the framework. Without it NoClassDefFound
          * shows up for classes like org.apache.felix.karaf.main.spi.MainService
          */
-        equinoxProperties.put(OSGI_FRAMEWORK_PARENT_CLASSLOADER_KEY, "app"); //$NON-NLS-1$
+        equinoxProperties.put(OSGI_FRAMEWORK_PARENT_CLASSLOADER_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
 
         KarafLaunchConfigurationUtils.interpolateVariables(equinoxProperties, equinoxProperties);
 
@@ -484,7 +584,10 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
                 final int size = events.length;
                 for (int i = 0; i < size; i++) {
-                    if (process != null && process.equals(events[i].getSource()) && events[i].getKind() == DebugEvent.TERMINATE) {
+                    if (   process != null
+                        && process.equals(events[i].getSource())
+                        && events[i].getKind() == DebugEvent.TERMINATE)
+                    {
                         if (mbeanConnectionJob != null) {
                             mbeanConnectionJob.cancel();
                         }
@@ -514,8 +617,21 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
         final Dictionary<String, Object> dictionary = new Hashtable<String, Object>();
 
-        karafRuntimeDataProviderServiceRegistrtion = bundleContext.registerService(RuntimeDataProvider.class.getName(),
-                runtimeDataProvider, dictionary);
+        karafRuntimeDataProviderServiceRegistrtion =
+            bundleContext.registerService(
+                    RuntimeDataProvider.class.getName(),
+                    runtimeDataProvider,
+                    dictionary);
+
+        /*
+         * Register the jmxrmi connection descriptor
+         */
+        dictionary.put(JMX_DOMAIN_SERVICE_KEY, JMX_JMXRMI_DOMAIN);
+        karafMBeanProviderServiceRegistration =
+            bundleContext.registerService(
+                    JMXServiceDescriptor.class.getName(),
+                    mbeanConnectionJob.getMBeanServerConnectionDescriptor(),
+                    dictionary);
     }
 
     /**
@@ -536,9 +652,18 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
             }
 
             public void launchRemoved(ILaunch l) {
-                if (karafRuntimeDataProviderServiceRegistrtion != null & l.equals(launch)) {
+                if(!l.equals(launch)) {
+                    return;
+                }
+
+                JMXClientPlugin.getDefault().getJMXServiceManager().removeJMXService(jmxServiceDescriptor);
+
+                if (karafRuntimeDataProviderServiceRegistrtion != null) {
                     karafRuntimeDataProviderServiceRegistrtion.unregister();
                     karafRuntimeDataProviderServiceRegistrtion = null;
+
+                    karafMBeanProviderServiceRegistration.unregister();
+                    karafMBeanProviderServiceRegistration = null;
                 }
             }
 
@@ -557,12 +682,40 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      * @throws CoreException
      *             if there is a general problem scheduling the {@link Job}
      */
-    private void startMBeanConnectionJob(final ILaunchConfiguration configuration) throws MalformedURLException, CoreException {
-        final MBeanServerConnectionDescriptor descriptor = MBeanServerConnectionDescriptor.createStandardDescriptor(
-                configuration.getName(), "localhost", jmxPort, null, null); // $NON-NLS-1$
-
+    private void startMBeanConnectionJob(final ILaunchConfiguration configuration) throws CoreException {
         final String memento = configuration.getMemento();
-        mbeanConnectionJob = new MBeanServerConnectionJob(configuration.getName(), descriptor);
+
+        try {
+            final JMXServiceURL standardJmxConnection = new JMXServiceURL(
+                    JMXConstants.DEFAULT_PROTOCOL,
+                    "localhost",
+                    jmxPort,
+                    "/" + JMX_JMXRMI_DOMAIN); //$NON-NLS-1$
+
+            final JMXServiceDescriptor descriptor = new JMXServiceDescriptor(
+                        configuration.getName(),
+                        standardJmxConnection,
+                        null,
+                        null);
+
+            final JMXServiceURL jmxServiceConnection = new JMXServiceURL(
+                    JMXConstants.DEFAULT_PROTOCOL,
+                    "localhost",
+                    jmxServicePort,
+                    "/" + JMXConstants.DEFAULT_DOMAIN); //$NON-NLS-1$
+
+            jmxServiceDescriptor = new JMXServiceDescriptor(
+                        configuration.getName(),
+                        jmxServiceConnection,
+                        null,
+                        null);
+
+            mbeanConnectionJob = new MBeanServerConnectionJob(configuration.getName(), descriptor);
+        } catch(MalformedURLException e) {
+            KarafUIPluginActivator.getLogger().error("Unable to connect to JMX endpoint on Karaf instance", e);
+
+            throw new CoreException(new Status(IStatus.ERROR, "", ""));
+        }
 
         final IJobChangeListener listener = new JobChangeAdapter() {
             @Override
@@ -597,5 +750,4 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         mbeanConnectionJob.addJobChangeListener(listener);
         mbeanConnectionJob.schedule(MBeanServerConnectionJob.DEFAULT_INITIAL_SCHEDULE_DELAY);
     }
-
 }

@@ -12,6 +12,7 @@ package info.evanchik.eclipse.karaf.ui;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 
+
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
@@ -78,6 +79,6 @@ public final class KarafLaunchConfigurationConstants {
      * Private constructor to prevent instantiation.
      */
     private KarafLaunchConfigurationConstants() {
-        throw new IllegalStateException(KarafLaunchConfigurationConstants.class.getName() + " cannot be instantiated");
+        throw new AssertionError(KarafLaunchConfigurationConstants.class.getName() + " cannot be instantiated");
     }
 }

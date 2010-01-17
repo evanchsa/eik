@@ -38,10 +38,6 @@ public class KarafInstallationSelectionPage extends WizardPage {
 
     protected KarafPlatformModel karafPlatform;
 
-    /*
-     * UI Controls
-     */
-
     /**
      * The Karaf Runtime installation directory as selected by the user
      */
@@ -60,7 +56,7 @@ public class KarafInstallationSelectionPage extends WizardPage {
         setDescription("Browse for a Karaf installation directory to use as your target platform");
 
         setPageComplete(false);
-        setImageDescriptor(KarafUIPluginActivator.getImageDescriptor("logo64"));
+        setImageDescriptor(KarafUIPluginActivator.getImageDescriptor("logo64")); // $NON-NLS-1$
     }
 
     public void createControl(Composite parent) {

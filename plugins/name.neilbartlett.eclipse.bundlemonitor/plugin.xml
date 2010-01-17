@@ -34,7 +34,7 @@
       <objectContribution
             adaptable="false"
             id="name.neilbartlett.eclipse.bundlemonitor.bundleContrib"
-            objectClass="name.neilbartlett.eclipse.bundlemonitor.providers.RuntimeBundleItem">
+            objectClass="name.neilbartlett.eclipse.bundlemonitor.providers.internal.EclipseOSGiBundleWrapper">
          <action
                class="name.neilbartlett.eclipse.bundlemonitor.views.bundle.actions.DiagnoseBundlesActionDelegate"
                id="name.neilbartlett.eclipse.bundlemonitor.diagnoseAction"

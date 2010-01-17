@@ -31,9 +31,7 @@ public class KarafServerLaunchShortcut extends OSGiLaunchShortcut {
             ILaunchConfigurationWorkingCopy configuration) {
         super.initializeConfiguration(configuration);
 
-        final KarafLaunchConfigurationInitializer karafInitializer = new KarafLaunchConfigurationInitializer();
-        karafInitializer.initialize(configuration);
-
+        KarafLaunchConfigurationInitializer.initializeConfiguration(configuration);
     }
 
 }

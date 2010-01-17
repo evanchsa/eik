@@ -19,19 +19,11 @@
                types="jst.utility"
                versions="1.0">
          </moduleType>
+         <moduleType
+               types="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
+               versions="1.0">
+         </moduleType>
       </runtimeType>
-   </extension>
-   <extension
-         point="org.eclipse.wst.common.project.facet.core.defaultFacets">
-      <default-facets>
-         <runtime-component
-               id="info.evanchik.eclipse.server.karaf">
-         </runtime-component>
-         <facet
-               id="wst.jsdt.web"
-               version="1.0">
-         </facet>
-      </default-facets>
    </extension>
    <extension
          point="org.eclipse.wst.common.project.facet.core.runtimes">
@@ -66,6 +58,10 @@
                id="jst.utility"
                version="1.0">
          </facet>
+         <facet
+               id="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
+               version="1.0">
+         </facet>
       </supported>
    </extension>
    <extension
@@ -78,7 +74,7 @@
    <extension
          point="org.eclipse.wst.server.core.publishTasks">
       <publishTask
-            class="info.evanchik.eclipse.karaf.wtp.core.PublishTask"
+            class="info.evanchik.eclipse.karaf.wtp.core.tasks.KarafPublishTask"
             id="info.evanchik.eclipse.karaf.ui.publishTask"
             typeIds="info.evanchik.eclipse.server.karaf.*">
       </publishTask>
@@ -98,7 +94,7 @@
             runtimeTypeId="info.evanchik.eclipse.server.karaf.runtime.12"
             startTimeout="45000"
             stopTimeout="15000"
-            supportsRemoteHosts="true">
+            supportsRemoteHosts="false">
       </serverType>
    </extension>
    <extension
@@ -124,7 +120,7 @@
             delegateDescription="The Karaf Server Launcher supports running and debugging Karaf Servers"
             delegateName="Karaf Server Launcher"
             id="info.evanchik.eclipse.karaf.wtp.core.KarafServerLauncher"
-            modes="run, debug"
+            modes="run, debug, profile"
             name="Apache Felix Karaf"
             public="true"
             sourceLocatorId="org.eclipse.pde.ui.launcher.PDESourceLookupDirector"
@@ -146,6 +142,72 @@
             id="info.evanchik.eclipse.karaf.wtp.core.runtime.locator"
             typeIds="info.evanchik.eclipse.server.karaf.runtime.*">
       </runtimeLocator>
+   </extension>
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.facets">
+      <project-facet
+            id="info.evanchik.eclipse.karaf.wtp.core.facets.bundle">
+         <description>
+            Supports deploying an OSGi Bundle on a Apache Felix Karaf server
+         </description>
+         <label>
+            OSGi Bundle
+         </label>
+         <member
+               category="info.evanchik.eclipse.karaf.wtp.core.category">
+         </member>
+      </project-facet>
+      <category
+            id="info.evanchik.eclipse.karaf.wtp.core.category">
+         <description>
+            Projects that can be deployed to an Apache Felix Karaf Server
+         </description>
+         <label>
+            Apache Felix Karaf
+         </label>
+      </category>
+      <project-facet-version
+            facet="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
+            version="1.0">
+      </project-facet-version>
+      <action
+            facet="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
+            type="install">
+         <delegate
+               class="info.evanchik.eclipse.karaf.wtp.core.internal.BundleFacetInstallDelegate">
+         </delegate>
+      </action>
+      <action
+            facet="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
+            type="uninstall">
+         <delegate
+               class="info.evanchik.eclipse.karaf.wtp.core.internal.BundleFacetUninstallDelegate">
+         </delegate>
+      </action>
+   </extension>
+   <extension
+         point="org.eclipse.hyades.trace.ui.launchConfigMechanismAssociator">
+      <association
+            launchConfigID="info.evanchik.eclipse.karaf.wtp.core.KarafServerLauncher">
+         <mechanism
+               mechanismID="org.eclipse.tptp.trace.ui.jvmpiMechanism">
+            <configuration
+                  associatedAgent="org.eclipse.tptp.trace.ui.jvmpiAgent"
+                  configurationId="org.eclipse.tptp.trace.ui.jvmpiConfiguration"
+                  filter="org.eclipse.tptp.platform.profile.server.core.internal.PICollectorFiltration"
+                  launchDelegate="org.eclipse.tptp.trace.ui.internal.launcher.deleg.application.PIAttachLauncherDelegate">
+            </configuration>
+         </mechanism>
+         <mechanism
+               mechanismID="org.eclipse.tptp.trace.jvmti.jvmtiMechanism">
+            <configuration
+                  associatedAgent="org.eclipse.tptp.platform.jvmti.TIAgent"
+                  configurationId="org.eclipse.tptp.trace.jvmti.tiConfiguration"
+                  filter="org.eclipse.tptp.platform.profile.server.core.internal.TICollectorFiltration"
+                  launchDelegate="org.eclipse.tptp.platform.jvmti.client.internal.launcher.TIAttachLauncherDelegate">
+            </configuration>
+         </mechanism>
+      </association>
    </extension>
 
 </plugin>

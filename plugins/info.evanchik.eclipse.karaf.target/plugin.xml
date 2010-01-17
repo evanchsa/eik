@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.pde.core.targets">
+      <target
+            definition="runtimes/apache-felix-karaf.target"
+            id="org.apache.felix.karaf.ide.eclipse.target"
+            name="Apache Felix Karaf">
+      </target>
+   </extension>
+
+</plugin>

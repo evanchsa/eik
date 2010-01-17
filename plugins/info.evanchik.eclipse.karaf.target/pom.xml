@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2009 Stephen Evanchik (evanchsa@gmail.com)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>info.evanchik.eclipse.karaf</groupId>
+    <artifactId>eik-pde-parent</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>info.evanchik.eclipse.karaf</groupId>
+  <artifactId>info.evanchik.eclipse.karaf.target</artifactId>
+  <packaging>jar</packaging>
+  <name>Eclipse Integration for Karaf :: Apache Felix Karaf PDE Target Platform Definition</name>
+  <description>Embedded Eclipse Target Platform Definition plugin for Apache Felix Karaf</description>
+  <properties>
+    <karaf.hooks.artifactId>info.evanchik.eclipse.karaf.hooks</karaf.hooks.artifactId>
+  </properties>
+  <build>
+    <finalName>${artifactId}_${version}</finalName>
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>${pom.basedir}/src/main/filtered-resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${pom.basedir}</directory>
+        <includes>
+          <include>plugin.xml</include>
+          <include>plugin.properties</include>
+          <include>build.properties</include>
+          <include>runtimes/**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${pom.basedir}/src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>runtimes/karaf</directory>
+              <includes>
+                <include>**/*</include>
+              </includes>
+              <excludes>
+                <exclude>**/.svn</exclude>
+              </excludes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.apache.felix.karaf</groupId>
+                  <artifactId>apache-felix-karaf</artifactId>
+                  <version>${apache.karaf.version}</version>
+                  <type>tar.gz</type>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-hooks</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>info.evanchik.eclipse.karaf</groupId>
+                  <artifactId>info.evanchik.eclipse.karaf.hooks</artifactId>
+                  <version>${pom.version}</version>
+                  <type>jar</type>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.basedir}/runtimes/karaf/plugins</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-runtime-jars</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <tasks>
+            <copy todir="${pom.basedir}/runtimes/karaf/etc">
+              <fileset dir="${project.build.directory}/dependency/apache-felix-karaf-${apache.karaf.version}/etc">
+                <include name="**/*" />
+              </fileset>
+              <flattenmapper />
+            </copy>
+            <copy todir="${pom.basedir}/runtimes/karaf/plugins">
+              <fileset dir="${project.build.directory}/dependency/apache-felix-karaf-${apache.karaf.version}/system">
+                <include name="**/*.jar" />
+              </fileset>
+              <flattenmapper />
+            </copy>
+            <copy todir="${pom.basedir}/runtimes/karaf/bootclasspath">
+              <fileset dir="${project.build.directory}/dependency/apache-felix-karaf-${apache.karaf.version}/lib">
+                <include name="**/*.jar" />
+              </fileset>
+              <flattenmapper />
+            </copy>
+            <move file="${pom.basedir}/runtimes/karaf/plugins/${karaf.hooks.artifactId}-${pom.version}.jar"
+                  tofile="${pom.basedir}/runtimes/karaf/plugins/${karaf.hooks.artifactId}_${pom.version}.jar"
+                  overwrite="true" />
+          </tasks>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+  </dependencies>
+</project>

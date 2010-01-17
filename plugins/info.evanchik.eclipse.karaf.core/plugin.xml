@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.variables.dynamicVariables">
+      <variable
+            description="A variable resolver for filesystem locations of Eclipse plugins"
+            name="plugin_loc"
+            resolver="info.evanchik.eclipse.karaf.core.internal.PluginLocVariableResolver"
+            supportsArgument="true">
+      </variable>
+   </extension>
+
+</plugin>

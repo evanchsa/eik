@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/info.evanchik.eclipse.karaf.feature_0.4.0.qualifier.jar" id="info.evanchik.eclipse.karaf.feature" version="0.4.0.qualifier">
+      <category name="info.evanchik.eclipse.pde.karaf"/>
+   </feature>
+   <category-def name="info.evanchik.eclipse.pde.karaf" label="Apache Felix Karaf integration for Eclipse">
+      <description>
+         Extensions for Eclipse PDE and Eclipse WTP to enable the development and deployment of bundles to Apache Felix Karaf.
+      </description>
+   </category-def>
+</site>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+     Copyright (c) 2009 Stephen Evanchik
+     All rights reserved. This program and the accompanying materials
+     are made available under the terms of the Eclipse Public License v1.0
+     which accompanies this distribution, and is available at
+     http://www.eclipse.org/legal/epl-v10.html
+    
+     Contributors:
+      Stephen Evanchik - initial implementation
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>info.evanchik.eclipse.karaf</groupId>
+        <artifactId>eik-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>eik-pde-parent</artifactId>
+    <packaging>pom</packaging>
+    <name>Eclipse Integration for Karaf :: Eclipse PDE Integration Parent</name>
+    <description>Eclipse PDE integration plugins</description>
+    <modules>
+        <module>info.evanchik.eclipse.karaf.core</module>
+        <module>info.evanchik.eclipse.karaf.ui</module>
+        <module>info.evanchik.eclipse.karaf.hooks</module>
+        <module>info.evanchik.eclipse.karaf.jmx</module>
+        <module>info.evanchik.eclipse.karaf.target</module>
+        <module>info.evanchik.eclipse.nmr.target</module>
+        <module>info.evanchik.eclipse.servicemix.target</module>
+    </modules>
+    <properties>
+        <org.osgi.jmx.version>1.0-r6125-patched</org.osgi.jmx.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.eclipse</groupId>
+                <artifactId>pde</artifactId>
+                <version>${org.eclipse.pde.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse</groupId>
+                <artifactId>ui</artifactId>
+                <version>${org.eclipse.ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>org.eclipse.equinox.common</artifactId>
+                <version>${org.eclipse.equinox.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>org.eclipse.osgi</artifactId>
+                <version>${org.eclipse.osgi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>jmx</artifactId>
+                <version>${org.osgi.jmx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.osgi</groupId>
+                <artifactId>jmx-impl</artifactId>
+                <version>${org.osgi.jmx.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.2"?>
+
+<target name="Apache ServiceMix 4.0.0">
+
+   <location path="${plugin_loc:info.evanchik.eclipse.karaf.servicemix.target}/runtimes/servicemix"/>
+
+   <content useAllPlugins="true">
+      <plugins>
+      </plugins>
+      <features>
+      </features>
+      <extraLocations>
+         <location path="${plugin_loc:info.evanchik.eclipse.karaf.target}/runtimes/karaf"/>
+         <location path="${plugin_loc:info.evanchik.eclipse.karaf.nmr.target}/runtimes/nmr"/>
+      </extraLocations>
+   </content>
+
+</target>

@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Bundle Monitor Bundle
+Bundle-SymbolicName: name.neilbartlett.eclipse.bundlemonitor;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Activator: name.neilbartlett.eclipse.bundlemonitor.internal.Activator
+Bundle-Vendor: Neil Bartlett
+Require-Bundle: org.eclipse.core.runtime,
+ info.evanchik.eclipse.karaf.ui;bundle-version="1.0.0",
+ org.osgi.jmx;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.core.commands,
+ org.eclipse.core.commands.common,
+ org.eclipse.jface.action,
+ org.eclipse.jface.dialogs,
+ org.eclipse.jface.resource,
+ org.eclipse.jface.viewers,
+ org.eclipse.jface.window,
+ org.eclipse.jface.wizard,
+ org.eclipse.swt,
+ org.eclipse.swt.custom,
+ org.eclipse.swt.events,
+ org.eclipse.swt.graphics,
+ org.eclipse.swt.layout,
+ org.eclipse.swt.widgets,
+ org.eclipse.ui;ui.workbench=split,
+ org.eclipse.ui.part;ui.workbench=split,
+ org.eclipse.ui.plugin,
+ org.osgi.service.cm;version="1.2.0"
+Bundle-ClassPath: target/classes/,
+ .

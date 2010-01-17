@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache ServiceMix PDE Target Platform Definition
+Bundle-SymbolicName: info.evanchik.eclipse.servicemix.target;singleton:=true
+Bundle-Version: 1.0.0
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.variables,
+ org.eclipse.core.runtime,
+ org.eclipse.pde.ui,
+ info.evanchik.eclipse.karaf.target;bundle-version="1.2.0",
+ info.evanchik.eclipse.nmr.target;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

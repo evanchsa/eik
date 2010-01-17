@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Equinox Hooks for Eclipse PDE Integration
+Bundle-SymbolicName: info.evanchik.eclipse.karaf.hooks;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.eclipse.osgi;bundle-version="3.4.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

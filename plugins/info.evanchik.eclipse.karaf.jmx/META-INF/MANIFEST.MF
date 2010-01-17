@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Karaf JMX Connector
+Bundle-SymbolicName: info.evanchik.eclipse.karaf.jmx;singleton:=true
+Bundle-Version: 1.2.0.qualifier
+Bundle-Activator: info.evanchik.eclipse.karaf.jmx.KarafJMXConnectorActivator
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: info.evanchik.eclipse.karaf.jmx
+Import-Package: org.osgi.framework;version="1.4.0"

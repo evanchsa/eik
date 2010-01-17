@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.2"?>
+
+<target name="Apache Felix Karaf 1.2">
+
+   <location path="${plugin_loc:info.evanchik.eclipse.karaf.target}/runtimes/karaf"/>
+
+   <content useAllPlugins="true">
+      <plugins>
+      </plugins>
+      <features>
+      </features>
+   </content>
+
+</target>

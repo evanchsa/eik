@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2009 Stephen Evanchik (evanchsa@gmail.com)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>info.evanchik.eclipse.karaf</groupId>
+    <artifactId>eik-pde-parent</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>info.evanchik.eclipse.karaf</groupId>
+  <artifactId>info.evanchik.eclipse.servicemix.target</artifactId>
+  <packaging>jar</packaging>
+  <name>Eclipse Integration for Karaf :: Apache ServiceMix PDE Target Platform Definition</name>
+  <description>Eclipse PDE Target Platform Definition plugin for Apache ServiceMix</description>
+  <build>
+    <finalName>${artifactId}_${version}</finalName>
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>${pom.basedir}/src/main/filtered-resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${pom.basedir}</directory>
+        <includes>
+          <include>plugin.xml</include>
+          <include>plugin.properties</include>
+          <include>build.properties</include>
+          <include>runtimes/**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${pom.basedir}/src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>runtimes/servicemix</directory>
+              <includes>
+                <include>**/*</include>
+              </includes>
+              <excludes>
+                <exclude>**/.svn</exclude>
+              </excludes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.servicemix.tooling</groupId>
+        <artifactId>features-maven-plugin</artifactId>
+        <version>1.0</version>
+        <executions>
+          <execution>
+            <id>add-features-to-repo</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>add-features-to-repo</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>mvn:org.apache.servicemix/apache-servicemix/${apache.servicemix.version}/xml/features</descriptor>
+                <descriptor>mvn:org.apache.servicemix.nmr/apache-servicemix-nmr/${apache.nmr.version}/xml/features</descriptor>
+              </descriptors>
+              <features>
+                <feature>jbi-cluster</feature>
+                <feature>web</feature>
+                <!-- ServiceMix components -->
+                <feature>servicemix-cxf-bc</feature>
+                <feature>servicemix-file</feature>
+                <feature>servicemix-ftp</feature>
+                <feature>servicemix-http</feature>
+                <feature>servicemix-jms</feature>
+                <feature>servicemix-mail</feature>
+                <feature>servicemix-bean</feature>
+                <feature>servicemix-camel</feature>
+                <feature>servicemix-cxf-se</feature>
+                <feature>servicemix-drools</feature>
+                <feature>servicemix-eip</feature>
+                <feature>servicemix-osworkflow</feature>
+                <feature>servicemix-quartz</feature>
+                <feature>servicemix-scripting</feature>
+                <feature>servicemix-validation</feature>
+                <feature>servicemix-saxon</feature>
+                <feature>servicemix-wsn2005</feature>
+                <feature>servicemix-snmp</feature>
+                <feature>servicemix-vfs</feature>
+                <feature>servicemix-smpp</feature>
+              </features>
+              <repository>target/features-repo</repository>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-runtime-jars</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <tasks>
+            <copy todir="${pom.basedir}/runtimes/servicemix/plugins">
+              <fileset dir="${project.build.directory}/features-repo">
+                <include name="**/*.jar" />
+              </fileset>
+              <flattenmapper />
+            </copy>
+          </tasks>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.servicemix</groupId>
+      <artifactId>apache-servicemix</artifactId>
+      <version>${apache.servicemix.version}</version>
+      <type>tar.gz</type>
+    </dependency>
+  </dependencies>
+</project>

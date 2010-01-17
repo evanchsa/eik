@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Compile info.evanchik.eclipse.karaf.feature" default="main">
+	<target name="main">
+		<ant antfile="build.xml" dir="../info.evanchik.eclipse.karaf.hooks" target="build.jars"/>
+		<ant antfile="build.xml" dir="../info.evanchik.eclipse.karaf.jmx" target="build.jars"/>
+		<ant antfile="build.xml" dir="../info.evanchik.eclipse.karaf.core" target="build.jars"/>
+		<ant antfile="build.xml" dir="../info.evanchik.eclipse.karaf.target" target="build.jars"/>
+		<ant antfile="build.xml" dir="../info.evanchik.eclipse.karaf.ui" target="build.jars"/>
+		<ant antfile="build.xml" dir="../../../svndevel/njbartlett-bundlemonitor-693ec2949d8cf3e6189c7858c654ad2e364b78a6/name.neilbartlett.eclipse.bundlemonitor" target="build.jars"/>
+		<ant antfile="build.xml" dir="../info.evanchik.eclipse.karaf.wtp.core" target="build.jars"/>
+		<ant antfile="build.xml" dir="../info.evanchik.eclipse.karaf.wtp.ui" target="build.jars"/>
+	</target>
+</project>

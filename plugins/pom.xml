@@ -17,16 +17,18 @@
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>eik-pde-parent</artifactId>
+    <artifactId>eik-plugins-parent</artifactId>
     <packaging>pom</packaging>
-    <name>Eclipse Integration for Karaf :: Eclipse PDE Integration Parent</name>
-    <description>Eclipse PDE integration plugins</description>
+    <name>Eclipse Integration for Karaf :: Eclipse Plugins Integration Parent</name>
+    <description>Eclipse integration plugins</description>
     <modules>
         <module>info.evanchik.eclipse.karaf.core</module>
         <module>info.evanchik.eclipse.karaf.ui</module>
         <module>info.evanchik.eclipse.karaf.hooks</module>
         <module>info.evanchik.eclipse.karaf.jmx</module>
         <module>info.evanchik.eclipse.karaf.target</module>
+        <module>info.evanchik.eclipse.karaf.wtp.core</module>
+        <module>info.evanchik.eclipse.karaf.wtp.ui</module>
         <module>info.evanchik.eclipse.nmr.target</module>
         <module>info.evanchik.eclipse.servicemix.target</module>
     </modules>

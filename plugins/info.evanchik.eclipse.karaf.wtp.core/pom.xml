@@ -16,11 +16,11 @@
     <version>1.0.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>info.evanchik.eclipse.karaf</groupId>
-  <artifactId>info.evanchik.eclipse.karaf.ui</artifactId>
+  <groupId>info.evanchik.eclipse.karaf.wtp</groupId>
+  <artifactId>info.evanchik.eclipse.karaf.wtp.core</artifactId>
   <packaging>jar</packaging>
-  <name>Eclipse Integration for Karaf :: Eclipse PDE UI Integration</name>
-  <description>Eclipse PDE UI Integration for Apache Felix Karaf</description>
+  <name>Eclipse Integration for Karaf :: Eclipse WTP Core Integration</name>
+  <description>Provides core functionalty for WTP Integration</description>
   <build>
     <finalName>${artifactId}_${version}</finalName>
     <resources>
@@ -48,21 +48,6 @@
       </resource>
     </resources>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>runtimes/karaf</directory>
-              <includes>
-                <include>**/*</include>
-              </includes>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>

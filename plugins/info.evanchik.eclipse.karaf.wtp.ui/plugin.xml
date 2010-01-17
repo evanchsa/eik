@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.wst.common.project.facet.ui.images">
+      <image
+            path="icons/obj16/felixLogo16x16.gif"
+            runtime-component-type="info.evanchik.eclipse.karaf.server">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.ui.serverImages">
+      <image
+            icon="icons/obj16/felixLogo16x16.gif"
+            id="info.evanchik.eclipse.server.karaf.12"
+            typeIds="info.evanchik.eclipse.server.karaf.runtime.12">
+      </image>
+      <image
+            icon="icons/obj16/felixLogo16x16.gif"
+            id="info.evanchik.eclipse.server.karaf.12"
+            typeIds="info.evanchik.eclipse.server.karaf.12">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.ui.wizardFragments">
+      <fragment
+            class="info.evanchik.eclipse.karaf.wtp.ui.KarafRuntimeWizardFragment"
+            id="info.evanchik.eclipse.server.karaf.runtime.12"
+            typeIds="info.evanchik.eclipse.server.karaf.runtime.12">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.runtimes">
+      <adapter>
+         <runtime-component
+               id="info.evanchik.eclipse.server.karaf">
+         </runtime-component>
+         <factory
+               class="org.eclipse.jst.server.ui.internal.RuntimeLabelProvider$Factory">
+         </factory>
+         <type
+               class="org.eclipse.wst.common.project.facet.ui.IRuntimeComponentLabelProvider">
+         </type>
+      </adapter>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="info.evanchik.eclipse.karaf.wtp.ui.launcher.KarafLauncherTabGroup"
+            id="info.evanchik.eclipse.karaf.wtp.ui.KarafLauncherTabGroup"
+            type="info.evanchik.eclipse.karaf.wtp.core.KarafServerLauncher">
+      </launchConfigurationTabGroup>
+   </extension>
+
+</plugin>

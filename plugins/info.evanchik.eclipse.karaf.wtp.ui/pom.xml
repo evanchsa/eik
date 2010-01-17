@@ -16,11 +16,11 @@
     <version>1.0.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>info.evanchik.eclipse.karaf</groupId>
-  <artifactId>info.evanchik.eclipse.karaf.ui</artifactId>
+  <groupId>info.evanchik.eclipse.karaf.wtp</groupId>
+  <artifactId>info.evanchik.eclipse.karaf.wtp.ui</artifactId>
   <packaging>jar</packaging>
-  <name>Eclipse Integration for Karaf :: Eclipse PDE UI Integration</name>
-  <description>Eclipse PDE UI Integration for Apache Felix Karaf</description>
+  <name>Eclipse Integration for Karaf :: Eclipse WTP UI Integration</name>
+  <description>Eclipse WTP UI Integration for Apache Felix Karaf</description>
   <build>
     <finalName>${artifactId}_${version}</finalName>
     <resources>

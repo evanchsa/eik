@@ -74,5 +74,9 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>jmx</artifactId>
+    </dependency>
   </dependencies>
 </project>

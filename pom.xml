@@ -166,5 +166,21 @@
       <url>http://eik.fusesource.org/maven2</url>
       <layout>default</layout>
     </repository>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
+      </snapshots>
+      <id>servicemix</id>
+      <name>Apache ServiceMix</name>
+      <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
+      <layout>default</layout>
+    </repository>
   </repositories>
 </project>

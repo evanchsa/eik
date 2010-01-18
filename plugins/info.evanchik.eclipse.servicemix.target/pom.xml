@@ -121,29 +121,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-runtime-jars</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <tasks>
-            <copy todir="${pom.basedir}/runtimes/servicemix/plugins">
-              <fileset dir="${project.build.directory}/features-repo">
-                <include name="**/*.jar" />
-              </fileset>
-              <flattenmapper />
-            </copy>
-          </tasks>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
   <dependencies>

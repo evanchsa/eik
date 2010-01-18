@@ -1,5 +1,5 @@
-*/bin/*
-*/.settings/*
-*/.svn/*
-*/CVS/*
-*/target/*
+bin
+.settings
+.svn
+CVS
+target

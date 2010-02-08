@@ -23,6 +23,7 @@ import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.State;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.internal.core.PDEState;
+import org.osgi.framework.Bundle;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -49,6 +50,10 @@ abstract public class AbstractKarafPlatformModel implements KarafPlatformModel {
         final BundleDescription desc = getState().getBundle(symbolicName, null);
 
         return desc != null;
+    }
+
+    public IPath getConfigurationDirectory() {
+        return getRootDirectory().append("etc"); //$NON-NLS-1$
     }
 
     public IPath getUserDeployedDirectory() {

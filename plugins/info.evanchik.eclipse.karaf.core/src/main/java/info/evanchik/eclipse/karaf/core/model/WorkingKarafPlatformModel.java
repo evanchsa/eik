@@ -11,6 +11,7 @@
 package info.evanchik.eclipse.karaf.core.model;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 
 import java.net.URL;
 import java.util.Collections;
@@ -24,7 +25,7 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel {
+public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel implements KarafWorkingPlatformModel {
 
     private final IPath location;
 
@@ -58,10 +59,6 @@ public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel {
 
     public List<String> getBootClasspath() {
         return parentKarafModel.getBootClasspath();
-    }
-
-    public IPath getConfigurationDirectory() {
-        return location.append("etc"); //$NON-NLS-1$
     }
 
     public IPath getConfigurationFile(String key) {

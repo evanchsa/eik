@@ -11,26 +11,23 @@
 package info.evanchik.eclipse.karaf.ui;
 
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafModelSynchronizer;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.KarafPlatformModelFactory;
+import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
+import info.evanchik.eclipse.karaf.core.KarafPlatformModelSynchronizer;
 import info.evanchik.eclipse.karaf.core.SystemBundleNames;
 import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
-import info.evanchik.eclipse.karaf.core.model.BundleKarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.model.DefaultKarafModelSynchronizer;
-import info.evanchik.eclipse.karaf.core.model.DirectoryKarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.model.WorkingKarafPlatformModel;
+import info.evanchik.eclipse.karaf.ui.internal.BundleKarafPlatformModel;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Properties;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -69,11 +66,6 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      */
     public static String KARAF_HOOK_PLUGIN_ID = "info.evanchik.eclipse.karaf.hooks"; //$NON-NLS-1$
 
-    /**
-     * Sub-directories found in Karaf distributions
-     */
-    public static String[] KARAF_SUB_DIRECTORIES = new String[] { "etc", "system" }; //$NON-NLS-1$ $NON-NLS-2$
-
     public static final char VERSION_SEPARATOR = '*';
 
     /**
@@ -99,20 +91,21 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      * @throws CoreException
      */
     public static KarafPlatformModel findKarafPlatform(ILaunchConfiguration configuration, IProgressMonitor monitor) throws CoreException {
-        IPluginModelBase karafPlatform = PluginRegistry.findModel(KarafPlatformModel.KARAF_MAIN_BUNDLE_SYMBOLIC_NAME);
-        if (karafPlatform == null) {
+        /*
+        IPluginModelBase karafPlatformPlugin = PluginRegistry.findModel(KarafPlatformModel.KARAF_MAIN_BUNDLE_SYMBOLIC_NAME);
+        if (karafPlatformPlugin == null) {
             monitor.worked(10);
-            karafPlatform = PluginRegistry.findModel(KarafPlatformModel.KARAF_JAAS_BOOT_BUNDLE_SYMBOLIC_NAME);
+            karafPlatformPlugin = PluginRegistry.findModel(KarafPlatformModel.KARAF_JAAS_BOOT_BUNDLE_SYMBOLIC_NAME);
         }
 
         monitor.worked(10);
 
-        if (karafPlatform == null) {
+        if (karafPlatformPlugin == null) {
             throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID,
                     "Unable to locate Karaf Platform. Please use set the Target Platform to include a valid set of Karaf bundles"));
         }
 
-        final IPath modelPath = new Path(karafPlatform.getInstallLocation());
+        final IPath modelPath = new Path(karafPlatformPlugin.getInstallLocation());
         if (modelPath.toFile().isDirectory()) {
             // This is in the workspace! What to do?!
             throw new CoreException(new Status(IStatus.WARNING, KarafUIPluginActivator.PLUGIN_ID,
@@ -153,10 +146,24 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
             if (testBundlePath.equals(bundlePath)) {
                 karafPlatformModel = new BundleKarafPlatformModel(karafPluginBundle);
             } else {
-                karafPlatformModel = new DirectoryKarafPlatformModel(rootPath);
+                karafPlatformModel = KarafPlatformModelRegistry.findPlatformModel(rootPath);
             }
         } else {
-            karafPlatformModel = new DirectoryKarafPlatformModel(rootPath);
+            karafPlatformModel = KarafPlatformModelRegistry.findPlatformModel(rootPath);
+        }
+        */
+
+        final KarafPlatformModel karafPlatformModel =
+            KarafPlatformModelRegistry.findActivePlatformModel();
+
+        monitor.worked(10);
+
+        if (karafPlatformModel == null) {
+            throw new CoreException(
+                    new Status(
+                            IStatus.ERROR,
+                            KarafUIPluginActivator.PLUGIN_ID,
+                            "Unable to locate compatible Apache Felix Karaf platform model"));
         }
 
         monitor.worked(10);
@@ -247,6 +254,8 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      */
     protected KarafPlatformModel karafPlatform;
 
+    protected KarafPlatformModelFactory karafPlatformFactory;
+
     protected StartupSection startupSection;
 
     @Override
@@ -255,20 +264,20 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
 
         synchronizeHooksWithPlatform(this.karafPlatform);
 
-        final File configDir = LaunchConfigurationHelper.getConfigurationArea(configuration);
-        setupKarafDirectoryStructure(configDir);
+        final File configDir =
+            LaunchConfigurationHelper.getConfigurationArea(configuration);
 
         final IPath workingArea = new Path(configDir.getAbsolutePath());
-        final KarafPlatformModel workingKarafPlatform = new WorkingKarafPlatformModel(workingArea, karafPlatform);
+        final KarafPlatformModel workingKarafPlatform =
+            new WorkingKarafPlatformModel(workingArea, karafPlatform);
 
-        final KarafModelSynchronizer synchronizer = DefaultKarafModelSynchronizer.getInstance();
-        synchronizer.synchronize(karafPlatform, workingKarafPlatform, "java.util.logging.properties"); //$NON-NLS-1$
-        synchronizer.synchronize(karafPlatform, workingKarafPlatform, "config.properties"); //$NON-NLS-1$
-        synchronizer.synchronize(karafPlatform, workingKarafPlatform, "system.properties"); //$NON-NLS-1$
-        synchronizer.synchronize(karafPlatform, workingKarafPlatform, "startup.properties"); //$NON-NLS-1$
+        workingKarafPlatform.getConfigurationDirectory().toFile().mkdirs();
+        workingKarafPlatform.getUserDeployedDirectory().toFile().mkdirs();
 
-        // TODO: Make this part of the configuration sections
-        synchronizeDefaultConfigAdminPrefs(workingKarafPlatform);
+        final KarafPlatformModelSynchronizer synchronizer =
+            karafPlatformFactory.getPlatformSynchronizer(karafPlatform);
+
+        synchronizer.synchronize(workingKarafPlatform, false);
 
         // TODO: Factor this out so that it pulls the ID from this plugins
         // registry
@@ -366,9 +375,13 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
 
         final String bootClasspath = KarafCorePluginUtils.join(bootClasspathEntries, ",");
 
-        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_REQUIRED_BOOT_CLASSPATH, bootClasspath);
-        configuration.setAttribute(IPDELauncherConstants.DEFAULT_START_LEVEL, new Integer(
-                KarafPlatformModel.KARAF_DEFAULT_BUNDLE_START_LEVEL));
+        configuration.setAttribute(
+                KarafLaunchConfigurationConstants.KARAF_LAUNCH_REQUIRED_BOOT_CLASSPATH,
+                bootClasspath);
+
+        configuration.setAttribute(
+                IPDELauncherConstants.DEFAULT_START_LEVEL,
+                Integer.parseInt(KarafPlatformModel.KARAF_DEFAULT_BUNDLE_START_LEVEL));
     }
 
     /**
@@ -380,6 +393,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
     protected void loadKarafPlatform(ILaunchConfigurationWorkingCopy configuration) {
         try {
             this.karafPlatform = findKarafPlatform(configuration, new NullProgressMonitor());
+            this.karafPlatformFactory = KarafPlatformModelRegistry.findPlatformModelFactory(karafPlatform.getRootDirectory());
 
             this.startupSection = (StartupSection) Platform.getAdapterManager().getAdapter(this.karafPlatform, StartupSection.class);
             this.startupSection.load();
@@ -415,20 +429,6 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
     }
 
     /**
-     * Sets up the proper Karaf directory structure in {@code karaf.base}:
-     *
-     * @param configuration
-     *            the current launcher configuration used to locate the base
-     *            configuration directory
-     */
-    private void setupKarafDirectoryStructure(File karafBaseDirectory) {
-        for (String subdir : KARAF_SUB_DIRECTORIES) {
-            final File dir = new File(karafBaseDirectory, subdir);
-            dir.mkdirs();
-        }
-    }
-
-    /**
      * Adds default VM arguments to this launch configuration
      *
      * @param configuration
@@ -448,45 +448,5 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
 
         configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArgs.toString());
 
-    }
-
-    /**
-     * Copy all of the default OSGi Config Admin prefs files to the launch
-     * configuration directory. This method will not overwrite an existing
-     * configuration file if it exists.
-     *
-     * @param workingKarafPlatform
-     *            the working Karaf platform configuration
-     */
-    private void synchronizeDefaultConfigAdminPrefs(KarafPlatformModel workingKarafPlatform) {
-        final File runtimeConfigDir = karafPlatform.getConfigurationDirectory().toFile();
-
-        for (File srcConfigFile : runtimeConfigDir.listFiles()) {
-            // Config Admin files are *.cfg
-            if (!srcConfigFile.getAbsolutePath().endsWith(".cfg")) { //$NON-NLS-1$
-                continue;
-            }
-
-            final File dstConfigFile = workingKarafPlatform.getConfigurationDirectory().append(srcConfigFile.getName()).toFile();
-            if (dstConfigFile.exists()) {
-                continue;
-            }
-
-            // The file does not exist so load the properties file and write it
-            // out to the destination. This could change to a straight file
-            // copy.
-            try {
-                final Properties props = new Properties();
-                final InputStream in = new FileInputStream(srcConfigFile);
-
-                props.load(in);
-
-                in.close();
-
-                LaunchConfigurationHelper.save(dstConfigFile, props);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

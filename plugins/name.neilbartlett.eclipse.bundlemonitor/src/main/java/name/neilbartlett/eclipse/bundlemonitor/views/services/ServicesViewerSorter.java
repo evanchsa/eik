@@ -10,7 +10,7 @@
  */
 package name.neilbartlett.eclipse.bundlemonitor.views.services;
 
-import info.evanchik.eclipse.karaf.ui.provider.OSGiServiceWrapper;
+import info.evanchik.eclipse.karaf.workbench.provider.OSGiServiceWrapper;
 
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;

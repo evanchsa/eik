@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="info.evanchik.eclipse.karaf.jmx.feature"
+      label="Eclipse JMX Integration Feature for Apache Felix Karaf"
+      version="0.5.0.qualifier"
+      provider-name="evanchik.info">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http\://www.eclipse.org/legal/epl-v10.html">
+      Eclipse Public License - v1.0
+   </license>
+
+   <includes
+         id="org.eclipse.equinox.jmx.client.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.equinox.jmx.common.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.equinox.jmx.server.feature"
+         version="0.0.0"/>
+
+   <plugin
+         id="info.evanchik.eclipse.karaf.jmx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="info.evanchik.eclipse.karaf.workbench"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.osgi.jmx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.oracle.osgi.jmx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="name.neilbartlett.eclipse.bundlemonitor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

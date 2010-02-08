@@ -27,9 +27,25 @@ public class KarafJMXPlugin implements BundleActivator {
 
     public static final String JMX_COMMON_PLUGIN_ID = "org.eclipse.equinox.jmx.common";
 
+    private static BundleActivator bundleActivator;
+
+    private BundleContext bundleContext;
+
+    public static BundleActivator getDefault() {
+        return bundleActivator;
+    }
+
+    public BundleContext getBundleContext() {
+        return bundleContext;
+    }
+
     public void start(BundleContext context) throws Exception {
+        KarafJMXPlugin.bundleActivator = this;
+        this.bundleContext = context;
     }
 
     public void stop(BundleContext context) throws Exception {
+        KarafJMXPlugin.bundleActivator = null;
+        this.bundleContext = null;
     }
 }

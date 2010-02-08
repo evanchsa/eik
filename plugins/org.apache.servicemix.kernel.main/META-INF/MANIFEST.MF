@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache ServiceMix Kernel Main Classes
+Bundle-SymbolicName: org.apache.servicemix.kernel.main
+Bundle-Version: 1.1.0.qualifier
+Bundle-Vendor: evanchik.info
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: org.apache.servicemix.kernel.main.spi

@@ -12,7 +12,7 @@
 package name.neilbartlett.eclipse.bundlemonitor.views.bundle;
 
 
-import info.evanchik.eclipse.karaf.ui.provider.RuntimeDataProvider;
+import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;

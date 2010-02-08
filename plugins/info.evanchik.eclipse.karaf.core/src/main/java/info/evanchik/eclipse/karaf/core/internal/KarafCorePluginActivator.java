@@ -23,7 +23,7 @@ import org.osgi.framework.BundleContext;
  */
 public class KarafCorePluginActivator extends Plugin {
 
-    public static final String PLUGIN_ID = "org.apache.felix.karaf.ide.eclipse.core"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "info.evanchik.eclipse.karaf.core"; //$NON-NLS-1$
 
     private static KarafCorePluginActivator plugin = null;
 

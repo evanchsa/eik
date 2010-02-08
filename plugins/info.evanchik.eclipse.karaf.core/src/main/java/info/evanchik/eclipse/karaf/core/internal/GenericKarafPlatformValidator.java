@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.core.internal;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformValidatorStrategy;
+import info.evanchik.eclipse.karaf.core.KarafPlatformValidator;
 
 import org.eclipse.core.runtime.IPath;
 
@@ -18,23 +18,16 @@ import org.eclipse.core.runtime.IPath;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class GenericKarafPlatformValidator implements KarafPlatformValidatorStrategy {
+public class GenericKarafPlatformValidator implements KarafPlatformValidator {
 
-    private final IPath rootPath;
-
-    public GenericKarafPlatformValidator(IPath rootPath) {
-        this.rootPath = rootPath;
-    }
-
-    public boolean isValid() {
+    public boolean isValid(IPath rootPath) {
         final IPath karafJar = rootPath.append("/lib/karaf.jar");
-        final IPath servicemixJar = rootPath.append("/lib/servicemix.jar");
 
         final IPath systemDir = rootPath.append("/system");
         final IPath confDir = rootPath.append("/etc");
 
-        // First level is the Karaf or ServiceMix JARs in the lib directory
-        if (karafJar.toFile().exists() || servicemixJar.toFile().exists()) {
+        // First level is the Karaf JARs in the lib directory
+        if (karafJar.toFile().exists()) {
             return true;
         }
 
@@ -44,9 +37,8 @@ public class GenericKarafPlatformValidator implements KarafPlatformValidatorStra
          */
         if(systemDir.toFile().isDirectory() && confDir.toFile().isDirectory()) {
             final IPath karafFeatures = confDir.append("/org.apache.felix.karaf.features.cfg");
-            final IPath servicemixFeatures = confDir.append("/org.apache.servicemix.kernel.features.cfg");
 
-            if(karafFeatures.toFile().exists() || servicemixFeatures.toFile().exists()) {
+            if(karafFeatures.toFile().exists()) {
                 return true;
             }
         }

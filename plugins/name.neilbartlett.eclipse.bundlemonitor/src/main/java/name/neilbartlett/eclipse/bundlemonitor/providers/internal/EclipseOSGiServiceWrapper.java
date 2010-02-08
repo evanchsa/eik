@@ -10,7 +10,7 @@
  */
 package name.neilbartlett.eclipse.bundlemonitor.providers.internal;
 
-import info.evanchik.eclipse.karaf.ui.provider.OSGiServiceWrapper;
+import info.evanchik.eclipse.karaf.workbench.provider.OSGiServiceWrapper;
 
 import java.util.Collections;
 import java.util.HashMap;

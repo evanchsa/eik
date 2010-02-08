@@ -1,22 +1,20 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Core Eclipse PDE integration for Karaf
+Bundle-Name: Eclipse Integration for Apache Felix Karaf
 Bundle-SymbolicName: info.evanchik.eclipse.karaf.core;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.5.0.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
  org.eclipse.core.variables;bundle-version="[3.1.0,4.0.0)",
+ org.eclipse.debug.core;bundle-version="3.5.0",
  org.eclipse.pde.core;bundle-version="[3.2.0,4.0.0)",
- org.eclipse.pde.ui;bundle-version="[3.2.0,4.0.0)"
+ org.eclipse.pde.ui;bundle-version="[3.2.0,4.0.0)",
+ org.osgi.jmx;bundle-version="1.0.0"
 Export-Package: info.evanchik.eclipse.karaf.core,
  info.evanchik.eclipse.karaf.core.configuration,
  info.evanchik.eclipse.karaf.core.equinox,
- info.evanchik.eclipse.karaf.core.jmx,
  info.evanchik.eclipse.karaf.core.model
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator
-Import-Package: javax.management,
- org.osgi.jmx,
- org.osgi.jmx.codec,
- org.osgi.jmx.compendium,
- org.osgi.jmx.core
+Import-Package: javax.management
+Bundle-Vendor: evanchik.info

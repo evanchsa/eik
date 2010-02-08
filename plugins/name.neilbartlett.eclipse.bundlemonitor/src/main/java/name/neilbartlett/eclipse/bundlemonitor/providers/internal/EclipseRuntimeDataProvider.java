@@ -10,9 +10,9 @@
  */
 package name.neilbartlett.eclipse.bundlemonitor.providers.internal;
 
-import info.evanchik.eclipse.karaf.ui.provider.AbstractRuntimeDataProvider;
-import info.evanchik.eclipse.karaf.ui.provider.OSGiServiceWrapper;
-import info.evanchik.eclipse.karaf.ui.provider.RuntimeDataProviderListener;
+import info.evanchik.eclipse.karaf.workbench.provider.AbstractRuntimeDataProvider;
+import info.evanchik.eclipse.karaf.workbench.provider.OSGiServiceWrapper;
+import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProviderListener;
 
 import java.util.EnumSet;
 

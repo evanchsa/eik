@@ -11,9 +11,10 @@
 package info.evanchik.eclipse.karaf.ui.wizards.provisioner;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.model.DirectoryKarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.wizard.WizardPage;
@@ -120,7 +121,17 @@ public class KarafInstallationSelectionPage extends WizardPage {
     }
 
     private void validateWizardState() {
-        karafPlatform = new DirectoryKarafPlatformModel(new Path(installDir.getText()));
-        setPageComplete(karafPlatform.isValid());
+        try {
+            karafPlatform = KarafPlatformModelRegistry.findPlatformModel(new Path(installDir.getText()));
+            if (karafPlatform == null) {
+                setErrorMessage("The specified directory does not contain a recognized installation");
+            } else {
+                setErrorMessage(null);
+                setPageComplete(karafPlatform.isValid());
+            }
+        } catch (CoreException e) {
+            setErrorMessage("There was an error loading the installation: " + e.getMessage());
+            KarafUIPluginActivator.getLogger().error("There was an error loading the installation", e);
+        }
     }
 }

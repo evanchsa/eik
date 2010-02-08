@@ -11,8 +11,8 @@
  */
 package name.neilbartlett.eclipse.bundlemonitor.views.bundle;
 
-import info.evanchik.eclipse.karaf.ui.provider.RuntimeDataProvider;
-import info.evanchik.eclipse.karaf.ui.provider.RuntimeDataProviderListener;
+import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
+import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProviderListener;
 
 import java.util.ArrayList;
 import java.util.EnumSet;

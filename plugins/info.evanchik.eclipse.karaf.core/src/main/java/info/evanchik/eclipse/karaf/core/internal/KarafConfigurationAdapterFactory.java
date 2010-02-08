@@ -18,12 +18,10 @@ import info.evanchik.eclipse.karaf.core.configuration.GeneralSection;
 import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
 import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
 import info.evanchik.eclipse.karaf.core.configuration.SystemSection;
-import info.evanchik.eclipse.karaf.core.configuration.internal.BundleStartupSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.GeneralSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.ManagementSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.StartupSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.SystemSectionImpl;
-import info.evanchik.eclipse.karaf.core.model.BundleKarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.model.WorkingKarafPlatformModel;
 
 import org.eclipse.core.runtime.IAdapterFactory;
@@ -65,9 +63,14 @@ public class KarafConfigurationAdapterFactory implements IAdapterFactory {
 
             return new ManagementSectionImpl(karafModel);
         } else if (adapterType == StartupSection.class) {
+            // TODO: Figure out how to re-enable support
+           /*
             if (karafModel instanceof BundleKarafPlatformModel) {
                 return new BundleStartupSectionImpl(karafModel);
-            } else if (karafModel instanceof WorkingKarafPlatformModel) {
+            } else
+            */
+
+            if (karafModel instanceof WorkingKarafPlatformModel) {
 
                 /*
                  * This delegates to the original model because that is where

@@ -28,21 +28,9 @@ import org.osgi.framework.BundleException;
  */
 public class KarafAdapterHook implements AdaptorHook {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.osgi.baseadaptor.hooks.AdaptorHook#addProperties(java.util
-     * .Properties)
-     */
     public void addProperties(Properties properties) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.eclipse.osgi.baseadaptor.hooks.AdaptorHook#createFrameworkLog()
-     */
     public FrameworkLog createFrameworkLog() {
         return null;
     }
@@ -58,65 +46,23 @@ public class KarafAdapterHook implements AdaptorHook {
         loader.loadSystemProperties();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.osgi.baseadaptor.hooks.AdaptorHook#frameworkStop(org.osgi
-     * .framework.BundleContext)
-     */
     public void frameworkStop(BundleContext context) throws BundleException {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.osgi.baseadaptor.hooks.AdaptorHook#frameworkStopping(org.
-     * osgi.framework.BundleContext)
-     */
     public void frameworkStopping(BundleContext context) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.osgi.baseadaptor.hooks.AdaptorHook#handleRuntimeError(java
-     * .lang.Throwable)
-     */
     public void handleRuntimeError(Throwable error) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.osgi.baseadaptor.hooks.AdaptorHook#initialize(org.eclipse
-     * .osgi.baseadaptor.BaseAdaptor)
-     */
     public void initialize(BaseAdaptor adaptor) {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.osgi.baseadaptor.hooks.AdaptorHook#mapLocationToURLConnection
-     * (java.lang.String)
-     */
     public URLConnection mapLocationToURLConnection(String location)
             throws IOException {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.osgi.baseadaptor.hooks.AdaptorHook#matchDNChain(java.lang
-     * .String, java.lang.String[])
-     */
     public boolean matchDNChain(String pattern, String[] dnChain) {
         return false;
     }

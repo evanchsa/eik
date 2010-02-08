@@ -28,6 +28,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -107,11 +108,16 @@ public final class KarafCorePluginUtils {
     public static String getBundleLocation(String bundleSymbolicName) {
         final Bundle bundle = Platform.getBundle(bundleSymbolicName);
         if (bundle == null) {
-            // TODO: Handle this condition better
+            KarafCorePluginActivator.getLogger().error("Unable to locate bundle with symbolic name: " + bundleSymbolicName);
             return null;
         }
 
-        return bundle.getLocation();
+        try {
+            return FileLocator.getBundleFile(bundle).getAbsolutePath();
+        } catch(IOException e) {
+            KarafCorePluginActivator.getLogger().error("Unable to locate bundle with symbolic name: " + bundleSymbolicName, e);
+            return null;
+        }
     }
 
     /**

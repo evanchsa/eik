@@ -2,7 +2,7 @@
 <feature
       id="info.evanchik.eclipse.karaf.feature"
       label="%featureName"
-      version="0.4.0.qualifier"
+      version="0.5.0.qualifier"
       provider-name="%providerName">
 
    <description>
@@ -33,19 +33,6 @@
          unpack="false"/>
 
    <plugin
-         id="info.evanchik.eclipse.karaf.jmx"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="info.evanchik.eclipse.karaf.target"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="info.evanchik.eclipse.karaf.ui"
          download-size="0"
          install-size="0"
@@ -53,35 +40,7 @@
          unpack="false"/>
 
    <plugin
-         id="info.evanchik.eclipse.karaf.wtp.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="info.evanchik.eclipse.karaf.wtp.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="name.neilbartlett.eclipse.bundlemonitor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.osgi.jmx"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.oracle.osgi.jmx"
          download-size="0"
          install-size="0"
          version="0.0.0"

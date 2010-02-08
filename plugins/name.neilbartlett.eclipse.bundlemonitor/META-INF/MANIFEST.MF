@@ -5,8 +5,8 @@ Bundle-SymbolicName: name.neilbartlett.eclipse.bundlemonitor;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: name.neilbartlett.eclipse.bundlemonitor.internal.Activator
 Bundle-Vendor: Neil Bartlett
-Require-Bundle: org.eclipse.core.runtime,
- info.evanchik.eclipse.karaf.ui;bundle-version="1.0.0",
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
+ info.evanchik.eclipse.karaf.workbench;bundle-version="0.5.0",
  org.osgi.jmx;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy

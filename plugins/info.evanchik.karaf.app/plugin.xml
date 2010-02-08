@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="info.evanchik.swordfish.app.main"
+         name="Eclipse Swordfish ESB main application"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="info.evanchik.karaf.app.KarafApplication">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="server"
+         name="Eclipse Swordfish ESB product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="info.evanchik.swordfish.app.main"
+            description="Eclipse Swordfish Enterprise Service Bus"
+            name="Eclipse Swordfish Product">
+         <property
+               name="appName"
+               value="Eclipse Swordfish Product">
+         </property>
+      </product>
+   </extension>
+
+</plugin>

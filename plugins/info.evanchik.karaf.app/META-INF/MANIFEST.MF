@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Felix Karaf Main Application
+Bundle-SymbolicName: info.evanchik.karaf.app;singleton:=true
+Bundle-Version: 1.3.0.qualifier
+Bundle-Activator: info.evanchik.karaf.app.Activator
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: evanchik.info

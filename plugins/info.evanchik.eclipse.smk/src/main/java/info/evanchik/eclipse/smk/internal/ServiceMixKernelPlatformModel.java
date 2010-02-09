@@ -54,19 +54,23 @@ public class ServiceMixKernelPlatformModel extends GenericKarafPlatformModel {
             }
         }
 
-        final Bundle b = Platform.getBundle(SERVICEMIX_MAIN_SPI_PROVIDER);
+        final Bundle[] bundles = Platform.getBundles(SERVICEMIX_MAIN_SPI_PROVIDER, null);
 
-        if (b == null) {
+        if (bundles == null) {
             ServiceMixKernelActivator.getLogger().error("Unable to resolve MainService SPI bundle: " + SERVICEMIX_MAIN_SPI_PROVIDER);
         } else {
-            try {
-                final File location = FileLocator.getBundleFile(b);
-                finalClasspath.add(location.getAbsolutePath());
-            } catch(IOException e) {
-                ServiceMixKernelActivator.getLogger().error("Unable to resolve MainService SPI bundle: " + SERVICEMIX_MAIN_SPI_PROVIDER, e);
+            for (Bundle b : bundles) {
+                try {
+                    final File location = FileLocator.getBundleFile(b);
+                    if (!location.getAbsolutePath().endsWith(SERVICEMIX_MAIN_JAR)) {
+                        finalClasspath.add(location.getAbsolutePath());
+                        break;
+                    }
+                } catch(IOException e) {
+                    ServiceMixKernelActivator.getLogger().error("Unable to resolve MainService SPI bundle: " + SERVICEMIX_MAIN_SPI_PROVIDER, e);
+                }
             }
         }
-        finalClasspath.add("/home/evanchsa/apps/plugins/org.apache.servicemix.kernel.main_1.1.0.201002071639.jar");
 
         return finalClasspath;
     }

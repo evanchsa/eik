@@ -19,18 +19,12 @@ import info.evanchik.eclipse.karaf.core.SystemBundleNames;
 import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.WorkingKarafPlatformModel;
-import info.evanchik.eclipse.karaf.ui.internal.BundleKarafPlatformModel;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -41,7 +35,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
-import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.pde.core.plugin.IPluginBase;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.ModelEntry;
@@ -50,7 +43,6 @@ import org.eclipse.pde.internal.ui.IPDEUIConstants;
 import org.eclipse.pde.internal.ui.launcher.LaunchConfigurationHelper;
 import org.eclipse.pde.ui.launcher.IPDELauncherConstants;
 import org.eclipse.pde.ui.launcher.OSGiLaunchConfigurationInitializer;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
 /**
@@ -91,68 +83,6 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      * @throws CoreException
      */
     public static KarafPlatformModel findKarafPlatform(ILaunchConfiguration configuration, IProgressMonitor monitor) throws CoreException {
-        /*
-        IPluginModelBase karafPlatformPlugin = PluginRegistry.findModel(KarafPlatformModel.KARAF_MAIN_BUNDLE_SYMBOLIC_NAME);
-        if (karafPlatformPlugin == null) {
-            monitor.worked(10);
-            karafPlatformPlugin = PluginRegistry.findModel(KarafPlatformModel.KARAF_JAAS_BOOT_BUNDLE_SYMBOLIC_NAME);
-        }
-
-        monitor.worked(10);
-
-        if (karafPlatformPlugin == null) {
-            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID,
-                    "Unable to locate Karaf Platform. Please use set the Target Platform to include a valid set of Karaf bundles"));
-        }
-
-        final IPath modelPath = new Path(karafPlatformPlugin.getInstallLocation());
-        if (modelPath.toFile().isDirectory()) {
-            // This is in the workspace! What to do?!
-            throw new CoreException(new Status(IStatus.WARNING, KarafUIPluginActivator.PLUGIN_ID,
-                    "The Karaf Target Platform cannot be projects in your workspace: " + modelPath));
-        }
-
-        // Strip the filename and its containing directory (lib/<filename>)
-        final IPath rootPath = modelPath.removeLastSegments(2);
-
-        // This must be Platform.getBundle() because the plugin may not be in
-        // the Target Platform or Workspace
-        final Bundle karafPluginBundle = Platform.getBundle(KarafPlatformModel.KARAF_DEFAULT_PLATFORM_PROVIDER_SYMBOLIC_NAME);
-
-        monitor.worked(10);
-
-        final KarafPlatformModel karafPlatformModel;
-
-        if (karafPluginBundle != null) {
-            final File builtInKarafPlatform;
-            try {
-                builtInKarafPlatform = FileLocator.getBundleFile(karafPluginBundle);
-            } catch (IOException e) {
-                throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID,
-                        "Unable to resolve built in Karaf Target Platform to File", e));
-            }
-
-            if (!builtInKarafPlatform.isDirectory()) {
-                throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID,
-                        "Invalid built in Karaf Target Platform: The bundle must be unpacked"));
-            }
-
-            monitor.worked(10);
-
-            // Remove the "runtimes/karaf" from the bundle path
-            final IPath testBundlePath = rootPath.removeLastSegments(2);
-            final IPath bundlePath = new Path(builtInKarafPlatform.getAbsolutePath());
-
-            if (testBundlePath.equals(bundlePath)) {
-                karafPlatformModel = new BundleKarafPlatformModel(karafPluginBundle);
-            } else {
-                karafPlatformModel = KarafPlatformModelRegistry.findPlatformModel(rootPath);
-            }
-        } else {
-            karafPlatformModel = KarafPlatformModelRegistry.findPlatformModel(rootPath);
-        }
-        */
-
         final KarafPlatformModel karafPlatformModel =
             KarafPlatformModelRegistry.findActivePlatformModel();
 
@@ -183,73 +113,6 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
     }
 
     /**
-     * This will synchronize the Karaf Equinox hook provider to the target
-     * platform if possible. Equinox hook providers must be in the same
-     * directory as the JAR that provides OSGi (org.eclipse.osgi*.jar).
-     *
-     * @param karafPlatform
-     *            the {@link KarafPlatformModel} that will be synchronized
-     */
-    public static void synchronizeHooksWithPlatform(KarafPlatformModel karafPlatform) {
-        if (karafPlatform.isReadOnly()) {
-            KarafUIPluginActivator.getLogger().info(
-                    "Cannot synchronize a read-only target platform: " + karafPlatform.getRootDirectory().toOSString());
-            return;
-        }
-
-        final BundleDescription hookIsPresent = karafPlatform.getState().getBundle(
-                KarafLaunchConfigurationInitializer.KARAF_HOOK_PLUGIN_ID, null);
-
-        if (hookIsPresent != null) {
-            return;
-        }
-
-        final Bundle bundleKarafPlatform = Platform.getBundle(KarafPlatformModel.KARAF_DEFAULT_PLATFORM_PROVIDER_SYMBOLIC_NAME);
-        if (bundleKarafPlatform == null) {
-            return;
-        }
-
-        final String wildcard = KARAF_HOOK_PLUGIN_ID + "*.jar";
-        final Enumeration<?> enumeration = bundleKarafPlatform.findEntries(BundleKarafPlatformModel.KARAF_RUNTIME_BUNDLES_LOCATION,
-                wildcard, false);
-
-        if (enumeration == null || !enumeration.hasMoreElements()) {
-            KarafUIPluginActivator.getLogger().error(
-                    "Cannot discover platform model entries at " + BundleKarafPlatformModel.KARAF_RUNTIME_BUNDLES_LOCATION);
-            return;
-        }
-
-        final URL hookBundleUrl = (URL) enumeration.nextElement();
-
-        try {
-            final URL fileSrc = FileLocator.toFileURL(hookBundleUrl);
-            final File src = new File(fileSrc.toURI());
-
-            /*
-             * Build up the destination conceptually as <dir to Equinox JAR> /
-             * <hook JAR filename>
-             */
-            final BundleDescription equinox = karafPlatform.getState().getBundle("org.eclipse.osgi", null);
-            if (equinox == null) {
-                // TODO: throw new CoreException()
-                return;
-            }
-
-            IPath dstPath = new Path(equinox.getLocation());
-            dstPath = dstPath.removeLastSegments(1);
-            dstPath = dstPath.append(src.getName());
-
-            KarafCorePluginUtils.copyFile(src, dstPath.toFile());
-
-        } catch (IOException e) {
-            KarafUIPluginActivator.getLogger().error("Unable to copy hook implementation from", e);
-        } catch (URISyntaxException e) {
-            KarafUIPluginActivator.getLogger().error("Could not resolve File URL to URL");
-        }
-
-    }
-
-    /**
      * The model that represents the Karaf platform
      */
     protected KarafPlatformModel karafPlatform;
@@ -261,8 +124,6 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
     @Override
     public void initialize(ILaunchConfigurationWorkingCopy configuration) {
         loadKarafPlatform(configuration);
-
-        synchronizeHooksWithPlatform(this.karafPlatform);
 
         final File configDir =
             LaunchConfigurationHelper.getConfigurationArea(configuration);

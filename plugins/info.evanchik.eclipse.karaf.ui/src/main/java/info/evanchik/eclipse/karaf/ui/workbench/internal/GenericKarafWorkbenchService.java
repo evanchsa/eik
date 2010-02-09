@@ -14,14 +14,12 @@ import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
-import info.evanchik.eclipse.karaf.core.configuration.SystemSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationConstants;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -48,8 +46,32 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
             return Collections.emptyList();
         }
+        String[] bundles = {
+                "info.evanchik.karaf.app",
+                "org.eclipse.core.contenttype",
+                "org.eclipse.core.jobs",
+                "org.eclipse.core.runtime",
+                "org.eclipse.core.runtime.compatibility.auth",
+                "org.eclipse.equinox.app",
+                "org.eclipse.equinox.common",
+                "org.eclipse.equinox.registry",
+                "org.eclipse.equinox.preferences",
+                "org.eclipse.osgi.util"
+        };
 
-        return Collections.emptyList();
+        final List<BundleEntry> bundleEntries = new ArrayList<BundleEntry>();
+
+        for (String b : bundles) {
+            final String bundleLocation =
+                KarafCorePluginUtils.getBundleLocation(b);
+
+            final BundleEntry entry =
+                new BundleEntry.Builder(bundleLocation).startLevel("1").autostart("start").build(); //$NON-NLS-1$ $NON-NLS-2$
+
+            bundleEntries.add(entry);
+        }
+
+        return bundleEntries;
     }
 
     public Map<String, String> getAdditionalEquinoxConfiguration(KarafWorkingPlatformModel platformModel) {
@@ -140,22 +162,9 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
                     KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE,
                     false);
 
-        final File javaLoggingFile = new File(platformModel.getConfigurationDirectory().toFile(), "java.util.logging.properties"); //$NON-NLS-1$
-
-        final SystemSection systemSection =
-            (SystemSection) Platform.getAdapterManager().getAdapter(
-                    platformModel,
-                    SystemSection.class);
-
-        systemSection.load();
-
-        systemSection.setProperty(KarafPlatformModel.KARAF_BASE_PROP, platformModel.getRootDirectory().toOSString());
-        systemSection.setProperty(KarafPlatformModel.KARAF_HOME_PROP, platformModel.getRootDirectory().toOSString());
-        systemSection.setProperty("java.util.logging.config.file", javaLoggingFile.getAbsolutePath()); //$NON-NLS-1$
-        systemSection.setProperty("karaf.startLocalConsole", startLocalConsole.toString()); //$NON-NLS-1$
-        systemSection.setProperty("karaf.startRemoteShell", startRemoteConsole.toString()); //$NON-NLS-1$
-
-        systemSection.save();
+        arguments.add("-Djava.util.logging.config.file=" + platformModel.getConfigurationDirectory() + "/java.util.logging.properties");
+        arguments.add("-Dkaraf.startLocalConsole=" + startLocalConsole.toString()); //$NON-NLS-1$
+        arguments.add("-Dkaraf.startRemoteShell=" + startRemoteConsole.toString()); //$NON-NLS-1$
 
         return arguments;
     }

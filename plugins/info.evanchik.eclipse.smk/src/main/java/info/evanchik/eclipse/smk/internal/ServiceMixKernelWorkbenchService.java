@@ -11,6 +11,7 @@
 package info.evanchik.eclipse.smk.internal;
 
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
+import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
@@ -20,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -81,10 +83,6 @@ public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
                 platformModel.getRootDirectory().toOSString());
 
         equinoxProperties.put(
-                "servicemix.name",
-                "rootName");
-
-        equinoxProperties.put(
                 "org.apache.servicemix.filemonitor.configDir",
                 platformModel.getConfigurationDirectory().toOSString());
 
@@ -112,9 +110,19 @@ public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
                 "org.osgi.framework.bootdelegation",
                 "sun.*,com.sun.management.*");
 
-        equinoxProperties.put(
-                "org.osgi.framework.system.packages.extra",
-                "org.osgi.framework;version=\"1.4.0\",org.apache.servicemix.kernel.main.spi;version=\"1.0.0\",org.apache.servicemix.kernel.jaas.boot,org.apache.servicemix.kernel.version");
+        try {
+            final Properties currentConfig =
+                KarafCorePluginUtils.loadProperties(
+                    platformModel.getConfigurationDirectory().toFile(),
+                    KarafPlatformModel.KARAF_DEFAULT_CONFIG_PROPERTIES_FILE);
+
+            final String extraSystemPackages = "org.osgi.framework;version=\"1.4.0\",org.apache.servicemix.kernel.main.spi;version=\"1.0.0\",org.apache.servicemix.kernel.jaas.boot,org.apache.servicemix.kernel.version".concat(",").concat(currentConfig.getProperty("jre-1.6"));
+            equinoxProperties.put(
+                    "org.osgi.framework.system.packages.extra",
+                    extraSystemPackages);
+        } catch(CoreException e) {
+
+        }
 
         return equinoxProperties;
     }

@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.pde.core.targets">
       <target
-            definition="karaf-eclipse-tooling.target"
+            definition="eik.target"
             id="info.evanchik.eclipse.karaf.development.target"
             name="Eclipse Integration for Karaf Development">
       </target>
@@ -31,7 +31,7 @@
             id="info.evanchik.eclipse.karaf.Framework"
             initializer="info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationInitializer"
             launcherDelegate="info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationDelegate"
-            name="Karaf on Equinox">
+            name="Apache Felix Karaf runtime on Equinox">
       </framework>
    </extension>
    <extension

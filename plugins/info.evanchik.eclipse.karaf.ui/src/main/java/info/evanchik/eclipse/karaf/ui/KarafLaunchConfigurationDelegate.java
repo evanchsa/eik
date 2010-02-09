@@ -146,7 +146,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
         buildEquinoxConfiguration(configuration);
 
-        final List<String> arguments = karafPlatform.getBootClasspath();
+        final List<String> arguments = new ArrayList<String>();
 
         for (String s : progArguments) {
             arguments.add(s);
@@ -168,31 +168,12 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     public String[] getVMArguments(ILaunchConfiguration configuration) throws CoreException {
         final String[] vmArguments = super.getVMArguments(configuration);
 
-        /*
-         * Build the framework extension argument by augmenting it with
-         * the KARAF_HOOK_PLUGIN_ID hook
-         */
-        final String FRAMEWORK_EXTENSION_PREFIX = "-Dosgi.framework.extensions="; //$NON-NLS-1$
-
         final List<String> arguments = new ArrayList<String>();
-
-        String frameworkExtension = null;
-
-        // Process all arguments, preserving all but the framework extension arg
-        // which is augmented to include the proper hook bundle
         for (String vmArg : vmArguments) {
-            if (vmArg.startsWith(FRAMEWORK_EXTENSION_PREFIX) && !vmArg.contains(KarafLaunchConfigurationInitializer.KARAF_HOOK_PLUGIN_ID)) {
-
-                frameworkExtension = vmArg.concat("," + KarafLaunchConfigurationInitializer.KARAF_HOOK_PLUGIN_ID); //$NON-NLS-1$
-            } else {
-                arguments.add(vmArg);
-            }
+            arguments.add(vmArg);
         }
 
-        // Did not find the framework extension property
-        if (frameworkExtension == null) {
-            arguments.add(FRAMEWORK_EXTENSION_PREFIX + KarafLaunchConfigurationInitializer.KARAF_HOOK_PLUGIN_ID);
-        }
+        arguments.add("-Deik.properties.system=" + workingKarafPlatform.getConfigurationFile("system.properties"));
 
         final List<KarafWorkbenchServiceFactory> list =
             WorkbenchServiceExtensions.getLaunchCustomizerFactories();
@@ -227,10 +208,6 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         super.preLaunchCheck(configuration, launch, monitor);
 
         this.karafPlatform = KarafLaunchConfigurationInitializer.findKarafPlatform(configuration, monitor);
-
-        monitor.worked(10);
-
-        KarafLaunchConfigurationInitializer.synchronizeHooksWithPlatform(this.karafPlatform);
 
         monitor.worked(10);
 

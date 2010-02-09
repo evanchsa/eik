@@ -8,43 +8,38 @@
  * Contributors:
  *  Stephen Evanchik - initial implementation
  */
-package info.evanchik.smk.app;
+package info.evanchik.karaf.app;
 
-import info.evanchik.smk.app.internal.LockManager;
-import info.evanchik.smk.app.internal.SystemPropertyLoader;
+import info.evanchik.karaf.app.internal.LockManager;
+import info.evanchik.karaf.app.internal.SystemPropertyLoader;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Properties;
+import java.util.logging.Logger;
 
-import org.apache.servicemix.kernel.main.spi.MainService;
+import org.apache.felix.karaf.main.BootstrapLogManager;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class MainApplication implements IApplication, MainService {
+public class MainApplication implements IApplication {
 
+    private static final Logger LOG = Logger.getLogger(MainApplication.class.getName());
+
+    @SuppressWarnings("unused")
     private String[] applicationArgs;
 
+    @SuppressWarnings("unused")
     private BundleContext bundleContext;
 
-    private final AtomicInteger exitCode = new AtomicInteger(0);
-
-    private ServiceRegistration mainService;
-
+    @Override
     public Object start(IApplicationContext context) throws Exception {
         System.out.println("Apache ServiceMix Kernel :: Starting main application");
 
         this.bundleContext = Activator.getDefault().getBundle().getBundleContext();
-
-        this.mainService =
-            bundleContext.registerService(
-                    MainService.class.getName(),
-                    this,
-                    null);
 
         final Object argsObject = context.getArguments().get("application.args");
 
@@ -54,15 +49,17 @@ public class MainApplication implements IApplication, MainService {
             this.applicationArgs = (String[]) argsObject;
         }
 
+        BootstrapLogManager.setProperties(new Properties());
+        LOG.addHandler(BootstrapLogManager.getDefaultHandler());
+
         SystemPropertyLoader.getInstance().loadSystemProperties();
         LockManager.getInstance().start();
 
         return null;
     }
 
+    @Override
     public void stop() {
-
-        mainService.unregister();
 
         try {
             LockManager.getInstance().stop();
@@ -71,15 +68,4 @@ public class MainApplication implements IApplication, MainService {
         }
     }
 
-    public String[] getArgs() {
-        return applicationArgs;
-    }
-
-    public int getExitCode() {
-        return exitCode.get();
-    }
-
-    public void setExitCode(int arg0) {
-        exitCode.set(arg0);
-    }
 }

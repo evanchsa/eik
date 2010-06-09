@@ -67,6 +67,9 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
         this.mbeanProvider = provider;
 
         this.updateDataJob = new Job("Populating OSGi Runtime view data for: " + name) {
+
+            private volatile boolean cancel = false;
+
             @Override
             public IStatus run(IProgressMonitor monitor) {
                 if (monitor == null) {
@@ -95,15 +98,22 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
                     return Status.OK_STATUS;
                 }
 
-                /*
-                 * Poll every 25 seconds because the MBeans are not notification
-                 * enabled
-                 */
-                this.schedule(25000);
+                if (!cancel) {
+                    /*
+                     * Poll every 25 seconds because the MBeans are not notification
+                     * enabled
+                     */
+                    this.schedule(25000);
+                }
 
                 fireProviderChangeEvent(EnumSet.of(RuntimeDataProviderListener.EventType.CHANGE));
 
                 return Status.OK_STATUS;
+            }
+
+            @Override
+            protected void canceling() {
+                cancel = true;
             }
         };
 

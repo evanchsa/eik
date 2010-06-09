@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/info.evanchik.eclipse.karaf.feature_0.5.0.201002081907.jar" id="info.evanchik.eclipse.karaf.feature" version="0.5.0.201002081907">
+   <feature url="features/info.evanchik.eclipse.karaf.feature_0.5.0.201003262133.jar" id="info.evanchik.eclipse.karaf.feature" version="0.5.0.201003262133">
       <category name="info.evanchik.eclipse.karaf"/>
    </feature>
-   <feature url="features/info.evanchik.eclipse.karaf.jmx.feature_0.5.0.201002081907.jar" id="info.evanchik.eclipse.karaf.jmx.feature" version="0.5.0.201002081907">
+   <feature url="features/info.evanchik.eclipse.karaf.jmx.feature_0.5.0.201003262133.jar" id="info.evanchik.eclipse.karaf.jmx.feature" version="0.5.0.201003262133">
       <category name="info.evanchik.eclipse.karaf"/>
    </feature>
-   <feature url="features/info.evanchik.smk.feature_0.5.0.201002081907.jar" id="info.evanchik.smk.feature" version="0.5.0.201002081907">
+   <feature url="features/info.evanchik.smk.feature_0.5.0.201003262133.jar" id="info.evanchik.smk.feature" version="0.5.0.201003262133">
       <category name="info.evanchik.eclipse.smk"/>
    </feature>
-   <category-def name="info.evanchik.eclipse.karaf" label="Eclipse Integration for Apache Felix Karaf"/>
-   <category-def name="info.evanchik.eclipse.smk" label="Eclipse Integration for Apache ServiceMix Kernel"/>
+   <category-def name="info.evanchik.eclipse.karaf" label="Eclipse Integration for Apache Felix Karaf">
+      <description>
+         Core functionality required to integrate Apache Felix Karaf family of application servers inside the Eclipse IDE.
+      </description>
+   </category-def>
+   <category-def name="info.evanchik.eclipse.smk" label="Eclipse Integration for Apache ServiceMix Kernel">
+      <description>
+         Functionality required to execute application server distributions based on Apache ServiceMix Kernel
+      </description>
+   </category-def>
 </site>

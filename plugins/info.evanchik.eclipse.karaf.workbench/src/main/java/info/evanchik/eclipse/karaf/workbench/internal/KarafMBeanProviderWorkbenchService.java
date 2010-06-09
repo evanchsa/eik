@@ -328,6 +328,10 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                         final KarafRuntimeDataProviderItem item =
                             runtimeDataProviderMap.get(memento);
 
+                        if (item == null) {
+                            return;
+                        }
+
                         item.getMbeanConnectionJob().cancel();
                         item.getRuntimeDataProviderServiceRegistration().unregister();
                         item.getRuntimeDataProvider().stop();

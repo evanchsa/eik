@@ -6,7 +6,7 @@
       provider-name="evanchik.info">
 
    <description>
-      JMX Integration for Apache Felix Karaf runtimes
+      JMX Integration for Apache Karaf runtimes
    </description>
 
    <copyright>

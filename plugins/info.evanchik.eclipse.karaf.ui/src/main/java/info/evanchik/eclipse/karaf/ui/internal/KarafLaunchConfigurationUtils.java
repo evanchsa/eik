@@ -38,11 +38,10 @@ public final class KarafLaunchConfigurationUtils {
      *
      * @see StrSubstitutor
      */
-    @SuppressWarnings("unchecked")
     public static void interpolateVariables(final Properties configProperties,
             final Properties initialProperties) {
 
-        for (Enumeration e = configProperties.propertyNames(); e
+        for (Enumeration<?> e = configProperties.propertyNames(); e
                 .hasMoreElements();) {
             final String name = (String) e.nextElement();
             final String value = (String) configProperties.get(name);

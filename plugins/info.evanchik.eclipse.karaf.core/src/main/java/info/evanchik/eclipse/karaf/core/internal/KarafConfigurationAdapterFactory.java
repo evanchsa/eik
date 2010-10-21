@@ -46,8 +46,7 @@ public class KarafConfigurationAdapterFactory implements IAdapterFactory {
         SystemSection.class
     };
 
-    @SuppressWarnings("unchecked")
-    public Object getAdapter(Object adaptableObject, Class adapterType) {
+    public Object getAdapter(Object adaptableObject, @SuppressWarnings("rawtypes") Class adapterType) {
         if (adaptableObject instanceof KarafPlatformModel == false) {
             return null;
         }

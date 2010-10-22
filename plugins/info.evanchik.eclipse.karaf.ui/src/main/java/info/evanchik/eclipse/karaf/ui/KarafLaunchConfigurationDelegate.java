@@ -20,6 +20,8 @@ import info.evanchik.eclipse.karaf.ui.internal.WorkbenchServiceExtensions;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,16 +34,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.pde.internal.launching.launcher.LaunchConfigurationHelper;
-import org.eclipse.pde.ui.launcher.EquinoxLaunchConfiguration;
-import org.eclipse.pde.ui.launcher.IPDELauncherConstants;
+import org.eclipse.pde.launching.EquinoxLaunchConfiguration;
+import org.eclipse.pde.launching.IPDELauncherConstants;
 import org.osgi.framework.Bundle;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-@SuppressWarnings("restriction")
 public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration {
 
     /**
@@ -116,6 +116,21 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     private final Map<String, BundleEntry> deployedBundles =
         new HashMap<String, BundleEntry>();
 
+    /**
+     * Saves a properties file
+     * @param file
+     * @param properties
+     */
+    public static void save(File file, Properties properties) {
+        try {
+            FileOutputStream stream = new FileOutputStream(file);
+            properties.store(stream, "Configuration File"); //$NON-NLS-1$
+            stream.flush();
+            stream.close();
+        } catch (IOException e) {
+            //PDECore.logException(e);
+        }
+    }
     /**
      * Adds the items typically found in {@code KARAF_HOME/lib} as system
      * classpath entries.<br>
@@ -281,7 +296,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
         KarafLaunchConfigurationUtils.interpolateVariables(equinoxProperties, equinoxProperties);
 
-        LaunchConfigurationHelper.save(new File(getConfigDir(configuration), ECLIPSE_CONFIG_INI_FILE), equinoxProperties);
+        save(new File(getConfigDir(configuration), ECLIPSE_CONFIG_INI_FILE), equinoxProperties);
     }
 
     /**

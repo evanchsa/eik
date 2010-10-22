@@ -41,8 +41,8 @@ import org.eclipse.pde.core.plugin.ModelEntry;
 import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.pde.internal.launching.launcher.LaunchConfigurationHelper;
 import org.eclipse.pde.internal.ui.IPDEUIConstants;
-import org.eclipse.pde.ui.launcher.IPDELauncherConstants;
-import org.eclipse.pde.ui.launcher.OSGiLaunchConfigurationInitializer;
+import org.eclipse.pde.launching.IPDELauncherConstants;
+import org.eclipse.pde.launching.OSGiLaunchConfigurationInitializer;
 import org.osgi.framework.Version;
 
 /**

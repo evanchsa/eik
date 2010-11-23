@@ -19,12 +19,15 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 /**
  * Stephen Evanchik (evanchsa@gmail.com)
  *
  */
 public final class SystemPropertyLoader {
+
+    public static final String INCLUDES_PROPERTY = "${includes}"; //$NON-NLS-1$
 
     public static final String KARAF_BASE_PROP_KEY = "karaf.base"; //$NON-NLS-1$
 
@@ -133,6 +136,70 @@ public final class SystemPropertyLoader {
             }
         }
 
+        final String includes = props.getProperty(INCLUDES_PROPERTY);
+        if (includes != null) {
+            final StringTokenizer st = new StringTokenizer(includes, "\" ", true);
+            if (st.countTokens() > 0) {
+                String location;
+                do {
+                    location = nextLocation(st);
+                    if (location != null) {
+                        try {
+                            URL url = new URL(source, location);
+                            Properties includeProps = loadProperties(url);
+                            props.putAll(includeProps);
+                        } catch (MalformedURLException e) {
+                            // TODO: What to throw?
+                        }
+                    }
+                } while (location != null);
+            }
+            props.remove(INCLUDES_PROPERTY);
+        }
+
         return props;
+    }
+
+    private static String nextLocation(StringTokenizer st) {
+        String retVal = null;
+
+        if (st.countTokens() > 0) {
+            String tokenList = "\" ";
+            StringBuffer tokBuf = new StringBuffer(10);
+            String tok = null;
+            boolean inQuote = false;
+            boolean tokStarted = false;
+            boolean exit = false;
+            while ((st.hasMoreTokens()) && (!exit)) {
+                tok = st.nextToken(tokenList);
+                if (tok.equals("\"")) {
+                    inQuote = !inQuote;
+                    if (inQuote) {
+                        tokenList = "\"";
+                    } else {
+                        tokenList = "\" ";
+                    }
+
+                } else if (tok.equals(" ")) {
+                    if (tokStarted) {
+                        retVal = tokBuf.toString();
+                        tokStarted = false;
+                        tokBuf = new StringBuffer(10);
+                        exit = true;
+                    }
+                } else {
+                    tokStarted = true;
+                    tokBuf.append(tok.trim());
+                }
+            }
+
+            // Handle case where end of token stream and
+            // still got data
+            if ((!exit) && (tokStarted)) {
+                retVal = tokBuf.toString();
+            }
+        }
+
+        return retVal;
     }
 }

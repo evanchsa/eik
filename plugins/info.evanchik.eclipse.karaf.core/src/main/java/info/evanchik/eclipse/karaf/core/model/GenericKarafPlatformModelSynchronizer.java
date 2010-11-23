@@ -36,7 +36,9 @@ public class GenericKarafPlatformModelSynchronizer implements KarafPlatformModel
         final List<String> tempFileKeys = new ArrayList<String>();
 
         tempFileKeys.add("java.util.logging.properties"); //$NON-NLS-1$
+        tempFileKeys.add("jre.properties"); //$NON-NLS-1$
         tempFileKeys.add("config.properties"); //$NON-NLS-1$
+        tempFileKeys.add("custom.properties"); //$NON-NLS-1$
         tempFileKeys.add("system.properties"); //$NON-NLS-1$
         tempFileKeys.add("startup.properties"); //$NON-NLS-1$
         tempFileKeys.add("org.ops4j.pax.logging.cfg"); //$NON-NLS-1$
@@ -109,6 +111,11 @@ public class GenericKarafPlatformModelSynchronizer implements KarafPlatformModel
 
         try {
             if (!overwrite && dstFile.toFile().exists()) {
+                return Status.OK_STATUS;
+            }
+
+            if (!srcFile.toFile().exists()) {
+                // TODO: What do do here?
                 return Status.OK_STATUS;
             }
 

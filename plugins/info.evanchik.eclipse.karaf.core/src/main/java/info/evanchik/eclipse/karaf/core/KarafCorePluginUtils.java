@@ -15,6 +15,7 @@ import info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
@@ -40,6 +42,8 @@ import org.osgi.framework.Bundle;
  */
 public final class KarafCorePluginUtils {
 
+    public static final String INCLUDES_PROPERTY = "${includes}"; //$NON-NLS-1$
+
     /**
      * Copies the source file to the destination file
      *
@@ -51,6 +55,10 @@ public final class KarafCorePluginUtils {
      *             if there is a problem during the file copy
      */
     public static void copyFile(File src, File dst) throws IOException {
+        if (!src.exists()) {
+            throw new FileNotFoundException("File does not exist: " + src.getAbsolutePath());
+        }
+
         if (!dst.exists()) {
             dst.createNewFile();
         }
@@ -88,12 +96,34 @@ public final class KarafCorePluginUtils {
     public static boolean isServiceMix(KarafPlatformModel model) {
         if (model.getConfigurationFile("org.apache.servicemix.management.cfg").toFile().exists()) {
             return true;
-        } else if (model.getConfigurationFile("org.apache.felix.karaf.management.cfg").toFile().exists()) {
-            return false;
         } else {
+            return false;
+        }
+    }
 
-            throw new IllegalArgumentException(
-                    "Invalid platform Missing Karaf or ServiceMix Kernel configuration file: {org.apache.servicemix|org.apache.felix.karaf}.management.cfg");
+    /**
+     *
+     * @param model
+     * @return
+     */
+    public static boolean isFelixKaraf(KarafPlatformModel model) {
+        if (model.getConfigurationFile("org.apache.felix.karaf.management.cfg").toFile().exists()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param model
+     * @return
+     */
+    public static boolean isKaraf(KarafPlatformModel model) {
+        if (model.getConfigurationFile("org.apache.karaf.management.cfg").toFile().exists()) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -240,7 +270,7 @@ public final class KarafCorePluginUtils {
      *            properties file
      * @return a {@link Properties} object or null if there was an error
      */
-    public static Properties loadPropertiesFile(Bundle theBundle, String propertiesFile) {
+    public static Properties loadProperties(Bundle theBundle, String propertiesFile) {
         final Properties properties = new Properties();
 
         final URL entryUrl = theBundle.getEntry(propertiesFile);
@@ -265,7 +295,7 @@ public final class KarafCorePluginUtils {
     }
 
     /**
-     * Loads a configuration file relative to the launch configuration's root
+     * Loads a configuration file relative to the specified base
      * directory
      *
      * @param base
@@ -292,7 +322,98 @@ public final class KarafCorePluginUtils {
 
     }
 
+    /**
+     * Loads a configuration file relative to the specified base directory. This
+     * method also processes any include directives that import other properties
+     * files relative to the specified property file.
+     *
+     * @param base
+     *            the directory containing the file
+     * @param filename
+     *            the relative path to the properties file
+     * @param processIncludes
+     *            true if {@link #INCLUDES_PROPERTY} statements should be
+     *            followed; false otherwise.
+     * @return the {@link Properties} object created from the contents of
+     *         configuration file
+     * @throws CoreException
+     *             if there is a problem loading the file
+     */
+    public static Properties loadProperties(final File base, String filename, boolean processIncludes) throws CoreException {
+        final File f = new File(base, filename);
+
+        try {
+            final Properties p = new Properties();
+            p.load(new FileInputStream(f));
+
+            final String includes = p.getProperty(INCLUDES_PROPERTY);
+            if (includes != null) {
+                final StringTokenizer st = new StringTokenizer(includes, "\" ", true);
+                if (st.countTokens() > 0) {
+                    String location;
+                    do {
+                        location = nextLocation(st);
+                        if (location != null) {
+                            Properties includeProps = loadProperties(base, location);
+                            p.putAll(includeProps);
+                        }
+                    } while (location != null);
+                }
+                p.remove(INCLUDES_PROPERTY);
+            }
+
+            return p;
+        } catch (IOException e) {
+            final String message = "Unable to load configuration file from configuration directory: " + f.getAbsolutePath();
+            throw new CoreException(new Status(IStatus.ERROR, KarafCorePluginActivator.PLUGIN_ID, IStatus.OK, message, e));
+        }
+
+    }
+
     private KarafCorePluginUtils() {
         throw new AssertionError("Cannot instantiate " + KarafCorePluginUtils.class.getName());
+    }
+
+    private static String nextLocation(StringTokenizer st) {
+        String retVal = null;
+
+        if (st.countTokens() > 0) {
+            String tokenList = "\" ";
+            StringBuffer tokBuf = new StringBuffer(10);
+            String tok = null;
+            boolean inQuote = false;
+            boolean tokStarted = false;
+            boolean exit = false;
+            while ((st.hasMoreTokens()) && (!exit)) {
+                tok = st.nextToken(tokenList);
+                if (tok.equals("\"")) {
+                    inQuote = !inQuote;
+                    if (inQuote) {
+                        tokenList = "\"";
+                    } else {
+                        tokenList = "\" ";
+                    }
+
+                } else if (tok.equals(" ")) {
+                    if (tokStarted) {
+                        retVal = tokBuf.toString();
+                        tokStarted = false;
+                        tokBuf = new StringBuffer(10);
+                        exit = true;
+                    }
+                } else {
+                    tokStarted = true;
+                    tokBuf.append(tok.trim());
+                }
+            }
+
+            // Handle case where end of token stream and
+            // still got data
+            if ((!exit) && (tokStarted)) {
+                retVal = tokBuf.toString();
+            }
+        }
+
+        return retVal;
     }
 }

@@ -28,10 +28,14 @@ public interface KarafPlatformModel {
      */
     public static final String KARAF_BASE_PROP = "karaf.base"; //$NON-NLS-1$
 
+    public static final String KARAF_DATA_PROP = "karaf.data"; //$NON-NLS-1$
+
     /**
      * Karaf home directory, used to reference installation specific files
      */
     public static final String KARAF_HOME_PROP = "karaf.home"; //$NON-NLS-1$
+
+    public static final String KARAF_INSTANCES_PROP = "karaf.instances"; //$NON-NLS-1$
 
     public static final String KARAF_BUNDLE_LOCATIONS_PROP = "bundle.locations"; //$NON-NLS-1$
 

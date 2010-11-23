@@ -57,10 +57,15 @@ public class KarafConfigurationAdapterFactory implements IAdapterFactory {
             return new GeneralSectionImpl(karafModel);
         } else if (adapterType == ManagementSection.class) {
             if(KarafCorePluginUtils.isServiceMix(karafModel)) {
-                return new ManagementSectionImpl(karafModel, ManagementSectionImpl.MANAGEMENT_FILENAME);
+                return new ManagementSectionImpl(karafModel, ManagementSectionImpl.SERVICEMIX_KERNEL_MANAGEMENT_FILENAME);
+            } else if (KarafCorePluginUtils.isFelixKaraf(karafModel)) {
+                return new ManagementSectionImpl(karafModel, ManagementSectionImpl.FELIX_KARAF_MANAGEMENT_FILENAME);
+            } else if (KarafCorePluginUtils.isKaraf(karafModel)) {
+                return new ManagementSectionImpl(karafModel, ManagementSectionImpl.KARAF_MANAGEMENT_FILENAME);
+            } else {
+                throw new IllegalArgumentException(
+                        "Invalid platform Missing Karaf or ServiceMix Kernel configuration file: {org.apache.servicemix|org.apache.felix.karaf|org.apache.karaf}.management.cfg");
             }
-
-            return new ManagementSectionImpl(karafModel);
         } else if (adapterType == StartupSection.class) {
             // TODO: Figure out how to re-enable support
            /*

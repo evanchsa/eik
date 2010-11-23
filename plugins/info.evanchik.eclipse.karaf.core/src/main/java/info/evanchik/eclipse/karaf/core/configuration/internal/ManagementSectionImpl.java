@@ -23,16 +23,13 @@ import java.net.URL;
  */
 public class ManagementSectionImpl extends AbstractPropertiesConfigurationSection implements ManagementSection {
 
-    public static String MANAGEMENT_SECTION_ID = "info.evanchik.eclipse.karaf.configuration.section.Management"; //$NON-NLS-1$
+    public static final String MANAGEMENT_SECTION_ID = "info.evanchik.eclipse.karaf.configuration.section.Management"; //$NON-NLS-1$
 
-    public static String MANAGEMENT_FILENAME = "org.apache.felix.karaf.management.cfg"; //$NON-NLS-1$
+    public static final String SERVICEMIX_KERNEL_MANAGEMENT_FILENAME = "org.apache.servicemix.management.cfg"; //$NON-NLS-1$
 
-    /**
-     * @param parent
-     */
-    public ManagementSectionImpl(KarafPlatformModel parent) {
-        super(MANAGEMENT_SECTION_ID, MANAGEMENT_FILENAME, parent);
-    }
+    public static final String FELIX_KARAF_MANAGEMENT_FILENAME = "org.apache.felix.karaf.management.cfg"; //$NON-NLS-1$
+
+    public static final String KARAF_MANAGEMENT_FILENAME = "org.apache.karaf.management.cfg"; //$NON-NLS-1$
 
     /**
      * @param parent

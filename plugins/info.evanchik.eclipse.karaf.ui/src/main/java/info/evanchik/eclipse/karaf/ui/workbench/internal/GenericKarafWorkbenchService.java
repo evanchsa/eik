@@ -81,12 +81,14 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
         final Map<String, String> equinoxProperties = new HashMap<String, String>();
 
+        // TODO: Need to interpolate the config.properties file
         final Properties currentConfig;
         try {
             currentConfig =
                 KarafCorePluginUtils.loadProperties(
                     platformModel.getConfigurationDirectory().toFile(),
-                    KarafPlatformModel.KARAF_DEFAULT_CONFIG_PROPERTIES_FILE);
+                    KarafPlatformModel.KARAF_DEFAULT_CONFIG_PROPERTIES_FILE,
+                    true);
 
             /*
              * Populate the config.ini with all of the typical Karaf properties that
@@ -130,7 +132,9 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         final List<String> arguments = new ArrayList<String>();
 
         arguments.add("-D" + KarafPlatformModel.KARAF_BASE_PROP + "=" + platformModel.getRootDirectory()); //$NON-NLS-1$ $NON-NLS-2$
+        arguments.add("-D" + KarafPlatformModel.KARAF_DATA_PROP + "=" + platformModel.getRootDirectory().append("data")); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
         arguments.add("-D" + KarafPlatformModel.KARAF_HOME_PROP + "=" + platformModel.getRootDirectory()); //$NON-NLS-1$ $NON-NLS-2$
+        arguments.add("-D" + KarafPlatformModel.KARAF_INSTANCES_PROP + "=" + platformModel.getRootDirectory().append("instances")); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
 
         /*
          * Ensure that the RMI registry port for the JMX connector is unique

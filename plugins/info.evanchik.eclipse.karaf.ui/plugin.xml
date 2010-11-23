@@ -31,7 +31,7 @@
             id="info.evanchik.eclipse.karaf.Framework"
             initializer="info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationInitializer"
             launcherDelegate="info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationDelegate"
-            name="Apache Felix Karaf runtime on Equinox">
+            name="Apache Karaf runtime on Equinox">
       </framework>
    </extension>
    <extension
@@ -40,9 +40,9 @@
             class="info.evanchik.eclipse.karaf.ui.wizards.provisioner.KarafInstallationProvisionerWizard"
             icon="icons/obj16/felixLogo16x16.gif"
             id="info.evanchik.eclipse.karaf.ui.karaf.installation"
-            name="Apache Felix Karaf Installation">
+            name="Apache Karaf Installation">
          <description>
-            Provisions a target platform based on a Apache Felix Karaf installation.
+            Provisions a target platform based on a Apache Karaf installation.
          </description>
       </provisioner>
    </extension>

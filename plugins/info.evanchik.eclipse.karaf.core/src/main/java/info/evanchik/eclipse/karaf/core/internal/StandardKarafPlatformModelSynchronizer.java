@@ -35,6 +35,12 @@ public class StandardKarafPlatformModelSynchronizer extends GenericKarafPlatform
         tempFileKeys.add("org.apache.felix.karaf.management.cfg"); //$NON-NLS-1$
         tempFileKeys.add("org.apache.felix.karaf.shell.cfg"); //$NON-NLS-1$
 
+        tempFileKeys.add("org.apache.felix.fileinstall-deploy.cfg"); //$NON-NLS-1$
+        tempFileKeys.add("org.apache.karaf.features.cfg"); //$NON-NLS-1$
+        tempFileKeys.add("org.apache.karaf.log.cfg"); //$NON-NLS-1$
+        tempFileKeys.add("org.apache.karaf.management.cfg"); //$NON-NLS-1$
+        tempFileKeys.add("org.apache.karaf.shell.cfg"); //$NON-NLS-1$
+
         fileKeys = Collections.unmodifiableList(tempFileKeys);
     }
 

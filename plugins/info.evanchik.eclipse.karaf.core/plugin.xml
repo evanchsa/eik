@@ -22,6 +22,12 @@
          <triggerBundle
                symbolicName="org.apache.felix.karaf.jaas.boot">
          </triggerBundle>
+         <triggerBundle
+               symbolicName="org.apache.karaf.main">
+         </triggerBundle>
+         <triggerBundle
+               symbolicName="org.apache.karaf.jass.boot">
+         </triggerBundle>
       </model>
    </extension>
 

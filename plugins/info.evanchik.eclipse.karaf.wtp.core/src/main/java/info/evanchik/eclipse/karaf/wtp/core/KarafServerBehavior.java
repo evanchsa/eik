@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.wtp.core;
 
-import info.evanchik.eclipse.karaf.core.jmx.MBeanProvider;
+import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 
 import java.io.IOException;
 

@@ -11,7 +11,7 @@
 package info.evanchik.eclipse.karaf.wtp.core;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.model.DirectoryKarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -59,8 +59,7 @@ public class KarafRuntime extends RuntimeDelegate {
             return status;
         }
 
-        final KarafPlatformModel karafTargetPlatform = new DirectoryKarafPlatformModel(
-                        location);
+        final KarafPlatformModel karafTargetPlatform = new GenericKarafPlatformModel(location);
 
         if (karafTargetPlatform.isValid()) {
             return Status.OK_STATUS;

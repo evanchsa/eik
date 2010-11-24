@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.wtp.core;
 
-import info.evanchik.eclipse.karaf.core.model.DirectoryKarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationDelegate;
 
 import org.eclipse.core.runtime.CoreException;
@@ -67,7 +67,6 @@ public class KarafServerLaunchConfiguration extends KarafLaunchConfigurationDele
         karafServer.configureLaunch(launch, mode, monitor);
     }
 
-    @Override
     protected void loadKarafPlatform(ILaunchConfiguration configuration, ILaunch launch,
                     IProgressMonitor monitor) throws CoreException {
         server = ServerUtil.getServer(configuration);
@@ -78,7 +77,7 @@ public class KarafServerLaunchConfiguration extends KarafLaunchConfigurationDele
 
         monitor.worked(5);
 
-        this.karafPlatform = new DirectoryKarafPlatformModel(server.getRuntime().getLocation());
+        this.karafPlatform = new GenericKarafPlatformModel(server.getRuntime().getLocation());
 
         karafServer = (KarafServerBehavior) server.loadAdapter(KarafServerBehavior.class, null);
 

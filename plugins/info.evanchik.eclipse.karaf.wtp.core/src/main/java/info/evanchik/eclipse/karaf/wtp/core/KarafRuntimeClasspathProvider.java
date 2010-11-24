@@ -12,7 +12,7 @@ package info.evanchik.eclipse.karaf.wtp.core;
 
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.model.DirectoryKarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class KarafRuntimeClasspathProvider extends RuntimeClasspathProviderDeleg
 
         // TODO: This is not necessarily true if this supports more than 1
         // version of Karaf
-        final KarafPlatformModel karafPlatform = new DirectoryKarafPlatformModel(installPath);
+        final KarafPlatformModel karafPlatform = new GenericKarafPlatformModel(installPath);
 
         final File pluginRootDirectory = karafPlatform.getPluginRootDirectory().toFile();
         final List<File> jarFiles = new ArrayList<File>();

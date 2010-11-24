@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse WTP Core Integration
 Bundle-SymbolicName: info.evanchik.eclipse.karaf.wtp.core;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.5.0.qualifier
 Bundle-Activator: info.evanchik.eclipse.karaf.wtp.core.KarafWtpPluginActivator
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
  org.eclipse.jst.server.core;bundle-version="[1.1.3,2.0.0)",
@@ -15,8 +15,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
  org.eclipse.jdt.launching;bundle-version="[3.2.0,4.0.0)",
  org.eclipse.debug.core;bundle-version="[3.2.0,4.0.0)",
  org.osgi.jmx;bundle-version="1.0.0",
- info.evanchik.eclipse.karaf.core;bundle-version="1.0.0",
- info.evanchik.eclipse.karaf.ui;bundle-version="1.0.0",
+ info.evanchik.eclipse.karaf.core;bundle-version="0.5.0",
+ info.evanchik.eclipse.karaf.ui;bundle-version="0.5.0",
+ info.evanchik.eclipse.karaf.workbench;bundle-version="0.5.0",
  name.neilbartlett.eclipse.bundlemonitor;bundle-version="0.1.0",
  org.eclipse.hyades.trace.ui;bundle-version="[4.4.0,5.0.0)";resolution:=optional,
  org.eclipse.tptp.platform.jvmti.client;bundle-version="[4.4.0,5.0.0)";resolution:=optional,

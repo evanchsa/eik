@@ -13,10 +13,10 @@ package name.neilbartlett.eclipse.bundlemonitor.views.bundle;
 
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 
+import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.osgi.framework.Bundle;
-import org.osgi.jmx.codec.OSGiBundle;
 
 public class ExcludeBundlesViewerFilter extends ViewerFilter {
 
@@ -32,7 +32,7 @@ public class ExcludeBundlesViewerFilter extends ViewerFilter {
             return true;
         }
 
-        final OSGiBundle bundle = (OSGiBundle) element;
+        final BundleData bundle = (BundleData) element;
 
         return bundle.getState().equals(state) == false;
     }

@@ -11,12 +11,13 @@
  */
 package name.neilbartlett.eclipse.bundlemonitor.views.bundle;
 
-import org.osgi.jmx.codec.OSGiBundle;
+import org.apache.aries.jmx.codec.BundleData;
+
 
 public class BundleIdSorter extends BundlesViewerSorter {
 
     @Override
-    protected int compareBundles(OSGiBundle b1, OSGiBundle b2) {
+    protected int compareBundles(BundleData b1, BundleData b2) {
         return new Long(b1.getIdentifier()).compareTo(b2.getIdentifier());
     }
 

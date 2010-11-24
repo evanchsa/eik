@@ -12,6 +12,7 @@
 package name.neilbartlett.eclipse.bundlemonitor.views.bundle;
 
 
+import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -23,13 +24,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.osgi.jmx.codec.OSGiBundle;
 
 public class BundlePropertiesDialog extends TitleAreaDialog {
 
-    private final OSGiBundle bundle;
+    private final BundleData bundle;
 
-    public BundlePropertiesDialog(Shell parentShell, OSGiBundle bundle) {
+    public BundlePropertiesDialog(Shell parentShell, BundleData bundle) {
         super(parentShell);
 
         this.bundle = bundle;

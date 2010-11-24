@@ -67,7 +67,7 @@ public class ServiceLabelProvider extends BundleTableLabelProvider {
             final OSGiServiceWrapper service = (OSGiServiceWrapper) element;
 
             if (columnIndex == 0) {
-                final String[] interfaces = service.getOSGiService().getInterfaces();
+                final String[] interfaces = service.getOSGiService().getServiceInterfaces();
                 Arrays.sort(interfaces);
                 label = arrayToString(interfaces);
             } else {

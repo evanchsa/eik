@@ -14,10 +14,10 @@ package name.neilbartlett.eclipse.bundlemonitor.views.bundle;
 
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 
+import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.osgi.jmx.codec.OSGiBundle;
 
 public class BundleTableLabelProvider extends LabelProvider implements ITableLabelProvider {
 
@@ -38,7 +38,7 @@ public class BundleTableLabelProvider extends LabelProvider implements ITableLab
             return "";
         }
 
-        final OSGiBundle bundle = (OSGiBundle) element;
+        final BundleData bundle = (BundleData) element;
         String label;
 
         switch (columnIndex) {

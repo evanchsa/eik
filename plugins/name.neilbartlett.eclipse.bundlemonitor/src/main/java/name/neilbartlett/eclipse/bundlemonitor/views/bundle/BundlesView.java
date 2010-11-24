@@ -14,6 +14,7 @@ package name.neilbartlett.eclipse.bundlemonitor.views.bundle;
 import name.neilbartlett.eclipse.bundlemonitor.internal.Activator;
 import name.neilbartlett.eclipse.bundlemonitor.views.shared.FilteredViewPart;
 
+import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -33,7 +34,6 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.osgi.framework.Bundle;
-import org.osgi.jmx.codec.OSGiBundle;
 
 public class BundlesView extends FilteredViewPart {
 
@@ -147,7 +147,7 @@ public class BundlesView extends FilteredViewPart {
             public void run() {
                 IStructuredSelection selection = (IStructuredSelection) treeTableViewer.getSelection();
                 if (!selection.isEmpty()) {
-                    final OSGiBundle bundle = (OSGiBundle) selection.getFirstElement();
+                    final BundleData bundle = (BundleData) selection.getFirstElement();
 
                     final BundlePropertiesDialog propsDialog = new BundlePropertiesDialog(getSite().getShell(), bundle);
                     propsDialog.open();

@@ -11,23 +11,23 @@
  */
 package name.neilbartlett.eclipse.bundlemonitor.views.bundle;
 
+import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
-import org.osgi.jmx.codec.OSGiBundle;
 
 public abstract class BundlesViewerSorter extends ViewerSorter {
 
     @Override
     public int compare(Viewer viewer, Object e1, Object e2) {
-        if (e1 instanceof OSGiBundle == false || e1 instanceof OSGiBundle == false) {
+        if (e1 instanceof BundleData == false || e1 instanceof BundleData == false) {
             return 0;
         }
 
-        final OSGiBundle b1 = (OSGiBundle) e1;
-        final OSGiBundle b2 = (OSGiBundle) e2;
+        final BundleData b1 = (BundleData) e1;
+        final BundleData b2 = (BundleData) e2;
 
         return compareBundles(b1, b2);
     }
 
-    protected abstract int compareBundles(OSGiBundle b1, OSGiBundle b2);
+    protected abstract int compareBundles(BundleData b1, BundleData b2);
 }

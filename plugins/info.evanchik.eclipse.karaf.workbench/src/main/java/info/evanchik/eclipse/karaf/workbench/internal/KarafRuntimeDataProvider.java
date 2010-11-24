@@ -24,16 +24,15 @@ import java.util.Hashtable;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
+import org.apache.aries.jmx.codec.BundleData;
+import org.apache.aries.jmx.codec.ServiceData;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.graphics.Image;
-import org.osgi.jmx.codec.OSGiBundle;
-import org.osgi.jmx.codec.OSGiProperties;
-import org.osgi.jmx.codec.OSGiService;
-import org.osgi.jmx.core.ServiceStateMBean;
+import org.osgi.jmx.framework.ServiceStateMBean;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -168,7 +167,7 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
         }
 
         try {
-            final TabularData rawBundleData = mbeanProvider.getBundleStateMBean().getBundles();
+            final TabularData rawBundleData = mbeanProvider.getBundleStateMBean().listBundles();
 
             synchronized (bundleSet) {
                 bundleSet.clear();
@@ -177,7 +176,7 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
 
             for (Object o : rawBundleData.values()) {
                 final CompositeData composite = (CompositeData) o;
-                final OSGiBundle bundle = new OSGiBundle(composite);
+                final BundleData bundle = BundleData.from(composite);
 
                 synchronized (bundleSet) {
                     bundleSet.add(bundle);
@@ -213,7 +212,7 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
         }
 
         try {
-            final TabularData rawServiceData = mbeanProvider.getServiceStateMBean().getServices();
+            final TabularData rawServiceData = mbeanProvider.getServiceStateMBean().listServices();
 
             synchronized (serviceSet) {
                 serviceSet.clear();
@@ -222,7 +221,7 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
 
             for (Object o : rawServiceData.values()) {
                 final CompositeData composite = (CompositeData) o;
-                final OSGiService service = new OSGiService(composite);
+                final ServiceData service = ServiceData.from(composite);
 
                 /*
                  * Get the service's properties from the JMX enabled runtime
@@ -232,15 +231,15 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
                 }
 
                 final ServiceStateMBean serviceStateMBean = mbeanProvider.getServiceStateMBean();
-                final Hashtable<String, Object> properties = OSGiProperties.propertiesFrom(serviceStateMBean.getProperties(service
-                        .getIdentifier()));
+                /*PropertyData.from(serviceStateMBean.getProperties(service.getServiceId()));*/
+                final Hashtable<String, Object> properties = new Hashtable<String, Object>();
 
-                final OSGiBundle bundle = idToBundleMap.get(service.getBundle());
+                final BundleData bundle = idToBundleMap.get(service.getBundleId());
                 final OSGiServiceWrapper serviceWrapper = new KarafOSGiServiceWrapper(service, bundle, properties);
 
                 synchronized (serviceSet) {
                     serviceSet.add(serviceWrapper);
-                    idToServiceMap.put(service.getIdentifier(), serviceWrapper);
+                    idToServiceMap.put(service.getServiceId(), serviceWrapper);
                 }
 
                 monitor.worked(1);

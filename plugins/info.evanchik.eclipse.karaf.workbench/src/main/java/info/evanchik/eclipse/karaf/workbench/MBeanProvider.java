@@ -12,10 +12,10 @@ package info.evanchik.eclipse.karaf.workbench;
 
 import javax.management.MBeanServerConnection;
 
-import org.osgi.jmx.core.BundleStateMBean;
-import org.osgi.jmx.core.FrameworkMBean;
-import org.osgi.jmx.core.PackageStateMBean;
-import org.osgi.jmx.core.ServiceStateMBean;
+import org.osgi.jmx.framework.BundleStateMBean;
+import org.osgi.jmx.framework.FrameworkMBean;
+import org.osgi.jmx.framework.PackageStateMBean;
+import org.osgi.jmx.framework.ServiceStateMBean;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)

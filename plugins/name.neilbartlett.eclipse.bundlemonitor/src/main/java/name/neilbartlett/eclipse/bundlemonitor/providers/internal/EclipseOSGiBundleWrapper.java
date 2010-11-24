@@ -10,16 +10,7 @@
  */
 package name.neilbartlett.eclipse.bundlemonitor.providers.internal;
 
-import static org.osgi.jmx.codec.Util.getBundleExportedPackages;
-import static org.osgi.jmx.codec.Util.getBundleFragments;
-import static org.osgi.jmx.codec.Util.getBundleHeaders;
-import static org.osgi.jmx.codec.Util.getBundleState;
-import static org.osgi.jmx.codec.Util.isBundleFragment;
-import static org.osgi.jmx.codec.Util.isBundlePersistentlyStarted;
-import static org.osgi.jmx.codec.Util.isBundleRequired;
-import static org.osgi.jmx.codec.Util.isRequiredBundleRemovalPending;
-import static org.osgi.jmx.codec.Util.serviceIds;
-
+import org.apache.aries.jmx.codec.BundleData;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.jmx.codec.OSGiBundle;
@@ -34,7 +25,7 @@ import org.osgi.service.startlevel.StartLevel;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class EclipseOSGiBundleWrapper extends OSGiBundle {
+public class EclipseOSGiBundleWrapper extends BundleData {
 
     private final BundleContext context;
 
@@ -66,11 +57,7 @@ public class EclipseOSGiBundleWrapper extends OSGiBundle {
      *            the {@link Bundle} that is being wrapped
      */
     public EclipseOSGiBundleWrapper(BundleContext bc, PackageAdmin admin, StartLevel sl, Bundle b) {
-        super(b.getLocation(), b.getBundleId(), b.getSymbolicName(), sl.getBundleStartLevel(b), getBundleState(b), b.getLastModified(),
-                isBundlePersistentlyStarted(b, sl), isRequiredBundleRemovalPending(b, bc, admin), isBundleRequired(b, bc, admin),
-                isBundleFragment(b, admin), serviceIds(b.getRegisteredServices()), serviceIds(b.getServicesInUse()), getBundleHeaders(b),
-                getBundleExportedPackages(b, admin), new String[0], getBundleFragments(b, admin), Util.bundleIds(admin.getHosts(b)),
-                new long[0], new long[0]);
+        super(bc, b, admin, sl);
 
         this.context = bc;
         this.admin = admin;

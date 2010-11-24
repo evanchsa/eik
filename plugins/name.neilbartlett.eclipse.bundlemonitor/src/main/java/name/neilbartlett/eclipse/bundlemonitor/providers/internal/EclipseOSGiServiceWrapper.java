@@ -16,10 +16,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.aries.jmx.codec.BundleData;
+import org.apache.aries.jmx.codec.ServiceData;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
-import org.osgi.jmx.codec.OSGiBundle;
-import org.osgi.jmx.codec.OSGiService;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -27,25 +27,25 @@ import org.osgi.jmx.codec.OSGiService;
  */
 public class EclipseOSGiServiceWrapper implements OSGiServiceWrapper {
 
-    private final OSGiBundle bundle;
+    private final BundleData bundle;
 
     private final Map<String, Object> properties;
 
     private final ServiceReference reference;
 
-    private final OSGiService serviceDelegate;
+    private final ServiceData serviceDelegate;
 
-    public EclipseOSGiServiceWrapper(ServiceReference reference, OSGiBundle bundle) {
+    public EclipseOSGiServiceWrapper(ServiceReference reference, BundleData bundle) {
         this.reference = reference;
 
-        this.serviceDelegate = new OSGiService(reference);
+        this.serviceDelegate = new ServiceData(reference);
 
         this.bundle = bundle;
 
         this.properties = new HashMap<String, Object>();
     }
 
-    public OSGiBundle getBundle() {
+    public BundleData getBundle() {
         final Bundle b = reference.getBundle();
         if (b == null) {
             return null; // UnregisteredServiceItem.getInstance().getBundle();
@@ -55,7 +55,7 @@ public class EclipseOSGiServiceWrapper implements OSGiServiceWrapper {
 
     }
 
-    public OSGiService getOSGiService() {
+    public ServiceData getOSGiService() {
         return serviceDelegate;
     }
 

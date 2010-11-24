@@ -31,12 +31,11 @@ import javax.management.remote.JMXConnector;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.jmx.Constants;
-import org.osgi.jmx.compendium.ConfigAdminManagerMBean;
-import org.osgi.jmx.core.BundleStateMBean;
-import org.osgi.jmx.core.FrameworkMBean;
-import org.osgi.jmx.core.PackageStateMBean;
-import org.osgi.jmx.core.ServiceStateMBean;
+import org.osgi.jmx.framework.BundleStateMBean;
+import org.osgi.jmx.framework.FrameworkMBean;
+import org.osgi.jmx.framework.PackageStateMBean;
+import org.osgi.jmx.framework.ServiceStateMBean;
+import org.osgi.jmx.service.cm.ConfigurationAdminMBean;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -56,15 +55,15 @@ public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
 
     /*
      * If this throws an exception we're in trouble because it means that the
-     * constants in {@link org.osgi.jmx.Constants} are invalid
+     * constants are invalid
      */
     static {
         try {
-            BUNDLE_STATE = new ObjectName(Constants.BUNDLE_STATE);
-            CM_SERVICE = new ObjectName(Constants.CM_SERVICE);
-            FRAMEWORK = new ObjectName(Constants.FRAMEWORK);
-            PACKAGE_STATE = new ObjectName(Constants.PACKAGE_STATE);
-            SERVICE_STATE = new ObjectName(Constants.SERVICE_STATE);
+            BUNDLE_STATE = new ObjectName("osgi.core:type=bundleState,version=1.5");
+            CM_SERVICE = new ObjectName("osgi.core:type=cm,version=1.3");
+            FRAMEWORK = new ObjectName("osgi.core:type=framework,version=1.5");
+            PACKAGE_STATE = new ObjectName("osgi.core:type=packageState,version=1.5");
+            SERVICE_STATE = new ObjectName("osgi.core:type=serviceState,version=1.5");
         } catch (Exception e) {
             throw new IllegalStateException("The OSGi JMX implementation references an invalid ObjectName", e);
         }
@@ -81,7 +80,7 @@ public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
 
     private BundleStateMBean bundleStateMBean;
 
-    private ConfigAdminManagerMBean configAdminManagerMBean;
+    private ConfigurationAdminMBean configurationAdminMBean;
 
     private FrameworkMBean frameworkMBean;
 
@@ -190,11 +189,11 @@ public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
                 BundleStateMBean.class,
                 false);
 
-        configAdminManagerMBean =
+        configurationAdminMBean =
             MBeanServerInvocationHandler.newProxyInstance(
                     mbeanServer,
                     CM_SERVICE,
-                    ConfigAdminManagerMBean.class,
+                    ConfigurationAdminMBean.class,
                     false);
 
         frameworkMBean =
@@ -238,8 +237,8 @@ public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
         registration = bundleContext.registerService(BundleStateMBean.class.getName(), bundleStateMBean, dictionary);
         mbeanServiceRegistrations.put(BundleStateMBean.class, registration);
 
-        registration = bundleContext.registerService(ConfigAdminManagerMBean.class.getName(), configAdminManagerMBean, dictionary);
-        mbeanServiceRegistrations.put(ConfigAdminManagerMBean.class, registration);
+        registration = bundleContext.registerService(ConfigurationAdminMBean.class.getName(), configurationAdminMBean, dictionary);
+        mbeanServiceRegistrations.put(ConfigurationAdminMBean.class, registration);
 
         registration = bundleContext.registerService(FrameworkMBean.class.getName(), frameworkMBean, dictionary);
         mbeanServiceRegistrations.put(FrameworkMBean.class, registration);
@@ -258,8 +257,8 @@ public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
         mbeanServiceRegistrations.get(BundleStateMBean.class).unregister();
         mbeanServiceRegistrations.remove(BundleStateMBean.class);
 
-        mbeanServiceRegistrations.get(ConfigAdminManagerMBean.class).unregister();
-        mbeanServiceRegistrations.remove(ConfigAdminManagerMBean.class);
+        mbeanServiceRegistrations.get(ConfigurationAdminMBean.class).unregister();
+        mbeanServiceRegistrations.remove(ConfigurationAdminMBean.class);
 
         mbeanServiceRegistrations.get(FrameworkMBean.class).unregister();
         mbeanServiceRegistrations.remove(FrameworkMBean.class);

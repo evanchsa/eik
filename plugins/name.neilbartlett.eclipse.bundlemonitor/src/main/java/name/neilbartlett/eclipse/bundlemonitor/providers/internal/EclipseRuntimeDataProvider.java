@@ -18,6 +18,7 @@ import java.util.EnumSet;
 
 import name.neilbartlett.eclipse.bundlemonitor.internal.Activator;
 
+import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -31,7 +32,6 @@ import org.osgi.framework.BundleListener;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
-import org.osgi.jmx.codec.OSGiBundle;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.startlevel.StartLevel;
 
@@ -64,7 +64,7 @@ public class EclipseRuntimeDataProvider extends AbstractRuntimeDataProvider impl
     }
 
     public void bundleChanged(BundleEvent event) {
-        final OSGiBundle wrappedBundle = new OSGiBundle(event.getBundle().getBundleContext(), packageAdmin, startLevel, event.getBundle());
+        final BundleData wrappedBundle = new BundleData(event.getBundle().getBundleContext(), event.getBundle(), packageAdmin, startLevel);
 
         EnumSet<RuntimeDataProviderListener.EventType> events = EnumSet.noneOf(RuntimeDataProviderListener.EventType.class);
 
@@ -102,7 +102,7 @@ public class EclipseRuntimeDataProvider extends AbstractRuntimeDataProvider impl
     public void serviceChanged(ServiceEvent event) {
         final ServiceReference reference = event.getServiceReference();
 
-        final OSGiBundle bundle = new EclipseOSGiBundleWrapper(reference.getBundle().getBundleContext(), packageAdmin, startLevel,
+        final BundleData bundle = new EclipseOSGiBundleWrapper(reference.getBundle().getBundleContext(), packageAdmin, startLevel,
                 reference.getBundle());
         final OSGiServiceWrapper ri = new EclipseOSGiServiceWrapper(reference, bundle);
 
@@ -189,8 +189,7 @@ public class EclipseRuntimeDataProvider extends AbstractRuntimeDataProvider impl
                     monitor.subTask("OSGi Services");
 
                     for (ServiceReference r : services) {
-                        final OSGiBundle bundle = new EclipseOSGiBundleWrapper(r.getBundle().getBundleContext(), packageAdmin, startLevel,
-                                r.getBundle());
+                        final BundleData bundle = new EclipseOSGiBundleWrapper(r.getBundle().getBundleContext(), packageAdmin, startLevel, r.getBundle());
 
                         synchronized (serviceSet) {
                             serviceSet.add(new EclipseOSGiServiceWrapper(r, bundle));

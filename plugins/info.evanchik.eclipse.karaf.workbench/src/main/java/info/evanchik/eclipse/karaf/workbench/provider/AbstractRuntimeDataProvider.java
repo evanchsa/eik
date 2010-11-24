@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.swt.graphics.Image;
-import org.osgi.jmx.codec.OSGiBundle;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -30,8 +30,8 @@ import org.osgi.jmx.codec.OSGiBundle;
  */
 public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider {
 
-    protected final Set<OSGiBundle> bundleSet;
-    protected final Map<Long, OSGiBundle> idToBundleMap;
+    protected final Set<BundleData> bundleSet;
+    protected final Map<Long, BundleData> idToBundleMap;
 
     protected final Set<OSGiServiceWrapper> serviceSet;
     protected final Map<Long, OSGiServiceWrapper> idToServiceMap;
@@ -44,8 +44,8 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
     public AbstractRuntimeDataProvider() {
         listeners = new ArrayList<RuntimeDataProviderListener>();
 
-        bundleSet = new HashSet<OSGiBundle>();
-        idToBundleMap = new HashMap<Long, OSGiBundle>();
+        bundleSet = new HashSet<BundleData>();
+        idToBundleMap = new HashMap<Long, BundleData>();
 
         serviceSet = new HashSet<OSGiServiceWrapper>();
         idToServiceMap = new HashMap<Long, OSGiServiceWrapper>();
@@ -59,11 +59,11 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
         listeners.add(listener);
     }
 
-    public OSGiBundle getBundle(long id) {
+    public BundleData getBundle(long id) {
         return idToBundleMap.get(id);
     }
 
-    public Set<OSGiBundle> getBundles() {
+    public Set<BundleData> getBundles() {
         synchronized (bundleSet) {
             return Collections.unmodifiableSet(bundleSet);
         }

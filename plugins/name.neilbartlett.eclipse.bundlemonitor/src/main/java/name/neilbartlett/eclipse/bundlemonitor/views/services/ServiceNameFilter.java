@@ -42,7 +42,7 @@ public class ServiceNameFilter extends ViewerFilter {
         } else if (element instanceof OSGiServiceWrapper) {
             result = false;
 
-            final String[] interfaces = ((OSGiServiceWrapper) element).getOSGiService().getInterfaces();
+            final String[] interfaces = ((OSGiServiceWrapper) element).getOSGiService().getServiceInterfaces();
             for (int i = 0; i < interfaces.length; i++) {
                 if (interfaces[i].toLowerCase().indexOf(serviceName.toLowerCase()) > -1) {
                     result = true;

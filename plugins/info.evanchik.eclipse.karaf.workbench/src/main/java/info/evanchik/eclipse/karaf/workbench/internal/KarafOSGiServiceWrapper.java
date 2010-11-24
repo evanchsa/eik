@@ -15,8 +15,8 @@ import info.evanchik.eclipse.karaf.workbench.provider.OSGiServiceWrapper;
 import java.util.Collections;
 import java.util.Map;
 
-import org.osgi.jmx.codec.OSGiBundle;
-import org.osgi.jmx.codec.OSGiService;
+import org.apache.aries.jmx.codec.BundleData;
+import org.apache.aries.jmx.codec.ServiceData;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -24,31 +24,31 @@ import org.osgi.jmx.codec.OSGiService;
  */
 public class KarafOSGiServiceWrapper implements OSGiServiceWrapper {
 
-    private final OSGiService delegate;
+    private final ServiceData delegate;
 
-    private final OSGiBundle bundle;
+    private final BundleData bundle;
 
     private final Map<String, Object> properties;
 
     /**
-     * Constructs a fully materialized service entry from an {@link OSGiService}
-     * its {@link OSGiBundle} and the service's properties as retrieved from the
+     * Constructs a fully materialized service entry from an {@link ServiceData}
+     * its {@link BundleData} and the service's properties as retrieved from the
      * runtime.
      *
      * @param delegate
-     *            the delegate {@code OSGiService}
+     *            the delegate {@code ServiceData}
      * @param bundle
-     *            the service's bundle in the form of a {@code OSGiBundle}
+     *            the service's bundle in the form of a {@code BundleData}
      * @param properties
      *            the service's properties
      */
-    public KarafOSGiServiceWrapper(OSGiService delegate, OSGiBundle bundle, Map<String, Object> properties) {
+    public KarafOSGiServiceWrapper(ServiceData delegate, BundleData bundle, Map<String, Object> properties) {
         this.delegate = delegate;
         this.bundle = bundle;
         this.properties = properties;
     }
 
-    public OSGiService getOSGiService() {
+    public ServiceData getOSGiService() {
         return delegate;
     }
 
@@ -56,7 +56,7 @@ public class KarafOSGiServiceWrapper implements OSGiServiceWrapper {
         return Collections.unmodifiableMap(properties);
     }
 
-    public OSGiBundle getBundle() {
+    public BundleData getBundle() {
         return bundle;
     }
 }

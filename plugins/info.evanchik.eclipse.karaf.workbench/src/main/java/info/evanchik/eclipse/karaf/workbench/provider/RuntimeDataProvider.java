@@ -12,10 +12,9 @@ package info.evanchik.eclipse.karaf.workbench.provider;
 
 import java.util.Set;
 
+import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.graphics.Image;
-import org.osgi.jmx.codec.OSGiBundle;
-import org.osgi.jmx.codec.OSGiService;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -34,21 +33,21 @@ public interface RuntimeDataProvider {
     public void addListener(RuntimeDataProviderListener listener);
 
     /**
-     * Getter for the specific {@link OSGiBundle} instance
+     * Getter for the specific {@link BundleData} instance
      *
      * @param id
      *            the identifier of the bundle to retrieve
-     * @return the {@code OSGiBundle} if it exists, null otherwise
+     * @return the {@code BundleData} if it exists, null otherwise
      */
-    public OSGiBundle getBundle(long id);
+    public BundleData getBundle(long id);
 
     /**
-     * Getter for the {@link Set} of {@link OSGiBundle}S in this runtime. The
+     * Getter for the {@link Set} of {@link BundleData}S in this runtime. The
      * returned {@code Set} cannot be modified.
      *
-     * @return the {@code Set} of {@code OSGiBundle}S in this runtime
+     * @return the {@code Set} of {@code BundleData}S in this runtime
      */
-    public Set<OSGiBundle> getBundles();
+    public Set<BundleData> getBundles();
 
     /**
      * A 16x16 {@link Image} suitable for using in a view

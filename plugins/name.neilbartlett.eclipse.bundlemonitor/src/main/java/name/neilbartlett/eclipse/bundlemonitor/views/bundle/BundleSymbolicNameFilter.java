@@ -13,9 +13,9 @@ package name.neilbartlett.eclipse.bundlemonitor.views.bundle;
 
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 
+import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.osgi.jmx.codec.OSGiBundle;
 
 public class BundleSymbolicNameFilter extends ViewerFilter {
 
@@ -31,7 +31,7 @@ public class BundleSymbolicNameFilter extends ViewerFilter {
 	        return true;
 	    }
 
-	    final OSGiBundle bundle = (OSGiBundle) element;
+	    final BundleData bundle = (BundleData) element;
 
 		return bundle.getSymbolicName().toLowerCase().indexOf(filterString) > -1;
 	}

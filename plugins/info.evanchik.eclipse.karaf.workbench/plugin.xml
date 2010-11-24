@@ -17,5 +17,21 @@
             class="info.evanchik.eclipse.karaf.workbench.factory.MBeanProviderWorkbenchServiceFactory">
       </launchCustomizer>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="info.evanchik.eclipse.karaf.workbench.karaf"
+            name="Apache Karaf">
+      </category>
+      <view
+            allowMultiple="false"
+            category="info.evanchik.eclipse.karaf.workbench.karaf"
+            class="info.evanchik.eclipse.karaf.workbench.ViewPart1"
+            icon="icons/obj16/bundle_obj.gif"
+            id="info.evanchik.eclipse.karaf.workbench.karafBundles"
+            name="Bundles"
+            restorable="true">
+      </view>
+   </extension>
 
 </plugin>

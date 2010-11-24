@@ -12,9 +12,9 @@ package name.neilbartlett.eclipse.bundlemonitor.views.services;
 
 import info.evanchik.eclipse.karaf.workbench.provider.OSGiServiceWrapper;
 
+import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
-import org.osgi.jmx.codec.OSGiBundle;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -31,8 +31,8 @@ public class ServicesViewerSorter extends ViewerSorter {
         final OSGiServiceWrapper lhs = (OSGiServiceWrapper) e1;
         final OSGiServiceWrapper rhs = (OSGiServiceWrapper) e2;
 
-        final OSGiBundle lhsBundle = lhs.getBundle();
-        final OSGiBundle rhsBundle = rhs.getBundle();
+        final BundleData lhsBundle = lhs.getBundle();
+        final BundleData rhsBundle = rhs.getBundle();
 
         if (lhsBundle == null && rhsBundle == null) {
             return 0;
@@ -44,7 +44,7 @@ public class ServicesViewerSorter extends ViewerSorter {
             int value = lhsBundle.getSymbolicName().compareTo(rhsBundle.getSymbolicName());
 
             if (value == 0) {
-                value = lhs.getOSGiService().getInterfaces()[0].compareTo(rhs.getOSGiService().getInterfaces()[0]);
+                value = lhs.getOSGiService().getServiceInterfaces()[0].compareTo(rhs.getOSGiService().getServiceInterfaces()[0]);
             }
 
             return value;

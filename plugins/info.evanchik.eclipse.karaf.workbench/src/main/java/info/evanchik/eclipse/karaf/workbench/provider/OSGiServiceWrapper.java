@@ -12,8 +12,8 @@ package info.evanchik.eclipse.karaf.workbench.provider;
 
 import java.util.Map;
 
-import org.osgi.jmx.codec.OSGiBundle;
-import org.osgi.jmx.codec.OSGiService;
+import org.apache.aries.jmx.codec.BundleData;
+import org.apache.aries.jmx.codec.ServiceData;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -22,24 +22,24 @@ import org.osgi.jmx.codec.OSGiService;
 public interface OSGiServiceWrapper {
 
     /**
-     * Getter for the underlying {@link OSGiService} delegate
+     * Getter for the underlying {@link ServiceData} delegate
      *
-     * @return the instance of the {@code OSGiService}
+     * @return the instance of the {@code ServiceData}
      */
-    public OSGiService getOSGiService();
+    public ServiceData getOSGiService();
 
     /**
-     * Getter for the {@link OSGiBundle} that owns this {@link OSGiService}
+     * Getter for the {@link BundleData} that owns this {@link ServiceData}
      *
-     * @return the instance of the {@code OSGiBundle} that owns this {@code
-     *         OSGiService}
+     * @return the instance of the {@code BundleData} that owns this {@code
+     *         ServiceData}
      */
-    public OSGiBundle getBundle();
+    public BundleData getBundle();
 
     /**
-     * Getter for the properties of this {@link OSGiService}
+     * Getter for the properties of this {@link ServiceData}
      *
-     * @return the properties of this {@code OSGiService}
+     * @return the properties of this {@code ServiceData}
      */
     public Map<String, Object> getProperties();
 }

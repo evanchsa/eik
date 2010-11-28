@@ -11,7 +11,7 @@
 package info.evanchik.eclipse.karaf.wtp.core;
 
 import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
-import info.evanchik.eclipse.karaf.core.model.DirectoryKarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationInitializer;
 
 import org.eclipse.core.runtime.CoreException;

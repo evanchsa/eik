@@ -13,13 +13,11 @@ package name.neilbartlett.eclipse.bundlemonitor.providers.internal;
 import org.apache.aries.jmx.codec.BundleData;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.jmx.codec.OSGiBundle;
-import org.osgi.jmx.codec.Util;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.startlevel.StartLevel;
 
 /**
- * Implementation of an {@link OSGiBundle} that defers making expensive data
+ * Implementation of an {@link BundleData} that defers making expensive data
  * gathering calls in to the framework on construction.
  *
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -68,7 +66,7 @@ public class EclipseOSGiBundleWrapper extends BundleData {
     @Override
     public String[] getImportedPackages() {
         if (importedPackages == null) {
-            importedPackages = Util.getBundleImportedPackages(bundle, context, admin);
+            //importedPackages = Util.getBundleImportedPackages(bundle, context, admin);
         }
         return importedPackages;
     }
@@ -76,7 +74,7 @@ public class EclipseOSGiBundleWrapper extends BundleData {
     @Override
     public long[] getRequiredBundles() {
         if (requiredBundles == null) {
-            requiredBundles = Util.getBundleDependencies(bundle, admin);
+            //requiredBundles = Util.getBundleDependencies(bundle, admin);
         }
         return requiredBundles;
     }
@@ -84,7 +82,7 @@ public class EclipseOSGiBundleWrapper extends BundleData {
     @Override
     public long[] getRequiringBundles() {
         if (requiringBundles == null) {
-            requiringBundles = Util.getBundlesRequiring(bundle, context, admin);
+            //requiringBundles = Util.getBundlesRequiring(bundle, context, admin);
         }
         return requiringBundles;
     }

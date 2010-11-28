@@ -176,11 +176,11 @@ public class EclipseRuntimeDataProvider extends AbstractRuntimeDataProvider impl
                     if (b == null || b.getBundleContext() == null) {
                         continue;
                     }
-
+/*
                     synchronized (bundleSet) {
                         bundleSet.add(new EclipseOSGiBundleWrapper(b.getBundleContext(), packageAdmin, startLevel, b));
                     }
-
+*/
                     monitor.worked(1);
                 }
 
@@ -189,12 +189,13 @@ public class EclipseRuntimeDataProvider extends AbstractRuntimeDataProvider impl
                     monitor.subTask("OSGi Services");
 
                     for (ServiceReference r : services) {
+/*
                         final BundleData bundle = new EclipseOSGiBundleWrapper(r.getBundle().getBundleContext(), packageAdmin, startLevel, r.getBundle());
 
                         synchronized (serviceSet) {
                             serviceSet.add(new EclipseOSGiServiceWrapper(r, bundle));
                         }
-
+*/
                         monitor.worked(1);
                     }
                 }

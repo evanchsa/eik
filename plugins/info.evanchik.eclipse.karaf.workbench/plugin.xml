@@ -26,7 +26,7 @@
       <view
             allowMultiple="false"
             category="info.evanchik.eclipse.karaf.workbench.karaf"
-            class="info.evanchik.eclipse.karaf.workbench.ViewPart1"
+            class="info.evanchik.eclipse.karaf.workbench.ui.views.BundlesView"
             icon="icons/obj16/bundle_obj.gif"
             id="info.evanchik.eclipse.karaf.workbench.karafBundles"
             name="Bundles"

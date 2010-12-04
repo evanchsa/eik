@@ -6,15 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: lib/org.apache.aries.jmx.core-0.2-incubating.jar,
  .
-Export-Package: org.apache.aries.jmx;version="0.2.0.incubating",
- org.apache.aries.jmx.agent;version="0.2.0.incubating",
- org.apache.aries.jmx.cm;version="0.2.0.incubating",
- org.apache.aries.jmx.codec;version="0.2.0.incubating",
- org.apache.aries.jmx.framework;version="0.2.0.incubating",
- org.apache.aries.jmx.permissionadmin;version="0.2.0.incubating",
- org.apache.aries.jmx.provisioning;version="0.2.0.incubating",
- org.apache.aries.jmx.useradmin;version="0.2.0.incubating",
- org.apache.aries.jmx.util;version="0.2.0.incubating"
+Export-Package: org.apache.aries.jmx.codec;version="0.2.0.incubating"
 Import-Package: javax.management,
  javax.management.openmbean,
  org.osgi.framework;version="1.5.0",

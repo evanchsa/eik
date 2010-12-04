@@ -47,14 +47,6 @@
       </provisioner>
    </extension>
    <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            adaptable="false"
-            id="info.evanchik.eclipse.karaf.ui.jmxViews"
-            objectClass="org.eclipse.equinox.jmx.common.ContributionProxy">
-      </objectContribution>
-   </extension>
-   <extension
          id="karaf"
          name="Default Apache Felix Karaf Workbench Services"
          point="info.evanchik.eclipse.karaf.ui.service">

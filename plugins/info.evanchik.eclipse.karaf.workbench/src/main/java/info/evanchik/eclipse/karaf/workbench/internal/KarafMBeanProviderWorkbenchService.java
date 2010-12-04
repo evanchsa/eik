@@ -15,6 +15,7 @@ import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
+import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 
 import java.io.IOException;
@@ -42,7 +43,6 @@ import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.equinox.jmx.client.JMXServiceDescriptor;
 import org.eclipse.jdt.launching.SocketUtil;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -216,7 +216,8 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                         configuration.getName(),
                         standardJmxConnection,
                         null,
-                        null);
+                        null,
+                        "jmxrmi");
 
             mbeanConnectionJob = new MBeanServerConnectionJob(configuration.getName(), descriptor);
         } catch(MalformedURLException e) {
@@ -315,6 +316,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
             launch.getLaunchConfiguration().getMemento();
 
         return new IDebugEventSetListener() {
+            @Override
             public void handleDebugEvents(final DebugEvent[] events) {
                 if (events == null) {
                     return;

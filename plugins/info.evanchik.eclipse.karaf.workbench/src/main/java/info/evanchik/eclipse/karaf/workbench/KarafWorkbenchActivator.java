@@ -2,6 +2,10 @@ package info.evanchik.eclipse.karaf.workbench;
 
 import info.evanchik.eclipse.karaf.core.LogWrapper;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
+import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceManager;
+import info.evanchik.eclipse.karaf.workbench.jmx.IJMXTransportRegistry;
+import info.evanchik.eclipse.karaf.workbench.jmx.internal.JMXServiceManager;
+import info.evanchik.eclipse.karaf.workbench.jmx.internal.JMXTransportRegistry;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,9 +25,15 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "info.evanchik.eclipse.karaf.workbench";
 
+	public static final String JMX_CONNECTOR_PROVIDER_EXTENSION_ID = "jmxConnectorProvider";
+
     public static final String BUNDLE_OBJ_IMG = "bundle_obj"; //$NON-NLS-1$
 
     public static final String LOGO_16X16_IMG = "logo16"; //$NON-NLS-1$
+
+    private JMXServiceManager jmxServiceManager;
+
+    private JMXTransportRegistry jmxTransportRegistry;
 
 	// The shared instance
 	private static KarafWorkbenchActivator plugin;
@@ -63,6 +73,26 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
 	public KarafWorkbenchActivator() {
 	}
 
+	/**
+     * Getter for the {@link IJMXServiceManager} implementation. There is only
+     * one per plugin instance.
+     *
+     * @return the {@code IJMXServiceManager} instance
+     */
+    public IJMXServiceManager getJMXServiceManager() {
+        return jmxServiceManager;
+    }
+
+    /**
+     * Getter for the {@link IJMXTransportRegistry} implementation. There is
+     * only on per plugin instance.
+     *
+     * @return the {@link IJMXTransportRegistry} instance
+     */
+    public IJMXTransportRegistry getJMXTransportRegistry() {
+        return jmxTransportRegistry;
+    }
+
 	@Override
     public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -70,12 +100,18 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
 
         final String pathSuffix = "icons/"; // $NON-NLS-1$
         ICON_ROOT_URL = getBundle().getEntry(pathSuffix);
+
+        jmxServiceManager = new JMXServiceManager();
+        jmxTransportRegistry = new JMXTransportRegistry();
 	}
 
 	@Override
     public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+
+        jmxServiceManager = null;
+        jmxTransportRegistry = null;
 	}
 
     /**

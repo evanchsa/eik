@@ -11,11 +11,7 @@
 package info.evanchik.eclipse.karaf.workbench;
 
 import javax.management.MBeanServerConnection;
-
-import org.osgi.jmx.framework.BundleStateMBean;
-import org.osgi.jmx.framework.FrameworkMBean;
-import org.osgi.jmx.framework.PackageStateMBean;
-import org.osgi.jmx.framework.ServiceStateMBean;
+import javax.management.ObjectName;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -31,38 +27,6 @@ public interface MBeanProvider {
         "info.evanchik.eclipse.karaf.jmx.workbench.services";
 
     /**
-     *
-     * @author Stephen Evanchik (evanchsa@gmail.com)
-     *
-     */
-    public interface MBeanProviderListener {
-
-        /**
-         * Called when the {@link MBeanProvider} is opened
-         *
-         * @param mbeanProvider
-         *            the {@code MBeanProvider} that is being opened
-         */
-        public void onOpen(MBeanProvider mbeanProvider);
-
-        /**
-         * Called when the {@link MBeanProvider} is closed
-         *
-         * @param mbeanProivder
-         *            the {@code MBeanProvider} that is being closed
-         */
-        public void onClose(MBeanProvider mbeanProivder);
-    };
-
-    /**
-     * Adds a {@link MBeanProviderListener} to the list of listeners
-     *
-     * @param listener
-     *            the {@code MBeanProviderListener} to add
-     */
-    public void addListener(MBeanProviderListener listener);
-
-    /**
      * Closes this {@code MBeanProvider}. This will close any connections to a
      * remote {@code MBeanServer} and unregister any OSGi Services from the
      * Service Registry.<br>
@@ -75,22 +39,18 @@ public interface MBeanProvider {
     public void close();
 
     /**
-     * Getter for the {@link BundleStateMBean}<br>
-     * <br>
-     * This can return null
+     * Retrieves an MBean proxy of the given interface class
      *
-     * @return the {@link BundleStateMBean}
+     * @param <T>
+     *            allows the compiler to know that if the {@code interfaceClass}
+     *            parameter is {@code MyMBean.class}, for example, then the
+     *            return type is {@code MyMBean}.
+     * @param objectName
+     *            the name of the MBean to forward to on the remote end point
+     * @param interfaceClass
+     * @return the new proxy instance
      */
-    public BundleStateMBean getBundleStateMBean();
-
-    /**
-     * Getter for the {@link FrameworkMBean}<br>
-     * <br>
-     * This can return null
-     *
-     * @return the {@link FrameworkMBean}
-     */
-    public FrameworkMBean getFrameworkMBean();
+    public <T> T getMBean(ObjectName objectName, Class<T> interfaceClass);
 
     /**
      * Getter for the {@link MBeanServerConnection}
@@ -98,24 +58,6 @@ public interface MBeanProvider {
      * @return the {@link MBeanServerConnection}
      */
     public MBeanServerConnection getMBeanServerConnection();
-
-    /**
-     * Getter for the {@link PackageStateMBean}<br>
-     * <br>
-     * This can return null
-     *
-     * @return the {@link PackageStateMBean}
-     */
-    public PackageStateMBean getPackageStateMBean();
-
-    /**
-     * Getter for the {@link ServiceStateMBean}<br>
-     * <br>
-     * This can return null
-     *
-     * @return the {@link ServiceStateMBean}
-     */
-    public ServiceStateMBean getServiceStateMBean();
 
     /**
      * Determines if this {@code MBeanProvider} has been opened.
@@ -139,13 +81,4 @@ public interface MBeanProvider {
      *            property in the OSGi service registry.
      */
     public void open(Object memento);
-
-    /**
-     * Removes the specified {@link MBeanProviderListener} from the list of
-     * listeners
-     *
-     * @param listener
-     *            the {@code MBeanProviderListener} to add
-     */
-    public void removeListener(MBeanProviderListener listener);
 }

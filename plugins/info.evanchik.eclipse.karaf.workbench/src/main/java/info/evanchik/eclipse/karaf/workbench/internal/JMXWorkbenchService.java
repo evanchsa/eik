@@ -16,6 +16,7 @@ import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.jmx.KarafJMXPlugin;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
+import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -34,9 +35,6 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchListener;
-import org.eclipse.equinox.jmx.client.JMXClientPlugin;
-import org.eclipse.equinox.jmx.client.JMXServiceDescriptor;
-import org.eclipse.equinox.jmx.common.JMXConstants;
 import org.eclipse.jdt.launching.SocketUtil;
 
 /**
@@ -52,12 +50,6 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
     public List<BundleEntry> getAdditionalBundles(KarafWorkingPlatformModel platformModel) {
         String[] jmxBundles = {
                 KarafJMXPlugin.PLUGIN_ID,
-                KarafJMXPlugin.JMX_COMMON_PLUGIN_ID,
-                KarafJMXPlugin.JMX_SERVER_PLUGIN_ID,
-                KarafJMXPlugin.JMX_SERVER_RMI_CONNECTOR_PLUGIN_ID,
-                "org.eclipse.equinox.jmx.vm",
-                "org.eclipse.equinox.registry.jmx",
-                "org.eclipse.osgi.jmx",
                 "org.eclipse.core.contenttype",
                 "org.eclipse.core.jobs",
                 "org.eclipse.core.runtime",
@@ -112,16 +104,17 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
         try {
 
             final JMXServiceURL jmxServiceConnection = new JMXServiceURL(
-                    JMXConstants.DEFAULT_PROTOCOL,
+                    JMXServiceDescriptor.DEFAULT_PROTOCOL,
                     "localhost",
                     jmxServicePort,
-                    "/" + JMXConstants.DEFAULT_DOMAIN); //$NON-NLS-1$
+                    "/" + JMXServiceDescriptor.DEFAULT_DOMAIN); //$NON-NLS-1$
 
             final JMXServiceDescriptor jmxServiceDescriptor = new JMXServiceDescriptor(
                         configuration.getName(),
                         jmxServiceConnection,
                         null,
-                        null);
+                        null,
+                        JMXServiceDescriptor.DEFAULT_DOMAIN);
 
             jmxServiceDescriptorMap.put(configuration.getMemento(), jmxServiceDescriptor);
 
@@ -147,7 +140,7 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
         final JMXServiceDescriptor jmxServiceDescriptor =
             jmxServiceDescriptorMap.get(memento);
 
-        JMXClientPlugin.getDefault().getJMXServiceManager().addJMXService(jmxServiceDescriptor);
+        KarafWorkbenchActivator.getDefault().getJMXServiceManager().addJMXService(jmxServiceDescriptor);
 
         final ILaunchListener launchListener = getLaunchListener(launch);
         DebugPlugin.getDefault().getLaunchManager().addLaunchListener(launchListener);
@@ -165,12 +158,15 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
 
         return new ILaunchListener() {
 
+            @Override
             public void launchAdded(ILaunch l) {
             }
 
+            @Override
             public void launchChanged(ILaunch l) {
             }
 
+            @Override
             public void launchRemoved(ILaunch l) {
                 if (!l.equals(launch)) {
                     return;
@@ -179,7 +175,7 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
                 final JMXServiceDescriptor jmxServiceDescriptor =
                     jmxServiceDescriptorMap.get(memento);
 
-                JMXClientPlugin.getDefault().getJMXServiceManager().removeJMXService(jmxServiceDescriptor);
+                KarafWorkbenchActivator.getDefault().getJMXServiceManager().removeJMXService(jmxServiceDescriptor);
 
                 jmxServiceDescriptorMap.remove(memento);
             }

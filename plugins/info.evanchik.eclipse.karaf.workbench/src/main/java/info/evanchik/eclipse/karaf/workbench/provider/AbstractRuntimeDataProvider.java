@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -30,11 +29,11 @@ import org.eclipse.swt.graphics.Image;
  */
 public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider {
 
-    protected final Set<BundleData> bundleSet;
-    protected final Map<Long, BundleData> idToBundleMap;
+    protected final Set<BundleItem> bundleSet;
+    protected final Map<Long, BundleItem> idToBundleMap;
 
-    protected final Set<OSGiServiceWrapper> serviceSet;
-    protected final Map<Long, OSGiServiceWrapper> idToServiceMap;
+    protected final Set<ServiceItem> serviceSet;
+    protected final Map<Long, ServiceItem> idToServiceMap;
 
     private final List<RuntimeDataProviderListener> listeners;
 
@@ -44,11 +43,11 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
     public AbstractRuntimeDataProvider() {
         listeners = new ArrayList<RuntimeDataProviderListener>();
 
-        bundleSet = new HashSet<BundleData>();
-        idToBundleMap = new HashMap<Long, BundleData>();
+        bundleSet = new HashSet<BundleItem>();
+        idToBundleMap = new HashMap<Long, BundleItem>();
 
-        serviceSet = new HashSet<OSGiServiceWrapper>();
-        idToServiceMap = new HashMap<Long, OSGiServiceWrapper>();
+        serviceSet = new HashSet<ServiceItem>();
+        idToServiceMap = new HashMap<Long, ServiceItem>();
     }
 
     public void addListener(RuntimeDataProviderListener listener) {
@@ -59,11 +58,11 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
         listeners.add(listener);
     }
 
-    public BundleData getBundle(long id) {
+    public BundleItem getBundle(long id) {
         return idToBundleMap.get(id);
     }
 
-    public Set<BundleData> getBundles() {
+    public Set<BundleItem> getBundles() {
         synchronized (bundleSet) {
             return Collections.unmodifiableSet(bundleSet);
         }
@@ -73,11 +72,11 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
         return KarafWorkbenchActivator.getDefault().getImageRegistry().get(KarafWorkbenchActivator.BUNDLE_OBJ_IMG);
     }
 
-    public OSGiServiceWrapper getService(long id) {
+    public ServiceItem getService(long id) {
         return idToServiceMap.get(id);
     }
 
-    public Set<OSGiServiceWrapper> getServices() {
+    public Set<ServiceItem> getServices() {
         synchronized (serviceSet) {
             return Collections.unmodifiableSet(serviceSet);
         }

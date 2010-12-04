@@ -4,8 +4,8 @@ Bundle-Name: Aplication definition for Apache Karaf
 Bundle-SymbolicName: info.evanchik.karaf.app;singleton:=true
 Bundle-Version: 0.5.0.qualifier
 Bundle-Activator: info.evanchik.karaf.app.Activator
-Require-Bundle: org.eclipse.core.runtime
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: evanchik.info
 Export-Package: info.evanchik.karaf.app

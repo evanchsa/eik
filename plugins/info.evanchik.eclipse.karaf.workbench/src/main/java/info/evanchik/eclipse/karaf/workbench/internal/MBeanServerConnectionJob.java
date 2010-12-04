@@ -11,6 +11,7 @@
 package info.evanchik.eclipse.karaf.workbench.internal;
 
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
+import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -22,7 +23,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.equinox.jmx.client.JMXServiceDescriptor;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)

@@ -10,8 +10,16 @@
  */
 package info.evanchik.eclipse.karaf.jmx;
 
+
+import java.lang.management.ManagementFactory;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
+import org.eclipse.osgi.service.resolver.PlatformAdmin;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -21,17 +29,13 @@ public class KarafJMXPlugin implements BundleActivator {
     // The plug-in ID
     public static final String PLUGIN_ID = "info.evanchik.eclipse.karaf.jmx";
 
-    public static final String JMX_SERVER_PLUGIN_ID = "org.eclipse.equinox.jmx.server";
-
-    public static final String JMX_SERVER_RMI_CONNECTOR_PLUGIN_ID = "org.eclipse.equinox.jmx.server.rmi";
-
-    public static final String JMX_COMMON_PLUGIN_ID = "org.eclipse.equinox.jmx.common";
-
-    private static BundleActivator bundleActivator;
+    private static KarafJMXPlugin bundleActivator;
 
     private BundleContext bundleContext;
 
-    public static BundleActivator getDefault() {
+    private ServiceReference platformAdminRef;
+
+    public static KarafJMXPlugin getDefault() {
         return bundleActivator;
     }
 
@@ -39,13 +43,40 @@ public class KarafJMXPlugin implements BundleActivator {
         return bundleContext;
     }
 
+    public MBeanServer getMBeanServer() {
+        return ManagementFactory.getPlatformMBeanServer();
+    }
+
+    public PlatformAdmin getPlatformAdmin() {
+        final PlatformAdmin platAdmin = (PlatformAdmin) bundleContext.getService(platformAdminRef);
+        if (platAdmin == null) {
+            throw new AssertionError("PlatformAdmin service not available");
+        }
+
+        return platAdmin;
+    }
+
+    @Override
     public void start(BundleContext context) throws Exception {
         KarafJMXPlugin.bundleActivator = this;
         this.bundleContext = context;
+        this.platformAdminRef = bundleContext.getServiceReference(PlatformAdmin.class.getName());
+        if (platformAdminRef == null) {
+            throw new AssertionError("PlatformAdmin service not available");
+        }
+
+        final DiagnosticsServiceMBean diagnosticsService = new DiagnosticsService(getPlatformAdmin());
+        final ObjectName name = new ObjectName("info.evanchik.eclipse.karaf.jmx:type=DiagnosticsServiceMBean");
+
+        getMBeanServer().registerMBean(diagnosticsService, name);
     }
 
+    @Override
     public void stop(BundleContext context) throws Exception {
+        this.bundleContext.ungetService(platformAdminRef);
+
         KarafJMXPlugin.bundleActivator = null;
         this.bundleContext = null;
+        this.platformAdminRef = null;
     }
 }

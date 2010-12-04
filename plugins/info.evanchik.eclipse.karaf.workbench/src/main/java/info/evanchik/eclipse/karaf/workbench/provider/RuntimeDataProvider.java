@@ -33,21 +33,21 @@ public interface RuntimeDataProvider {
     public void addListener(RuntimeDataProviderListener listener);
 
     /**
-     * Getter for the specific {@link BundleData} instance
+     * Getter for the specific {@link BundleItem} instance
      *
      * @param id
      *            the identifier of the bundle to retrieve
-     * @return the {@code BundleData} if it exists, null otherwise
+     * @return the {@code BundleItem} if it exists, null otherwise
      */
-    public BundleData getBundle(long id);
+    public BundleItem getBundle(long id);
 
     /**
-     * Getter for the {@link Set} of {@link BundleData}S in this runtime. The
+     * Getter for the {@link Set} of {@link BundleData}s in this runtime. The
      * returned {@code Set} cannot be modified.
      *
-     * @return the {@code Set} of {@code BundleData}S in this runtime
+     * @return the {@code Set} of {@code BundleItem}s in this runtime
      */
-    public Set<BundleData> getBundles();
+    public Set<BundleItem> getBundles();
 
     /**
      * A 16x16 {@link Image} suitable for using in a view
@@ -70,15 +70,15 @@ public interface RuntimeDataProvider {
      *            the identifier of the service to retrieve
      * @return the {code OSGiService} if it exists, null otherwise
      */
-    public OSGiServiceWrapper getService(long id);
+    public ServiceItem getService(long id);
 
     /**
-     * Getter for the {@link Set} of {@link OSGiService}S in this runtime. The
+     * Getter for the {@link Set} of {@link ServiceItem}s in this runtime. The
      * returned {@code Set} cannot be modified.
      *
-     * @return the {@code Set} of {@code OSGiService}S in this runtime
+     * @return the {@code Set} of {@code ServiceItem}s in this runtime
      */
-    public Set<OSGiServiceWrapper> getServices();
+    public Set<ServiceItem> getServices();
 
     /**
      * Removes the listener from the {@code RuntimeDataProvider} if it exists.<br>

@@ -14,6 +14,8 @@ import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 
 import java.io.IOException;
 
+import javax.management.ObjectName;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -27,6 +29,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.jmx.core.FrameworkMBean;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -38,11 +41,25 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
 
     public final int SERVER_TERMINATE_JOB_SCHEDULE_DELAY = 5000;
 
+    private static final ObjectName FRAMEWORK;
+
     private ServiceTracker serviceTracker;
 
     private String memento;
 
     private MBeanProvider mbeanProvider;
+
+    /*
+     * If this throws an exception we're in trouble because it means that the
+     * constants are invalid
+     */
+    static {
+        try {
+            FRAMEWORK = new ObjectName("osgi.core:type=framework,version=1.5");
+        } catch (Exception e) {
+            throw new IllegalStateException("The OSGi JMX implementation references an invalid ObjectName", e);
+        }
+    }
 
     /**
      * Adds the {@link MBeanProvider} service to this server instance. This
@@ -145,7 +162,7 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
 
             try {
                 if (mbeanProvider != null) {
-                    mbeanProvider.getFrameworkMBean().shutdownFramework();
+                    mbeanProvider.getMBean(FRAMEWORK, FrameworkMBean.class).shutdownFramework();
                     mbeanProvider.close();
                 }
             } catch (IOException e) {

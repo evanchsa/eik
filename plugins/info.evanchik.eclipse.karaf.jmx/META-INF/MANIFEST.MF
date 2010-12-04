@@ -5,13 +5,10 @@ Bundle-SymbolicName: info.evanchik.eclipse.karaf.jmx
 Bundle-Version: 0.5.0.qualifier
 Bundle-Activator: info.evanchik.eclipse.karaf.jmx.KarafJMXPlugin
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: javax.management,
- javax.management.remote,
- org.eclipse.core.runtime;version="3.4.0",
- org.eclipse.osgi.util;version="1.1.0",
+ org.eclipse.osgi.service.resolver;version="1.4.0",
  org.osgi.framework;version="1.4.0"
-Export-Package: info.evanchik.eclipse.karaf.jmx
-Require-Bundle: org.eclipse.equinox.jmx.common;bundle-version="1.0.0",
- org.eclipse.equinox.jmx.server;bundle-version="1.0.0"
+Export-Package: info.evanchik.eclipse.karaf.jmx,
+ info.evanchik.eclipse.karaf.jmx.resolver
 Bundle-Vendor: evanchik.info

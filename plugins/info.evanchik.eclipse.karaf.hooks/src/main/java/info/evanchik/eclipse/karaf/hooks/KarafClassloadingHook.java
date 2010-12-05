@@ -37,8 +37,8 @@ public class KarafClassloadingHook implements ClassLoadingHook {
      * org.eclipse.osgi.baseadaptor.loader.ClasspathManager,
      * org.eclipse.osgi.baseadaptor.BaseData, java.security.ProtectionDomain)
      */
-    @SuppressWarnings("unchecked")
-    public boolean addClassPathEntry(ArrayList cpEntries, String cp,
+    @Override
+    public boolean addClassPathEntry(@SuppressWarnings("rawtypes") ArrayList cpEntries, String cp,
             ClasspathManager hostmanager, BaseData sourcedata,
             ProtectionDomain sourcedomain) {
         return false;
@@ -54,6 +54,7 @@ public class KarafClassloadingHook implements ClassLoadingHook {
      * org.eclipse.osgi.framework.adaptor.BundleProtectionDomain,
      * org.eclipse.osgi.baseadaptor.BaseData, java.lang.String[])
      */
+    @Override
     public BaseClassLoader createClassLoader(ClassLoader parent,
             ClassLoaderDelegate delegate, BundleProtectionDomain domain,
             BaseData data, String[] bundleclasspath) {
@@ -67,6 +68,7 @@ public class KarafClassloadingHook implements ClassLoadingHook {
      * org.eclipse.osgi.baseadaptor.hooks.ClassLoadingHook#findLibrary(org.eclipse
      * .osgi.baseadaptor.BaseData, java.lang.String)
      */
+    @Override
     public String findLibrary(BaseData data, String libName) {
         return null;
     }
@@ -77,6 +79,7 @@ public class KarafClassloadingHook implements ClassLoadingHook {
      * @seeorg.eclipse.osgi.baseadaptor.hooks.ClassLoadingHook#
      * getBundleClassLoaderParent()
      */
+    @Override
     public ClassLoader getBundleClassLoaderParent() {
         return null;
     }
@@ -89,6 +92,7 @@ public class KarafClassloadingHook implements ClassLoadingHook {
      * (org.eclipse.osgi.baseadaptor.loader.BaseClassLoader,
      * org.eclipse.osgi.baseadaptor.BaseData)
      */
+    @Override
     public void initializedClassLoader(BaseClassLoader baseClassLoader,
             BaseData data) {
     }
@@ -102,6 +106,7 @@ public class KarafClassloadingHook implements ClassLoadingHook {
      * org.eclipse.osgi.baseadaptor.bundlefile.BundleEntry,
      * org.eclipse.osgi.baseadaptor.loader.ClasspathManager)
      */
+    @Override
     public byte[] processClass(String name, byte[] classbytes,
             ClasspathEntry classpathEntry, BundleEntry entry,
             ClasspathManager manager) {

@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -52,31 +53,45 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
         runtimeDataProviders.add(eclipseWorkbenchDataProvider);
     }
 
+    @Override
     public Object addingService(ServiceReference reference) {
         final RuntimeDataProvider provider = (RuntimeDataProvider)context.getService(reference);
 
         if(!runtimeDataProviders.contains(provider)) {
             provider.addListener(this);
             runtimeDataProviders.add(provider);
-/*
-            SWTConcurrencyUtils.safeAsyncUpdate(viewer, new ViewerUpdater() {
-                public void updateViewer(Viewer viewer) {
+
+            Display.getDefault().asyncExec(new Runnable() {
+
+                @Override
+                public void run() {
                     viewer.refresh();
                 }
+
             });
-*/
         }
 
         return provider;
     }
 
+    @Override
     public void providerChange(RuntimeDataProvider source, EnumSet<RuntimeDataProviderListener.EventType> type) {
-        // SWTConcurrencyUtils.safeRefresh(viewer);
+
+        Display.getDefault().asyncExec(new Runnable() {
+
+            @Override
+            public void run() {
+                viewer.refresh();
+            }
+
+        });
     }
 
+    @Override
     public void dispose() {
     }
 
+    @Override
     public Object[] getChildren(Object parentElement) {
         if (parentElement instanceof RuntimeDataProvider) {
             return ((RuntimeDataProvider) parentElement).getBundles().toArray(new Object[0]);
@@ -85,10 +100,12 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
         return null;
     }
 
+    @Override
     public Object[] getElements(Object inputElement) {
         return runtimeDataProviders.toArray(new Object[0]);
     }
 
+    @Override
     public Object getParent(Object element) {
         if(element instanceof RuntimeDataProvider == false) {
             return null;
@@ -105,6 +122,7 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
         return null;
     }
 
+    @Override
     public boolean hasChildren(Object element) {
         if (element instanceof RuntimeDataProvider) {
             return true;
@@ -113,31 +131,38 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
         return false;
     }
 
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
     }
 
+    @Override
     public void modifiedService(ServiceReference reference, Object service) {
     }
 
+    @Override
     public void providerStart(RuntimeDataProvider source) {
     }
 
+    @Override
     public void providerStop(RuntimeDataProvider source) {
     }
 
+    @Override
     public void removedService(ServiceReference reference, Object service) {
         if(runtimeDataProviders.contains(service)) {
             final RuntimeDataProvider provider = (RuntimeDataProvider)service;
             provider.removeListener(this);
 
             runtimeDataProviders.remove(service);
-/*
-            SWTConcurrencyUtils.safeAsyncUpdate(viewer, new ViewerUpdater() {
-                public void updateViewer(Viewer viewer) {
+
+            Display.getDefault().asyncExec(new Runnable() {
+
+                @Override
+                public void run() {
                     viewer.refresh();
                 }
+
             });
-*/
         }
     }
 

@@ -10,8 +10,6 @@
  */
 package info.evanchik.eclipse.karaf.hooks;
 
-import info.evanchik.eclipse.karaf.hooks.impl.SystemPropertyLoader;
-
 import java.io.IOException;
 import java.net.URLConnection;
 import java.util.Properties;
@@ -28,9 +26,11 @@ import org.osgi.framework.BundleException;
  */
 public class KarafAdapterHook implements AdaptorHook {
 
+    @Override
     public void addProperties(Properties properties) {
     }
 
+    @Override
     public FrameworkLog createFrameworkLog() {
         return null;
     }
@@ -41,23 +41,28 @@ public class KarafAdapterHook implements AdaptorHook {
      * @see org.eclipse.osgi.baseadaptor.hooks.AdaptorHook#frameworkStart(org.osgi
      *      .framework.BundleContext)
      */
+    @Override
     public void frameworkStart(BundleContext context) throws BundleException {
-        final SystemPropertyLoader loader = new SystemPropertyLoader();
-        loader.loadSystemProperties();
+
     }
 
+    @Override
     public void frameworkStop(BundleContext context) throws BundleException {
     }
 
+    @Override
     public void frameworkStopping(BundleContext context) {
     }
 
+    @Override
     public void handleRuntimeError(Throwable error) {
     }
 
+    @Override
     public void initialize(BaseAdaptor adaptor) {
     }
 
+    @Override
     public URLConnection mapLocationToURLConnection(String location)
             throws IOException {
         return null;

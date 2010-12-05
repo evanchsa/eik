@@ -49,10 +49,16 @@ public class ServicesContentProvider extends BundlesContentProvider {
 
             final List<PropertyEntry> entries = new ArrayList<PropertyEntry>();
 
-            for (Object o: properties.keySet()) {
-                final String key = (String)o;
-                final PropertyEntry pi = new PropertyEntry(service, key, properties.get(key));
+            if (properties == null) {
+                final PropertyEntry pi = new PropertyEntry(service, "Properties unavailable", "");
                 entries.add(pi);
+            } else {
+
+                for (Object o: properties.keySet()) {
+                    final String key = (String)o;
+                    final PropertyEntry pi = new PropertyEntry(service, key, properties.get(key));
+                    entries.add(pi);
+                }
             }
 
             result = entries.toArray(new Object[0]);

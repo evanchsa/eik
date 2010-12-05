@@ -142,17 +142,16 @@ public class JMXTransportRegistry implements IJMXTransportRegistry {
 		try {
 			final String transport = serviceDescriptor.getUrl().getProtocol();
 
-			final JMXConnectorProvider ctorp = getConnectorProvider(transport);
+			final JMXConnectorProvider connectorProvider = getConnectorProvider(transport);
 
-			// TODO: Use something other than JMXConstants.DEFAULT_DOMAIN
 			final JMXServiceURL url = getJMXServiceURL(
 									serviceDescriptor.getUrl().getHost(),
 									serviceDescriptor.getUrl().getPort(),
 									serviceDescriptor.getUrl().getProtocol(),
-									JMXServiceDescriptor.DEFAULT_DOMAIN);
+									serviceDescriptor.getDomain());
 
 			Map<String, Object> environment = null;
-			if(serviceDescriptor.getUsername() != null) {
+			if (serviceDescriptor.getUsername() != null) {
 				environment = new HashMap<String, Object>();
 				String[] credentials = new String[] {
 							serviceDescriptor.getUsername(),
@@ -161,7 +160,7 @@ public class JMXTransportRegistry implements IJMXTransportRegistry {
 				environment.put(JMXConnector.CREDENTIALS, credentials);
 			}
 
-			return ctorp.newJMXConnector(url, environment);
+			return connectorProvider.newJMXConnector(url, environment);
 		} catch (Exception e) {
 			KarafWorkbenchActivator.getLogger().error(e.getMessage(), e);
 			return null;
@@ -217,7 +216,11 @@ public class JMXTransportRegistry implements IJMXTransportRegistry {
 		getJMXTransportrNotifier().notify(transportsAdded, EventType.ADDED);
 	}
 
-    private static JMXServiceURL getJMXServiceURL(String host, int port, String protocol, String domain)
+    private static JMXServiceURL getJMXServiceURL(
+            String host,
+            int port,
+            String protocol,
+            String domain)
         throws MalformedURLException
     {
         return new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/" + domain);

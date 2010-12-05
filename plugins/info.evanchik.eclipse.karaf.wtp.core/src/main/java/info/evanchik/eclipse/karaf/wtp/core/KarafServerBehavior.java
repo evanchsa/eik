@@ -29,7 +29,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.jmx.core.FrameworkMBean;
+import org.osgi.jmx.framework.FrameworkMBean;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -66,6 +66,7 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
      * service is how the workbench interacts with the running server. It also
      * serves as a sentry that indicates the server is operational.
      */
+    @Override
     public Object addingService(ServiceReference reference) {
         final String serviceMemento = (String) reference.getProperty(MBeanProvider.KARAF_WORKBENCH_SERVICES_ID);
         if (serviceMemento.equals(memento)) {
@@ -111,10 +112,12 @@ public class KarafServerBehavior extends ServerBehaviourDelegate implements Serv
         monitor.worked(1);
     }
 
+    @Override
     public void modifiedService(ServiceReference reference, Object service) {
         // Do nothing
     }
 
+    @Override
     public void removedService(ServiceReference reference, Object service) {
         final String serviceMemento = (String) reference.getProperty(MBeanProvider.KARAF_WORKBENCH_SERVICES_ID);
         if (serviceMemento.equals(memento)) {

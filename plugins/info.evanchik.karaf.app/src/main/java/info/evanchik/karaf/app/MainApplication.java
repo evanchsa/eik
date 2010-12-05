@@ -35,7 +35,6 @@ public class MainApplication implements IApplication {
     @SuppressWarnings("unused")
     private BundleContext bundleContext;
 
-    @Override
     public Object start(IApplicationContext context) throws Exception {
         System.out.println("Apache ServiceMix Kernel :: Starting main application");
 
@@ -58,7 +57,6 @@ public class MainApplication implements IApplication {
         return null;
     }
 
-    @Override
     public void stop() {
 
         try {

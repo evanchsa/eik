@@ -56,7 +56,6 @@ public class KarafJMXPlugin implements BundleActivator {
         return platAdmin;
     }
 
-    @Override
     public void start(BundleContext context) throws Exception {
         KarafJMXPlugin.bundleActivator = this;
         this.bundleContext = context;
@@ -71,7 +70,6 @@ public class KarafJMXPlugin implements BundleActivator {
         getMBeanServer().registerMBean(diagnosticsService, name);
     }
 
-    @Override
     public void stop(BundleContext context) throws Exception {
         this.bundleContext.ungetService(platformAdminRef);
 

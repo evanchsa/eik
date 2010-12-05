@@ -4,22 +4,14 @@ Bundle-Name: Eclipse WTP UI Integration
 Bundle-SymbolicName: info.evanchik.eclipse.karaf.wtp.ui;singleton:=true
 Bundle-Version: 0.5.0.qualifier
 Bundle-Activator: info.evanchik.eclipse.karaf.wtp.ui.KarafWtpUIPluginActivator
-Require-Bundle: org.eclipse.ui;bundle-version="[3.2.0,4.0.0)",
- org.eclipse.core.resources;bundle-version="[3.2.0,4.0.0)",
- org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
- org.eclipse.debug.ui;bundle-version="[3.2.0,4.0.0)",
+Require-Bundle: org.eclipse.debug.ui;bundle-version="[3.2.0,4.0.0)",
  org.eclipse.pde.ui;bundle-version="[3.2.0,4.0.0)",
- org.eclipse.jst.common.project.facet.core;bundle-version="[1.1.0,2.0.0)",
  org.eclipse.wst.common.project.facet.ui;bundle-version="[1.1.0,2.0.0)",
  org.eclipse.wst.server.ui;bundle-version="[1.0.204,2.0.0)",
  org.eclipse.wst.server.core;bundle-version="[1.0.204,2.0.0)",
- org.eclipse.jst.server.core;bundle-version="[1.0.103,2.0.0)",
- org.eclipse.jst.server.ui;bundle-version="[1.0.103,2.0.0)",
  org.eclipse.jdt.debug.ui;bundle-version="[3.2.0,4.0.0)",
- org.eclipse.jdt.launching;bundle-version="[3.2.0,4.0.0)",
  info.evanchik.eclipse.karaf.core;bundle-version="0.5.0",
- info.evanchik.eclipse.karaf.ui;bundle-version="0.5.0",
- info.evanchik.eclipse.karaf.wtp.core;bundle-version="0.5.0"
+ info.evanchik.eclipse.karaf.ui;bundle-version="0.5.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: info.evanchik.eclipse.karaf.wtp.ui

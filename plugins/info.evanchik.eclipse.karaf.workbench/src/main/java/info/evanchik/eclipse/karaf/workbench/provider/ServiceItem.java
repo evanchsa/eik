@@ -99,7 +99,7 @@ public class ServiceItem implements IAdaptable {
             if (other.serviceReference != null) {
                 return false;
             }
-        } else if (serviceReference.compareTo(other.serviceReference) == 0) {
+        } else if (!serviceReference.equals(other.serviceReference)) {
             return false;
         }
         return true;

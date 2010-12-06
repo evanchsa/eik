@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="info.evanchik.eclipse.karaf.jmx.feature"
+      label="Eclipse JMX Integration Feature for Apache Felix Karaf"
+      version="0.5.0.qualifier"
+      provider-name="evanchik.info">
+
+   <description>
+      JMX Integration for Apache Karaf runtimes
+   </description>
+
+   <copyright>
+      Copyright (c) 2010 Stephen Evanchik
+   </copyright>
+
+   <license url="http\://www.eclipse.org/legal/epl-v10.html">
+      Eclipse Public License - v1.0
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.core.runtime" version="3.1.0" match="compatible"/>
+      <import plugin="org.eclipse.debug.core" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.jdt.launching" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.2.0" match="compatible"/>
+      <import plugin="info.evanchik.eclipse.karaf.core" version="0.5.0" match="greaterOrEqual"/>
+      <import plugin="info.evanchik.eclipse.karaf.jmx" version="0.5.0" match="greaterOrEqual"/>
+      <import plugin="info.evanchik.eclipse.karaf.ui" version="0.5.0" match="greaterOrEqual"/>
+      <import plugin="org.slf4j.jcl"/>
+      <import plugin="org.eclipse.osgi.services"/>
+   </requires>
+
+   <plugin
+         id="info.evanchik.eclipse.karaf.jmx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="info.evanchik.eclipse.karaf.workbench"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.osgi.jmx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.aries.jmx.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

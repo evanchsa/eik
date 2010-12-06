@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="info.evanchik.smk.feature"
+      label="Eclipse Integration for Apache ServiceMix Kernel Feature"
+      version="0.5.0.qualifier"
+      provider-name="evanchik.info">
+
+   <description>
+      Eclipse Integration for Apache ServiceMix Kernel (and compatible) runtimes.
+   </description>
+
+   <copyright>
+      Copyright (c) 2010 Stephen Evanchik
+   </copyright>
+
+   <license url="http\://www.eclipse.org/legal/epl-v10.html">
+      Eclipse Public License - v1.0
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.1.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.debug.ui" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.pde.core" version="3.2.0" match="compatible"/>
+      <import plugin="org.apache.servicemix.kernel.main" version="1.1.0" match="greaterOrEqual"/>
+      <import plugin="info.evanchik.eclipse.karaf.core" version="0.5.0" match="greaterOrEqual"/>
+      <import plugin="info.evanchik.eclipse.karaf.ui" version="0.5.0" match="greaterOrEqual"/>
+      <import plugin="info.evanchik.eclipse.karaf.workbench" version="0.5.0" match="greaterOrEqual"/>
+      <import plugin="info.evanchik.smk.app" version="0.5.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="info.evanchik.smk.app"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="info.evanchik.eclipse.smk"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.servicemix.kernel.main"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

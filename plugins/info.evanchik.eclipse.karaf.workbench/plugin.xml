@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="jmxConnectorProvider" name="JMX Connector Provider" schema="schema/jmxConnectorProvider.exsd"/>
+   <extension
+         id="monitoring"
+         name="JMX Monitoring and Management"
+         point="info.evanchik.eclipse.karaf.ui.service">
+      <launchCustomizer
+            class="info.evanchik.eclipse.karaf.workbench.factory.JMXWorkbenchServiceFactory">
+      </launchCustomizer>
+   </extension>
+   <extension
+         id="runtimeData"
+         name="OSGi C&amp;C Runtime Data provider"
+         point="info.evanchik.eclipse.karaf.ui.service">
+      <launchCustomizer
+            class="info.evanchik.eclipse.karaf.workbench.factory.MBeanProviderWorkbenchServiceFactory">
+      </launchCustomizer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="info.evanchik.eclipse.karaf.workbench.karaf"
+            name="Apache Karaf">
+      </category>
+      <view
+            allowMultiple="false"
+            category="info.evanchik.eclipse.karaf.workbench.karaf"
+            class="info.evanchik.eclipse.karaf.workbench.ui.views.bundle.BundlesView"
+            icon="icons/obj16/bundle_obj.gif"
+            id="info.evanchik.eclipse.karaf.workbench.karafBundles"
+            name="Bundles"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="info.evanchik.eclipse.karaf.workbench.karaf"
+            class="info.evanchik.eclipse.karaf.workbench.ui.views.services.ServicesView"
+            icon="icons/obj16/generic_elements.gif"
+            id="info.evanchik.eclipse.karaf.workbench.karafServices"
+            name="Services">
+      </view>
+      <view
+            category="info.evanchik.eclipse.karaf.workbench.karaf"
+            class="info.evanchik.eclipse.karaf.workbench.jmx.views.JmxServersView"
+            icon="icons/obj16/generic_element.gif"
+            id="info.evanchik.eclipse.karaf.workbench.jmx.serversView"
+            name="JMX MBean Servers"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="info.evanchik.eclipse.karaf.workbench.ui.KarafWorkbenchPerspectiveFactory"
+            icon="icons/obj16/felixLogo16x16.gif"
+            id="info.evanchik.eclipse.karaf.workbench.karafPerspective"
+            name="Apache Karaf">
+         <description>
+            Apache Karaf
+         </description>
+      </perspective>
+   </extension>
+   <extension
+         point="info.evanchik.eclipse.karaf.workbench.jmxConnectorProvider">
+      <transport
+            class="info.evanchik.eclipse.karaf.workbench.jmx.internal.RMIConnectionProvider"
+            protocol="rmi">
+      </transport>
+   </extension>
+
+</plugin>

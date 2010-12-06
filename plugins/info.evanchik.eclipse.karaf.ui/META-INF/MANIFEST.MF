@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: UI for Eclipse Integration for Apache Karaf
+Bundle-SymbolicName: info.evanchik.eclipse.karaf.ui;singleton:=true
+Bundle-Version: 0.5.0.qualifier
+Require-Bundle: org.eclipse.ui;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
+ org.eclipse.debug.ui;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.jdt.launching;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.pde.ui;bundle-version="[3.6.0,4.0.0)",
+ info.evanchik.eclipse.karaf.core;bundle-version="[0.5.0,1.0.0]"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: info.evanchik.eclipse.karaf.ui,
+ info.evanchik.eclipse.karaf.ui.workbench
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator
+Bundle-Vendor: evanchik.info

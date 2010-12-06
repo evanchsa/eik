@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!--
+     Copyright (c) 2009 Stephen Evanchik
+     All rights reserved. This program and the accompanying materials
+     are made available under the terms of the Eclipse Public License v1.0
+     which accompanies this distribution, and is available at
+     http://www.eclipse.org/legal/epl-v10.html
+    
+     Contributors:
+      Stephen Evanchik - initial implementation
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>info.evanchik.eclipse.karaf</groupId>
+    <artifactId>eik-plugins-parent</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>info.evanchik.eclipse.karaf</groupId>
+  <artifactId>info.evanchik.eclipse.karaf.jmx</artifactId>
+  <packaging>jar</packaging>
+  <name>Eclipse Integration for Karaf :: JMX MBeans for Control and Instrumentation</name>
+  <description>JMX MBeans for remote control and information gathering</description>
+  <build>
+    <finalName>${artifactId}_${version}</finalName>
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>${pom.basedir}/src/main/filtered-resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${pom.basedir}</directory>
+        <includes>
+          <include>plugin.xml</include>
+          <include>plugin.properties</include>
+          <include>build.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${pom.basedir}/src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>osgi</artifactId>
+      <version>3.3.0-v20070530</version>
+    </dependency>
+  </dependencies>
+</project>

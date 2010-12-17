@@ -14,7 +14,6 @@ package info.evanchik.eclipse.karaf.jmx;
 import java.lang.management.ManagementFactory;
 
 import javax.management.MBeanServer;
-import javax.management.ObjectName;
 
 import org.eclipse.osgi.service.resolver.PlatformAdmin;
 import org.osgi.framework.BundleActivator;
@@ -63,11 +62,6 @@ public class KarafJMXPlugin implements BundleActivator {
         if (platformAdminRef == null) {
             throw new AssertionError("PlatformAdmin service not available");
         }
-
-        final DiagnosticsServiceMBean diagnosticsService = new DiagnosticsService(getPlatformAdmin());
-        final ObjectName name = new ObjectName("info.evanchik.eclipse.karaf.jmx:type=DiagnosticsServiceMBean");
-
-        getMBeanServer().registerMBean(diagnosticsService, name);
     }
 
     public void stop(BundleContext context) throws Exception {

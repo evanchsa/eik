@@ -101,6 +101,12 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
                     monitor = new NullProgressMonitor();
                 }
 
+                if (   !KarafRuntimeDataProvider.this.mbeanProvider.isOpen()
+                    && !cancel)
+                {
+                    this.schedule(25000);
+                }
+
                 monitor.beginTask("Populating view data set", IProgressMonitor.UNKNOWN);
 
                 IStatus status = loadBundleData(monitor);

@@ -95,13 +95,6 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
         super();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-     * )
-     */
     @Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
@@ -111,13 +104,6 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
         ICON_ROOT_URL = getBundle().getEntry(pathSuffix);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-     * )
-     */
     @Override
     public void stop(BundleContext context) throws Exception {
         plugin = null;
@@ -136,9 +122,9 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
         final ImageRegistry imageRegistry = new ImageRegistry();
 
         registerImage(imageRegistry, BUNDLE_OBJ_IMG, "obj16/bundle_obj.gif");
-        registerImage(imageRegistry, "logo16", "obj16/felixLogo16x16.gif");
-        registerImage(imageRegistry, "logo32", "obj32/felixLogo32x32.gif");
-        registerImage(imageRegistry, "logo64", "obj64/felixLogo64x64.gif");
+        registerImage(imageRegistry, LOGO_16X16_IMG, "obj16/felixLogo16x16.gif");
+        registerImage(imageRegistry, LOGO_32X32_IMG, "obj32/felixLogo32x32.gif");
+        registerImage(imageRegistry, LOGO_64X64_IMG, "obj64/felixLogo64x64.gif");
 
         return imageRegistry;
     }

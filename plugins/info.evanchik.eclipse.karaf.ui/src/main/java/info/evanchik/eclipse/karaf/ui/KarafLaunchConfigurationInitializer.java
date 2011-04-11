@@ -52,12 +52,6 @@ import org.osgi.framework.Version;
 @SuppressWarnings("restriction")
 public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfigurationInitializer {
 
-    /**
-     * Plugin that implements low-level Equinox hooks for the Karaf Eclipse
-     * integration
-     */
-    public static String KARAF_HOOK_PLUGIN_ID = "info.evanchik.eclipse.karaf.hooks"; //$NON-NLS-1$
-
     public static final char VERSION_SEPARATOR = '*';
 
     /**
@@ -83,7 +77,9 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      * @throws CoreException
      */
     public static KarafPlatformModel findKarafPlatform(ILaunchConfiguration configuration, IProgressMonitor monitor) throws CoreException {
-        final KarafPlatformModel karafPlatformModel =
+    	monitor.subTask("Locating Karaf Platform");
+    	
+    	final KarafPlatformModel karafPlatformModel =
             KarafPlatformModelRegistry.findActivePlatformModel();
 
         monitor.worked(10);
@@ -138,7 +134,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
         final KarafPlatformModelSynchronizer synchronizer =
             karafPlatformFactory.getPlatformSynchronizer(karafPlatform);
 
-        synchronizer.synchronize(workingKarafPlatform, false);
+        synchronizer.synchronize(workingKarafPlatform, true);
 
         // TODO: Factor this out so that it pulls the ID from this plugins
         // registry

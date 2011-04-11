@@ -57,7 +57,7 @@ public class KarafInstallationSelectionPage extends WizardPage {
         setDescription("Browse for a Karaf installation directory to use as your target platform");
 
         setPageComplete(false);
-        setImageDescriptor(KarafUIPluginActivator.getImageDescriptor("logo64")); // $NON-NLS-1$
+        setImageDescriptor(KarafUIPluginActivator.getImageDescriptor(KarafUIPluginActivator.LOGO_64X64_IMG)); // $NON-NLS-1$
     }
 
     public void createControl(Composite parent) {

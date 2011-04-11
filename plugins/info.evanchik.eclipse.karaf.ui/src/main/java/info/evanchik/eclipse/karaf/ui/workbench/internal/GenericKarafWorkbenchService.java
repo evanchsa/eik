@@ -104,11 +104,11 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
         equinoxProperties.put(
                 KarafPlatformModel.KARAF_BASE_PROP,
-                platformModel.getRootDirectory().toOSString());
+                platformModel.getParentKarafModel().getRootDirectory().toOSString());
 
         equinoxProperties.put(
                 KarafPlatformModel.KARAF_HOME_PROP,
-                platformModel.getRootDirectory().toOSString());
+                platformModel.getParentKarafModel().getRootDirectory().toOSString());
 
         /*
          * Adds the $TARGET_HOME/<system plugins> directory to the default
@@ -131,9 +131,10 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
         final List<String> arguments = new ArrayList<String>();
 
-        arguments.add("-D" + KarafPlatformModel.KARAF_BASE_PROP + "=" + platformModel.getRootDirectory()); //$NON-NLS-1$ $NON-NLS-2$
+        arguments.add("-D" + KarafPlatformModel.KARAF_BASE_PROP + "=" + platformModel.getParentKarafModel().getRootDirectory()); //$NON-NLS-1$ $NON-NLS-2$
+        arguments.add("-D" + KarafPlatformModel.KARAF_HOME_PROP + "=" + platformModel.getParentKarafModel().getRootDirectory()); //$NON-NLS-1$ $NON-NLS-2$
+
         arguments.add("-D" + KarafPlatformModel.KARAF_DATA_PROP + "=" + platformModel.getRootDirectory().append("data")); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
-        arguments.add("-D" + KarafPlatformModel.KARAF_HOME_PROP + "=" + platformModel.getRootDirectory()); //$NON-NLS-1$ $NON-NLS-2$
         arguments.add("-D" + KarafPlatformModel.KARAF_INSTANCES_PROP + "=" + platformModel.getRootDirectory().append("instances")); //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
 
         /*

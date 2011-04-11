@@ -126,7 +126,7 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
         final ImageRegistry imageRegistry = new ImageRegistry();
 
         registerImage(imageRegistry, BUNDLE_OBJ_IMG, "obj16/bundle_obj.gif");
-        registerImage(imageRegistry, "logo16", "obj16/felixLogo16x16.gif");
+        registerImage(imageRegistry, LOGO_16X16_IMG, "obj16/felixLogo16x16.gif");
         registerImage(imageRegistry, "logo32", "obj32/felixLogo32x32.gif");
         registerImage(imageRegistry, "logo64", "obj64/felixLogo64x64.gif");
 

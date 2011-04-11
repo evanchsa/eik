@@ -48,6 +48,12 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      * Eclipse Equinox configuration file name
      */
     public static final String ECLIPSE_CONFIG_INI_FILE = "config.ini"; //$NON-NLS-1$
+    
+	/**
+	 * The classloader type to use as the parent {@link ClassLoader} of the
+	 * context classloader used by the Framework.
+	 */
+    public static final String OSGI_CONTEXT_CLASSLOADER_PARENT_KEY = "osgi.contextClassLoaderParent"; //$NON-NLS-1$
 
     /**
      * This property is a list of OSGi Framework Extension bundles.
@@ -83,6 +89,12 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      * disjoint. See the section on locations for more details.
      */
     public static final String OSGI_INSTALL_AREA_KEY = "osgi.install.area"; //$NON-NLS-1$
+    
+	/**
+	 * The classloader type to use as the parent {@link ClassLoader} for all
+	 * bundles installed in the Framework.
+	 */
+    public static final String OSGI_PARENT_CLASSLOADER_KEY = "osgi.parentClassloader"; //$NON-NLS-1$
 
     /**
      * From the Equinox runtime documentation:<br>
@@ -116,11 +128,12 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     private final Map<String, BundleEntry> deployedBundles =
         new HashMap<String, BundleEntry>();
 
-    /**
-     * Saves a properties file
-     * @param file
-     * @param properties
-     */
+	/**
+	 * Saves a properties file
+	 * 
+	 * @param file
+	 * @param properties
+	 */
     public static void save(File file, Properties properties) {
         try {
             FileOutputStream stream = new FileOutputStream(file);
@@ -290,9 +303,11 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         /*
          * This is very important as it allows the boot classpath entries to
          * present their classes to the framework. Without it NoClassDefFound
-         * shows up for classes like org.apache.felix.karaf.main.spi.MainService
+         * shows up for classes like org.apache.karaf.jaas.boot.ProxyLoginModule
          */
         equinoxProperties.put(OSGI_FRAMEWORK_PARENT_CLASSLOADER_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
+        equinoxProperties.put(OSGI_CONTEXT_CLASSLOADER_PARENT_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
+        equinoxProperties.put(OSGI_PARENT_CLASSLOADER_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
 
         KarafLaunchConfigurationUtils.interpolateVariables(equinoxProperties, equinoxProperties);
 

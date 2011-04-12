@@ -303,6 +303,11 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
             vmArgs.append(" -Dosgi.noShutdown=true"); //$NON-NLS-1$
         }
 
+        // prevent terminal CTRL-characters in Eclipse console
+        if (vmArgs.indexOf("-Djline.terminal") == -1) { //$NON-NLS-1$
+            vmArgs.append(" -Djline.terminal=jline.UnsupportedTerminal"); //$NON-NLS-1$
+        }
+
         configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArgs.toString());
 
     }

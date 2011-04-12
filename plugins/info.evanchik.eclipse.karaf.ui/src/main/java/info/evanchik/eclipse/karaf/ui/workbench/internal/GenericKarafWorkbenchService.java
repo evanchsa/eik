@@ -42,11 +42,12 @@ import org.eclipse.jdt.launching.SocketUtil;
  */
 public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
-    public List<BundleEntry> getAdditionalBundles(KarafWorkingPlatformModel platformModel) {
+    @Override
+    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel) {
         if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
             return Collections.emptyList();
         }
-        String[] bundles = {
+        final String[] bundles = {
                 "info.evanchik.karaf.app",
                 "org.eclipse.core.contenttype",
                 "org.eclipse.core.jobs",
@@ -61,7 +62,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
         final List<BundleEntry> bundleEntries = new ArrayList<BundleEntry>();
 
-        for (String b : bundles) {
+        for (final String b : bundles) {
             final String bundleLocation =
                 KarafCorePluginUtils.getBundleLocation(b);
 
@@ -74,7 +75,8 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         return bundleEntries;
     }
 
-    public Map<String, String> getAdditionalEquinoxConfiguration(KarafWorkingPlatformModel platformModel) {
+    @Override
+    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel) {
         if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
             return Collections.emptyMap();
         }
@@ -94,11 +96,11 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
              * Populate the config.ini with all of the typical Karaf properties that
              * are not found in the System properties
              */
-            for (Map.Entry<Object, Object> e : currentConfig.entrySet()) {
+            for (final Map.Entry<Object, Object> e : currentConfig.entrySet()) {
                 equinoxProperties.put((String)e.getKey(), (String)e.getValue());
 
             }
-        } catch(CoreException e) {
+        } catch(final CoreException e) {
             KarafUIPluginActivator.getLogger().error("Unable to load configuration file: " + platformModel.getConfigurationDirectory(), e);
         }
 
@@ -121,9 +123,10 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         return equinoxProperties;
     }
 
+    @Override
     public List<String> getVMArguments(
-            KarafWorkingPlatformModel platformModel,
-            ILaunchConfiguration configuration) throws CoreException
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration) throws CoreException
     {
         if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
             return Collections.emptyList();
@@ -174,12 +177,13 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         return arguments;
     }
 
+    @Override
     public void launch(
-            KarafWorkingPlatformModel platformModel,
-            ILaunchConfiguration configuration,
-            String mode,
-            ILaunch launch,
-            IProgressMonitor monitor) throws CoreException
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration,
+            final String mode,
+            final ILaunch launch,
+            final IProgressMonitor monitor) throws CoreException
     {
         if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
             return;

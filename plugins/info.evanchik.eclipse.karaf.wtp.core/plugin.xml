@@ -185,29 +185,5 @@
          </delegate>
       </action>
    </extension>
-   <extension
-         point="org.eclipse.hyades.trace.ui.launchConfigMechanismAssociator">
-      <association
-            launchConfigID="info.evanchik.eclipse.karaf.wtp.core.KarafServerLauncher">
-         <mechanism
-               mechanismID="org.eclipse.tptp.trace.ui.jvmpiMechanism">
-            <configuration
-                  associatedAgent="org.eclipse.tptp.trace.ui.jvmpiAgent"
-                  configurationId="org.eclipse.tptp.trace.ui.jvmpiConfiguration"
-                  filter="org.eclipse.tptp.platform.profile.server.core.internal.PICollectorFiltration"
-                  launchDelegate="org.eclipse.tptp.trace.ui.internal.launcher.deleg.application.PIAttachLauncherDelegate">
-            </configuration>
-         </mechanism>
-         <mechanism
-               mechanismID="org.eclipse.tptp.trace.jvmti.jvmtiMechanism">
-            <configuration
-                  associatedAgent="org.eclipse.tptp.platform.jvmti.TIAgent"
-                  configurationId="org.eclipse.tptp.trace.jvmti.tiConfiguration"
-                  filter="org.eclipse.tptp.platform.profile.server.core.internal.TICollectorFiltration"
-                  launchDelegate="org.eclipse.tptp.platform.jvmti.client.internal.launcher.TIAttachLauncherDelegate">
-            </configuration>
-         </mechanism>
-      </association>
-   </extension>
 
 </plugin>

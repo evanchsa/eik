@@ -22,6 +22,7 @@ import info.evanchik.eclipse.karaf.core.configuration.internal.GeneralSectionImp
 import info.evanchik.eclipse.karaf.core.configuration.internal.ManagementSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.StartupSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.SystemSectionImpl;
+import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.model.WorkingKarafPlatformModel;
 
 import org.eclipse.core.runtime.IAdapterFactory;
@@ -46,6 +47,7 @@ public class KarafConfigurationAdapterFactory implements IAdapterFactory {
         SystemSection.class
     };
 
+    @Override
     public Object getAdapter(Object adaptableObject, @SuppressWarnings("rawtypes") Class adapterType) {
         if (adaptableObject instanceof KarafPlatformModel == false) {
             return null;
@@ -53,47 +55,54 @@ public class KarafConfigurationAdapterFactory implements IAdapterFactory {
 
         final KarafPlatformModel karafModel = (KarafPlatformModel) adaptableObject;
 
+        final Object adaptedObject;
         if (adapterType == GeneralSection.class) {
-            return new GeneralSectionImpl(karafModel);
+            adaptedObject = new GeneralSectionImpl(karafModel);
         } else if (adapterType == ManagementSection.class) {
             if(KarafCorePluginUtils.isServiceMix(karafModel)) {
-                return new ManagementSectionImpl(karafModel, ManagementSectionImpl.SERVICEMIX_KERNEL_MANAGEMENT_FILENAME);
+                adaptedObject = new ManagementSectionImpl(karafModel, ManagementSectionImpl.SERVICEMIX_KERNEL_MANAGEMENT_FILENAME);
             } else if (KarafCorePluginUtils.isFelixKaraf(karafModel)) {
-                return new ManagementSectionImpl(karafModel, ManagementSectionImpl.FELIX_KARAF_MANAGEMENT_FILENAME);
+                adaptedObject = new ManagementSectionImpl(karafModel, ManagementSectionImpl.FELIX_KARAF_MANAGEMENT_FILENAME);
             } else if (KarafCorePluginUtils.isKaraf(karafModel)) {
-                return new ManagementSectionImpl(karafModel, ManagementSectionImpl.KARAF_MANAGEMENT_FILENAME);
+                adaptedObject = new ManagementSectionImpl(karafModel, ManagementSectionImpl.KARAF_MANAGEMENT_FILENAME);
             } else {
                 throw new IllegalArgumentException(
                         "Invalid platform Missing Karaf or ServiceMix Kernel configuration file: {org.apache.servicemix|org.apache.felix.karaf|org.apache.karaf}.management.cfg");
             }
         } else if (adapterType == StartupSection.class) {
-            // TODO: Figure out how to re-enable support
-           /*
-            if (karafModel instanceof BundleKarafPlatformModel) {
-                return new BundleStartupSectionImpl(karafModel);
-            } else
-            */
-
             if (karafModel instanceof WorkingKarafPlatformModel) {
 
                 /*
                  * This delegates to the original model because that is where
                  * the plugins that are used to start the Karaf Platform live.
                  */
-                final WorkingKarafPlatformModel workingModel = (WorkingKarafPlatformModel) karafModel;
-                final KarafPlatformModel parentModel = workingModel.getParentKarafModel();
+                final WorkingKarafPlatformModel workingModel =
+                    (WorkingKarafPlatformModel) karafModel;
 
-                return new DelegatingStartupSectionImpl(parentModel, new StartupSectionImpl(parentModel));
+                final KarafPlatformModel parentModel = workingModel.getParentKarafModel();
+                if (parentModel instanceof GenericKarafPlatformModel) {
+                    adaptedObject =
+                        new DelegatingStartupSectionImpl(
+                            parentModel,
+                            new StartupSectionImpl(parentModel));
+                } else {
+                    adaptedObject = null;
+                }
+            } else if (karafModel instanceof GenericKarafPlatformModel) {
+                adaptedObject = new StartupSectionImpl(karafModel);
             } else {
-                return new StartupSectionImpl(karafModel);
+                adaptedObject = null;
             }
         } else if (adapterType == SystemSection.class) {
             return new SystemSectionImpl(karafModel);
         } else {
-            return null;
+            adaptedObject = null;
         }
+
+        return adaptedObject;
     }
 
+    @Override
     public Class<?>[] getAdapterList() {
         return ADAPTABLE_TYPES;
     }

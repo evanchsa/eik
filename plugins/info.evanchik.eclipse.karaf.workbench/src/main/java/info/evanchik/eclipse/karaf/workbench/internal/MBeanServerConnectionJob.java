@@ -52,12 +52,6 @@ public class MBeanServerConnectionJob extends Job {
     private final JMXServiceDescriptor connection;
 
     /**
-     * The maximum number of retries this job will attempt to connect to the JMX
-     * server before failing.
-     */
-    private int maxRetries = DEFAULT_MAX_RETRIES;
-
-    /**
      * The time between connection retries
      */
     private long rescheduleDelay = DEFAULT_RESCHEDULE_DELAY;
@@ -78,11 +72,6 @@ public class MBeanServerConnectionJob extends Job {
     private JMXConnector jmxClient;
 
     /**
-     * The number of connection retries
-     */
-    private int retries = 0;
-
-    /**
      * Constructs a {@link Job} that will connect to the JMX MBeanServer on a
      * remote (or local) Karaf instance.
      *
@@ -92,7 +81,7 @@ public class MBeanServerConnectionJob extends Job {
      *            the {@link JMXServiceDescriptor} that represents
      *            the JMX MBeanServer this {@link Job} will connect to
      */
-    public MBeanServerConnectionJob(String name, JMXServiceDescriptor connection) {
+    public MBeanServerConnectionJob(final String name, final JMXServiceDescriptor connection) {
         super(name);
 
         this.connection = connection;
@@ -106,10 +95,6 @@ public class MBeanServerConnectionJob extends Job {
 
     public JMXConnector getJmxClient() {
         return jmxClient;
-    }
-
-    public final int getMaxRetries() {
-        return maxRetries;
     }
 
     public JMXServiceDescriptor getMBeanServerConnectionDescriptor() {
@@ -130,18 +115,10 @@ public class MBeanServerConnectionJob extends Job {
     }
 
     /**
-     * @param maxRetries
-     *            the maxRetries to set
-     */
-    public final void setMaxRetries(int maxRetries) {
-        this.maxRetries = maxRetries;
-    }
-
-    /**
      * @param rescheduleDelay
      *            the rescheduleDelay to set
      */
-    public final void setRescheduleDelay(long rescheduleDelay) {
+    public final void setRescheduleDelay(final long rescheduleDelay) {
         this.rescheduleDelay = rescheduleDelay;
     }
 
@@ -151,41 +128,32 @@ public class MBeanServerConnectionJob extends Job {
     }
 
     @Override
-    protected IStatus run(IProgressMonitor monitor) {
+    protected IStatus run(final IProgressMonitor monitor) {
 
-        if (cancel) {
-            return Status.CANCEL_STATUS;
-        }
+	    IStatus status;
 
-        IStatus status;
+	    try {
+	        jmxClient = JMXConnectorFactory.connect(connection.getUrl(), environment);
 
-        try {
-            jmxClient = JMXConnectorFactory.connect(connection.getUrl(), environment);
+	        monitor.worked(5);
 
-            monitor.worked(5);
+	        status = new Status(
+	                IStatus.OK,
+	                KarafWorkbenchActivator.PLUGIN_ID,
+	                "Successfully connected to JMX MBeanServer for: " + getName());
 
-            status = new Status(
-                    IStatus.OK,
-                    KarafWorkbenchActivator.PLUGIN_ID,
-                    "Successfully connected to JMX MBeanServer for: " + getName());
+	    } catch (final IOException ex) {
+	        status = new Status(
+	        		IStatus.WARNING,
+	        		KarafWorkbenchActivator.PLUGIN_ID,
+	        		"Retrying connection for for: " + getName(), ex);
 
-        } catch (IOException ex) {
+		    if (!cancel) {
+		    	schedule(rescheduleDelay);
+		    }
+	    }
 
-            if (retries < maxRetries) {
-                retries++;
-
-                monitor.worked(2);
-
-                status = new Status(IStatus.WARNING, KarafWorkbenchActivator.PLUGIN_ID, "Retrying connection for for: " + getName(), ex);
-
-                schedule(rescheduleDelay);
-            } else {
-                status = new Status(IStatus.ERROR, KarafWorkbenchActivator.PLUGIN_ID, "Unable to connect to: " + getName());
-            }
-
-        }
-
-        return status;
+	    return status;
     }
 
     /**

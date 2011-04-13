@@ -10,6 +10,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
 Import-Package: javax.management,
  org.eclipse.osgi.service.resolver;version="1.4.0",
  org.osgi.framework;version="1.4.0"
-Export-Package: info.evanchik.eclipse.karaf.jmx,
- info.evanchik.eclipse.karaf.jmx.resolver
+Export-Package: info.evanchik.eclipse.karaf.jmx
 Bundle-Vendor: evanchik.info

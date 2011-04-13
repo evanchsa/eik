@@ -7,6 +7,7 @@
  *
  * Contributors:
  *  Stephen Evanchik - initial implementation
+ *  Timo Naroska - proper console support for Windows
  */
 package info.evanchik.eclipse.karaf.ui;
 
@@ -31,9 +32,13 @@ import java.util.Properties;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMInstall3;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.pde.launching.EquinoxLaunchConfiguration;
 import org.eclipse.pde.launching.IPDELauncherConstants;
 import org.osgi.framework.Bundle;
@@ -45,9 +50,30 @@ import org.osgi.framework.Bundle;
 public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration {
 
     /**
+     * Java Specification Version system property
+     */
+    public static final String JAVA_SPECIFICATION_VERSION = "java.specification.version"; //$NON-NLS-1$
+
+    /**
      * Eclipse Equinox configuration file name
      */
     public static final String ECLIPSE_CONFIG_INI_FILE = "config.ini"; //$NON-NLS-1$
+
+    /**
+     * The classloader type to use as the parent {@link ClassLoader} of the
+     * context classloader used by the Framework. The valid types are the
+     * following:<br>
+     * <br>
+     * <ul>
+     * <li>app - the application classloader.</li>
+     * <li>boot - the boot classloader.</li>
+     * <li>ext - the extension classloader.</li>
+     * <li>fwk - the framework classloader.</li>
+     * <li>ccl - the original context classloader that was set when the
+     * framework launched (default value).</li>
+     * </ul>
+     */
+    public static final String OSGI_CONTEXT_CLASSLOADER_PARENT_KEY = "osgi.contextClassLoaderParent"; //$NON-NLS-1$
 
     /**
      * This property is a list of OSGi Framework Extension bundles.
@@ -85,6 +111,19 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     public static final String OSGI_INSTALL_AREA_KEY = "osgi.install.area"; //$NON-NLS-1$
 
     /**
+     * The classloader type to use as the parent {@link ClassLoader} for all
+     * bundles installed in the Framework. The valid types are the following:<br>
+     * <br>
+     * <ul>
+     * <li>app - the application classloader.</li>
+     * <li>boot - the boot classloader.</li>
+     * <li>ext - the extension classloader.</li>
+     * <li>fwk - the framework classloader.</li>
+     * </ul>
+     */
+    public static final String OSGI_PARENT_CLASSLOADER_KEY = "osgi.parentClassloader"; //$NON-NLS-1$
+
+    /**
      * From the Equinox runtime documentation:<br>
      * <br>
      * the start level value the framework will be set to at startup. The
@@ -116,18 +155,19 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     private final Map<String, BundleEntry> deployedBundles =
         new HashMap<String, BundleEntry>();
 
-    /**
-     * Saves a properties file
-     * @param file
-     * @param properties
-     */
-    public static void save(File file, Properties properties) {
+	/**
+	 * Saves a properties file
+	 *
+	 * @param file
+	 * @param properties
+	 */
+    public static void save(final File file, final Properties properties) {
         try {
-            FileOutputStream stream = new FileOutputStream(file);
+            final FileOutputStream stream = new FileOutputStream(file);
             properties.store(stream, "Configuration File"); //$NON-NLS-1$
             stream.flush();
             stream.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             //PDECore.logException(e);
         }
     }
@@ -143,12 +183,12 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      *            the launch configuration
      */
     @Override
-    public String[] getClasspath(ILaunchConfiguration configuration) throws CoreException {
+    public String[] getClasspath(final ILaunchConfiguration configuration) throws CoreException {
         final String[] mainClasspath = super.getClasspath(configuration);
 
         final List<String> classpath = karafPlatform.getBootClasspath();
 
-        for (String s : mainClasspath) {
+        for (final String s : mainClasspath) {
             classpath.add(s);
         }
 
@@ -156,14 +196,14 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     }
 
     @Override
-    public String[] getProgramArguments(ILaunchConfiguration configuration) throws CoreException {
+    public String[] getProgramArguments(final ILaunchConfiguration configuration) throws CoreException {
         final String[] progArguments = super.getProgramArguments(configuration);
 
         buildEquinoxConfiguration(configuration);
 
         final List<String> arguments = new ArrayList<String>();
 
-        for (String s : progArguments) {
+        for (final String s : progArguments) {
             arguments.add(s);
         }
 
@@ -180,20 +220,20 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      *            the launch configuration
      */
     @Override
-    public String[] getVMArguments(ILaunchConfiguration configuration) throws CoreException {
+    public String[] getVMArguments(final ILaunchConfiguration configuration) throws CoreException {
         final String[] vmArguments = super.getVMArguments(configuration);
 
         final List<String> arguments = new ArrayList<String>();
-        for (String vmArg : vmArguments) {
+        for (final String vmArg : vmArguments) {
             arguments.add(vmArg);
         }
 
-        arguments.add("-Deik.properties.system=" + workingKarafPlatform.getConfigurationFile("system.properties"));
+        arguments.add("-Deik.properties.system=" + workingKarafPlatform.getConfigurationFile("system.properties"));  //$NON-NLS-1$  //$NON-NLS-2$
 
         final List<KarafWorkbenchServiceFactory> list =
             WorkbenchServiceExtensions.getLaunchCustomizerFactories();
 
-        for (KarafWorkbenchServiceFactory f : list) {
+        for (final KarafWorkbenchServiceFactory f : list) {
             arguments.addAll(f.getWorkbenchService().getVMArguments(workingKarafPlatform, configuration));
         }
 
@@ -213,13 +253,13 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         final List<KarafWorkbenchServiceFactory> list =
             WorkbenchServiceExtensions.getLaunchCustomizerFactories();
 
-        for (KarafWorkbenchServiceFactory f : list) {
+        for (final KarafWorkbenchServiceFactory f : list) {
             f.getWorkbenchService().launch(workingKarafPlatform, configuration, mode, launch, monitor);
         }
     }
 
     @Override
-    protected void preLaunchCheck(ILaunchConfiguration configuration, ILaunch launch, IProgressMonitor monitor) throws CoreException {
+    protected void preLaunchCheck(final ILaunchConfiguration configuration, final ILaunch launch, final IProgressMonitor monitor) throws CoreException {
         super.preLaunchCheck(configuration, launch, monitor);
 
         this.karafPlatform = KarafLaunchConfigurationInitializer.findKarafPlatform(configuration, monitor);
@@ -242,7 +282,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      *             if there is a problem reading or writing the configuration
      *             file
      */
-    private void buildEquinoxConfiguration(ILaunchConfiguration configuration) throws CoreException {
+    private void buildEquinoxConfiguration(final ILaunchConfiguration configuration) throws CoreException {
 
         final IPath rootDirectory = workingKarafPlatform.getRootDirectory();
 
@@ -253,7 +293,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         final List<KarafWorkbenchServiceFactory> list =
             WorkbenchServiceExtensions.getLaunchCustomizerFactories();
 
-        for (KarafWorkbenchServiceFactory f : list) {
+        for (final KarafWorkbenchServiceFactory f : list) {
             final Map<String, String> m =
                 f.getWorkbenchService().getAdditionalEquinoxConfiguration(workingKarafPlatform);
 
@@ -261,7 +301,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         }
 
         final String currentBundles =
-            (String) equinoxProperties.get(OSGI_BUNDLES_KEY); //$NON-NLS-1$
+            (String) equinoxProperties.get(OSGI_BUNDLES_KEY);
 
         final String allBundles = mergeDeployedBundles(currentBundles);
 
@@ -289,12 +329,17 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
             new Path(karafPlatform.getState().getBundle("org.eclipse.osgi", null).getLocation()); //$NON-NLS-1$
         equinoxProperties.put(OSGI_INSTALL_AREA_KEY, frameworkPath.removeLastSegments(1).toString());
 
+        final String javaSpecificationVersion = getJavaRuntimeSpecificationVersion(configuration);
+        equinoxProperties.put(JAVA_SPECIFICATION_VERSION, javaSpecificationVersion);
+
         /*
          * This is very important as it allows the boot classpath entries to
          * present their classes to the framework. Without it NoClassDefFound
-         * shows up for classes like org.apache.felix.karaf.main.spi.MainService
+         * shows up for classes like org.apache.karaf.jaas.boot.ProxyLoginModule
          */
         equinoxProperties.put(OSGI_FRAMEWORK_PARENT_CLASSLOADER_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
+        equinoxProperties.put(OSGI_CONTEXT_CLASSLOADER_PARENT_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
+        equinoxProperties.put(OSGI_PARENT_CLASSLOADER_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
 
         KarafLaunchConfigurationUtils.interpolateVariables(equinoxProperties, equinoxProperties);
 
@@ -302,11 +347,39 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     }
 
     /**
+     * Determines the Java Specification Version of the Java Virtual Machine
+     * that will execute Karaf. If the {@link VMInstall} does not support
+     * evaluating system properties then the workbench's specification version
+     * is used.
+     *
+     * @param configuration
+     *            the launch configuration
+     * @return the Java Specification Version (e.g "1.6" or "1.5")
+     * @throws CoreException
+     *             if there is a problem determining the Java Specification
+     *             Version of the {@code VMInstall}
+     */
+    private String getJavaRuntimeSpecificationVersion(final ILaunchConfiguration configuration) throws CoreException {
+        final IVMInstall vmInstall = JavaRuntime.computeVMInstall(configuration);
+        if (!(vmInstall instanceof IVMInstall3)) {
+            return System.getProperty(JAVA_SPECIFICATION_VERSION);
+        }
+
+        final IVMInstall3 vmInstall3 = (IVMInstall3) vmInstall;
+
+        @SuppressWarnings("unchecked")
+        final Map<String, String> properties =
+            vmInstall3.evaluateSystemProperties(new String[] { JAVA_SPECIFICATION_VERSION }, new NullProgressMonitor());
+
+        return properties.get(JAVA_SPECIFICATION_VERSION);
+    }
+
+    /**
      *
      * @param currentBundles
      * @return
      */
-    private String mergeDeployedBundles(String currentBundles) throws CoreException {
+    private String mergeDeployedBundles(final String currentBundles) throws CoreException {
 
         /*
          * Create a Map of all the bundles that we are going to deploy in this
@@ -315,24 +388,24 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         deployedBundles.clear();
 
         final List<BundleEntry> bundles = KarafCorePluginUtils.getEquinoxBundles(currentBundles);
-        for(BundleEntry b : bundles) {
+        for(final BundleEntry b : bundles) {
             deployedBundles.put(b.getBundle(), b);
         }
 
         final List<KarafWorkbenchServiceFactory> list =
             WorkbenchServiceExtensions.getLaunchCustomizerFactories();
 
-        for (KarafWorkbenchServiceFactory f : list) {
+        for (final KarafWorkbenchServiceFactory f : list) {
             final List<BundleEntry> extBundles =
                 f.getWorkbenchService().getAdditionalBundles(workingKarafPlatform);
 
-            for(BundleEntry b : extBundles) {
+            for(final BundleEntry b : extBundles) {
                 if(!deployedBundles.containsKey(b.getBundle())) {
                     deployedBundles.put(b.getBundle(), b);
                 }
             }
         }
 
-        return KarafCorePluginUtils.join(deployedBundles.values(), ",");
+        return KarafCorePluginUtils.join(deployedBundles.values(), ",");  //$NON-NLS-1$
     }
 }

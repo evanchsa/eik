@@ -165,7 +165,7 @@ public final class KarafCorePluginUtils {
 
         final List<BundleEntry> entries = new ArrayList<BundleEntry>();
         for (String s : bundles) {
-            entries.add(BundleEntry.fromString(s));
+            entries.add(BundleEntry.fromString(s.trim()));
         }
 
         return entries;
@@ -203,6 +203,24 @@ public final class KarafCorePluginUtils {
      *            the current maximum depth
      */
     public static void getJarFileList(File dir, List<File> list, int maxDepth) {
+    	getFileList(dir, ".jar", list, maxDepth);
+    }
+
+	/**
+	 * Searches a directory to the specified depth for library files.<br>
+	 * <br>
+	 * This method is recursive so be careful with the maximum depth
+	 *
+	 * @param dir
+	 *            the directory to being the search
+	 * @param extension
+	 *            the extension to search for
+	 * @param list
+	 *            the list of libraries found
+	 * @param maxDepth
+	 *            the current maximum depth
+	 */
+    public static void getFileList(File dir, String extension, List<File> list, int maxDepth) {
         if (dir == null) {
             throw new IllegalArgumentException("Directory must not be null");
         }
@@ -214,8 +232,8 @@ public final class KarafCorePluginUtils {
 
         for (File file : files) {
             if (file.isDirectory() && maxDepth > 0) {
-                getJarFileList(file, list, maxDepth - 1);
-            } else if (file.getAbsolutePath().endsWith(".jar") || file.getAbsolutePath().endsWith(".zip")) {
+                getFileList(file, extension, list, maxDepth - 1);
+            } else if (file.getAbsolutePath().endsWith(extension) || file.getAbsolutePath().endsWith(".zip")) {
                 list.add(file);
             }
         }

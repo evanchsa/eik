@@ -270,13 +270,15 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         /*
          * Set the following OSGi / Equinox properties:
          */
-        final Integer defaultStartLevel =
-            configuration.getAttribute(
-                    IPDELauncherConstants.DEFAULT_START_LEVEL,
-                    new Integer(KarafPlatformModel.KARAF_DEFAULT_BUNDLE_START_LEVEL));
-
-        equinoxProperties.put(OSGI_START_LEVEL_KEY, defaultStartLevel.toString());
-
+        if (!equinoxProperties.containsKey(OSGI_START_LEVEL_KEY)) {
+	        final Integer defaultStartLevel =
+	            configuration.getAttribute(
+	                    IPDELauncherConstants.DEFAULT_START_LEVEL,
+	                    new Integer(KarafPlatformModel.KARAF_DEFAULT_BUNDLE_START_LEVEL));
+	
+	        equinoxProperties.put(OSGI_START_LEVEL_KEY, defaultStartLevel.toString());
+        }
+        
         /*
          * Set the osgi.install.area to the runtime plugins directory or the
          * directory containing Equinox?

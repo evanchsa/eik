@@ -58,6 +58,7 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel {
         return bootClasspath;
     }
 
+    @Override
     public IPath getConfigurationDirectory() {
         return rootPlatformPath.append("etc"); //$NON-NLS-1$
     }
@@ -106,7 +107,7 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel {
      *            the {@code List} of {@code File}S
      * @return a {@code List} of {@code URL}S, one for each {@code File}
      */
-    private List<URL> filesToUrls(final List<File> files) {
+    protected final List<URL> filesToUrls(final List<File> files) {
         final List<URL> urls = new ArrayList<URL>();
 
         for (File f : files) {

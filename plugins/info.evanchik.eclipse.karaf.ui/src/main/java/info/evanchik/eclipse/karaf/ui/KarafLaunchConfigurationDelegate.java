@@ -15,10 +15,10 @@ import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
+import info.evanchik.eclipse.karaf.core.PropertyUtils;
 import info.evanchik.eclipse.karaf.core.SystemBundleNames;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.WorkingKarafPlatformModel;
-import info.evanchik.eclipse.karaf.ui.internal.KarafLaunchConfigurationUtils;
 import info.evanchik.eclipse.karaf.ui.internal.WorkbenchServiceExtensions;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
 
@@ -387,7 +387,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         equinoxProperties.put(OSGI_CONTEXT_CLASSLOADER_PARENT_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
         equinoxProperties.put(OSGI_PARENT_CLASSLOADER_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
 
-        KarafLaunchConfigurationUtils.interpolateVariables(equinoxProperties, equinoxProperties);
+        PropertyUtils.interpolateVariables(equinoxProperties, equinoxProperties);
 
         save(new File(getConfigDir(configuration), ECLIPSE_CONFIG_INI_FILE), equinoxProperties);
     }

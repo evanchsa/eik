@@ -58,7 +58,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
     public static final String JMX_JMXRMI_DOMAIN = "jmxrmi"; //$NON-NLS-1$
 
     private final Map<String, KarafRuntimeDataProviderItem> runtimeDataProviderMap =
-        new HashMap<String, KarafRuntimeDataProviderItem>();
+        Collections.synchronizedMap(new HashMap<String, KarafRuntimeDataProviderItem>());
 
     /**
      *
@@ -86,10 +86,10 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
          * @param runtimeDataProviderServiceRegistration
          */
         public KarafRuntimeDataProviderItem(
-                KarafMBeanProvider mbeanProvider,
-                MBeanServerConnectionJob mbeanServerConnectionJob,
-                RuntimeDataProvider runtimeDataProvider,
-                ServiceRegistration runtimeDataProviderServiceRegistration)
+                final KarafMBeanProvider mbeanProvider,
+                final MBeanServerConnectionJob mbeanServerConnectionJob,
+                final RuntimeDataProvider runtimeDataProvider,
+                final ServiceRegistration runtimeDataProviderServiceRegistration)
         {
             this.mbeanProvider = mbeanProvider;
             this.mbeanConnectionJob = mbeanServerConnectionJob;
@@ -117,15 +117,15 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
         public int hashCode() {
             final int prime = 31;
             int result = 1;
-            result = prime * result + ((mbeanConnectionJob == null) ? 0 : mbeanConnectionJob.hashCode());
-            result = prime * result + ((mbeanProvider == null) ? 0 : mbeanProvider.hashCode());
-            result = prime * result + ((runtimeDataProvider == null) ? 0 : runtimeDataProvider.hashCode());
-            result = prime * result + ((runtimeDataProviderServiceRegistration == null) ? 0 : runtimeDataProviderServiceRegistration.hashCode());
+            result = prime * result + (mbeanConnectionJob == null ? 0 : mbeanConnectionJob.hashCode());
+            result = prime * result + (mbeanProvider == null ? 0 : mbeanProvider.hashCode());
+            result = prime * result + (runtimeDataProvider == null ? 0 : runtimeDataProvider.hashCode());
+            result = prime * result + (runtimeDataProviderServiceRegistration == null ? 0 : runtimeDataProviderServiceRegistration.hashCode());
             return result;
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             if (this == obj) {
                 return true;
             }
@@ -140,15 +140,17 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
             final KarafRuntimeDataProviderItem other = (KarafRuntimeDataProviderItem) obj;
             if (mbeanConnectionJob == null) {
-                if (other.mbeanConnectionJob != null)
+                if (other.mbeanConnectionJob != null) {
                     return false;
+                }
             } else if (!mbeanConnectionJob.equals(other.mbeanConnectionJob)) {
                 return false;
             }
 
             if (mbeanProvider == null) {
-                if (other.mbeanProvider != null)
+                if (other.mbeanProvider != null) {
                     return false;
+                }
             } else if (!mbeanProvider.equals(other.mbeanProvider)) {
                 return false;
             }
@@ -166,12 +168,12 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
     };
 
     @Override
-    public List<BundleEntry> getAdditionalBundles(KarafWorkingPlatformModel platformModel) {
+    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel) {
         return Collections.emptyList();
     }
 
     @Override
-    public Map<String, String> getAdditionalEquinoxConfiguration(KarafWorkingPlatformModel platformModel) {
+    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel) {
         return Collections.emptyMap();
     }
 
@@ -220,7 +222,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                         "jmxrmi");
 
             mbeanConnectionJob = new MBeanServerConnectionJob(configuration.getName(), descriptor);
-        } catch(MalformedURLException e) {
+        } catch(final MalformedURLException e) {
             KarafWorkbenchActivator.getLogger().error("Unable to connect to JMX endpoint on Karaf instance", e);
 
             throw new CoreException(new Status(IStatus.ERROR, "", ""));
@@ -228,7 +230,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
         final IJobChangeListener listener = new JobChangeAdapter() {
             @Override
-            public void done(IJobChangeEvent event) {
+            public void done(final IJobChangeEvent event) {
                 final IStatus result = event.getResult();
                 if (result == null || !result.isOK()) {
                     // TODO: Log something
@@ -244,7 +246,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                 try {
                     mbeanProvider = new KarafMBeanProvider(mbeanConnectionJob.getJmxClient());
                     mbeanProvider.open(memento);
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     KarafWorkbenchActivator.getLogger().error("Unable to create MBeanProvider from JMXConnector", e);
 
                     return;
@@ -289,11 +291,11 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
     @Override
     public void launch(
-            KarafWorkingPlatformModel platformModel,
-            ILaunchConfiguration configuration,
-            String mode,
-            ILaunch launch,
-            IProgressMonitor monitor) throws CoreException
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration,
+            final String mode,
+            final ILaunch launch,
+            final IProgressMonitor monitor) throws CoreException
     {
         final IDebugEventSetListener debugListener = getDebugEventListener(launch);
         DebugPlugin.getDefault().addDebugEventListener(debugListener);
@@ -322,7 +324,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                     return;
                 }
 
-                for (DebugEvent event : events) {
+                for (final DebugEvent event : events) {
                     if (   process != null
                         && process.equals(event.getSource())
                         && event.getKind() == DebugEvent.TERMINATE)

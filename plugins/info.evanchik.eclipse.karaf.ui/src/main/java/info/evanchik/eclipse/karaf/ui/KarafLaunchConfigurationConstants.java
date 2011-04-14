@@ -10,7 +10,6 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 
 
 /**
@@ -38,16 +37,6 @@ public final class KarafLaunchConfigurationConstants {
     public static final String KARAF_LAUNCH_REQUIRED_BOOT_CLASSPATH = "karaf_required_boot_classpath"; //$NON-NLS-1$
 
     /**
-     * PDE Launcher constant that contains the value for karaf.base
-     */
-    public static final String KARAF_LAUNCH_KARAF_HOME = "karaf_base"; //$NON-NLS-1$
-
-    /**
-     * PDE Launcher constant that contains the value for karaf.home
-     */
-    public static final String KARAF_LAUNCH_KARAF_BASE = "karaf_home"; //$NON-NLS-1$
-
-    /**
      * Contains the root directory that this launch configuration will use for
      * its source configuration data
      */
@@ -58,22 +47,6 @@ public final class KarafLaunchConfigurationConstants {
      * launch configuration
      */
     public static final String KARAF_LAUNCH_CONFIGURATION_PROJECT = "karaf_configuration_project"; //$NON-NLS-1$
-
-    /**
-     * System property that points to an Apache ServiceMix Kernel base
-     * directory.
-     *
-     * @see KarafPlatformModel#KARAF_BASE_PROP
-     */
-    public static final String SERVICEMIX_BASE_PROP = "servicemix.base"; //$NON-NLS-1$
-
-    /**
-     * System property that points to an Apache ServiceMix Kernel home
-     * directory.
-     *
-     * @see KarafPlatformModel#KARAF_HOME_PROP
-     */
-    public static final String SERVICEMIX_HOME_PROP = "servicemix.home"; //$NON-NLS-1$
 
     /**
      * Private constructor to prevent instantiation.

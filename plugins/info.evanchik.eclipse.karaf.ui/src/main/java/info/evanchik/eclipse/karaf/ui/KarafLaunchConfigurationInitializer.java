@@ -10,6 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
+import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelFactory;
@@ -238,7 +239,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
 
         configuration.setAttribute(
                 IPDELauncherConstants.DEFAULT_START_LEVEL,
-                Integer.parseInt(KarafPlatformModel.KARAF_DEFAULT_BUNDLE_START_LEVEL));
+                Integer.parseInt(IKarafConstants.KARAF_DEFAULT_BUNDLE_START_LEVEL));
     }
 
     /**

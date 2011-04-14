@@ -11,9 +11,11 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
+import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
+import info.evanchik.eclipse.karaf.core.SystemBundleNames;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.WorkingKarafPlatformModel;
 import info.evanchik.eclipse.karaf.ui.internal.KarafLaunchConfigurationUtils;
@@ -211,10 +213,8 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     }
 
     /**
-     * {@inheritDoc}<br>
-     * <br>
-     * Adds the Equinox fragment bundle that implements the necessary Framework
-     * Extension points (hooks) to allow Karaf to run in the workbench.
+     * {@inheritDoc}
+     * <p>
      *
      * @param configuration
      *            the launch configuration
@@ -228,7 +228,12 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
             arguments.add(vmArg);
         }
 
-        arguments.add("-Deik.properties.system=" + workingKarafPlatform.getConfigurationFile("system.properties"));  //$NON-NLS-1$  //$NON-NLS-2$
+        addJavaExtensionsArguments(configuration, arguments);
+
+        arguments.add(
+                KarafCorePluginUtils.constructSystemProperty(
+                        "eik.properties.system", //$NON-NLS-1$
+                        workingKarafPlatform.getConfigurationFile("system.properties").toString())); //$NON-NLS-1$
 
         final List<KarafWorkbenchServiceFactory> list =
             WorkbenchServiceExtensions.getLaunchCustomizerFactories();
@@ -270,7 +275,48 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         workingKarafPlatform = new WorkingKarafPlatformModel(workingArea, karafPlatform);
 
         monitor.worked(10);
+    }
 
+    /**
+     * Adds the {@code java.endorsed.dirs} and {@code java.ext.dirs} VM
+     * arguments for the Karaf platform
+     *
+     * @param configuration
+     *            the launch configuration
+     * @param arguments
+     *            the current list of arguments
+     * @throws CoreException
+     *             thrown if the {@link VMInstall} cannot be computed
+     */
+    private void addJavaExtensionsArguments(
+            final ILaunchConfiguration configuration,
+            final List<String> arguments) throws CoreException {
+
+        final List<String> endorsedDirs = new ArrayList<String>();
+        endorsedDirs.add(workingKarafPlatform.getParentKarafModel().getRootDirectory().append("lib/endorsed").toString()); //$NON-NLS-1$
+
+        final List<String> extDirs = new ArrayList<String>();
+        extDirs.add(workingKarafPlatform.getParentKarafModel().getRootDirectory().append("lib/ext").toString()); //$NON-NLS-1$
+
+        final IVMInstall vmInstall = JavaRuntime.computeVMInstall(configuration);
+        final File vmRootDirectory = vmInstall.getInstallLocation();
+        if (vmRootDirectory != null) {
+            endorsedDirs.add(new File(vmRootDirectory, "jre/lib/endorsed").getAbsolutePath()); //$NON-NLS-1$
+            endorsedDirs.add(new File(vmRootDirectory, "lib/endorsed").getAbsolutePath()); //$NON-NLS-1$
+
+            extDirs.add(new File(vmRootDirectory, "jre/lib/ext").getAbsolutePath()); //$NON-NLS-1$
+            extDirs.add(new File(vmRootDirectory, "lib/ext").getAbsolutePath()); //$NON-NLS-1$
+        }
+
+        arguments.add(
+                KarafCorePluginUtils.constructSystemProperty(
+                        "java.endorsed.dirs", //$NON-NLS-1$
+                        KarafCorePluginUtils.join(endorsedDirs, ":"))); //$NON-NLS-1$
+
+        arguments.add(
+                KarafCorePluginUtils.constructSystemProperty(
+                        "java.ext.dirs", //$NON-NLS-1$
+                        KarafCorePluginUtils.join(extDirs, ":"))); //$NON-NLS-1$
     }
 
     /**
@@ -314,11 +360,11 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 	        final Integer defaultStartLevel =
 	            configuration.getAttribute(
 	                    IPDELauncherConstants.DEFAULT_START_LEVEL,
-	                    new Integer(KarafPlatformModel.KARAF_DEFAULT_BUNDLE_START_LEVEL));
-	
+	                    new Integer(IKarafConstants.KARAF_DEFAULT_BUNDLE_START_LEVEL));
+
 	        equinoxProperties.put(OSGI_START_LEVEL_KEY, defaultStartLevel.toString());
         }
-        
+
         /*
          * Set the osgi.install.area to the runtime plugins directory or the
          * directory containing Equinox?
@@ -326,7 +372,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
          * "/org/eclipse/osgi/3.5.0.v20090429-1630"
          */
         final IPath frameworkPath =
-            new Path(karafPlatform.getState().getBundle("org.eclipse.osgi", null).getLocation()); //$NON-NLS-1$
+            new Path(karafPlatform.getState().getBundle(SystemBundleNames.EQUINOX.toString(), null).getLocation());
         equinoxProperties.put(OSGI_INSTALL_AREA_KEY, frameworkPath.removeLastSegments(1).toString());
 
         final String javaSpecificationVersion = getJavaRuntimeSpecificationVersion(configuration);

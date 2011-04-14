@@ -42,7 +42,7 @@ import org.osgi.framework.Bundle;
  */
 public final class KarafCorePluginUtils {
 
-    public static final String INCLUDES_PROPERTY = "${includes}"; //$NON-NLS-1$
+    private static final String INCLUDES_PROPERTY = "${includes}"; //$NON-NLS-1$
 
     /**
      * Copies the source file to the destination file
@@ -54,7 +54,7 @@ public final class KarafCorePluginUtils {
      * @throws IOException
      *             if there is a problem during the file copy
      */
-    public static void copyFile(File src, File dst) throws IOException {
+    public static void copyFile(final File src, final File dst) throws IOException {
         if (!src.exists()) {
             throw new FileNotFoundException("File does not exist: " + src.getAbsolutePath());
         }
@@ -82,6 +82,24 @@ public final class KarafCorePluginUtils {
     }
 
     /**
+     * Create a JVM system property argument (e.g -DpropertyName=propertyValue).
+     *
+     * @param name
+     *            the name of the system property
+     * @param value
+     *            the value of the system property
+     * @return the fully constructed system property string
+     */
+    public static String constructSystemProperty(final String name, final String value) {
+        final StringBuilder sb = new StringBuilder("-D"); //$NON-NLS-1$
+        sb.append(name);
+        sb.append("="); //$NON-NLS-1$
+        sb.append(value);
+
+        return sb.toString();
+    }
+
+    /**
      * Determines if a Karaf platform model points to a ServiceMix Kernel based
      * distribution.
      *
@@ -93,9 +111,12 @@ public final class KarafCorePluginUtils {
      *             if the Karaf platform model does not contain the appropriate
      *             sentry file
      */
-    public static boolean isServiceMix(KarafPlatformModel model) {
-        if (model.getConfigurationFile("org.apache.servicemix.management.cfg").toFile().exists()) {
+    public static boolean isServiceMix(final KarafPlatformModel model) {
+        if (model.getConfigurationFile(IKarafConstants.ORG_APACHE_SERVICEMIX_MANAGEMENT_CFG_FILENAME).toFile().exists()) {
             return true;
+        } else if (model instanceof KarafWorkingPlatformModel) {
+            final KarafWorkingPlatformModel workingModel = (KarafWorkingPlatformModel) model;
+            return workingModel.getConfigurationFile(IKarafConstants.ORG_APACHE_SERVICEMIX_MANAGEMENT_CFG_FILENAME).toFile().exists();
         } else {
             return false;
         }
@@ -106,9 +127,12 @@ public final class KarafCorePluginUtils {
      * @param model
      * @return
      */
-    public static boolean isFelixKaraf(KarafPlatformModel model) {
-        if (model.getConfigurationFile("org.apache.felix.karaf.management.cfg").toFile().exists()) {
+    public static boolean isFelixKaraf(final KarafPlatformModel model) {
+        if (model.getConfigurationFile(IKarafConstants.ORG_APACHE_FELIX_KARAF_MANAGEMENT_CFG_FILENAME).toFile().exists()) {
             return true;
+        } else if (model instanceof KarafWorkingPlatformModel) {
+            final KarafWorkingPlatformModel workingModel = (KarafWorkingPlatformModel) model;
+            return workingModel.getConfigurationFile(IKarafConstants.ORG_APACHE_FELIX_KARAF_MANAGEMENT_CFG_FILENAME).toFile().exists();
         } else {
             return false;
         }
@@ -119,9 +143,12 @@ public final class KarafCorePluginUtils {
      * @param model
      * @return
      */
-    public static boolean isKaraf(KarafPlatformModel model) {
-        if (model.getConfigurationFile("org.apache.karaf.management.cfg").toFile().exists()) {
+    public static boolean isKaraf(final KarafPlatformModel model) {
+        if (model.getConfigurationFile(IKarafConstants.ORG_APACHE_KARAF_MANAGEMENT_CFG_FILENAME).toFile().exists()) {
             return true;
+        } else if (model instanceof KarafWorkingPlatformModel) {
+            final KarafWorkingPlatformModel workingModel = (KarafWorkingPlatformModel) model;
+            return workingModel.getConfigurationFile(IKarafConstants.ORG_APACHE_KARAF_MANAGEMENT_CFG_FILENAME).toFile().exists();
         } else {
             return false;
         }
@@ -135,7 +162,7 @@ public final class KarafCorePluginUtils {
      *            the symbolic name of the {@code Bundle}
      * @return the location of the {@code Bundle} or {@code null}
      */
-    public static String getBundleLocation(String bundleSymbolicName) {
+    public static String getBundleLocation(final String bundleSymbolicName) {
         final Bundle bundle = Platform.getBundle(bundleSymbolicName);
         if (bundle == null) {
             KarafCorePluginActivator.getLogger().error("Unable to locate bundle with symbolic name: " + bundleSymbolicName);
@@ -144,7 +171,7 @@ public final class KarafCorePluginUtils {
 
         try {
             return FileLocator.getBundleFile(bundle).getAbsolutePath();
-        } catch(IOException e) {
+        } catch(final IOException e) {
             KarafCorePluginActivator.getLogger().error("Unable to locate bundle with symbolic name: " + bundleSymbolicName, e);
             return null;
         }
@@ -160,11 +187,11 @@ public final class KarafCorePluginUtils {
      *            property of an Eclipse {@code config.ini}
      * @return a {@code List} of {@code BundleEntry} objects
      */
-    public static List<BundleEntry> getEquinoxBundles(String osgiBundles) {
+    public static List<BundleEntry> getEquinoxBundles(final String osgiBundles) {
         final String[] bundles = osgiBundles.split(",");
 
         final List<BundleEntry> entries = new ArrayList<BundleEntry>();
-        for (String s : bundles) {
+        for (final String s : bundles) {
             entries.add(BundleEntry.fromString(s.trim()));
         }
 
@@ -183,7 +210,7 @@ public final class KarafCorePluginUtils {
      * @throws IOException
      *             if there is a problem reading the JAR
      */
-    public static String getJarManifestHeader(File src, String manifestHeader) throws IOException {
+    public static String getJarManifestHeader(final File src, final String manifestHeader) throws IOException {
         final JarFile jar = new JarFile(src);
         final Manifest mf = jar.getManifest();
 
@@ -202,7 +229,7 @@ public final class KarafCorePluginUtils {
      * @param maxDepth
      *            the current maximum depth
      */
-    public static void getJarFileList(File dir, List<File> list, int maxDepth) {
+    public static void getJarFileList(final File dir, final List<File> list, final int maxDepth) {
     	getFileList(dir, ".jar", list, maxDepth);
     }
 
@@ -220,7 +247,7 @@ public final class KarafCorePluginUtils {
 	 * @param maxDepth
 	 *            the current maximum depth
 	 */
-    public static void getFileList(File dir, String extension, List<File> list, int maxDepth) {
+    public static void getFileList(final File dir, final String extension, final List<File> list, final int maxDepth) {
         if (dir == null) {
             throw new IllegalArgumentException("Directory must not be null");
         }
@@ -230,7 +257,7 @@ public final class KarafCorePluginUtils {
             return;
         }
 
-        for (File file : files) {
+        for (final File file : files) {
             if (file.isDirectory() && maxDepth > 0) {
                 getFileList(file, extension, list, maxDepth - 1);
             } else if (file.getAbsolutePath().endsWith(extension) || file.getAbsolutePath().endsWith(".zip")) {
@@ -252,7 +279,7 @@ public final class KarafCorePluginUtils {
      * @return The filename component of the URL, e.g. {@code
      *         filename-version.jar}
      */
-    public static String getLastPathComponent(String pathString) {
+    public static String getLastPathComponent(final String pathString) {
         return pathString.substring(pathString.lastIndexOf('/') + 1);
     }
 
@@ -265,9 +292,9 @@ public final class KarafCorePluginUtils {
      *            the string to act as glue in the concatenation
      * @return the concatenation of the specified items
      */
-    public static String join(Collection<? extends Object> items, String glue) {
+    public static String join(final Collection<? extends Object> items, final String glue) {
         final StringBuffer buffer = new StringBuffer();
-        for (Object o : items) {
+        for (final Object o : items) {
             if (buffer.length() > 0) {
                 buffer.append(glue);
             }
@@ -288,7 +315,7 @@ public final class KarafCorePluginUtils {
      *            properties file
      * @return a {@link Properties} object or null if there was an error
      */
-    public static Properties loadProperties(Bundle theBundle, String propertiesFile) {
+    public static Properties loadProperties(final Bundle theBundle, final String propertiesFile) {
         final Properties properties = new Properties();
 
         final URL entryUrl = theBundle.getEntry(propertiesFile);
@@ -305,7 +332,7 @@ public final class KarafCorePluginUtils {
             in.close();
 
             return properties;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
@@ -325,7 +352,7 @@ public final class KarafCorePluginUtils {
      * @throws CoreException
      *             if there is a problem loading the file
      */
-    public static Properties loadProperties(final File base, String filename) throws CoreException {
+    public static Properties loadProperties(final File base, final String filename) throws CoreException {
         final File f = new File(base, filename);
 
         try {
@@ -333,7 +360,7 @@ public final class KarafCorePluginUtils {
             p.load(new FileInputStream(f));
 
             return p;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             final String message = "Unable to load configuration file from configuration directory: " + f.getAbsolutePath();
             throw new CoreException(new Status(IStatus.ERROR, KarafCorePluginActivator.PLUGIN_ID, IStatus.OK, message, e));
         }
@@ -357,7 +384,7 @@ public final class KarafCorePluginUtils {
      * @throws CoreException
      *             if there is a problem loading the file
      */
-    public static Properties loadProperties(final File base, String filename, boolean processIncludes) throws CoreException {
+    public static Properties loadProperties(final File base, final String filename, final boolean processIncludes) throws CoreException {
         final File f = new File(base, filename);
 
         try {
@@ -372,7 +399,7 @@ public final class KarafCorePluginUtils {
                     do {
                         location = nextLocation(st);
                         if (location != null) {
-                            Properties includeProps = loadProperties(base, location);
+                            final Properties includeProps = loadProperties(base, location);
                             p.putAll(includeProps);
                         }
                     } while (location != null);
@@ -381,7 +408,7 @@ public final class KarafCorePluginUtils {
             }
 
             return p;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             final String message = "Unable to load configuration file from configuration directory: " + f.getAbsolutePath();
             throw new CoreException(new Status(IStatus.ERROR, KarafCorePluginActivator.PLUGIN_ID, IStatus.OK, message, e));
         }
@@ -392,7 +419,7 @@ public final class KarafCorePluginUtils {
         throw new AssertionError("Cannot instantiate " + KarafCorePluginUtils.class.getName());
     }
 
-    private static String nextLocation(StringTokenizer st) {
+    private static String nextLocation(final StringTokenizer st) {
         String retVal = null;
 
         if (st.countTokens() > 0) {
@@ -402,7 +429,7 @@ public final class KarafCorePluginUtils {
             boolean inQuote = false;
             boolean tokStarted = false;
             boolean exit = false;
-            while ((st.hasMoreTokens()) && (!exit)) {
+            while (st.hasMoreTokens() && !exit) {
                 tok = st.nextToken(tokenList);
                 if (tok.equals("\"")) {
                     inQuote = !inQuote;
@@ -427,7 +454,7 @@ public final class KarafCorePluginUtils {
 
             // Handle case where end of token stream and
             // still got data
-            if ((!exit) && (tokStarted)) {
+            if (!exit && tokStarted) {
                 retVal = tokBuf.toString();
             }
         }

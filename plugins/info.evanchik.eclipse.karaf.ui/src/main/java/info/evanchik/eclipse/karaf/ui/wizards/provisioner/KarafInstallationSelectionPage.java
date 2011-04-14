@@ -50,17 +50,18 @@ public class KarafInstallationSelectionPage extends WizardPage {
      * @param pageName
      *            the name of the page
      */
-    protected KarafInstallationSelectionPage(String pageName) {
+    protected KarafInstallationSelectionPage(final String pageName) {
         super(pageName);
 
         setTitle("Apache Felix Karaf Provisioner");
         setDescription("Browse for a Karaf installation directory to use as your target platform");
 
         setPageComplete(false);
-        setImageDescriptor(KarafUIPluginActivator.getImageDescriptor(KarafUIPluginActivator.LOGO_64X64_IMG)); // $NON-NLS-1$
+        setImageDescriptor(KarafUIPluginActivator.getDefault().getImageRegistry().getDescriptor(KarafUIPluginActivator.LOGO_64X64_IMG)); // $NON-NLS-1$
     }
 
-    public void createControl(Composite parent) {
+    @Override
+    public void createControl(final Composite parent) {
         final Composite client = new Composite(parent, SWT.NONE);
 
         final GridLayout layout = new GridLayout();
@@ -72,7 +73,7 @@ public class KarafInstallationSelectionPage extends WizardPage {
         data.horizontalSpan = 2;
 
         // The installation directory selection controls
-        Label label = new Label(client, SWT.NONE);
+        final Label label = new Label(client, SWT.NONE);
         label.setText("Installation directory");
         data = new GridData();
         data.horizontalSpan = 2;
@@ -82,17 +83,18 @@ public class KarafInstallationSelectionPage extends WizardPage {
         data = new GridData(GridData.FILL_HORIZONTAL);
         installDir.setLayoutData(data);
         installDir.addModifyListener(new ModifyListener() {
-            public void modifyText(ModifyEvent e) {
+            @Override
+            public void modifyText(final ModifyEvent e) {
                 validateWizardState();
             }
         });
 
         // File system browse button
-        Button browse = new Button(client, SWT.PUSH);
+        final Button browse = new Button(client, SWT.PUSH);
         browse.setText("Browse");
         browse.addSelectionListener(new SelectionAdapter() {
             @Override
-            public void widgetSelected(SelectionEvent se) {
+            public void widgetSelected(final SelectionEvent se) {
                 final DirectoryDialog dialog = new DirectoryDialog(
                         KarafInstallationSelectionPage.this.getShell());
                 dialog.setMessage("Select Karaf installation directory");
@@ -129,7 +131,7 @@ public class KarafInstallationSelectionPage extends WizardPage {
                 setErrorMessage(null);
                 setPageComplete(karafPlatform.isValid());
             }
-        } catch (CoreException e) {
+        } catch (final CoreException e) {
             setErrorMessage("There was an error loading the installation: " + e.getMessage());
             KarafUIPluginActivator.getLogger().error("There was an error loading the installation", e);
         }

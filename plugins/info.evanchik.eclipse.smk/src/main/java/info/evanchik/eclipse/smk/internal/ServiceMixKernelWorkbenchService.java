@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.smk.internal;
 
+import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
@@ -116,7 +116,7 @@ public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
             final Properties currentConfig =
                 KarafCorePluginUtils.loadProperties(
                     platformModel.getConfigurationDirectory().toFile(),
-                    KarafPlatformModel.KARAF_DEFAULT_CONFIG_PROPERTIES_FILE);
+                    IKarafConstants.KARAF_DEFAULT_CONFIG_PROPERTIES_FILE);
 
             final String extraSystemPackages = "org.osgi.framework;version=\"1.4.0\",org.apache.servicemix.kernel.main.spi;version=\"1.0.0\",org.apache.servicemix.kernel.jaas.boot,org.apache.servicemix.kernel.version".concat(",").concat(currentConfig.getProperty("jre-1.6"));
             equinoxProperties.put(

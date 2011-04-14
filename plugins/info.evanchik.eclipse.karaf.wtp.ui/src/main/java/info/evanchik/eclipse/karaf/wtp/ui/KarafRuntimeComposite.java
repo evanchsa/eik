@@ -72,14 +72,14 @@ public class KarafRuntimeComposite extends Composite {
      * @param w
      *            the {@link IWizardHandle} of the wizard fragment
      */
-    public KarafRuntimeComposite(Composite parent, IWizardHandle w) {
+    public KarafRuntimeComposite(final Composite parent, final IWizardHandle w) {
         super(parent, SWT.NONE);
 
         this.wizard = w;
 
         this.wizard.setTitle("Karaf Server");
         this.wizard.setDescription("Specify the installation directory");
-        this.wizard.setImageDescriptor(KarafUIPluginActivator.getImageDescriptor("logo64")); //$NON-NLS-1$
+        this.wizard.setImageDescriptor(KarafUIPluginActivator.getDefault().getImageRegistry().getDescriptor("logo64")); //$NON-NLS-1$
 
         createCompositeControls();
     }
@@ -92,7 +92,7 @@ public class KarafRuntimeComposite extends Composite {
      *            the {@link IRuntimeWorkingCopy} used in this instance of the
      *            wizard
      */
-    protected void setKarafRuntimeWC(IRuntimeWorkingCopy karafRuntimeWC) {
+    protected void setKarafRuntimeWC(final IRuntimeWorkingCopy karafRuntimeWC) {
         this.karafRuntimeWC = karafRuntimeWC;
 
         initializeWizard();
@@ -129,7 +129,8 @@ public class KarafRuntimeComposite extends Composite {
         data = new GridData(GridData.FILL_HORIZONTAL);
         name.setLayoutData(data);
         name.addModifyListener(new ModifyListener() {
-            public void modifyText(ModifyEvent e) {
+            @Override
+            public void modifyText(final ModifyEvent e) {
                 karafRuntimeWC.setName(name.getText());
                 validateWizardState();
             }
@@ -146,17 +147,18 @@ public class KarafRuntimeComposite extends Composite {
         data = new GridData(GridData.FILL_HORIZONTAL);
         installDir.setLayoutData(data);
         installDir.addModifyListener(new ModifyListener() {
-            public void modifyText(ModifyEvent e) {
+            @Override
+            public void modifyText(final ModifyEvent e) {
                 karafRuntimeWC.setLocation(new Path(installDir.getText()));
                 validateWizardState();
             }
         });
 
         // File system browse button
-        Button browse = KarafRuntimeUtils.createButton(this, "Browse");
+        final Button browse = KarafRuntimeUtils.createButton(this, "Browse");
         browse.addSelectionListener(new SelectionAdapter() {
             @Override
-            public void widgetSelected(SelectionEvent se) {
+            public void widgetSelected(final SelectionEvent se) {
                 final DirectoryDialog dialog = new DirectoryDialog(KarafRuntimeComposite.this.getShell());
                 dialog.setMessage("Select Karaf installation directory");
                 dialog.setFilterPath(installDir.getText());

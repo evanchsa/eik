@@ -54,26 +54,6 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
     }
 
     /**
-     * Getter for the {@link ImageDescriptor} specified by the key
-     *
-     * @param key
-     *            the key of the {@link ImageDescriptor} to retrieve
-     * @return the {@link ImageDescriptor} or null if it does not exist
-     */
-    public static ImageDescriptor getImageDescriptor(String key) {
-        try {
-            // This forces the creation of the ImageRegistry
-            plugin.getImageRegistry();
-            return getDefault().IMAGE_DESCRIPTORS.get(key);
-        } catch (Exception e) {
-            getLogger().error("Unable to get image from image registry for key: " + key, e);
-
-            // Is this the best thing to do or should an exception be thrown?
-            return null;
-        }
-    }
-
-    /**
      * Getter for the {@link LogWrapper} object that makes logging much easier
      * on the caller.
      *
@@ -96,7 +76,7 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
     }
 
     @Override
-    public void start(BundleContext context) throws Exception {
+    public void start(final BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
 
@@ -105,7 +85,7 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
     }
 
     @Override
-    public void stop(BundleContext context) throws Exception {
+    public void stop(final BundleContext context) throws Exception {
         plugin = null;
         super.stop(context);
     }
@@ -140,7 +120,7 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
      *            the URL, relative to the {@link ICON_ROOT_URL}, of the image
      *            to be registered
      */
-    private void registerImage(ImageRegistry registry, String key, String imageUrl) {
+    private void registerImage(final ImageRegistry registry, final String key, final String imageUrl) {
 
         try {
             final ImageDescriptor id = ImageDescriptor.createFromURL(new URL(ICON_ROOT_URL,
@@ -150,7 +130,7 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
 
             // Store this as an ImageDescriptor for future use in Wizards
             IMAGE_DESCRIPTORS.put(key, id);
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             getLogger().error("Could not create image descriptor for: " + key + " -> " + imageUrl,
                             e);
         }

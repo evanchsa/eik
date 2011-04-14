@@ -57,115 +57,17 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
     public static final String JMX_JMXRMI_DOMAIN = "jmxrmi"; //$NON-NLS-1$
 
-    private final Map<String, KarafRuntimeDataProviderItem> runtimeDataProviderMap =
-        Collections.synchronizedMap(new HashMap<String, KarafRuntimeDataProviderItem>());
+    private final Map<String, KarafMBeanProvider> mbeanProviderMap =
+        Collections.synchronizedMap(new HashMap<String, KarafMBeanProvider>());
 
-    /**
-     *
-     * @author Stephen Evanchik (evanchsa@gmail.com)
-     *
-     */
-    private static final class KarafRuntimeDataProviderItem {
+    private final Map<String, MBeanServerConnectionJob> mbeanConnectionJobMap =
+        Collections.synchronizedMap(new HashMap<String, MBeanServerConnectionJob>());
 
-        /**
-         * Provides access to the "standard" MBeans found in a Karaf server
-         */
-        private final KarafMBeanProvider mbeanProvider;
+    private final Map<String, RuntimeDataProvider> runtimeDataProviderMap =
+        Collections.synchronizedMap(new HashMap<String, RuntimeDataProvider>());
 
-        private final MBeanServerConnectionJob mbeanConnectionJob;
-
-        private final RuntimeDataProvider runtimeDataProvider;
-
-        private final ServiceRegistration runtimeDataProviderServiceRegistration;
-
-        /**
-         *
-         * @param mbeanProvider
-         * @param mbeanServerConnectionJob
-         * @param runtimeDataProvider
-         * @param runtimeDataProviderServiceRegistration
-         */
-        public KarafRuntimeDataProviderItem(
-                final KarafMBeanProvider mbeanProvider,
-                final MBeanServerConnectionJob mbeanServerConnectionJob,
-                final RuntimeDataProvider runtimeDataProvider,
-                final ServiceRegistration runtimeDataProviderServiceRegistration)
-        {
-            this.mbeanProvider = mbeanProvider;
-            this.mbeanConnectionJob = mbeanServerConnectionJob;
-            this.runtimeDataProvider = runtimeDataProvider;
-            this.runtimeDataProviderServiceRegistration = runtimeDataProviderServiceRegistration;
-        }
-
-        public KarafMBeanProvider getMbeanProvider() {
-            return mbeanProvider;
-        }
-
-        public MBeanServerConnectionJob getMbeanConnectionJob() {
-            return mbeanConnectionJob;
-        }
-
-        public RuntimeDataProvider getRuntimeDataProvider() {
-            return runtimeDataProvider;
-        }
-
-        public ServiceRegistration getRuntimeDataProviderServiceRegistration() {
-            return runtimeDataProviderServiceRegistration;
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + (mbeanConnectionJob == null ? 0 : mbeanConnectionJob.hashCode());
-            result = prime * result + (mbeanProvider == null ? 0 : mbeanProvider.hashCode());
-            result = prime * result + (runtimeDataProvider == null ? 0 : runtimeDataProvider.hashCode());
-            result = prime * result + (runtimeDataProviderServiceRegistration == null ? 0 : runtimeDataProviderServiceRegistration.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(final Object obj) {
-            if (this == obj) {
-                return true;
-            }
-
-            if (obj == null) {
-                return false;
-            }
-
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-
-            final KarafRuntimeDataProviderItem other = (KarafRuntimeDataProviderItem) obj;
-            if (mbeanConnectionJob == null) {
-                if (other.mbeanConnectionJob != null) {
-                    return false;
-                }
-            } else if (!mbeanConnectionJob.equals(other.mbeanConnectionJob)) {
-                return false;
-            }
-
-            if (mbeanProvider == null) {
-                if (other.mbeanProvider != null) {
-                    return false;
-                }
-            } else if (!mbeanProvider.equals(other.mbeanProvider)) {
-                return false;
-            }
-
-            if (runtimeDataProvider == null) {
-                if (other.runtimeDataProvider != null) {
-                    return false;
-                }
-            } else if (!runtimeDataProvider.equals(other.runtimeDataProvider)) {
-                return false;
-            }
-
-            return true;
-        }
-    };
+    private final Map<String, ServiceRegistration> serviceRegistrationMap =
+        Collections.synchronizedMap(new HashMap<String, ServiceRegistration>());
 
     @Override
     public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel) {
@@ -222,6 +124,9 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                         "jmxrmi");
 
             mbeanConnectionJob = new MBeanServerConnectionJob(configuration.getName(), descriptor);
+
+            mbeanConnectionJobMap.put(memento, mbeanConnectionJob);
+
         } catch(final MalformedURLException e) {
             KarafWorkbenchActivator.getLogger().error("Unable to connect to JMX endpoint on Karaf instance", e);
 
@@ -246,15 +151,43 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                 try {
                     mbeanProvider = new KarafMBeanProvider(mbeanConnectionJob.getJmxClient());
                     mbeanProvider.open(memento);
+
+                    mbeanProviderMap.put(memento, mbeanProvider);
                 } catch (final IOException e) {
                     KarafWorkbenchActivator.getLogger().error("Unable to create MBeanProvider from JMXConnector", e);
 
                     return;
                 }
 
+                final KarafRuntimeDataProvider runtimeDataProvider =
+                    createRuntimeDataProvider(configuration, memento, mbeanProvider);
+
+                registerRuntimeDataProviderService(memento, runtimeDataProvider);
+            }
+
+            /**
+             * @param configuration
+             * @param memento
+             * @param mbeanProvider
+             * @return
+             */
+            private KarafRuntimeDataProvider createRuntimeDataProvider(
+                    final ILaunchConfiguration configuration,
+                    final String memento, final KarafMBeanProvider mbeanProvider) {
                 final KarafRuntimeDataProvider runtimeDataProvider = new KarafRuntimeDataProvider(configuration.getName(), mbeanProvider);
                 runtimeDataProvider.start();
 
+                runtimeDataProviderMap.put(memento, runtimeDataProvider);
+                return runtimeDataProvider;
+            }
+
+            /**
+             * @param memento
+             * @param runtimeDataProvider
+             */
+            private void registerRuntimeDataProviderService(
+                    final String memento,
+                    final KarafRuntimeDataProvider runtimeDataProvider) {
                 /*
                  * Registers services against the running Karaf instance so that the Eclipse
                  * workbench can control and retrieve information from the process.
@@ -271,14 +204,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                             runtimeDataProvider,
                             dictionary);
 
-                final KarafRuntimeDataProviderItem item =
-                    new KarafRuntimeDataProviderItem(
-                            mbeanProvider,
-                            mbeanConnectionJob,
-                            runtimeDataProvider,
-                            runtimeDataProviderServiceReg);
-
-                runtimeDataProviderMap.put(memento, item);
+                serviceRegistrationMap.put(memento, runtimeDataProviderServiceReg);
             }
 
         };
@@ -329,19 +255,25 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                         && process.equals(event.getSource())
                         && event.getKind() == DebugEvent.TERMINATE)
                     {
-                        final KarafRuntimeDataProviderItem item =
-                            runtimeDataProviderMap.get(memento);
-
-                        if (item == null) {
-                            return;
+                        final MBeanServerConnectionJob job = mbeanConnectionJobMap.get(memento);
+                        if (job != null) {
+                            job.cancel();
                         }
 
-                        item.getMbeanConnectionJob().cancel();
-                        item.getRuntimeDataProviderServiceRegistration().unregister();
-                        item.getRuntimeDataProvider().stop();
-                        item.getMbeanProvider().close();
+                        final ServiceRegistration serviceRegistration = serviceRegistrationMap.get(memento);
+                        if (serviceRegistration != null) {
+                            serviceRegistration.unregister();
+                        }
 
-                        runtimeDataProviderMap.remove(memento);
+                        final RuntimeDataProvider runtimeDataProvider = runtimeDataProviderMap.get(memento);
+                        if (runtimeDataProvider != null) {
+                            runtimeDataProvider.stop();
+                        }
+
+                        final MBeanProvider mbeanProvider = mbeanProviderMap.get(memento);
+                        if (mbeanProvider != null) {
+                            mbeanProvider.close();
+                        }
                     }
                 }
             }

@@ -44,7 +44,7 @@ import org.eclipse.jdt.launching.SocketUtil;
 public class JMXWorkbenchService implements KarafWorkbenchService {
 
     private final Map<String, JMXServiceDescriptor> jmxServiceDescriptorMap =
-        new HashMap<String, JMXServiceDescriptor>();
+        Collections.synchronizedMap(new HashMap<String, JMXServiceDescriptor>());
 
     @Override
     public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel) {

@@ -311,12 +311,12 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         arguments.add(
                 KarafCorePluginUtils.constructSystemProperty(
                         "java.endorsed.dirs", //$NON-NLS-1$
-                        KarafCorePluginUtils.join(endorsedDirs, ":"))); //$NON-NLS-1$
+                        KarafCorePluginUtils.join(endorsedDirs, File.pathSeparator)));
 
         arguments.add(
                 KarafCorePluginUtils.constructSystemProperty(
                         "java.ext.dirs", //$NON-NLS-1$
-                        KarafCorePluginUtils.join(extDirs, ":"))); //$NON-NLS-1$
+                        KarafCorePluginUtils.join(extDirs, File.pathSeparator)));
     }
 
     /**

@@ -206,7 +206,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
             } else {
                 // By default, only add the plugin if it is in the Karaf model
                 final Version v = Version.parseVersion(models[i].getPluginBase().getVersion());
-                if (karafPlatform.getState().getBundle(id, v) != null) {
+                if (karafPlatform.getState().getBundle(id, v) != null && startupSection.containsPlugin(id)) {
                     externalPlugins.add(entry.toString());
                 }
             }

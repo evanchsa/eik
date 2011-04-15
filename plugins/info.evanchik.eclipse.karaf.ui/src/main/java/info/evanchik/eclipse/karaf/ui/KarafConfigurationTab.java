@@ -63,7 +63,6 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public void initializeFrom(final ILaunchConfiguration configuration) {
-        this.configuration = (ILaunchConfigurationWorkingCopy) configuration;
     }
 
     @Override

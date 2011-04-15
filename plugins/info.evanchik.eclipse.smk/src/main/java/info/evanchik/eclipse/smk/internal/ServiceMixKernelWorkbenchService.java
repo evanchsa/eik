@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -150,6 +151,14 @@ public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
         arguments.add("-Djava.util.logging.config.file=" + platformModel.getParentKarafModel().getConfigurationDirectory() + "/java.util.logging.properties");
 
         return arguments;
+    }
+
+    @Override
+    public void initialize(final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfigurationWorkingCopy configuration) {
+        if (!(platformModel.getParentKarafModel() instanceof ServiceMixKernelPlatformModel)) {
+            return;
+        }
     }
 
     @Override

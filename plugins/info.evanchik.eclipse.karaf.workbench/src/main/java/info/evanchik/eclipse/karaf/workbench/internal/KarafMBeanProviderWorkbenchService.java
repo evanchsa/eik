@@ -42,6 +42,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.SocketUtil;
 import org.osgi.framework.BundleContext;
@@ -213,6 +214,11 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
         mbeanConnectionJob.schedule(MBeanServerConnectionJob.DEFAULT_INITIAL_SCHEDULE_DELAY);
 
         return arguments;
+    }
+
+    @Override
+    public void initialize(final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfigurationWorkingCopy configuration) {
     }
 
     @Override

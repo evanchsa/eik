@@ -20,6 +20,8 @@ import info.evanchik.eclipse.karaf.core.SystemBundleNames;
 import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.WorkingKarafPlatformModel;
+import info.evanchik.eclipse.karaf.ui.internal.WorkbenchServiceExtensions;
+import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -126,7 +128,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
             LaunchConfigurationHelper.getConfigurationArea(configuration);
 
         final IPath workingArea = new Path(configDir.getAbsolutePath());
-        final KarafPlatformModel workingKarafPlatform =
+        final WorkingKarafPlatformModel workingKarafPlatform =
             new WorkingKarafPlatformModel(workingArea, karafPlatform);
 
         workingKarafPlatform.getConfigurationDirectory().toFile().mkdirs();
@@ -143,6 +145,16 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
         configuration.setAttribute(IPDEUIConstants.LAUNCHER_PDE_VERSION, "3.3"); //$NON-NLS-1$
 
         addDefaultVMArguments(configuration);
+
+        try {
+            final List<KarafWorkbenchServiceFactory> list = WorkbenchServiceExtensions.getLaunchCustomizerFactories();
+
+            for (final KarafWorkbenchServiceFactory f : list) {
+                f.getWorkbenchService().initialize(workingKarafPlatform, configuration);
+            }
+        } catch (final CoreException e) {
+            KarafUIPluginActivator.getLogger().error("Unable to access extension registry", e);
+        }
 
         // This must be the last item called
         super.initialize(configuration);

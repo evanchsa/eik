@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.launching.SocketUtil;
 
 /**
@@ -185,6 +186,13 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
                         startRemoteConsole.toString()));
 
         return arguments;
+    }
+
+    @Override
+    public void initialize(final KarafWorkingPlatformModel platformModel, final ILaunchConfigurationWorkingCopy configuration) {
+        if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
+            return;
+        }
     }
 
     /**

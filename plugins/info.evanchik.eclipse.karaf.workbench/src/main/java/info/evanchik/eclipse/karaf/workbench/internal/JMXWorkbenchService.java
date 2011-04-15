@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchListener;
 import org.eclipse.jdt.launching.SocketUtil;
 
@@ -92,7 +93,6 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
     {
         final List<String> arguments = new ArrayList<String>();
 
-
         /*
          * Establish the JMX connector port for the JMX service "jmxserver"
          */
@@ -127,9 +127,12 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
             // TODO: Throw a CoreException
         }
 
-        arguments.add("-Dorg.eclipse.equinox.jmx.server.port=" + new Integer(jmxServicePort).toString()); //$NON-NLS-1$
-
         return arguments;
+    }
+
+    @Override
+    public void initialize(final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfigurationWorkingCopy configuration) {
     }
 
     @Override

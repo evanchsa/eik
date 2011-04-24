@@ -53,9 +53,13 @@ public interface KarafWorkbenchService {
     public List<String> getVMArguments(KarafWorkingPlatformModel platformModel, ILaunchConfiguration configuration) throws CoreException;
 
     /**
+     * Called when the {@link ILaunchConfiguration} is being initialized
      *
      * @param platformModel
+     *            the {@link KarafWorkingPlatformModel} that this launch
+     *            configuration is executing against
      * @param configuration
+     *            the {@code ILaunchConfigurationWorkingCopy}
      */
     public void initialize(KarafWorkingPlatformModel platformModel, ILaunchConfigurationWorkingCopy configuration);
 

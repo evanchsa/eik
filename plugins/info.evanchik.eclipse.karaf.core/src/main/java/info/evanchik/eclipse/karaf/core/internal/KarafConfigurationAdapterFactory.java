@@ -15,10 +15,12 @@ import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.configuration.ConfigurationSection;
 import info.evanchik.eclipse.karaf.core.configuration.DelegatingStartupSectionImpl;
+import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.configuration.GeneralSection;
 import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
 import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
 import info.evanchik.eclipse.karaf.core.configuration.SystemSection;
+import info.evanchik.eclipse.karaf.core.configuration.internal.FeaturesSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.GeneralSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.ManagementSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.StartupSectionImpl;
@@ -39,9 +41,10 @@ import org.eclipse.core.runtime.IAdapterFactory;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class KarafConfigurationAdapterFactory implements IAdapterFactory {
+public final class KarafConfigurationAdapterFactory implements IAdapterFactory {
 
     private static final Class<?>[] ADAPTABLE_TYPES = {
+        FeaturesSection.class,
         GeneralSection.class,
         ManagementSection.class,
         StartupSection.class,
@@ -57,7 +60,9 @@ public class KarafConfigurationAdapterFactory implements IAdapterFactory {
         final KarafPlatformModel karafModel = (KarafPlatformModel) adaptableObject;
 
         final Object adaptedObject;
-        if (adapterType == GeneralSection.class) {
+        if (adapterType == FeaturesSection.class) {
+            adaptedObject = new FeaturesSectionImpl(karafModel);
+        } else if (adapterType == GeneralSection.class) {
             adaptedObject = new GeneralSectionImpl(karafModel);
         } else if (adapterType == ManagementSection.class) {
             adaptedObject = adaptManagementSection(karafModel);

@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import org.apache.commons.collections.Predicate;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
@@ -152,6 +153,24 @@ public final class KarafCorePluginUtils {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Filter a list based on a {@link Predicate}
+     *
+     * @param <T>
+     * @param target
+     * @param predicate
+     * @return
+     */
+    public static <T> List<T> filterList(final Collection<T> target, final Predicate predicate) {
+        final List<T> result = new ArrayList<T>();
+        for (final T element: target) {
+            if (predicate.evaluate(element)) {
+                result.add(element);
+            }
+        }
+        return result;
     }
 
     /**

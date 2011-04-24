@@ -11,7 +11,6 @@
 package info.evanchik.eclipse.karaf.core.model;
 
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.internal.GenericKarafPlatformValidator;
 import info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator;
 
 import java.io.File;
@@ -89,11 +88,6 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel {
     @Override
     public boolean isReadOnly() {
         return false;
-    }
-
-    @Override
-    public boolean isValid() {
-        return new GenericKarafPlatformValidator().isValid(rootPlatformPath);
     }
 
     @Override

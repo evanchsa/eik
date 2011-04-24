@@ -129,7 +129,7 @@ public class KarafInstallationSelectionPage extends WizardPage {
                 setErrorMessage("The specified directory does not contain a recognized installation");
             } else {
                 setErrorMessage(null);
-                setPageComplete(karafPlatform.isValid());
+                setPageComplete(true);
             }
         } catch (final CoreException e) {
             setErrorMessage("There was an error loading the installation: " + e.getMessage());

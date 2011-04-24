@@ -112,11 +112,4 @@ public interface KarafPlatformModel {
      *         writable configuration files
      */
     public boolean isReadOnly();
-
-    /**
-     * Determines if the Karaf platform model is valid and complete.
-     *
-     * @return true if the platform is valid, false otherwise
-     */
-    public boolean isValid();
 }

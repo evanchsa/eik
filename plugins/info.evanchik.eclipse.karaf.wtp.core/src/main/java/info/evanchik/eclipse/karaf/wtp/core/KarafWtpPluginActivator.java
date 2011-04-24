@@ -10,6 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.wtp.core;
 
+import info.evanchik.eclipse.karaf.core.LogWrapper;
+
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
@@ -30,6 +32,16 @@ public class KarafWtpPluginActivator extends Plugin {
     private static KarafWtpPluginActivator plugin;
 
     /**
+     * Getter for the {@link LogWrapper} object that makes logging much easier
+     * on the caller.
+     *
+     * @return the {@link LogWrapper} instance
+     */
+    public static LogWrapper getLogger() {
+        return new LogWrapper(getDefault().getLog(), PLUGIN_ID);
+    }
+
+    /**
      * The constructor
      */
     public KarafWtpPluginActivator() {
@@ -42,7 +54,7 @@ public class KarafWtpPluginActivator extends Plugin {
      * org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
      */
     @Override
-    public void start(BundleContext context) throws Exception {
+    public void start(final BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
     }
@@ -54,7 +66,7 @@ public class KarafWtpPluginActivator extends Plugin {
      * org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
      */
     @Override
-    public void stop(BundleContext context) throws Exception {
+    public void stop(final BundleContext context) throws Exception {
         plugin = null;
         super.stop(context);
     }

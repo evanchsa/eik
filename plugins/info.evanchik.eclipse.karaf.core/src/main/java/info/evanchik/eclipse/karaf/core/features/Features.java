@@ -25,7 +25,7 @@ import org.jdom.Element;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public final class Features {
+public final class Features implements ParentAwareObject<FeaturesRepository> {
 
     private final Element element;
 
@@ -57,6 +57,7 @@ public final class Features {
         return name;
     }
 
+    @Override
     public FeaturesRepository getParent() {
         return featuresRepository;
     }

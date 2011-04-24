@@ -42,6 +42,7 @@ import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -57,6 +58,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -264,54 +266,51 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
             features.load();
 
+            final List<FeaturesRepository> featuresRepositories = new ArrayList<FeaturesRepository>(features.getRepositoryList().size());
+            for (final String repository : features.getRepositoryList()) {
+                try {
+                    final InputStream stream = new URL(repository).openConnection().getInputStream();
+
+                    final String repositoryName;
+                    if (repository.startsWith(MVN_URL_PREFIX)) {
+                        final String[] repositoryComponents = repository.split("/"); //$NON-NLS-1$
+                        repositoryName = repositoryComponents[1] + "-" + repositoryComponents[2]; //$NON-NLS-1$
+                    } else {
+                        repositoryName = repository;
+                    }
+
+                    final FeaturesRepository newRepo = new XmlFeaturesRepository(repositoryName, stream);
+                    featuresRepositories.add(newRepo);
+                } catch (final MalformedURLException e) {
+                    // What to do here?
+                } catch (final IOException e) {
+                    // What to do here?
+                }
+
+                if (cancel) {
+                    return Status.CANCEL_STATUS;
+                }
+            }
+
+            if (cancel) {
+                return Status.CANCEL_STATUS;
+            }
+
+            final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
+
+            final List<TreePath> checkedFeatures = new ArrayList<TreePath>();
+            for (final String s : features.getBootFeatureNames()) {
+                final Feature found = fr.findFeature(s);
+                if (found != null) {
+                    checkedFeatures.add(new TreePath(new Object[] { found }));
+                }
+            }
+
             Display.getDefault().syncExec(new Runnable() {
                 @Override
                 public void run() {
-                    final List<FeaturesRepository> featuresRepositories = new ArrayList<FeaturesRepository>(features.getRepositoryList().size());
-                    for (final String repository : features.getRepositoryList()) {
-                        try {
-                            final InputStream stream = new URL(repository).openConnection().getInputStream();
-
-                            final String repositoryName;
-                            if (repository.startsWith(MVN_URL_PREFIX)) {
-                                final String[] repositoryComponents = repository.split("/"); //$NON-NLS-1$
-                                repositoryName = repositoryComponents[1] + "-" + repositoryComponents[2]; //$NON-NLS-1$
-                            } else {
-                                repositoryName = repository;
-                            }
-
-                            final FeaturesRepository newRepo = new XmlFeaturesRepository(repositoryName, stream);
-                            featuresRepositories.add(newRepo);
-                        } catch (final MalformedURLException e) {
-                            // What to do here?
-                        } catch (final IOException e) {
-                            // What to do here?
-                        }
-
-                        if (cancel) {
-                            return;
-                        }
-                    }
-
-                    if (cancel) {
-                        return;
-                    }
-
                     if (!getControl().isDisposed()) {
                         installedFeatures.setInput(featuresRepositories);
-                    }
-
-                    final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
-
-                    final List<Feature> checkedFeatures = new ArrayList<Feature>();
-                    for (final String s : features.getBootFeatureNames()) {
-                        final Feature found = fr.findFeature(s);
-                        if (found != null) {
-                            checkedFeatures.add(found);
-                        }
-                    }
-
-                    if (!getControl().isDisposed()) {
                         installedFeatures.setCheckedElements(checkedFeatures.toArray());
                     }
                 };
@@ -478,7 +477,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
         group.setText("Features");
 
-        installedFeatures = new CheckboxTreeViewer(group, SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
+        installedFeatures = new ContainerCheckedTreeViewer(group, SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
         final Tree tree = installedFeatures.getTree();
 
         final TreeColumn column1 = new TreeColumn(tree, SWT.LEFT);

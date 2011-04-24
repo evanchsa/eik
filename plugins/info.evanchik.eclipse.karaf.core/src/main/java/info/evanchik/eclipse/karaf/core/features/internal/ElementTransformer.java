@@ -12,6 +12,7 @@ package info.evanchik.eclipse.karaf.core.features.internal;
 
 import info.evanchik.eclipse.karaf.core.features.Bundle;
 import info.evanchik.eclipse.karaf.core.features.Feature;
+import info.evanchik.eclipse.karaf.core.features.Features;
 import info.evanchik.eclipse.karaf.core.features.Repository;
 
 import org.apache.commons.collections.Transformer;
@@ -37,6 +38,8 @@ public class ElementTransformer implements Transformer {
             return new Feature(element);
         } else if (element.getName().equalsIgnoreCase("bundle")) {
             return new Bundle(element);
+        } else if (element.getName().equalsIgnoreCase("features")) {
+            return new Features(element, null);
         } else {
             return object;
         }

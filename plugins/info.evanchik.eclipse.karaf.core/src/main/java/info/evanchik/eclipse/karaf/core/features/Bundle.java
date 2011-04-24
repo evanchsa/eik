@@ -20,7 +20,7 @@ import org.jdom.Element;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public final class Bundle {
+public final class Bundle implements ParentAwareObject<Object> {
 
     private final String bundleUrl;
 
@@ -43,6 +43,7 @@ public final class Bundle {
         return bundleUrl;
     }
 
+    @Override
     public Object getParent() {
         final Transformer transformer = new ElementTransformer();
         return transformer.transform(element.getParentElement());

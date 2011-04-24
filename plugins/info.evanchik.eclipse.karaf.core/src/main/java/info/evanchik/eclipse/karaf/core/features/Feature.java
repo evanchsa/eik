@@ -27,7 +27,7 @@ import org.jdom.Element;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public final class Feature {
+public final class Feature implements ParentAwareObject<Object> {
 
     private final String name;
 
@@ -68,7 +68,6 @@ public final class Feature {
         final int prime = 31;
         int result = 1;
         result = prime * result + (name == null ? 0 : name.hashCode());
-        result = prime * result + (version == null ? 0 : version.hashCode());
         return result;
     }
 
@@ -95,14 +94,6 @@ public final class Feature {
             return false;
         }
 
-        if (version == null) {
-            if (other.version != null) {
-                return false;
-            }
-        } else if (!version.equals(other.version)) {
-            return false;
-        }
-
         return true;
     }
 
@@ -110,6 +101,7 @@ public final class Feature {
         return name;
     }
 
+    @Override
     public Object getParent() {
         final Transformer transformer = new ElementTransformer();
         return transformer.transform(element.getParentElement());

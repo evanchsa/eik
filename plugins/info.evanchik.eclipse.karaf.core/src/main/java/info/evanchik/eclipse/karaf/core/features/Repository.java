@@ -22,7 +22,7 @@ import org.jdom.Element;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public final class Repository {
+public final class Repository implements ParentAwareObject<Object> {
 
     private final Element element;
 
@@ -37,6 +37,7 @@ public final class Repository {
         this.element = element;
     }
 
+    @Override
     public Object getParent() {
         final Transformer transformer = new ElementTransformer();
         return transformer.transform(element.getParentElement());

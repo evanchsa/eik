@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections.ListUtils;
@@ -42,7 +43,6 @@ import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -298,12 +298,10 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
             final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
 
-            final List<TreePath> checkedFeatures = new ArrayList<TreePath>();
+            final List<Object> checkedFeatures = new ArrayList<Object>();
             for (final String s : features.getBootFeatureNames()) {
-                final Feature found = fr.findFeature(s);
-                if (found != null) {
-                    checkedFeatures.add(new TreePath(new Object[] { found }));
-                }
+                final Object[] path = fr.getFeaturePath(s);
+                Collections.addAll(checkedFeatures, path);
             }
 
             Display.getDefault().syncExec(new Runnable() {

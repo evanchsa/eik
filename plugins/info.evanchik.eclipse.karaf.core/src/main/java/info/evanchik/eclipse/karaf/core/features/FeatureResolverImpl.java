@@ -11,6 +11,7 @@
 package info.evanchik.eclipse.karaf.core.features;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,14 +37,26 @@ public class FeatureResolverImpl {
      * @return
      */
     public Feature findFeature(final String featureName) {
+        final Object[] path = getFeaturePath(featureName);
+
+        if (path.length > 0) {
+            return (Feature) path[path.length - 1];
+        } else {
+            return null;
+        }
+    }
+
+    public Object[] getFeaturePath(final String featureName) {
+        final List<Object> path = new ArrayList<Object>();
+
         for (final FeaturesRepository r : featuresRepositories) {
             for (final Feature f : r.getFeatures().getFeatures()) {
                 if (f.getName().equals(featureName)) {
-                    return f;
+                    path.addAll(Arrays.asList(r, r.getFeatures(), f));
                 }
             }
         }
 
-        return null;
+        return path.toArray();
     }
 }

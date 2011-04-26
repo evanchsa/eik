@@ -64,8 +64,36 @@ public class XmlFeaturesRepository implements FeaturesRepository {
     }
 
     @Override
-    public List<Repository> getRepositories() {
-        return Collections.unmodifiableList(features.getRepositories());
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof XmlFeaturesRepository)) {
+            return false;
+        }
+
+        final XmlFeaturesRepository other = (XmlFeaturesRepository) obj;
+        if (features == null) {
+            if (other.features != null) {
+                return false;
+            }
+        } else if (!features.equals(other.features)) {
+            return false;
+        }
+
+        if (repositoryName == null) {
+            if (other.repositoryName != null) {
+                return false;
+            }
+        } else if (!repositoryName.equals(other.repositoryName)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -76,6 +104,20 @@ public class XmlFeaturesRepository implements FeaturesRepository {
     @Override
     public String getName() {
         return repositoryName;
+    }
+
+    @Override
+    public List<Repository> getRepositories() {
+        return Collections.unmodifiableList(features.getRepositories());
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (features == null ? 0 : features.hashCode());
+        result = prime * result + (repositoryName == null ? 0 : repositoryName.hashCode());
+        return result;
     }
 
     @Override

@@ -53,6 +53,7 @@ public class FeatureResolverImpl {
             for (final Feature f : r.getFeatures().getFeatures()) {
                 if (f.getName().equals(featureName)) {
                     path.addAll(Arrays.asList(r, r.getFeatures(), f));
+                    return path.toArray();
                 }
             }
         }

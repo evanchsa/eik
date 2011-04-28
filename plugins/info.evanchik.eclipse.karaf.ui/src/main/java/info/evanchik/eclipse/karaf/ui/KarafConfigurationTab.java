@@ -10,6 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
+import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
@@ -25,8 +26,11 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.collections.ListUtils;
 import org.eclipse.core.runtime.CoreException;
@@ -34,12 +38,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -245,10 +252,18 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
         private volatile boolean cancel;
 
+        private final List<FeaturesRepository> featuresRepositories =
+            Collections.synchronizedList(new ArrayList<FeaturesRepository>());
+
         public FeaturesResolverJob() {
             super("Features Resolver");
 
             setSystem(true);
+        }
+
+        @Override
+        public boolean shouldRun() {
+            return !getControl().isDisposed();
         }
 
         @Override
@@ -258,16 +273,11 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
         @Override
         protected IStatus run(final IProgressMonitor monitor) {
-            final FeaturesSection features =
-                (FeaturesSection) Platform.getAdapterManager().getAdapter(
-                        karafPlatformModel,
-                        FeaturesSection.class
-            );
+            featuresRepositories.clear();
 
-            features.load();
+            featuresSection.load();
 
-            final List<FeaturesRepository> featuresRepositories = new ArrayList<FeaturesRepository>(features.getRepositoryList().size());
-            for (final String repository : features.getRepositoryList()) {
+            for (final String repository : featuresSection.getRepositoryList()) {
                 try {
                     final InputStream stream = new URL(repository).openConnection().getInputStream();
 
@@ -292,38 +302,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
                 }
             }
 
-            if (cancel) {
-                return Status.CANCEL_STATUS;
-            }
-
-            final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
-
-            final List<Object> checkedFeatures = new ArrayList<Object>();
-            for (final String s : features.getBootFeatureNames()) {
-                final Object[] path = fr.getFeaturePath(s);
-                Collections.addAll(checkedFeatures, path);
-            }
-
-            Display.getDefault().syncExec(new Runnable() {
-                @Override
-                public void run() {
-                    if (!getControl().isDisposed()) {
-                        installedFeatures.setInput(featuresRepositories);
-                        installedFeatures.setCheckedElements(checkedFeatures.toArray());
-                    }
-                };
-            });
-
-            if (cancel) {
-                return Status.CANCEL_STATUS;
-            } else {
-                return Status.OK_STATUS;
-            }
-        }
-
-        @Override
-        public boolean shouldRun() {
-            return !getControl().isDisposed();
+            return Status.OK_STATUS;
         }
     }
 
@@ -333,9 +312,11 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
     private Composite control;
 
-    private Job featuresResolverJob;
+    private final FeaturesResolverJob featuresResolverJob = new FeaturesResolverJob();
 
-    private CheckboxTreeViewer installedFeatures;
+    private FeaturesSection featuresSection;
+
+    private ContainerCheckedTreeViewer installedFeatures;
 
     private KarafPlatformModel karafPlatformModel;
 
@@ -343,10 +324,10 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
     private Button remoteConsole;
 
+    private final SortedSet<String> selectedFeatures = Collections.synchronizedSortedSet(new TreeSet<String>());
+
     @Override
     public void createControl(final Composite parent) {
-        featuresResolverJob = new FeaturesResolverJob();
-
         control = new Composite(parent, SWT.NONE);
 
         final GridLayout layout = new GridLayout();
@@ -386,10 +367,53 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
             remoteConsole.setSelection(
                     configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE, false));
 
-            karafPlatformModel = KarafPlatformModelRegistry.findActivePlatformModel();
-        } catch (final CoreException e) {
+            initializeKarafPlatformModel();
 
+            final String featuresString = configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, "");
+            final String[] features = featuresString.split(",");
+            selectedFeatures.clear();
+            selectedFeatures.addAll(Arrays.asList(features));
+
+        } catch (final CoreException e) {
+            // TODO: Do something sensible here
         }
+
+        featuresResolverJob.addJobChangeListener(new JobChangeAdapter() {
+           @Override
+            public void done(final IJobChangeEvent event) {
+               if (event.getResult().isOK()) {
+                   featuresResolverJob.removeJobChangeListener(this);
+
+                    try {
+                        final String storedBootFeatures =
+                            configuration.getAttribute(
+                                KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES,
+                                "");
+
+                        final FeatureResolverImpl fr = new FeatureResolverImpl(featuresResolverJob.featuresRepositories);
+
+                        final List<Object> checkedFeatures = new ArrayList<Object>();
+                        for (final String s : storedBootFeatures.split(",")) {
+                            final Object[] path = fr.getFeaturePath(s);
+                            Collections.addAll(checkedFeatures, path);
+                        }
+
+                        Display.getDefault().syncExec(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!getControl().isDisposed()) {
+                                    installedFeatures.setInput(featuresResolverJob.featuresRepositories);
+                                    installedFeatures.setCheckedElements(checkedFeatures.toArray());
+                                }
+                            };
+                        });
+
+                    } catch (final CoreException e) {
+                        // TODO: Do something sensible
+                    }
+               }
+            }
+        });
 
         if (featuresResolverJob.getState() == Job.NONE) {
             featuresResolverJob.schedule();
@@ -400,12 +424,26 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
     public void performApply(final ILaunchConfigurationWorkingCopy configuration) {
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, localConsole.getSelection());
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE, remoteConsole.getSelection());
+        final String featuresString = KarafCorePluginUtils.join(selectedFeatures, ",");
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, featuresString);
     }
 
     @Override
     public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, true);
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE, false);
+
+        try {
+            initializeKarafPlatformModel();
+        } catch (final CoreException e) {
+            // TODO: Do something sensible here
+        }
+
+        final List<String> featuresList = featuresSection.getBootFeatureNames();
+        Collections.sort(featuresList);
+
+        final String features = KarafCorePluginUtils.join(featuresList, ",");
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, features);
     }
 
     /**
@@ -494,5 +532,42 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
         installedFeatures.setContentProvider(new FeaturesContentProvider());
         installedFeatures.setLabelProvider(new FeaturesLabelProvider());
         installedFeatures.setInput(null);
+        installedFeatures.addCheckStateListener(new ICheckStateListener() {
+
+            @Override
+            public void checkStateChanged(final CheckStateChangedEvent event) {
+                final Object[] elements = installedFeatures.getCheckedElements();
+
+                for (final Object e : elements) {
+                    if (e instanceof Feature && ((Feature)e).getParent() instanceof Features) {
+                        selectedFeatures.add(((Feature)e).getName());
+                    } else if (e instanceof Bundle) {
+                        final Bundle b = (Bundle) e;
+                        if (b.getParent() instanceof Feature) {
+                            selectedFeatures.add(((Feature)b.getParent()).getName());
+                        } else {
+                            // Intentionally empty
+                        }
+                    } else {
+                        // Intentionally empty
+                    }
+                }
+
+                KarafConfigurationTab.this.updateLaunchConfigurationDialog();
+            }
+        });
+    }
+
+    /**
+     * @throws CoreException
+     */
+    private void initializeKarafPlatformModel() throws CoreException {
+        karafPlatformModel = KarafPlatformModelRegistry.findActivePlatformModel();
+
+        featuresSection = (FeaturesSection) Platform.getAdapterManager().getAdapter(
+                    karafPlatformModel,
+                    FeaturesSection.class);
+
+        featuresSection.load();
     }
 }

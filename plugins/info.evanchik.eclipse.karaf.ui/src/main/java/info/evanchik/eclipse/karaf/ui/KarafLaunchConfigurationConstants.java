@@ -19,16 +19,15 @@ package info.evanchik.eclipse.karaf.ui;
 public final class KarafLaunchConfigurationConstants {
 
     /**
-     * PDE Launcher constant used for determining if the local console should
-     * start
+     * The list of features to use during Karaf boot
      */
-    public static final String KARAF_LAUNCH_START_LOCAL_CONSOLE = "karaf_start_local_console"; //$NON-NLS-1$
+    public static final String KARAF_LAUNCH_BOOT_FEATURES = "karaf_boot_features"; //$NON-NLS-1$
 
     /**
-     * PDE Launcher constant used for determining if the remote console should
-     * start
+     * The workspace project that contains all of the configuration data for the
+     * launch configuration
      */
-    public static final String KARAF_LAUNCH_START_REMOTE_CONSOLE = "karaf_start_remote_console"; //$NON-NLS-1$
+    public static final String KARAF_LAUNCH_CONFIGURATION_PROJECT = "karaf_configuration_project"; //$NON-NLS-1$
 
     /**
      * PDE Launcher constant used for recording classpath entries used as part
@@ -43,10 +42,16 @@ public final class KarafLaunchConfigurationConstants {
     public static final String KARAF_LAUNCH_SOURCE_RUNTIME = "karaf_source_runtime"; //$NON-NLS-1$
 
     /**
-     * The workspace project that contains all of the configuration data for the
-     * launch configuration
+     * PDE Launcher constant used for determining if the local console should
+     * start
      */
-    public static final String KARAF_LAUNCH_CONFIGURATION_PROJECT = "karaf_configuration_project"; //$NON-NLS-1$
+    public static final String KARAF_LAUNCH_START_LOCAL_CONSOLE = "karaf_start_local_console"; //$NON-NLS-1$
+
+    /**
+     * PDE Launcher constant used for determining if the remote console should
+     * start
+     */
+    public static final String KARAF_LAUNCH_START_REMOTE_CONSOLE = "karaf_start_remote_console"; //$NON-NLS-1$
 
     /**
      * Private constructor to prevent instantiation.

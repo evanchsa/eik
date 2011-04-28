@@ -13,6 +13,7 @@ package info.evanchik.eclipse.karaf.ui.workbench.internal;
 import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
+import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
@@ -196,6 +197,32 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
     }
 
     /**
+     *
+     * @param platformModel
+     * @throws CoreException
+     */
+    private void configureKarafFeatures(
+            final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) throws CoreException {
+
+        final FeaturesSection featuresSection =
+            (FeaturesSection) Platform.getAdapterManager().getAdapter(
+                    platformModel.getParentKarafModel(),
+                    FeaturesSection.class);
+
+        featuresSection.load();
+
+        final String bootFeaturesString =
+            configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, "");
+        final String[] bootFeaturesArray = bootFeaturesString.split(",");
+
+        final List<String> features = new ArrayList<String>();
+        Collections.addAll(features, bootFeaturesArray);
+
+        featuresSection.setBootFeatureNames(features);
+        featuresSection.save();
+    }
+
+    /**
      * @param platformModel
      * @throws CoreException
      */
@@ -234,6 +261,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
             return;
         }
 
+        configureKarafFeatures(platformModel, configuration);
         configureJMXConnector(platformModel);
     }
 }

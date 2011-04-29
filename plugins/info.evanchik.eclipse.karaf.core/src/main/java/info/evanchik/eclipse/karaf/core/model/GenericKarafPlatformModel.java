@@ -11,7 +11,6 @@
 package info.evanchik.eclipse.karaf.core.model;
 
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.internal.GenericKarafPlatformValidator;
 import info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator;
 
 import java.io.File;
@@ -42,34 +41,39 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel {
      *
      * @param platformPath
      */
-    public GenericKarafPlatformModel(IPath platformPath) {
+    public GenericKarafPlatformModel(final IPath platformPath) {
         this.rootPlatformPath = platformPath;
     }
 
+    @Override
     public List<String> getBootClasspath() {
         final List<File> jarFiles = new ArrayList<File>();
-        KarafCorePluginUtils.getJarFileList(rootPlatformPath.append("lib").toFile(), jarFiles, 2); //$NON-NLS-1$
+        KarafCorePluginUtils.getJarFileList(rootPlatformPath.append("lib").toFile(), jarFiles, 0); //$NON-NLS-1$
 
         final List<String> bootClasspath = new ArrayList<String>();
-        for(File f : jarFiles) {
+        for(final File f : jarFiles) {
             bootClasspath.add(f.getAbsolutePath());
         }
 
         return bootClasspath;
     }
 
+    @Override
     public IPath getConfigurationDirectory() {
         return rootPlatformPath.append("etc"); //$NON-NLS-1$
     }
 
-    public IPath getConfigurationFile(String key) {
+    @Override
+    public IPath getConfigurationFile(final String key) {
         return getConfigurationDirectory().append(key);
     }
 
+    @Override
     public IPath getPluginRootDirectory() {
         return rootPlatformPath.append("system"); //$NON-NLS-1$
     }
 
+    @Override
     public IPath getRootDirectory() {
         return rootPlatformPath;
     }
@@ -81,12 +85,9 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel {
      *
      * @return false, always
      */
+    @Override
     public boolean isReadOnly() {
         return false;
-    }
-
-    public boolean isValid() {
-        return new GenericKarafPlatformValidator().isValid(rootPlatformPath);
     }
 
     @Override
@@ -106,14 +107,14 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel {
      *            the {@code List} of {@code File}S
      * @return a {@code List} of {@code URL}S, one for each {@code File}
      */
-    private List<URL> filesToUrls(final List<File> files) {
+    protected final List<URL> filesToUrls(final List<File> files) {
         final List<URL> urls = new ArrayList<URL>();
 
-        for (File f : files) {
+        for (final File f : files) {
             try {
                 final URL u = f.toURI().toURL();
                 urls.add(u);
-            } catch (MalformedURLException e) {
+            } catch (final MalformedURLException e) {
                 KarafCorePluginActivator.getLogger().error(
                                 "Unable to convert file to URL: " + f.getAbsolutePath(), e);
             }

@@ -25,45 +25,43 @@ public class ManagementSectionImpl extends AbstractPropertiesConfigurationSectio
 
     public static final String MANAGEMENT_SECTION_ID = "info.evanchik.eclipse.karaf.configuration.section.Management"; //$NON-NLS-1$
 
-    public static final String SERVICEMIX_KERNEL_MANAGEMENT_FILENAME = "org.apache.servicemix.management.cfg"; //$NON-NLS-1$
-
-    public static final String FELIX_KARAF_MANAGEMENT_FILENAME = "org.apache.felix.karaf.management.cfg"; //$NON-NLS-1$
-
-    public static final String KARAF_MANAGEMENT_FILENAME = "org.apache.karaf.management.cfg"; //$NON-NLS-1$
-
     /**
      * @param parent
      * @param filename
      */
-    public ManagementSectionImpl(KarafPlatformModel parent, String filename) {
+    public ManagementSectionImpl(final KarafPlatformModel parent, final String filename) {
         super(MANAGEMENT_SECTION_ID, filename, parent);
     }
 
+    @Override
     public int getPort() {
         final String portString = getProperties().getProperty("rmiRegistryPort"); //$NON-NLS-1$
         return new Integer(portString);
     }
 
+    @Override
     public String getRealm() {
         return getProperties().getProperty("jmxRealm"); //$NON-NLS-1$
     }
 
+    @Override
     public URL getUrl() {
         try {
             final String url = getProperties().getProperty("serviceUrl"); //$NON-NLS-1$
             return new URL(url);
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
         }
 
         return null;
     }
 
-    public void setPort(int port) {
+    @Override
+    public void setPort(final int port) {
         getProperties().setProperty("rmiRegistryPort", new Integer(port).toString()); //$NON-NLS-1$
         getProperties().setProperty("serviceUrl", makeJMXUrl(new Integer(port).toString())); //$NON-NLS-1$
     }
 
-    private String makeJMXUrl(String port) {
+    private String makeJMXUrl(final String port) {
         final StringBuilder sb = new StringBuilder();
 
         // Build up something like:

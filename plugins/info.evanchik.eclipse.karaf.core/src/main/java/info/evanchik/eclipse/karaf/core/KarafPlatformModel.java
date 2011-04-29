@@ -23,37 +23,6 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
 public interface KarafPlatformModel {
 
     /**
-     * Karaf base directory, used to reference core Karaf system files; takes
-     * precedence over Karaf home directory
-     */
-    public static final String KARAF_BASE_PROP = "karaf.base"; //$NON-NLS-1$
-
-    public static final String KARAF_DATA_PROP = "karaf.data"; //$NON-NLS-1$
-
-    /**
-     * Karaf home directory, used to reference installation specific files
-     */
-    public static final String KARAF_HOME_PROP = "karaf.home"; //$NON-NLS-1$
-
-    public static final String KARAF_INSTANCES_PROP = "karaf.instances"; //$NON-NLS-1$
-
-    public static final String KARAF_BUNDLE_LOCATIONS_PROP = "bundle.locations"; //$NON-NLS-1$
-
-    public static final String KARAF_DEFAULT_CONFIG_PROPERTIES_FILE = "config.properties"; //$NON-NLS-1$
-
-    public static final String KARAF_DEFAULT_STARTUP_PROPERTIES_FILE = "startup.properties"; //$NON-NLS-1$
-
-    public static final String KARAF_DEFAULT_SYSTEM_PROPERTIES_FILE = "system.properties"; //$NON-NLS-1$
-
-    public static final String KARAF_DEFAULT_BUNDLE_START_LEVEL = "100"; //$NON-NLS-1$
-
-    public static final String KARAF_DEFAULT_PLATFORM_PROVIDER_SYMBOLIC_NAME = "info.evanchik.eclipse.karaf.target"; //$NON-NLS-1$
-
-    public static final String KARAF_MAIN_BUNDLE_SYMBOLIC_NAME = "org.apache.felix.karaf.main";
-
-    public static final String KARAF_JAAS_BOOT_BUNDLE_SYMBOLIC_NAME = "org.apache.felix.karaf.jaas.boot";
-
-    /**
      * Determines if a plugin is in the Karaf Target Platform.
      *
      * @param plugin
@@ -143,11 +112,4 @@ public interface KarafPlatformModel {
      *         writable configuration files
      */
     public boolean isReadOnly();
-
-    /**
-     * Determines if the Karaf platform model is valid and complete.
-     *
-     * @return true if the platform is valid, false otherwise
-     */
-    public boolean isValid();
 }

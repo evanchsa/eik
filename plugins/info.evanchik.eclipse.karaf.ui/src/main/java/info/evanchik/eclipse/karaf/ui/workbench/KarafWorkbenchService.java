@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -50,6 +51,17 @@ public interface KarafWorkbenchService {
      * @throws CoreException
      */
     public List<String> getVMArguments(KarafWorkingPlatformModel platformModel, ILaunchConfiguration configuration) throws CoreException;
+
+    /**
+     * Called when the {@link ILaunchConfiguration} is being initialized
+     *
+     * @param platformModel
+     *            the {@link KarafWorkingPlatformModel} that this launch
+     *            configuration is executing against
+     * @param configuration
+     *            the {@code ILaunchConfigurationWorkingCopy}
+     */
+    public void initialize(KarafWorkingPlatformModel platformModel, ILaunchConfigurationWorkingCopy configuration);
 
     /**
      *

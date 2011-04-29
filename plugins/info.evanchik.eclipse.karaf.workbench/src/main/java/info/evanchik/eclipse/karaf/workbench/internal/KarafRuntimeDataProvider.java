@@ -101,6 +101,12 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
                     monitor = new NullProgressMonitor();
                 }
 
+                if (   !KarafRuntimeDataProvider.this.mbeanProvider.isOpen()
+                    && !cancel)
+                {
+                    this.schedule(25000);
+                }
+
                 monitor.beginTask("Populating view data set", IProgressMonitor.UNKNOWN);
 
                 IStatus status = loadBundleData(monitor);
@@ -274,7 +280,11 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
 
             }
         } catch (IOException e) {
-            return new Status(IStatus.ERROR, KarafWorkbenchActivator.PLUGIN_ID, "Unable to connect to MBeanServer", e);
+        	if (monitor.isCanceled()) {
+        		return new Status(IStatus.CANCEL, KarafWorkbenchActivator.PLUGIN_ID, "Unable to connect to MBeanServer", e);
+        	} else {
+        		return new Status(IStatus.ERROR, KarafWorkbenchActivator.PLUGIN_ID, "Unable to connect to MBeanServer", e);
+        	}
         } catch (Exception e) {
             KarafWorkbenchActivator.getLogger().warn("Unable to update OSGi Services", e);
         }

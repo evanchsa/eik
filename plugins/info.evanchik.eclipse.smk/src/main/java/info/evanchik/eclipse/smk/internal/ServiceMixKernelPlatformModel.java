@@ -32,14 +32,11 @@ public class ServiceMixKernelPlatformModel extends GenericKarafPlatformModel {
 
     private static final String SERVICEMIX_MAIN_SPI_PROVIDER = "org.apache.servicemix.kernel.main";
 
-    private static final ServiceMixKernelPlatformValidator platformValidator =
-        new ServiceMixKernelPlatformValidator();
-
     /**
      *
      * @param platformPath
      */
-    public ServiceMixKernelPlatformModel(IPath platformPath) {
+    public ServiceMixKernelPlatformModel(final IPath platformPath) {
         super(platformPath);
     }
 
@@ -48,7 +45,7 @@ public class ServiceMixKernelPlatformModel extends GenericKarafPlatformModel {
         final List<String> finalClasspath = new ArrayList<String>();
 
         final List<String> bootClasspath = super.getBootClasspath();
-        for (String e : bootClasspath) {
+        for (final String e : bootClasspath) {
             if (!e.toLowerCase().endsWith(SERVICEMIX_MAIN_JAR)) {
                 finalClasspath.add(e);
             }
@@ -59,24 +56,19 @@ public class ServiceMixKernelPlatformModel extends GenericKarafPlatformModel {
         if (bundles == null) {
             ServiceMixKernelActivator.getLogger().error("Unable to resolve MainService SPI bundle: " + SERVICEMIX_MAIN_SPI_PROVIDER);
         } else {
-            for (Bundle b : bundles) {
+            for (final Bundle b : bundles) {
                 try {
                     final File location = FileLocator.getBundleFile(b);
                     if (!location.getAbsolutePath().endsWith(SERVICEMIX_MAIN_JAR)) {
                         finalClasspath.add(location.getAbsolutePath());
                         break;
                     }
-                } catch(IOException e) {
+                } catch(final IOException e) {
                     ServiceMixKernelActivator.getLogger().error("Unable to resolve MainService SPI bundle: " + SERVICEMIX_MAIN_SPI_PROVIDER, e);
                 }
             }
         }
 
         return finalClasspath;
-    }
-
-    @Override
-    public boolean isValid() {
-        return platformValidator.isValid(getRootDirectory());
     }
 }

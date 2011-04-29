@@ -10,6 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
+import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelFactory;
@@ -19,6 +20,8 @@ import info.evanchik.eclipse.karaf.core.SystemBundleNames;
 import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.WorkingKarafPlatformModel;
+import info.evanchik.eclipse.karaf.ui.internal.WorkbenchServiceExtensions;
+import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,12 +55,6 @@ import org.osgi.framework.Version;
 @SuppressWarnings("restriction")
 public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfigurationInitializer {
 
-    /**
-     * Plugin that implements low-level Equinox hooks for the Karaf Eclipse
-     * integration
-     */
-    public static String KARAF_HOOK_PLUGIN_ID = "info.evanchik.eclipse.karaf.hooks"; //$NON-NLS-1$
-
     public static final char VERSION_SEPARATOR = '*';
 
     /**
@@ -82,8 +79,10 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      * @param monitor
      * @throws CoreException
      */
-    public static KarafPlatformModel findKarafPlatform(ILaunchConfiguration configuration, IProgressMonitor monitor) throws CoreException {
-        final KarafPlatformModel karafPlatformModel =
+    public static KarafPlatformModel findKarafPlatform(final ILaunchConfiguration configuration, final IProgressMonitor monitor) throws CoreException {
+    	monitor.subTask("Locating Karaf Platform");
+
+    	final KarafPlatformModel karafPlatformModel =
             KarafPlatformModelRegistry.findActivePlatformModel();
 
         monitor.worked(10);
@@ -107,7 +106,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      * @param configuration
      *            the working copy of the launch configuration
      */
-    public static void initializeConfiguration(ILaunchConfigurationWorkingCopy configuration) {
+    public static void initializeConfiguration(final ILaunchConfigurationWorkingCopy configuration) {
         final KarafLaunchConfigurationInitializer configurationInitializer = new KarafLaunchConfigurationInitializer();
         configurationInitializer.initialize(configuration);
     }
@@ -122,14 +121,14 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
     protected StartupSection startupSection;
 
     @Override
-    public void initialize(ILaunchConfigurationWorkingCopy configuration) {
+    public void initialize(final ILaunchConfigurationWorkingCopy configuration) {
         loadKarafPlatform(configuration);
 
         final File configDir =
             LaunchConfigurationHelper.getConfigurationArea(configuration);
 
         final IPath workingArea = new Path(configDir.getAbsolutePath());
-        final KarafPlatformModel workingKarafPlatform =
+        final WorkingKarafPlatformModel workingKarafPlatform =
             new WorkingKarafPlatformModel(workingArea, karafPlatform);
 
         workingKarafPlatform.getConfigurationDirectory().toFile().mkdirs();
@@ -138,7 +137,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
         final KarafPlatformModelSynchronizer synchronizer =
             karafPlatformFactory.getPlatformSynchronizer(karafPlatform);
 
-        synchronizer.synchronize(workingKarafPlatform, false);
+        synchronizer.synchronize(workingKarafPlatform, true);
 
         // TODO: Factor this out so that it pulls the ID from this plugins
         // registry
@@ -146,6 +145,16 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
         configuration.setAttribute(IPDEUIConstants.LAUNCHER_PDE_VERSION, "3.3"); //$NON-NLS-1$
 
         addDefaultVMArguments(configuration);
+
+        try {
+            final List<KarafWorkbenchServiceFactory> list = WorkbenchServiceExtensions.getLaunchCustomizerFactories();
+
+            for (final KarafWorkbenchServiceFactory f : list) {
+                f.getWorkbenchService().initialize(workingKarafPlatform, configuration);
+            }
+        } catch (final CoreException e) {
+            KarafUIPluginActivator.getLogger().error("Unable to access extension registry", e);
+        }
 
         // This must be the last item called
         super.initialize(configuration);
@@ -159,7 +168,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      *      (java.lang.String)
      */
     @Override
-    protected String getAutoStart(String bundleID) {
+    protected String getAutoStart(final String bundleID) {
         if (startupSection.containsPlugin(bundleID)) {
             return "true"; //$NON-NLS-1$
         } else {
@@ -176,7 +185,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      *      (java.lang.String)
      */
     @Override
-    protected String getStartLevel(String bundleID) {
+    protected String getStartLevel(final String bundleID) {
         if (startupSection.containsPlugin(bundleID)) {
             return startupSection.getStartLevel(bundleID);
         } else {
@@ -185,7 +194,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
     }
 
     @Override
-    protected void initializeBundleState(ILaunchConfigurationWorkingCopy configuration) {
+    protected void initializeBundleState(final ILaunchConfigurationWorkingCopy configuration) {
         super.initializeBundleState(configuration);
 
         final List<String> externalPlugins = new ArrayList<String>();
@@ -203,13 +212,13 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
             final BundleEntry entry = new BundleEntry.Builder(getBundleId(models[i])).autostart(getAutoStart(id)).startLevel(
                     getStartLevel(id)).build();
 
-            boolean inWorkspace = models[i].getUnderlyingResource() != null;
+            final boolean inWorkspace = models[i].getUnderlyingResource() != null;
             if (inWorkspace) {
                 workspacePlugins.add(entry.toString());
             } else {
                 // By default, only add the plugin if it is in the Karaf model
                 final Version v = Version.parseVersion(models[i].getPluginBase().getVersion());
-                if (karafPlatform.getState().getBundle(id, v) != null) {
+                if (karafPlatform.getState().getBundle(id, v) != null && startupSection.containsPlugin(id)) {
                     externalPlugins.add(entry.toString());
                 }
             }
@@ -231,7 +240,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      * @see org.eclipse.pde.ui.launcher.OSGiLaunchConfigurationInitializer#initializeFrameworkDefaults(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
      */
     @Override
-    protected void initializeFrameworkDefaults(ILaunchConfigurationWorkingCopy configuration) {
+    protected void initializeFrameworkDefaults(final ILaunchConfigurationWorkingCopy configuration) {
         final List<String> bootClasspathEntries = karafPlatform.getBootClasspath();
 
         final String bootClasspath = KarafCorePluginUtils.join(bootClasspathEntries, ",");
@@ -242,7 +251,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
 
         configuration.setAttribute(
                 IPDELauncherConstants.DEFAULT_START_LEVEL,
-                Integer.parseInt(KarafPlatformModel.KARAF_DEFAULT_BUNDLE_START_LEVEL));
+                Integer.parseInt(IKarafConstants.KARAF_DEFAULT_BUNDLE_START_LEVEL));
     }
 
     /**
@@ -251,14 +260,14 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      *
      * @param configuration
      */
-    protected void loadKarafPlatform(ILaunchConfigurationWorkingCopy configuration) {
+    protected void loadKarafPlatform(final ILaunchConfigurationWorkingCopy configuration) {
         try {
             this.karafPlatform = findKarafPlatform(configuration, new NullProgressMonitor());
             this.karafPlatformFactory = KarafPlatformModelRegistry.findPlatformModelFactory(karafPlatform.getRootDirectory());
 
             this.startupSection = (StartupSection) Platform.getAdapterManager().getAdapter(this.karafPlatform, StartupSection.class);
             this.startupSection.load();
-        } catch (CoreException e) {
+        } catch (final CoreException e) {
             KarafUIPluginActivator.getLogger().error("Unable to locate the Karaf platform", e);
 
             this.karafPlatform = null;
@@ -275,7 +284,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      *         newest version if there is more than one plugin that responds to
      *         the given id
      */
-    private String getBundleId(IPluginModelBase model) {
+    private String getBundleId(final IPluginModelBase model) {
         final IPluginBase base = model.getPluginBase();
         final String id = base.getId();
         final StringBuffer buffer = new StringBuffer(id);
@@ -295,7 +304,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      * @param configuration
      *            the working copy of the launch configuration
      */
-    private void addDefaultVMArguments(ILaunchConfigurationWorkingCopy configuration) {
+    private void addDefaultVMArguments(final ILaunchConfigurationWorkingCopy configuration) {
         final StringBuffer vmArgs = new StringBuffer();
         if (vmArgs.indexOf("-Declipse.ignoreApp") == -1) { //$NON-NLS-1$
             if (vmArgs.length() > 0) {
@@ -303,8 +312,16 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
             }
             vmArgs.append("-Declipse.ignoreApp=true"); //$NON-NLS-1$
         }
+
         if (vmArgs.indexOf("-Dosgi.noShutdown") == -1) { //$NON-NLS-1$
             vmArgs.append(" -Dosgi.noShutdown=true"); //$NON-NLS-1$
+        }
+
+        // prevent terminal CTRL-characters in Eclipse console on Windows
+        final String localOperatingSystem = System.getProperty("os.name"); //$NON-NLS-1$
+        if (   localOperatingSystem.toLowerCase().indexOf("windows") >= 0 //$NON-NLS-1$
+            && vmArgs.indexOf("-Djline.terminal") == -1) { //$NON-NLS-1$
+            vmArgs.append(" -Djline.terminal=jline.UnsupportedTerminal"); //$NON-NLS-1$
         }
 
         configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArgs.toString());

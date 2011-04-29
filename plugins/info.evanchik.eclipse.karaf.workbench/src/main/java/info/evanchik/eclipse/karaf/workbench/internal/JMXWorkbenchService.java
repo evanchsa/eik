@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchListener;
 import org.eclipse.jdt.launching.SocketUtil;
 
@@ -44,26 +45,31 @@ import org.eclipse.jdt.launching.SocketUtil;
 public class JMXWorkbenchService implements KarafWorkbenchService {
 
     private final Map<String, JMXServiceDescriptor> jmxServiceDescriptorMap =
-        new HashMap<String, JMXServiceDescriptor>();
+        Collections.synchronizedMap(new HashMap<String, JMXServiceDescriptor>());
 
     @Override
-    public List<BundleEntry> getAdditionalBundles(KarafWorkingPlatformModel platformModel) {
-        String[] jmxBundles = {
+    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel) {
+        final String[] jmxBundles = {
                 KarafJMXPlugin.PLUGIN_ID,
-                "org.eclipse.core.contenttype",
-                "org.eclipse.core.jobs",
-                "org.eclipse.core.runtime",
-                "org.eclipse.core.runtime.compatibility.auth",
-                "org.eclipse.equinox.app",
-                "org.eclipse.equinox.common",
-                "org.eclipse.equinox.registry",
-                "org.eclipse.equinox.preferences",
-                "org.eclipse.osgi.util"
+                "org.eclipse.core.contenttype", //$NON-NLS-1$
+                "org.eclipse.core.jobs", //$NON-NLS-1$
+                "org.eclipse.core.runtime", //$NON-NLS-1$
+                "org.eclipse.core.runtime.compatibility.auth", //$NON-NLS-1$
+                "org.eclipse.equinox.app", //$NON-NLS-1$
+                "org.eclipse.equinox.common", //$NON-NLS-1$
+                "org.eclipse.equinox.registry", //$NON-NLS-1$
+                "org.eclipse.equinox.preferences", //$NON-NLS-1$
+                "org.eclipse.osgi.util" //$NON-NLS-1$
         };
 
         final List<BundleEntry> bundleEntries = new ArrayList<BundleEntry>();
 
-        for (String jmxBundle : jmxBundles) {
+        for (final String jmxBundle : jmxBundles) {
+            // If the bundle is already present in the platform, don't add it
+            if (platformModel.getState().getBundle(jmxBundle, null) != null) {
+                continue;
+            }
+
             final String bundleLocation =
                 KarafCorePluginUtils.getBundleLocation(jmxBundle);
 
@@ -77,21 +83,20 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
     }
 
     @Override
-    public Map<String, String> getAdditionalEquinoxConfiguration(KarafWorkingPlatformModel platformModel) {
+    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel) {
         return Collections.emptyMap();
     }
 
     @Override
-    public List<String> getVMArguments(KarafWorkingPlatformModel platformModel, ILaunchConfiguration configuration)
+    public List<String> getVMArguments(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration)
             throws CoreException
     {
         final List<String> arguments = new ArrayList<String>();
 
-
         /*
          * Establish the JMX connector port for the JMX service "jmxserver"
          */
-        int jmxServicePort = SocketUtil.findFreePort();
+        final int jmxServicePort = SocketUtil.findFreePort();
 
         if (jmxServicePort == -1) {
             throw new CoreException(
@@ -118,22 +123,25 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
 
             jmxServiceDescriptorMap.put(configuration.getMemento(), jmxServiceDescriptor);
 
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             // TODO: Throw a CoreException
         }
-
-        arguments.add("-Dorg.eclipse.equinox.jmx.server.port=" + new Integer(jmxServicePort).toString()); //$NON-NLS-1$
 
         return arguments;
     }
 
     @Override
+    public void initialize(final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfigurationWorkingCopy configuration) {
+    }
+
+    @Override
     public void launch(
-            KarafWorkingPlatformModel platformModel,
-            ILaunchConfiguration configuration,
-            String mode,
-            ILaunch launch,
-            IProgressMonitor monitor) throws CoreException
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration,
+            final String mode,
+            final ILaunch launch,
+            final IProgressMonitor monitor) throws CoreException
     {
         final String memento = configuration.getMemento();
 
@@ -159,15 +167,15 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
         return new ILaunchListener() {
 
             @Override
-            public void launchAdded(ILaunch l) {
+            public void launchAdded(final ILaunch l) {
             }
 
             @Override
-            public void launchChanged(ILaunch l) {
+            public void launchChanged(final ILaunch l) {
             }
 
             @Override
-            public void launchRemoved(ILaunch l) {
+            public void launchRemoved(final ILaunch l) {
                 if (!l.equals(launch)) {
                     return;
                 }

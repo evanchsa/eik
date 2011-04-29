@@ -54,5 +54,17 @@
             class="info.evanchik.eclipse.karaf.ui.workbench.internal.GenericKarafWorkbenchServiceFactory">
       </launchCustomizer>
    </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabs">
+      <tab
+            class="info.evanchik.eclipse.karaf.ui.KarafConfigurationTab"
+            group="org.eclipse.pde.ui.launcher.EquinoxLauncherTabGroup"
+            id="info.evanchik.eclipse.karaf.ui.karafGeneralLaunchConfigurationTab"
+            name="Karaf">
+         <placement
+               after="org.eclipse.pde.ui.launch.tab.tracing">
+         </placement>
+      </tab>
+   </extension>
 
 </plugin>

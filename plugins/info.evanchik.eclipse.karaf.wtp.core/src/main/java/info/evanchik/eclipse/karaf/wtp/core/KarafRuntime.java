@@ -11,8 +11,9 @@
 package info.evanchik.eclipse.karaf.wtp.core;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -32,14 +33,13 @@ public class KarafRuntime extends RuntimeDelegate {
     }
 
     @Override
-    public void setDefaults(IProgressMonitor monitor) {
+    public void setDefaults(final IProgressMonitor monitor) {
         super.setDefaults(monitor);
     }
 
     /**
      * Determines whether or not this is a valid {@link IRuntime} of a Karaf
-     * installation. Validation is done by delegating to
-     * {@link KarafPlatformModel#isValid()} .
+     * installation.
      *
      * @return a {@link IStatus} object indicating whether or not this is a
      *         valid Karaf runtime. A valid Karaf Runtime will return
@@ -59,13 +59,26 @@ public class KarafRuntime extends RuntimeDelegate {
             return status;
         }
 
-        final KarafPlatformModel karafTargetPlatform = new GenericKarafPlatformModel(location);
-
-        if (karafTargetPlatform.isValid()) {
-            return Status.OK_STATUS;
-        } else {
-            return new Status(IStatus.ERROR, KarafWtpPluginActivator.PLUGIN_ID, 0,
-                            "Unable to validate Karaf installation", null);
+        KarafPlatformModel karafTargetPlatform;
+        try {
+            karafTargetPlatform = KarafPlatformModelRegistry.findPlatformModel(location);
+            if (karafTargetPlatform != null) {
+                return Status.OK_STATUS;
+            } else {
+                return new Status(
+                        IStatus.ERROR,
+                        KarafWtpPluginActivator.PLUGIN_ID,
+                        0,
+                        "Unable to validate Karaf installation",
+                        null);
+            }
+        } catch (final CoreException e) {
+            return new Status(
+                    IStatus.ERROR,
+                    KarafWtpPluginActivator.PLUGIN_ID,
+                    0,
+                    "Unable to locate Karaf platform",
+                    e);
         }
     }
 }

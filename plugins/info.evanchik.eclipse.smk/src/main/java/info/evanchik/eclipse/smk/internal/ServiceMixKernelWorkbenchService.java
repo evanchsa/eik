@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.smk.internal;
 
+import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -34,12 +35,13 @@ import org.eclipse.debug.core.ILaunchConfiguration;
  */
 public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
 
-    public List<BundleEntry> getAdditionalBundles(KarafWorkingPlatformModel platformModel) {
+    @Override
+    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel) {
         if (!(platformModel.getParentKarafModel() instanceof ServiceMixKernelPlatformModel)) {
             return Collections.emptyList();
         }
 
-        String[] bundles = {
+        final String[] bundles = {
                 "info.evanchik.smk.app",
                 "org.eclipse.core.contenttype",
                 "org.eclipse.core.jobs",
@@ -54,7 +56,7 @@ public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
 
         final List<BundleEntry> bundleEntries = new ArrayList<BundleEntry>();
 
-        for (String b : bundles) {
+        for (final String b : bundles) {
             final String bundleLocation =
                 KarafCorePluginUtils.getBundleLocation(b);
 
@@ -67,7 +69,8 @@ public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
         return bundleEntries;
     }
 
-    public Map<String, String> getAdditionalEquinoxConfiguration(KarafWorkingPlatformModel platformModel) {
+    @Override
+    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel) {
         if (!(platformModel.getParentKarafModel() instanceof ServiceMixKernelPlatformModel)) {
             return Collections.emptyMap();
         }
@@ -76,19 +79,19 @@ public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
 
         equinoxProperties.put(
                 "servicemix.base",
-                platformModel.getRootDirectory().toOSString());
+                platformModel.getParentKarafModel().getRootDirectory().toOSString());
 
         equinoxProperties.put(
                 "servicemix.home",
-                platformModel.getRootDirectory().toOSString());
+                platformModel.getParentKarafModel().getRootDirectory().toOSString());
 
         equinoxProperties.put(
                 "org.apache.servicemix.filemonitor.configDir",
-                platformModel.getConfigurationDirectory().toOSString());
+                platformModel.getParentKarafModel().getConfigurationDirectory().toOSString());
 
         equinoxProperties.put(
                 "org.apache.servicemix.filemonitor.monitorDir",
-                platformModel.getUserDeployedDirectory().toOSString());
+                platformModel.getParentKarafModel().getUserDeployedDirectory().toOSString());
 
         equinoxProperties.put(
                 "org.apache.servicemix.filemonitor.generatedJarDir",
@@ -114,22 +117,24 @@ public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
             final Properties currentConfig =
                 KarafCorePluginUtils.loadProperties(
                     platformModel.getConfigurationDirectory().toFile(),
-                    KarafPlatformModel.KARAF_DEFAULT_CONFIG_PROPERTIES_FILE);
+                    IKarafConstants.KARAF_DEFAULT_CONFIG_PROPERTIES_FILE);
 
             final String extraSystemPackages = "org.osgi.framework;version=\"1.4.0\",org.apache.servicemix.kernel.main.spi;version=\"1.0.0\",org.apache.servicemix.kernel.jaas.boot,org.apache.servicemix.kernel.version".concat(",").concat(currentConfig.getProperty("jre-1.6"));
             equinoxProperties.put(
                     "org.osgi.framework.system.packages.extra",
                     extraSystemPackages);
-        } catch(CoreException e) {
+
+        } catch(final CoreException e) {
 
         }
 
         return equinoxProperties;
     }
 
+    @Override
     public List<String> getVMArguments(
-            KarafWorkingPlatformModel platformModel,
-            ILaunchConfiguration configuration) throws CoreException
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration) throws CoreException
     {
         if (!(platformModel.getParentKarafModel() instanceof ServiceMixKernelPlatformModel)) {
             return Collections.emptyList();
@@ -137,23 +142,32 @@ public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
 
         final List<String> arguments = new ArrayList<String>();
 
-        arguments.add("-Dservicemix.home=" + platformModel.getRootDirectory());
-        arguments.add("-Dservicemix.base=" + platformModel.getRootDirectory());
+        arguments.add("-Dservicemix.home=" + platformModel.getParentKarafModel().getRootDirectory());
+        arguments.add("-Dservicemix.base=" + platformModel.getParentKarafModel().getRootDirectory());
 
         arguments.add("-Dservicemix.startLocalConsole=true");
         arguments.add("-Dservicemix.startRemoteShell=true");
 
-        arguments.add("-Djava.util.logging.config.file=" + platformModel.getConfigurationDirectory() + "/java.util.logging.properties");
+        arguments.add("-Djava.util.logging.config.file=" + platformModel.getParentKarafModel().getConfigurationDirectory() + "/java.util.logging.properties");
 
         return arguments;
     }
 
+    @Override
+    public void initialize(final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfigurationWorkingCopy configuration) {
+        if (!(platformModel.getParentKarafModel() instanceof ServiceMixKernelPlatformModel)) {
+            return;
+        }
+    }
+
+    @Override
     public void launch(
-            KarafWorkingPlatformModel platformModel,
-            ILaunchConfiguration configuration,
-            String mode,
-            ILaunch launch,
-            IProgressMonitor monitor) throws CoreException
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration,
+            final String mode,
+            final ILaunch launch,
+            final IProgressMonitor monitor) throws CoreException
     {
         if (!(platformModel.getParentKarafModel() instanceof ServiceMixKernelPlatformModel)) {
             return;

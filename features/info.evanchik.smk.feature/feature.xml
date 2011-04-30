@@ -2,7 +2,7 @@
 <feature
       id="info.evanchik.smk.feature"
       label="Eclipse Integration for Apache ServiceMix Kernel Feature"
-      version="0.5.0.qualifier"
+      version="0.5.1.qualifier"
       provider-name="evanchik.info">
 
    <description>

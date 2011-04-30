@@ -20,6 +20,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator
 Bundle-Vendor: evanchik.info
  info.evanchik.eclipse.karaf.core.model
-Bundle-ActivationPolicy: lazy
-Bundle-Activator: info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator
-Bundle-Vendor: evanchik.info
+

@@ -58,22 +58,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
     public static final char VERSION_SEPARATOR = '*';
 
     /**
-     * Loads the Karaf platform in the following manner:<br>
-     * <br>
-     * <ol>
-     * <li>Locate a suitable reference platform bundle either:
-     * {@link KarafPlatformModel.KARAF_MAIN_BUNDLE_SYMBOLIC_NAME} or
-     * {@link KarafPlatformModel.KARAF_JAAS_BOOT_BUNDLE_SYMBOLIC_NAME}</li>
-     * <li>Locate the built in Karaf platform bundle:
-     * {@link KarafPlatformModel.KARAF_DEFAULT_PLATFORM_PROVIDER_SYMBOLIC_NAME}</li>
-     * <li>If the built in Karaf platform bundle does not exist, assume an
-     * external installation and construct a path to its root directory</li>
-     * <li>If the built in Karaf platform bundle exists compare its root
-     * location to the location of the reference platform bundle found in step
-     * 1. If they match, use the built in Karaf plugin</li>
-     * <li>Finally, if there is no match, assume an external Karaf installation
-     * and construct the root path accordingly</li>
-     * </ol>
+     * Loads a Karaf platform
      *
      * @param configuration
      * @param monitor
@@ -306,11 +291,11 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      */
     private void addDefaultVMArguments(final ILaunchConfigurationWorkingCopy configuration) {
         final StringBuffer vmArgs = new StringBuffer();
-        if (vmArgs.indexOf("-Declipse.ignoreApp") == -1) { //$NON-NLS-1$
+        if (vmArgs.indexOf("-Declipse.application") == -1) { //$NON-NLS-1$
             if (vmArgs.length() > 0) {
                 vmArgs.append(" "); //$NON-NLS-1$
             }
-            vmArgs.append("-Declipse.ignoreApp=true"); //$NON-NLS-1$
+            vmArgs.append("-Declipse.application=info.evanchik.karaf.app.KarafMain"); //$NON-NLS-1$
         }
 
         if (vmArgs.indexOf("-Dosgi.noShutdown") == -1) { //$NON-NLS-1$

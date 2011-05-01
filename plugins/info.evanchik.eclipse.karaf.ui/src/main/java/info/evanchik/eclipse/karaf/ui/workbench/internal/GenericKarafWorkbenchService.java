@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.SocketUtil;
 
 /**
@@ -161,7 +162,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         arguments.add(
                 KarafCorePluginUtils.constructSystemProperty(
                         IKarafConstants.KARAF_DATA_PROP,
-                        platformModel.getRootDirectory().append("data").toString())); //$NON-NLS-1$
+                        platformModel.getParentKarafModel().getRootDirectory().append("data").toString())); //$NON-NLS-1$
 
         arguments.add(
                 KarafCorePluginUtils.constructSystemProperty(
@@ -194,6 +195,10 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
             return;
         }
+
+        configuration.setAttribute(
+                IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY,
+                platformModel.getParentKarafModel().getRootDirectory().toString());
     }
 
     /**
@@ -212,7 +217,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         featuresSection.load();
 
         final String bootFeaturesString =
-            configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, "");
+            configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, ""); //$NON-NLS-1$
         final String[] bootFeaturesArray = bootFeaturesString.split(",");
 
         final List<String> features = new ArrayList<String>();
@@ -223,6 +228,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
     }
 
     /**
+     *
      * @param platformModel
      * @throws CoreException
      */
@@ -234,7 +240,9 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         final int jmxRegistryPort = SocketUtil.findFreePort();
 
         if (jmxRegistryPort == -1) {
-            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID,
+            throw new CoreException(new Status(
+                    IStatus.ERROR,
+                    KarafUIPluginActivator.PLUGIN_ID,
                     "Could not find suitable TCP/IP port for JMX RMI Registry"));
         }
 

@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="info.evanchik.karaf.app.main"
+         id="KarafMain"
          name="Equinox main Application for Apache Felix Karaf"
          point="org.eclipse.core.runtime.applications">
       <application

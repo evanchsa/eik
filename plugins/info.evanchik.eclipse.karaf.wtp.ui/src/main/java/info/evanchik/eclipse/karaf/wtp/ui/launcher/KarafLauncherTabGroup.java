@@ -10,6 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.wtp.ui.launcher;
 
+import info.evanchik.eclipse.karaf.ui.KarafConfigurationTab;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationInitializer;
 
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -35,10 +36,17 @@ public class KarafLauncherTabGroup extends AbstractLaunchConfigurationTabGroup {
      *
      * @see ILaunchConfigurationTabGroup
      */
-    public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-        ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
-                new ServerLaunchConfigurationTab(new String[] { "info.evanchik.eclipse.server.karaf" }), new JavaArgumentsTab(),
-                new OSGiSettingsTab(), new TracingTab(), new EnvironmentTab(), new CommonTab() }; //$NON-NLS-1$
+    @Override
+    public void createTabs(final ILaunchConfigurationDialog dialog, final String mode) {
+        final ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
+                new ServerLaunchConfigurationTab(new String[] { "info.evanchik.eclipse.karaf.server" }),  //$NON-NLS-1$
+                new JavaArgumentsTab(),
+                new OSGiSettingsTab(),
+                new TracingTab(),
+                new KarafConfigurationTab(),
+                new EnvironmentTab(),
+                new CommonTab()
+        };
         setTabs(tabs);
     }
 
@@ -51,7 +59,7 @@ public class KarafLauncherTabGroup extends AbstractLaunchConfigurationTabGroup {
      *            the working copy of the launch configuration
      */
     @Override
-    public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
+    public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
         super.setDefaults(configuration);
     }
 }

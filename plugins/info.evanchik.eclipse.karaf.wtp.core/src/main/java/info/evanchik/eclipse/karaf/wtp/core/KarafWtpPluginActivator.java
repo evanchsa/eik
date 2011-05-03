@@ -26,10 +26,21 @@ public class KarafWtpPluginActivator extends Plugin {
     /**
      * The list of runtime type identifiers that this plugin defines
      */
-    public static final String[] RUNTIME_TYPE_IDS = new String[] { "info.evanchik.eclipse.server.karaf.runtime.12" };
+    public static final String[] RUNTIME_TYPE_IDS = new String[] {
+        "info.evanchik.eclipse.karaf.wtp.server.runtime.2"
+    };
 
     // The shared instance
     private static KarafWtpPluginActivator plugin;
+
+    /**
+     * Returns the shared instance
+     *
+     * @return the shared instance
+     */
+    public static KarafWtpPluginActivator getDefault() {
+        return plugin;
+    }
 
     /**
      * Getter for the {@link LogWrapper} object that makes logging much easier
@@ -47,37 +58,16 @@ public class KarafWtpPluginActivator extends Plugin {
     public KarafWtpPluginActivator() {
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
-     */
     @Override
     public void start(final BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
-     */
     @Override
     public void stop(final BundleContext context) throws Exception {
         plugin = null;
         super.stop(context);
-    }
-
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static KarafWtpPluginActivator getDefault() {
-        return plugin;
     }
 
 }

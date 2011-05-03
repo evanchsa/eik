@@ -8,10 +8,11 @@
  * Contributors:
  *  Stephen Evanchik - initial implementation
  */
-package info.evanchik.eclipse.karaf.wtp.core;
+package info.evanchik.eclipse.karaf.wtp.core.runtime;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
+import info.evanchik.eclipse.karaf.wtp.core.KarafWtpPluginActivator;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;

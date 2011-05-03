@@ -4,13 +4,13 @@
    <extension
          point="org.eclipse.wst.server.core.runtimeTypes">
       <runtimeType
-            class="info.evanchik.eclipse.karaf.wtp.core.KarafRuntime"
-            description="Apache Felix Karaf v1.2 OSGi Application framework"
-            id="info.evanchik.eclipse.server.karaf.runtime.12"
-            name="Apache Felix Karaf v1.2"
+            class="info.evanchik.eclipse.karaf.wtp.core.runtime.KarafRuntime"
+            description="Apache Karaf OSGi Application framework"
+            id="info.evanchik.eclipse.karaf.wtp.server.runtime.2"
+            name="Apache Karaf"
             vendor="Apache"
             vendorId="apache"
-            version="1.2.0">
+            version="2.x">
          <moduleType
                types="jst.web"
                versions="2.2, 2.3, 2.4, 2.5">
@@ -24,6 +24,78 @@
                versions="1.0">
          </moduleType>
       </runtimeType>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.core.runtimeLocators">
+      <runtimeLocator
+            class="info.evanchik.eclipse.karaf.wtp.core.runtime.KarafRuntimeLocator"
+            id="info.evanchik.eclipse.karaf.wtp.core.runtimeLocator"
+            typeIds="info.evanchik.eclipse.karaf.wtp.server.runtime.*">
+      </runtimeLocator>
+   </extension>
+   <extension
+         point="org.eclipse.jst.server.core.runtimeClasspathProviders">
+      <runtimeClasspathProvider
+            class="info.evanchik.eclipse.karaf.wtp.core.runtime.KarafRuntimeClasspathProvider"
+            id="info.evanchik.eclipse.karaf.wtp.server.runtimeTarget"
+            runtimeTypeIds="info.evanchik.eclipse.karaf.wtp.server.runtime.*">
+      </runtimeClasspathProvider>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.core.serverTypes">
+      <serverType
+            behaviourClass="info.evanchik.eclipse.karaf.wtp.core.server.KarafServerBehavior"
+            class="info.evanchik.eclipse.karaf.wtp.core.server.KarafServer"
+            description="Apache Karaf server"
+            hasConfiguration="true"
+            id="info.evanchik.eclipse.karaf.server.2"
+            initialState="stopped"
+            launchConfigId="info.evanchik.eclipse.karaf.wtp.core.KarafServerLauncher"
+            name="Apache Karaf"
+            runtime="true"
+            runtimeTypeId="info.evanchik.eclipse.karaf.wtp.server.runtime.2"
+            startTimeout="45000"
+            stopTimeout="15000"
+            supportsRemoteHosts="false">
+      </serverType>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.core.serverLocators">
+      <serverLocator
+            class="info.evanchik.eclipse.karaf.wtp.core.server.KarafServerLocator"
+            id="info.evanchik.eclipse.karaf.wtp.core.server.locator"
+            supportsRemoteHosts="false"
+            typeIds="info.evanchik.eclipse.karaf.server.*">
+      </serverLocator>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.core.launchableAdapters">
+      <launchableAdapter
+            class="info.evanchik.eclipse.karaf.wtp.core.server.KarafLaunchableAdapterDelegate"
+            id="info.evanchik.eclipse.server.karaf.web">
+      </launchableAdapter>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="info.evanchik.eclipse.karaf.wtp.core.KarafServerLaunchConfiguration"
+            delegateDescription="The Karaf Server Launcher supports running and debugging Karaf Servers"
+            delegateName="Karaf Server Launcher"
+            id="info.evanchik.eclipse.karaf.wtp.core.KarafServerLauncher"
+            modes="run, debug, profile"
+            name="Apache Felix Karaf"
+            public="true"
+            sourceLocatorId="org.eclipse.pde.ui.launcher.PDESourceLookupDirector"
+            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.core.publishTasks">
+      <publishTask
+            class="info.evanchik.eclipse.karaf.wtp.core.tasks.KarafPublishTask"
+            id="info.evanchik.eclipse.karaf.ui.publishTask"
+            typeIds="info.evanchik.eclipse.server.karaf.*">
+      </publishTask>
    </extension>
    <extension
          point="org.eclipse.wst.common.project.facet.core.runtimes">
@@ -65,47 +137,6 @@
       </supported>
    </extension>
    <extension
-         point="org.eclipse.wst.server.core.launchableAdapters">
-      <launchableAdapter
-            class="info.evanchik.eclipse.karaf.wtp.core.KarafLaunchableAdapterDelegate"
-            id="info.evanchik.eclipse.server.karaf.web">
-      </launchableAdapter>
-   </extension>
-   <extension
-         point="org.eclipse.wst.server.core.publishTasks">
-      <publishTask
-            class="info.evanchik.eclipse.karaf.wtp.core.tasks.KarafPublishTask"
-            id="info.evanchik.eclipse.karaf.ui.publishTask"
-            typeIds="info.evanchik.eclipse.server.karaf.*">
-      </publishTask>
-   </extension>
-   <extension
-         point="org.eclipse.wst.server.core.serverTypes">
-      <serverType
-            behaviourClass="info.evanchik.eclipse.karaf.wtp.core.KarafServerBehavior"
-            class="info.evanchik.eclipse.karaf.wtp.core.KarafServer"
-            description="Apache Felix Karaf v1.2 server"
-            hasConfiguration="true"
-            id="info.evanchik.eclipse.server.karaf.12"
-            initialState="stopped"
-            launchConfigId="info.evanchik.eclipse.karaf.wtp.core.KarafServerLauncher"
-            name="Apache Felix Karaf v1.2"
-            runtime="true"
-            runtimeTypeId="info.evanchik.eclipse.server.karaf.runtime.12"
-            startTimeout="45000"
-            stopTimeout="15000"
-            supportsRemoteHosts="false">
-      </serverType>
-   </extension>
-   <extension
-         point="org.eclipse.jst.server.core.runtimeClasspathProviders">
-      <runtimeClasspathProvider
-            class="info.evanchik.eclipse.karaf.wtp.core.KarafRuntimeClasspathProvider"
-            id="info.evanchik.eclipse.server.karaf.runtimeTarget"
-            runtimeTypeIds="info.evanchik.eclipse.server.karaf.runtime.*">
-      </runtimeClasspathProvider>
-   </extension>
-   <extension
          point="org.eclipse.jst.server.core.runtimeFacetMappings">
       <runtimeFacetMapping
             runtime-component="info.evanchik.eclipse.server.karaf"
@@ -114,76 +145,12 @@
       </runtimeFacetMapping>
    </extension>
    <extension
-         point="org.eclipse.debug.core.launchConfigurationTypes">
-      <launchConfigurationType
-            delegate="info.evanchik.eclipse.karaf.wtp.core.KarafServerLaunchConfiguration"
-            delegateDescription="The Karaf Server Launcher supports running and debugging Karaf Servers"
-            delegateName="Karaf Server Launcher"
-            id="info.evanchik.eclipse.karaf.wtp.core.KarafServerLauncher"
-            modes="run, debug, profile"
-            name="Apache Felix Karaf"
-            public="true"
-            sourceLocatorId="org.eclipse.pde.ui.launcher.PDESourceLookupDirector"
-            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
-      </launchConfigurationType>
-   </extension>
-   <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
             configTypeID="info.evanchik.eclipse.karaf.wtp.core.KarafServerLauncher"
             icon="icons/obj16/felixLogo16x16.gif"
             id="info.evanchik.eclipse.karaf.wtp.core.KarafLauncherImage">
       </launchConfigurationTypeImage>
-   </extension>
-   <extension
-         point="org.eclipse.wst.server.core.runtimeLocators">
-      <runtimeLocator
-            class="info.evanchik.eclipse.karaf.wtp.core.KarafRuntimeLocator"
-            id="info.evanchik.eclipse.karaf.wtp.core.runtime.locator"
-            typeIds="info.evanchik.eclipse.server.karaf.runtime.*">
-      </runtimeLocator>
-   </extension>
-   <extension
-         point="org.eclipse.wst.common.project.facet.core.facets">
-      <project-facet
-            id="info.evanchik.eclipse.karaf.wtp.core.facets.bundle">
-         <description>
-            Supports deploying an OSGi Bundle on a Apache Felix Karaf server
-         </description>
-         <label>
-            OSGi Bundle
-         </label>
-         <member
-               category="info.evanchik.eclipse.karaf.wtp.core.category">
-         </member>
-      </project-facet>
-      <category
-            id="info.evanchik.eclipse.karaf.wtp.core.category">
-         <description>
-            Projects that can be deployed to an Apache Felix Karaf Server
-         </description>
-         <label>
-            Apache Felix Karaf
-         </label>
-      </category>
-      <project-facet-version
-            facet="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
-            version="1.0">
-      </project-facet-version>
-      <action
-            facet="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
-            type="install">
-         <delegate
-               class="info.evanchik.eclipse.karaf.wtp.core.internal.BundleFacetInstallDelegate">
-         </delegate>
-      </action>
-      <action
-            facet="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
-            type="uninstall">
-         <delegate
-               class="info.evanchik.eclipse.karaf.wtp.core.internal.BundleFacetUninstallDelegate">
-         </delegate>
-      </action>
    </extension>
 
 </plugin>

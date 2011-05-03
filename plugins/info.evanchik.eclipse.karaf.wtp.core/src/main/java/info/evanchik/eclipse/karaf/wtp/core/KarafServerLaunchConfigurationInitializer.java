@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.wtp.core;
 
+import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
-import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationInitializer;
 
 import org.eclipse.core.runtime.CoreException;
@@ -29,20 +29,19 @@ public class KarafServerLaunchConfigurationInitializer extends KarafLaunchConfig
     private IServer server;
 
     @Override
-    protected void loadKarafPlatform(ILaunchConfigurationWorkingCopy configuration) {
+    protected void loadKarafPlatform(final ILaunchConfigurationWorkingCopy configuration) {
         try {
             server = ServerUtil.getServer(configuration);
-        } catch (CoreException e) {
-            // TODO: Log this?
+
+            if (server == null) {
+                return;
+            }
+
+            this.karafPlatform = KarafPlatformModelRegistry.findPlatformModel(server.getRuntime().getLocation());
+
+            this.startupSection = (StartupSection)Platform.getAdapterManager().getAdapter(this.karafPlatform, StartupSection.class);
+            this.startupSection.load();
+        } catch (final CoreException e) {
         }
-
-        if (server == null) {
-            return;
-        }
-
-        this.karafPlatform = new GenericKarafPlatformModel(server.getRuntime().getLocation());
-
-        this.startupSection = (StartupSection)Platform.getAdapterManager().getAdapter(this.karafPlatform, StartupSection.class);
-        this.startupSection.load();
     }
 }

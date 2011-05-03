@@ -8,7 +8,7 @@
  * Contributors:
  *  Stephen Evanchik - initial implementation
  */
-package info.evanchik.eclipse.karaf.wtp.core;
+package info.evanchik.eclipse.karaf.wtp.core.server;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -22,19 +22,6 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
  *
  */
 public class KarafServer extends ServerDelegate {
-
-    /**
-     * Determines if the given {@link IModule} is supported in this Karaf server
-     * instance
-     *
-     * @param module
-     *            the {@code IModule} to test
-     * @return true if the module type is supported, false otherwise
-     */
-    public static boolean isSupportedModuleType(IModule module) {
-        final String type = module.getModuleType().getId();
-        return true;
-    }
 
     public KarafServer() {
         super();
@@ -53,7 +40,7 @@ public class KarafServer extends ServerDelegate {
      *         are successful, {@link IStatus.ERROR} otherwise
      */
     @Override
-    public IStatus canModifyModules(IModule[] add, IModule[] remove) {
+    public IStatus canModifyModules(final IModule[] add, final IModule[] remove) {
         if (add != null) {
 
         }
@@ -66,12 +53,12 @@ public class KarafServer extends ServerDelegate {
     }
 
     @Override
-    public IModule[] getChildModules(IModule[] module) {
+    public IModule[] getChildModules(final IModule[] module) {
         return null;
     }
 
     @Override
-    public IModule[] getRootModules(IModule module) throws CoreException {
+    public IModule[] getRootModules(final IModule module) throws CoreException {
         return new IModule[] { module };
     }
 
@@ -80,7 +67,7 @@ public class KarafServer extends ServerDelegate {
      * modules.
      */
     @Override
-    public void modifyModules(IModule[] add, IModule[] remove, IProgressMonitor monitor) throws CoreException {
+    public void modifyModules(final IModule[] add, final IModule[] remove, final IProgressMonitor monitor) throws CoreException {
         final IStatus status = canModifyModules(add, remove);
         if (status == null || !status.isOK()) {
             throw new CoreException(status);
@@ -99,5 +86,4 @@ public class KarafServer extends ServerDelegate {
     public String toString() {
         return "KarafServer"; //$NON-NLS-1$
     }
-
 }

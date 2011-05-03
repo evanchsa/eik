@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.wtp.core.tasks;
 
-import info.evanchik.eclipse.karaf.wtp.core.KarafServerBehavior;
+import info.evanchik.eclipse.karaf.wtp.core.server.KarafServerBehavior;
 
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.model.PublishOperation;

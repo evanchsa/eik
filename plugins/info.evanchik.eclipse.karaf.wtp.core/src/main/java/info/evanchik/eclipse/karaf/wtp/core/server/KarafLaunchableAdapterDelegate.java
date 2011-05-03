@@ -8,21 +8,23 @@
  * Contributors:
  *  Stephen Evanchik - initial implementation
  */
-package info.evanchik.eclipse.karaf.wtp.core.internal;
+package info.evanchik.eclipse.karaf.wtp.core.server;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.wst.common.project.facet.core.IDelegate;
-import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.eclipse.wst.server.core.IModuleArtifact;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.model.LaunchableAdapterDelegate;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class BundleFacetUninstallDelegate implements IDelegate {
+public class KarafLaunchableAdapterDelegate extends LaunchableAdapterDelegate {
 
-    public void execute(IProject arg0, IProjectFacetVersion arg1, Object arg2, IProgressMonitor arg3) throws CoreException {
+    @Override
+    public Object getLaunchable(IServer server, IModuleArtifact moduleArtifact)
+                    throws CoreException {
+        return null;
     }
 
 }

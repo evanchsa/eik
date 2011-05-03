@@ -8,7 +8,9 @@
  * Contributors:
  *  Stephen Evanchik - initial implementation
  */
-package info.evanchik.eclipse.karaf.wtp.core;
+package info.evanchik.eclipse.karaf.wtp.core.runtime;
+
+import info.evanchik.eclipse.karaf.wtp.core.KarafWtpPluginActivator;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -34,8 +36,8 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
     public static int MAX_DEPTH = 4;
 
     @Override
-    public void searchForRuntimes(IPath path, IRuntimeSearchListener listener,
-            IProgressMonitor monitor) {
+    public void searchForRuntimes(final IPath path, final IRuntimeSearchListener listener,
+            final IProgressMonitor monitor) {
 
         final File[] files;
         if (path == null) {
@@ -49,7 +51,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
 
         final int workUnit = 100 / files.length;
 
-        for (File f : files) {
+        for (final File f : files) {
             if (monitor.isCanceled()) {
                 return;
             }
@@ -60,11 +62,11 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
             }
         }
 
-        monitor.worked(100 - (workUnit * files.length));
+        monitor.worked(100 - workUnit * files.length);
     }
 
     /**
-     * Searchs the given directory and all directories recursively to the given
+     * Searches the given directory and all directories recursively to the given
      * depth for Karaf server runtimes.
      *
      * @param directory
@@ -77,8 +79,8 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
      * @param monitor
      *            the progress monitor
      */
-    protected static void searchDirectory(File directory, int depth,
-            IRuntimeSearchListener listener, IProgressMonitor monitor) {
+    private void searchDirectory(final File directory, final int depth,
+            final IRuntimeSearchListener listener, final IProgressMonitor monitor) {
 
         final IRuntimeWorkingCopy runtime = resolveDirectoryToRuntime(directory, monitor);
 
@@ -91,7 +93,8 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
         }
 
         final File[] files = directory.listFiles(new FileFilter() {
-            public boolean accept(File file) {
+            @Override
+            public boolean accept(final File file) {
                 return file.isDirectory();
             }
         });
@@ -100,7 +103,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
             return;
         }
 
-        for (File f : files) {
+        for (final File f : files) {
             if (monitor.isCanceled()) {
                 return;
             }
@@ -121,9 +124,9 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
      * @return a valid {@link IRuntimeWorkingCopy} if a runtime has been found,
      *         or null if it has not been found
      */
-    protected static IRuntimeWorkingCopy resolveDirectoryToRuntime(File directory,
-            IProgressMonitor monitor) {
-        for (String runtimeId : KarafWtpPluginActivator.RUNTIME_TYPE_IDS) {
+    private IRuntimeWorkingCopy resolveDirectoryToRuntime(final File directory,
+            final IProgressMonitor monitor) {
+        for (final String runtimeId : KarafWtpPluginActivator.RUNTIME_TYPE_IDS) {
             try {
                 final IRuntimeType runtimeType = ServerCore.findRuntimeType(runtimeId);
 
@@ -140,7 +143,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
                 }
 
                 // TODO: Log something?
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 // TODO : Logging
             }
         }

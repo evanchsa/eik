@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.apache.commons.collections.ListUtils;
 import org.eclipse.core.runtime.CoreException;
@@ -61,7 +59,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.PlatformUI;
@@ -312,6 +312,8 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
     private Composite control;
 
+    private Button enableFeaturesManagement;
+
     private final FeaturesResolverJob featuresResolverJob = new FeaturesResolverJob();
 
     private FeaturesSection featuresSection;
@@ -324,7 +326,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
     private Button remoteConsole;
 
-    private final SortedSet<String> selectedFeatures = Collections.synchronizedSortedSet(new TreeSet<String>());
+    private final List<String> selectedFeatures = Collections.synchronizedList(new ArrayList<String>());
 
     @Override
     public void createControl(final Composite parent) {
@@ -366,6 +368,8 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
                     configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, true));
             remoteConsole.setSelection(
                     configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE, false));
+            enableFeaturesManagement.setSelection(
+                    configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_FEATURES_MANAGEMENT, true));
 
             initializeKarafPlatformModel();
 
@@ -424,6 +428,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
     public void performApply(final ILaunchConfigurationWorkingCopy configuration) {
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, localConsole.getSelection());
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE, remoteConsole.getSelection());
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_FEATURES_MANAGEMENT, enableFeaturesManagement.getSelection());
         final String featuresString = KarafCorePluginUtils.join(selectedFeatures, ",");
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, featuresString);
     }
@@ -432,6 +437,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
     public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, true);
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE, false);
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_FEATURES_MANAGEMENT, true);
 
         try {
             initializeKarafPlatformModel();
@@ -440,7 +446,6 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
         }
 
         final List<String> featuresList = featuresSection.getBootFeatureNames();
-        Collections.sort(featuresList);
 
         final String features = KarafCorePluginUtils.join(featuresList, ",");
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, features);
@@ -513,6 +518,20 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
         group.setText("Features");
 
+        enableFeaturesManagement = new Button(group, SWT.CHECK);
+        enableFeaturesManagement.setText("Enable Karaf Features management");
+        enableFeaturesManagement.addListener(SWT.Selection, new Listener() {
+
+            @Override
+            public void handleEvent(final Event event) {
+                if (event.widget == enableFeaturesManagement) {
+                    final boolean enabledState = installedFeatures.getControl().getEnabled();
+                    installedFeatures.getControl().setEnabled(!enabledState);
+                    KarafConfigurationTab.this.updateLaunchConfigurationDialog();
+                }
+            }
+        });
+
         installedFeatures = new ContainerCheckedTreeViewer(group, SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
         final Tree tree = installedFeatures.getTree();
 
@@ -540,11 +559,17 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
                 for (final Object e : elements) {
                     if (e instanceof Feature && ((Feature)e).getParent() instanceof Features) {
-                        selectedFeatures.add(((Feature)e).getName());
+                        final Feature f = (Feature) e;
+                        if (!selectedFeatures.contains(f.getName())) {
+                            selectedFeatures.add(f.getName());
+                        }
                     } else if (e instanceof Bundle) {
                         final Bundle b = (Bundle) e;
                         if (b.getParent() instanceof Feature) {
-                            selectedFeatures.add(((Feature)b.getParent()).getName());
+                            final Feature f = (Feature) b.getParent();
+                            if (!selectedFeatures.contains(f)) {
+                                selectedFeatures.add(f.getName());
+                            }
                         } else {
                             // Intentionally empty
                         }

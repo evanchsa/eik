@@ -30,6 +30,12 @@ public final class KarafLaunchConfigurationConstants {
     public static final String KARAF_LAUNCH_CONFIGURATION_PROJECT = "karaf_configuration_project"; //$NON-NLS-1$
 
     /**
+     * Determines whether or not the Karaf Features system is managed by the
+     * Eclipse launch configuration
+     */
+    public static final String KARAF_LAUNCH_FEATURES_MANAGEMENT = "karaf_features_management"; //$NON-NLS-1$
+
+    /**
      * PDE Launcher constant used for recording classpath entries used as part
      * of the boot classpath for Karaf
      */

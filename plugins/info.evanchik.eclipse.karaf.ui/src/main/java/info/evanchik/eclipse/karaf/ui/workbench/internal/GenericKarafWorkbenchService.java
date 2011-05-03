@@ -209,6 +209,10 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
     private void configureKarafFeatures(
             final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) throws CoreException {
 
+        if (!configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_FEATURES_MANAGEMENT, true)) {
+            return;
+        }
+
         final FeaturesSection featuresSection =
             (FeaturesSection) Platform.getAdapterManager().getAdapter(
                     platformModel.getParentKarafModel(),

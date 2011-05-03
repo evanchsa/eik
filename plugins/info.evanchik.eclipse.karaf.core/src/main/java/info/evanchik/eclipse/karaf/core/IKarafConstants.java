@@ -26,7 +26,7 @@ public interface IKarafConstants {
 
     public static final String KARAF_DATA_PROP = "karaf.data"; //$NON-NLS-1$
 
-    public static final String KARAF_DEFAULT_BUNDLE_START_LEVEL = "100"; //$NON-NLS-1$
+    public static final String KARAF_DEFAULT_BUNDLE_START_LEVEL = "60"; //$NON-NLS-1$
 
     public static final String KARAF_DEFAULT_CONFIG_PROPERTIES_FILE = "config.properties"; //$NON-NLS-1$
 

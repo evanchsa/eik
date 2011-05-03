@@ -42,7 +42,11 @@ public class BundleEntry {
          * @param bundle
          *            the string location of the bundle
          */
-        public Builder(String bundle) {
+        public Builder(final String bundle) {
+            if (bundle == null) {
+                throw new NullPointerException("bundle");
+            }
+
             this.bundle = bundle;
             this.bundleUrl = null;
         }
@@ -53,17 +57,29 @@ public class BundleEntry {
          * @param u
          *            the URL to the bundle
          */
-        public Builder(URL u) {
+        public Builder(final URL u) {
+            if (u == null) {
+                throw new NullPointerException("u");
+            }
+
             this.bundleUrl = u;
             this.bundle = null;
         }
 
-        public Builder startLevel(String startLevel) {
+        public Builder startLevel(final String startLevel) {
+            if (startLevel == null) {
+                throw new NullPointerException("startLevel");
+            }
+
             this.startLevel = startLevel;
             return this;
         }
 
-        public Builder autostart(String autostart) {
+        public Builder autostart(final String autostart) {
+            if (autostart == null) {
+                throw new NullPointerException("autostart");
+            }
+
             this.autostart = autostart;
             return this;
         }
@@ -97,7 +113,11 @@ public class BundleEntry {
      *            the candidate string
      * @return an instance of {@code EquinoxBundleEntry}
      */
-    public static BundleEntry fromString(String s) {
+    public static BundleEntry fromString(final String s) {
+        if (s == null) {
+            throw new NullPointerException("s");
+        }
+
         String candidateBundle;
         String startComponent;
 
@@ -113,7 +133,7 @@ public class BundleEntry {
         URL u = null;
         try {
             u = new URL(candidateBundle);
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             // Do nothing as this is acceptable for a simple bundle
         }
 
@@ -153,7 +173,7 @@ public class BundleEntry {
          * @param bundleUrl
          *            the bundle in URL form
          */
-        public UrlBundleEntry(URL bundleUrl) {
+        public UrlBundleEntry(final URL bundleUrl) {
             super(bundleUrl.toExternalForm());
         }
     };
@@ -171,12 +191,12 @@ public class BundleEntry {
      * @param bundle
      *            the location of the bundle
      */
-    private BundleEntry(String bundle) {
+    private BundleEntry(final String bundle) {
         this.bundle = bundle;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj instanceof BundleEntry == false) {
             return false;
         }

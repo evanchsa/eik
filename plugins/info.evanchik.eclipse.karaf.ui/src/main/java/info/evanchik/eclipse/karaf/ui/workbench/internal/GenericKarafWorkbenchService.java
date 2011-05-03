@@ -252,7 +252,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
         final ManagementSection managementSection =
             (ManagementSection) Platform.getAdapterManager().getAdapter(
-                    platformModel,
+                    platformModel.getParentKarafModel(),
                     ManagementSection.class
         );
 

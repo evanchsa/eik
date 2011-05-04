@@ -47,7 +47,7 @@ import org.eclipse.jdt.launching.SocketUtil;
 public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
     @Override
-    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel) {
+    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
         if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
             return Collections.emptyList();
         }
@@ -87,14 +87,13 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
     }
 
     @Override
-    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel) {
+    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
         if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
             return Collections.emptyMap();
         }
 
         final Map<String, String> equinoxProperties = new HashMap<String, String>();
 
-        // TODO: Need to interpolate the config.properties file
         final Properties currentConfig;
         try {
             currentConfig =
@@ -103,14 +102,14 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
                     IKarafConstants.KARAF_DEFAULT_CONFIG_PROPERTIES_FILE,
                     true);
 
-            /*
-             * Populate the config.ini with all of the typical Karaf properties that
-             * are not found in the System properties
-             */
+            final Properties systemProperties = createLaunchSystemProperties(platformModel, configuration);
+            currentConfig.putAll(systemProperties);
+
+            PropertyUtils.interpolateVariables(currentConfig, currentConfig);
+
             for (final Map.Entry<Object, Object> e : currentConfig.entrySet()) {
                 equinoxProperties.put((String)e.getKey(), (String)e.getValue());
             }
-
         } catch(final CoreException e) {
             KarafUIPluginActivator.getLogger().error("Unable to load configuration file: " + platformModel.getConfigurationDirectory(), e);
         }
@@ -137,47 +136,14 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
     @Override
     public List<String> getVMArguments(
             final KarafWorkingPlatformModel platformModel,
-            final ILaunchConfiguration configuration) throws CoreException
+            final ILaunchConfiguration configuration)
+        throws CoreException
     {
         if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
             return Collections.emptyList();
         }
 
-        final Properties systemProperties = loadSystemProperties(platformModel);
-
-        systemProperties.put(
-            IKarafConstants.KARAF_HOME_PROP,
-            platformModel.getParentKarafModel().getRootDirectory().toString());
-
-        systemProperties.put(
-            "java.util.logging.config.file", //$NON-NLS-1$
-            platformModel.getParentKarafModel().getConfigurationDirectory().append("java.util.logging.properties").toString()); //$NON-NLS-1$
-
-        systemProperties.put(
-            IKarafConstants.KARAF_DATA_PROP,
-            platformModel.getParentKarafModel().getRootDirectory().append("data").toString()); //$NON-NLS-1$
-
-        systemProperties.put(
-            IKarafConstants.KARAF_INSTANCES_PROP,
-            platformModel.getRootDirectory().append("instances").toString()); //$NON-NLS-1$
-
-        final Boolean startLocalConsole =
-            configuration.getAttribute(
-                    KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE,
-                    true);
-        systemProperties.put(
-            "karaf.startLocalConsole", //$NON-NLS-1$
-            startLocalConsole.toString());
-
-        final Boolean startRemoteConsole =
-            configuration.getAttribute(
-                    KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE,
-                    false);
-        systemProperties.put(
-            "karaf.startRemoteShell", //$NON-NLS-1$
-            startRemoteConsole.toString());
-
-        PropertyUtils.interpolateVariables(systemProperties, systemProperties);
+        final Properties systemProperties = createLaunchSystemProperties(platformModel, configuration);
 
         final List<String> arguments = new ArrayList<String>();
         for (final Map.Entry<Object, Object> e : systemProperties.entrySet()) {
@@ -275,6 +241,53 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
         featuresSection.setBootFeatureNames(features);
         featuresSection.save();
+    }
+
+    /**
+     * @param platformModel
+     * @param configuration
+     * @return
+     * @throws CoreException
+     */
+    private Properties createLaunchSystemProperties(
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration) throws CoreException {
+        final Properties systemProperties = loadSystemProperties(platformModel);
+
+        systemProperties.put(
+            IKarafConstants.KARAF_HOME_PROP,
+            platformModel.getParentKarafModel().getRootDirectory().toString());
+
+        systemProperties.put(
+            "java.util.logging.config.file", //$NON-NLS-1$
+            platformModel.getParentKarafModel().getConfigurationDirectory().append("java.util.logging.properties").toString()); //$NON-NLS-1$
+
+        systemProperties.put(
+            IKarafConstants.KARAF_DATA_PROP,
+            platformModel.getParentKarafModel().getRootDirectory().append("data").toString()); //$NON-NLS-1$
+
+        systemProperties.put(
+            IKarafConstants.KARAF_INSTANCES_PROP,
+            platformModel.getRootDirectory().append("instances").toString()); //$NON-NLS-1$
+
+        final Boolean startLocalConsole =
+            configuration.getAttribute(
+                    KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE,
+                    true);
+        systemProperties.put(
+            "karaf.startLocalConsole", //$NON-NLS-1$
+            startLocalConsole.toString());
+
+        final Boolean startRemoteConsole =
+            configuration.getAttribute(
+                    KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE,
+                    false);
+        systemProperties.put(
+            "karaf.startRemoteShell", //$NON-NLS-1$
+            startRemoteConsole.toString());
+
+        PropertyUtils.interpolateVariables(systemProperties, systemProperties);
+        return systemProperties;
     }
 
     /**

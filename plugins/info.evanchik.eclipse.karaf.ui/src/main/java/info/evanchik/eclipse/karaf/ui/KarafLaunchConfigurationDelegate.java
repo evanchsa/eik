@@ -341,7 +341,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
         for (final KarafWorkbenchServiceFactory f : list) {
             final Map<String, String> m =
-                f.getWorkbenchService().getAdditionalEquinoxConfiguration(workingKarafPlatform);
+                f.getWorkbenchService().getAdditionalEquinoxConfiguration(workingKarafPlatform, configuration);
 
             equinoxProperties.putAll(m);
         }
@@ -349,7 +349,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         final String currentBundles =
             (String) equinoxProperties.get(OSGI_BUNDLES_KEY);
 
-        final String allBundles = mergeDeployedBundles(currentBundles);
+        final String allBundles = mergeDeployedBundles(currentBundles, configuration);
 
         equinoxProperties.put(OSGI_BUNDLES_KEY, allBundles);
 
@@ -423,9 +423,10 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     /**
      *
      * @param currentBundles
+     * @param configuration
      * @return
      */
-    private String mergeDeployedBundles(final String currentBundles) throws CoreException {
+    private String mergeDeployedBundles(final String currentBundles, final ILaunchConfiguration configuration) throws CoreException {
 
         /*
          * Create a Map of all the bundles that we are going to deploy in this
@@ -443,7 +444,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
         for (final KarafWorkbenchServiceFactory f : list) {
             final List<BundleEntry> extBundles =
-                f.getWorkbenchService().getAdditionalBundles(workingKarafPlatform);
+                f.getWorkbenchService().getAdditionalBundles(workingKarafPlatform, configuration);
 
             for(final BundleEntry b : extBundles) {
                 if(!deployedBundles.containsKey(b.getBundle())) {

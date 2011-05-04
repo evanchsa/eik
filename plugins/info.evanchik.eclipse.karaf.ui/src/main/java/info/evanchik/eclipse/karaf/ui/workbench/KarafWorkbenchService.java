@@ -30,19 +30,22 @@ public interface KarafWorkbenchService {
 
     /**
      *
+     * @param platformModel
+     * @param configuration
      * @return
      */
-    public List<BundleEntry> getAdditionalBundles(KarafWorkingPlatformModel platformModel);
+    public List<BundleEntry> getAdditionalBundles(KarafWorkingPlatformModel platformModel, ILaunchConfiguration configuration);
 
     /**
      * Gets the {@link Map<String, String>} of additional Equinox configuration
      * properties
      *
      * @param platformModel
+     * @param configuration
      * @return the {@code Map<String, String>} of additional Equinox
      *         configuration
      */
-    public Map<String, String> getAdditionalEquinoxConfiguration(KarafWorkingPlatformModel platformModel);
+    public Map<String, String> getAdditionalEquinoxConfiguration(KarafWorkingPlatformModel platformModel, ILaunchConfiguration configuration);
 
     /**
      *

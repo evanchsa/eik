@@ -48,7 +48,7 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
         Collections.synchronizedMap(new HashMap<String, JMXServiceDescriptor>());
 
     @Override
-    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel) {
+    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
         final String[] jmxBundles = {
                 KarafJMXPlugin.PLUGIN_ID,
                 "org.eclipse.core.contenttype", //$NON-NLS-1$
@@ -83,7 +83,7 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
     }
 
     @Override
-    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel) {
+    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
         return Collections.emptyMap();
     }
 

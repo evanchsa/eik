@@ -71,12 +71,12 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
         Collections.synchronizedMap(new HashMap<String, ServiceRegistration>());
 
     @Override
-    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel) {
+    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
         return Collections.emptyList();
     }
 
     @Override
-    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel) {
+    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
         return Collections.emptyMap();
     }
 

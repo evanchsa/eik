@@ -36,7 +36,7 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
 
     @Override
-    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel) {
+    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
         if (!(platformModel.getParentKarafModel() instanceof ServiceMixKernelPlatformModel)) {
             return Collections.emptyList();
         }
@@ -70,7 +70,7 @@ public class ServiceMixKernelWorkbenchService implements KarafWorkbenchService {
     }
 
     @Override
-    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel) {
+    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
         if (!(platformModel.getParentKarafModel() instanceof ServiceMixKernelPlatformModel)) {
             return Collections.emptyMap();
         }

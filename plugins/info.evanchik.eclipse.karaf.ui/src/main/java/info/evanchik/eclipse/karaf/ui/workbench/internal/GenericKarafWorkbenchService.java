@@ -13,6 +13,7 @@ package info.evanchik.eclipse.karaf.ui.workbench.internal;
 import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
+import info.evanchik.eclipse.karaf.core.PropertyUtils;
 import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
@@ -142,50 +143,49 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
             return Collections.emptyList();
         }
 
-        final List<String> arguments = new ArrayList<String>();
+        final Properties systemProperties = loadSystemProperties(platformModel);
 
-        arguments.add(
-            KarafCorePluginUtils.constructSystemProperty(
-                IKarafConstants.KARAF_BASE_PROP,
-                platformModel.getParentKarafModel().getRootDirectory().toString()));
+        systemProperties.put(
+            IKarafConstants.KARAF_HOME_PROP,
+            platformModel.getParentKarafModel().getRootDirectory().toString());
 
-        arguments.add(
-                KarafCorePluginUtils.constructSystemProperty(
-                        IKarafConstants.KARAF_HOME_PROP,
-                        platformModel.getParentKarafModel().getRootDirectory().toString()));
+        systemProperties.put(
+            "java.util.logging.config.file", //$NON-NLS-1$
+            platformModel.getParentKarafModel().getConfigurationDirectory().append("java.util.logging.properties").toString()); //$NON-NLS-1$
 
-        arguments.add(
-                KarafCorePluginUtils.constructSystemProperty(
-                        "java.util.logging.config.file", //$NON-NLS-1$
-                        platformModel.getParentKarafModel().getConfigurationDirectory().append("java.util.logging.properties").toString())); //$NON-NLS-1$
+        systemProperties.put(
+            IKarafConstants.KARAF_DATA_PROP,
+            platformModel.getParentKarafModel().getRootDirectory().append("data").toString()); //$NON-NLS-1$
 
-        arguments.add(
-                KarafCorePluginUtils.constructSystemProperty(
-                        IKarafConstants.KARAF_DATA_PROP,
-                        platformModel.getParentKarafModel().getRootDirectory().append("data").toString())); //$NON-NLS-1$
-
-        arguments.add(
-                KarafCorePluginUtils.constructSystemProperty(
-                        IKarafConstants.KARAF_INSTANCES_PROP,
-                        platformModel.getRootDirectory().append("instances").toString())); //$NON-NLS-1$
+        systemProperties.put(
+            IKarafConstants.KARAF_INSTANCES_PROP,
+            platformModel.getRootDirectory().append("instances").toString()); //$NON-NLS-1$
 
         final Boolean startLocalConsole =
             configuration.getAttribute(
                     KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE,
                     true);
-        arguments.add(
-                KarafCorePluginUtils.constructSystemProperty(
-                        "karaf.startLocalConsole", //$NON-NLS-1$
-                        startLocalConsole.toString()));
+        systemProperties.put(
+            "karaf.startLocalConsole", //$NON-NLS-1$
+            startLocalConsole.toString());
 
         final Boolean startRemoteConsole =
             configuration.getAttribute(
                     KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE,
                     false);
-        arguments.add(
-                KarafCorePluginUtils.constructSystemProperty(
-                        "karaf.startRemoteShell", //$NON-NLS-1$
-                        startRemoteConsole.toString()));
+        systemProperties.put(
+            "karaf.startRemoteShell", //$NON-NLS-1$
+            startRemoteConsole.toString());
+
+        PropertyUtils.interpolateVariables(systemProperties, systemProperties);
+
+        final List<String> arguments = new ArrayList<String>();
+        for (final Map.Entry<Object, Object> e : systemProperties.entrySet()) {
+            arguments.add(
+                    KarafCorePluginUtils.constructSystemProperty(
+                            (String) e.getKey(),
+                            (String) e.getValue()));
+        }
 
         return arguments;
     }
@@ -199,6 +199,52 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         configuration.setAttribute(
                 IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY,
                 platformModel.getParentKarafModel().getRootDirectory().toString());
+    }
+
+    @Override
+    public void launch(
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration,
+            final String mode,
+            final ILaunch launch,
+            final IProgressMonitor monitor) throws CoreException
+    {
+        if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
+            return;
+        }
+
+        configureKarafFeatures(platformModel, configuration);
+        configureJMXConnector(platformModel);
+    }
+
+    /**
+     *
+     * @param platformModel
+     * @throws CoreException
+     */
+    private void configureJMXConnector(
+            final KarafWorkingPlatformModel platformModel) throws CoreException {
+        /*
+         * Ensure that the RMI registry port for the JMX connector is unique
+         */
+        final int jmxRegistryPort = SocketUtil.findFreePort();
+
+        if (jmxRegistryPort == -1) {
+            throw new CoreException(new Status(
+                    IStatus.ERROR,
+                    KarafUIPluginActivator.PLUGIN_ID,
+                    "Could not find suitable TCP/IP port for JMX RMI Registry"));
+        }
+
+        final ManagementSection managementSection =
+            (ManagementSection) Platform.getAdapterManager().getAdapter(
+                    platformModel.getParentKarafModel(),
+                    ManagementSection.class
+        );
+
+        managementSection.load();
+        managementSection.setPort(jmxRegistryPort);
+        managementSection.save();
     }
 
     /**
@@ -234,46 +280,22 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
     /**
      *
      * @param platformModel
-     * @throws CoreException
+     * @return
      */
-    private void configureJMXConnector(
-            final KarafWorkingPlatformModel platformModel) throws CoreException {
-        /*
-         * Ensure that the RMI registry port for the JMX connector is unique
-         */
-        final int jmxRegistryPort = SocketUtil.findFreePort();
+    private Properties loadSystemProperties(final KarafWorkingPlatformModel platformModel) {
 
-        if (jmxRegistryPort == -1) {
-            throw new CoreException(new Status(
-                    IStatus.ERROR,
-                    KarafUIPluginActivator.PLUGIN_ID,
-                    "Could not find suitable TCP/IP port for JMX RMI Registry"));
+        try {
+            final Properties properties =
+                KarafCorePluginUtils.loadProperties(
+                    platformModel.getParentKarafModel().getConfigurationDirectory().toFile(),
+                    IKarafConstants.KARAF_DEFAULT_SYSTEM_PROPERTIES_FILE,
+                    true);
+
+            return properties;
+        } catch(final CoreException e) {
+            KarafUIPluginActivator.getLogger().error("Unable to load configuration file: " + platformModel.getConfigurationDirectory(), e);
         }
 
-        final ManagementSection managementSection =
-            (ManagementSection) Platform.getAdapterManager().getAdapter(
-                    platformModel.getParentKarafModel(),
-                    ManagementSection.class
-        );
-
-        managementSection.load();
-        managementSection.setPort(jmxRegistryPort);
-        managementSection.save();
-    }
-
-    @Override
-    public void launch(
-            final KarafWorkingPlatformModel platformModel,
-            final ILaunchConfiguration configuration,
-            final String mode,
-            final ILaunch launch,
-            final IProgressMonitor monitor) throws CoreException
-    {
-        if (!platformModel.getParentKarafModel().getClass().equals(GenericKarafPlatformModel.class)) {
-            return;
-        }
-
-        configureKarafFeatures(platformModel, configuration);
-        configureJMXConnector(platformModel);
+        return new Properties();
     }
 }

@@ -233,7 +233,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         arguments.add(
                 KarafCorePluginUtils.constructSystemProperty(
                         "eik.properties.system", //$NON-NLS-1$
-                        workingKarafPlatform.getConfigurationFile("system.properties").toString())); //$NON-NLS-1$
+                        workingKarafPlatform.getConfigurationFile(IKarafConstants.KARAF_DEFAULT_SYSTEM_PROPERTIES_FILE).toString()));
 
         final List<KarafWorkbenchServiceFactory> list =
             WorkbenchServiceExtensions.getLaunchCustomizerFactories();
@@ -248,7 +248,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     /**
      * {@inheritDoc}<br>
      * <br>
-     * This will call the proper extension points.
+     * This will call the proper EIK extension points.
      */
     @Override
     public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch, final IProgressMonitor monitor)

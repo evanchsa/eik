@@ -10,10 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.core.internal;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.LogWrapper;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
@@ -47,18 +45,14 @@ public class KarafCorePluginActivator extends Plugin {
     }
 
     @Override
-    public void start(BundleContext context) throws Exception {
+    public void start(final BundleContext context) throws Exception {
         super.start(context);
         KarafCorePluginActivator.plugin = this;
-
-        Platform.getAdapterManager().registerAdapters(new KarafConfigurationAdapterFactory(), KarafPlatformModel.class);
     }
 
     @Override
-    public void stop(BundleContext context) throws Exception {
+    public void stop(final BundleContext context) throws Exception {
         super.stop(context);
         KarafCorePluginActivator.plugin = null;
-
-        Platform.getAdapterManager().unregisterAdapters(new KarafConfigurationAdapterFactory(), KarafPlatformModel.class);
     }
 }

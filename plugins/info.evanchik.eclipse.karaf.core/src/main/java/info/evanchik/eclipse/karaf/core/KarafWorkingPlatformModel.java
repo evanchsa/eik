@@ -17,8 +17,10 @@ package info.evanchik.eclipse.karaf.core;
 public interface KarafWorkingPlatformModel extends KarafPlatformModel {
 
     /**
+     * Retrieves the parent {@link KarafPlatformModel} that this working model
+     * represents
      *
-     * @return
+     * @return the parent {@code KarafPlatformModel}
      */
     public KarafPlatformModel getParentKarafModel();
 }

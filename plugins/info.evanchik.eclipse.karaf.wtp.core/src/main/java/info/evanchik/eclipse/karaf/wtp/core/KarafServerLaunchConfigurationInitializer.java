@@ -15,7 +15,6 @@ import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationInitializer;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerUtil;
@@ -39,7 +38,7 @@ public class KarafServerLaunchConfigurationInitializer extends KarafLaunchConfig
 
             this.karafPlatform = KarafPlatformModelRegistry.findPlatformModel(server.getRuntime().getLocation());
 
-            this.startupSection = (StartupSection)Platform.getAdapterManager().getAdapter(this.karafPlatform, StartupSection.class);
+            this.startupSection = (StartupSection) this.karafPlatform.getAdapter(StartupSection.class);
             this.startupSection.load();
         } catch (final CoreException e) {
         }

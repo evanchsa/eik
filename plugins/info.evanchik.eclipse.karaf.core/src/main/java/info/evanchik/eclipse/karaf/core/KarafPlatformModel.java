@@ -12,6 +12,7 @@ package info.evanchik.eclipse.karaf.core;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.osgi.service.resolver.State;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
@@ -20,7 +21,7 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface KarafPlatformModel {
+public interface KarafPlatformModel extends IAdaptable {
 
     /**
      * Determines if a plugin is in the Karaf Target Platform.

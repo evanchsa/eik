@@ -43,25 +43,30 @@ public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel implem
      *            the source of all non-configuration information for this Karaf
      *            platform.
      */
-    public WorkingKarafPlatformModel(IPath thisModelLocation, KarafPlatformModel source) {
+    public WorkingKarafPlatformModel(final IPath thisModelLocation, final KarafPlatformModel source) {
         this.location = thisModelLocation;
         this.parentKarafModel = source;
     }
 
-    public KarafPlatformModel getParentKarafModel() {
-        return parentKarafModel;
-    }
-
     @Override
-    public boolean containsPlugin(IPluginModelBase plugin) {
+    public boolean containsPlugin(final IPluginModelBase plugin) {
         return parentKarafModel.containsPlugin(plugin);
     }
 
+    @Override
+    public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
+        final KarafPlatformModel parentModel = getParentKarafModel();
+        final Object adaptedObject = parentModel.getAdapter(adapter);
+        return adaptedObject;
+    }
+
+    @Override
     public List<String> getBootClasspath() {
         return parentKarafModel.getBootClasspath();
     }
 
-    public IPath getConfigurationFile(String key) {
+    @Override
+    public IPath getConfigurationFile(final String key) {
         final IPath origFile = parentKarafModel.getConfigurationFile(key);
         final int matchingSegments = origFile.matchingFirstSegments(parentKarafModel
                         .getConfigurationDirectory());
@@ -71,10 +76,17 @@ public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel implem
         return location.append(configFile);
     }
 
+    @Override
+    public KarafPlatformModel getParentKarafModel() {
+        return parentKarafModel;
+    }
+
+    @Override
     public IPath getPluginRootDirectory() {
         return parentKarafModel.getPluginRootDirectory();
     }
 
+    @Override
     public IPath getRootDirectory() {
         return location;
     }
@@ -85,7 +97,7 @@ public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel implem
     }
 
     @Override
-    public boolean isFrameworkPlugin(IPluginModelBase model) {
+    public boolean isFrameworkPlugin(final IPluginModelBase model) {
         return parentKarafModel.isFrameworkPlugin(model);
     }
 
@@ -95,6 +107,7 @@ public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel implem
      *
      * @return true in all cases
      */
+    @Override
     public boolean isReadOnly() {
         return false;
     }

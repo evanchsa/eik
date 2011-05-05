@@ -34,7 +34,6 @@ import org.apache.commons.collections.ListUtils;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
@@ -589,9 +588,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
     private void initializeKarafPlatformModel() throws CoreException {
         karafPlatformModel = KarafPlatformModelRegistry.findActivePlatformModel();
 
-        featuresSection = (FeaturesSection) Platform.getAdapterManager().getAdapter(
-                    karafPlatformModel,
-                    FeaturesSection.class);
+        featuresSection = (FeaturesSection) karafPlatformModel.getAdapter(FeaturesSection.class);
 
         featuresSection.load();
     }

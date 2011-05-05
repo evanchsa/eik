@@ -13,6 +13,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
  org.jdom;bundle-version="1.0.0"
 Export-Package: info.evanchik.eclipse.karaf.core,
  info.evanchik.eclipse.karaf.core.configuration,
+ info.evanchik.eclipse.karaf.core.configuration.internal,
  info.evanchik.eclipse.karaf.core.equinox,
  info.evanchik.eclipse.karaf.core.features,
  info.evanchik.eclipse.karaf.core.model

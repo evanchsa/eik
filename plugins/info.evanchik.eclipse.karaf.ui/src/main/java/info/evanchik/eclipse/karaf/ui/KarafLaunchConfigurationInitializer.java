@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -250,7 +249,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
             this.karafPlatform = findKarafPlatform(configuration, new NullProgressMonitor());
             this.karafPlatformFactory = KarafPlatformModelRegistry.findPlatformModelFactory(karafPlatform.getRootDirectory());
 
-            this.startupSection = (StartupSection) Platform.getAdapterManager().getAdapter(this.karafPlatform, StartupSection.class);
+            this.startupSection = (StartupSection) this.karafPlatform.getAdapter(StartupSection.class);
             this.startupSection.load();
         } catch (final CoreException e) {
             KarafUIPluginActivator.getLogger().error("Unable to locate the Karaf platform", e);
@@ -291,12 +290,6 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      */
     private void addDefaultVMArguments(final ILaunchConfigurationWorkingCopy configuration) {
         final StringBuffer vmArgs = new StringBuffer();
-        if (vmArgs.indexOf("-Declipse.application") == -1) { //$NON-NLS-1$
-            if (vmArgs.length() > 0) {
-                vmArgs.append(" "); //$NON-NLS-1$
-            }
-            vmArgs.append("-Declipse.application=info.evanchik.karaf.app.KarafMain"); //$NON-NLS-1$
-        }
 
         if (vmArgs.indexOf("-Dosgi.noShutdown") == -1) { //$NON-NLS-1$
             vmArgs.append(" -Dosgi.noShutdown=true"); //$NON-NLS-1$
@@ -310,6 +303,5 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
         }
 
         configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArgs.toString());
-
     }
 }

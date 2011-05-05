@@ -230,11 +230,6 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
         addJavaExtensionsArguments(configuration, arguments);
 
-        arguments.add(
-                KarafCorePluginUtils.constructSystemProperty(
-                        "eik.properties.system", //$NON-NLS-1$
-                        workingKarafPlatform.getConfigurationFile(IKarafConstants.KARAF_DEFAULT_SYSTEM_PROPERTIES_FILE).toString()));
-
         final List<KarafWorkbenchServiceFactory> list =
             WorkbenchServiceExtensions.getLaunchCustomizerFactories();
 

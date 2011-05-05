@@ -10,7 +10,18 @@
  */
 package info.evanchik.eclipse.karaf.core.model;
 
+import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
+import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
+import info.evanchik.eclipse.karaf.core.configuration.GeneralSection;
+import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
+import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
+import info.evanchik.eclipse.karaf.core.configuration.SystemSection;
+import info.evanchik.eclipse.karaf.core.configuration.internal.FeaturesSectionImpl;
+import info.evanchik.eclipse.karaf.core.configuration.internal.GeneralSectionImpl;
+import info.evanchik.eclipse.karaf.core.configuration.internal.ManagementSectionImpl;
+import info.evanchik.eclipse.karaf.core.configuration.internal.StartupSectionImpl;
+import info.evanchik.eclipse.karaf.core.configuration.internal.SystemSectionImpl;
 import info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator;
 
 import java.io.File;
@@ -19,13 +30,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class GenericKarafPlatformModel extends AbstractKarafPlatformModel {
+public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implements IAdaptable {
 
     /**
      * The maximum depth to search for JARs in this model
@@ -43,6 +55,26 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel {
      */
     public GenericKarafPlatformModel(final IPath platformPath) {
         this.rootPlatformPath = platformPath;
+    }
+
+    @Override
+    public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapterType) {
+        final Object adaptedObject;
+        if (adapterType == FeaturesSection.class) {
+            adaptedObject = new FeaturesSectionImpl(this);
+        } else if (adapterType == GeneralSection.class) {
+            adaptedObject = new GeneralSectionImpl(this);
+        } else if (adapterType == ManagementSection.class) {
+            adaptedObject = adaptManagementSection();
+        } else if (adapterType == StartupSection.class) {
+            adaptedObject = new StartupSectionImpl(this);
+        } else if (adapterType == SystemSection.class) {
+            return new SystemSectionImpl(this);
+        } else {
+            adaptedObject = null;
+        }
+
+        return adaptedObject;
     }
 
     @Override
@@ -121,5 +153,24 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel {
         }
 
         return urls;
+    }
+
+    /**
+     * @param karafModel
+     * @return
+     */
+    private Object adaptManagementSection() {
+        final Object adaptedObject;
+        if(KarafCorePluginUtils.isServiceMix(this)) {
+            adaptedObject = new ManagementSectionImpl(this, IKarafConstants.ORG_APACHE_SERVICEMIX_MANAGEMENT_CFG_FILENAME);
+        } else if (KarafCorePluginUtils.isFelixKaraf(this)) {
+            adaptedObject = new ManagementSectionImpl(this, IKarafConstants.ORG_APACHE_FELIX_KARAF_MANAGEMENT_CFG_FILENAME);
+        } else if (KarafCorePluginUtils.isKaraf(this)) {
+            adaptedObject = new ManagementSectionImpl(this, IKarafConstants.ORG_APACHE_KARAF_MANAGEMENT_CFG_FILENAME);
+        } else {
+            adaptedObject = null;
+        }
+
+        return adaptedObject;
     }
 }

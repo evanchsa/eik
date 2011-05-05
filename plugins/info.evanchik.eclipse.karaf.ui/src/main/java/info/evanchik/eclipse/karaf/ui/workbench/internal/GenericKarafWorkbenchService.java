@@ -32,7 +32,6 @@ import java.util.Properties;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -165,6 +164,25 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         configuration.setAttribute(
                 IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY,
                 platformModel.getParentKarafModel().getRootDirectory().toString());
+
+        final StringBuffer vmArgs = new StringBuffer();
+        if (vmArgs.indexOf("-Declipse.application") == -1) { //$NON-NLS-1$
+            if (vmArgs.length() > 0) {
+                vmArgs.append(" "); //$NON-NLS-1$
+            }
+            vmArgs.append(" -Declipse.application=info.evanchik.karaf.app.KarafMain"); //$NON-NLS-1$
+        }
+
+        try {
+            final String currentVMArguments = configuration.getAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "");
+
+            if (currentVMArguments.trim().length() > 0) {
+                vmArgs.append(" ").append(currentVMArguments);
+            }
+
+            configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArgs.toString());
+        } catch (final CoreException e) {
+        }
     }
 
     @Override
@@ -203,10 +221,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         }
 
         final ManagementSection managementSection =
-            (ManagementSection) Platform.getAdapterManager().getAdapter(
-                    platformModel.getParentKarafModel(),
-                    ManagementSection.class
-        );
+            (ManagementSection) platformModel.getAdapter(ManagementSection.class);
 
         managementSection.load();
         managementSection.setPort(jmxRegistryPort);
@@ -226,9 +241,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         }
 
         final FeaturesSection featuresSection =
-            (FeaturesSection) Platform.getAdapterManager().getAdapter(
-                    platformModel.getParentKarafModel(),
-                    FeaturesSection.class);
+            (FeaturesSection) platformModel.getAdapter(FeaturesSection.class);
 
         featuresSection.load();
 
@@ -255,6 +268,10 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         final Properties systemProperties = loadSystemProperties(platformModel);
 
         systemProperties.put(
+                IKarafConstants.KARAF_BASE_PROP,
+                platformModel.getParentKarafModel().getRootDirectory().toString());
+
+        systemProperties.put(
             IKarafConstants.KARAF_HOME_PROP,
             platformModel.getParentKarafModel().getRootDirectory().toString());
 
@@ -268,7 +285,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
         systemProperties.put(
             IKarafConstants.KARAF_INSTANCES_PROP,
-            platformModel.getRootDirectory().append("instances").toString()); //$NON-NLS-1$
+            platformModel.getParentKarafModel().getRootDirectory().append("instances").toString()); //$NON-NLS-1$
 
         final Boolean startLocalConsole =
             configuration.getAttribute(

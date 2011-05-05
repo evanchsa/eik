@@ -10,6 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.ui.wizards.provisioner;
 
+import info.evanchik.eclipse.karaf.core.KarafPlatformDetails;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
@@ -28,6 +29,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -43,6 +45,12 @@ public class KarafInstallationSelectionPage extends WizardPage {
      * The Karaf Runtime installation directory as selected by the user
      */
     protected Text installDir;
+
+    protected Text platformDescription;
+
+    protected Text platformName;
+
+    protected Text platformVersion;
 
     /**
      * Constructs a page in the wizard with the given name
@@ -79,6 +87,8 @@ public class KarafInstallationSelectionPage extends WizardPage {
         data.horizontalSpan = 2;
         label.setLayoutData(data);
 
+        Dialog.applyDialogFont(label);
+
         installDir = new Text(client, SWT.BORDER);
         data = new GridData(GridData.FILL_HORIZONTAL);
         installDir.setLayoutData(data);
@@ -108,7 +118,40 @@ public class KarafInstallationSelectionPage extends WizardPage {
             }
         });
 
-        Dialog.applyDialogFont(label);
+        final Group group = new Group(client, SWT.BORDER);
+        group.setText("Karaf Platform Details");
+        group.setLayout(new GridLayout(2, false));
+        data = new GridData(GridData.FILL_BOTH);
+        data.horizontalSpan = 2;
+        group.setLayoutData(data);
+
+        Label l = new Label(group, SWT.NONE);
+        l.setText("Name");
+        Dialog.applyDialogFont(l);
+
+        platformName = new Text(group, SWT.BORDER);
+        data = new GridData(GridData.FILL_HORIZONTAL);
+        platformName.setLayoutData(data);
+        platformName.setEnabled(false);
+
+        l = new Label(group, SWT.NONE);
+        l.setText("Version");
+        Dialog.applyDialogFont(l);
+
+        platformVersion = new Text(group, SWT.BORDER);
+        data = new GridData(GridData.FILL_HORIZONTAL);
+        platformVersion.setLayoutData(data);
+        platformVersion.setEnabled(false);
+
+        l = new Label(group, SWT.NONE);
+        l.setText("Description");
+        Dialog.applyDialogFont(l);
+
+        platformDescription = new Text(group, SWT.BORDER);
+        data = new GridData(GridData.FILL_HORIZONTAL);
+        platformDescription.setLayoutData(data);
+        platformDescription.setEnabled(false);
+
 
         setControl(client);
     }
@@ -130,6 +173,13 @@ public class KarafInstallationSelectionPage extends WizardPage {
             } else {
                 setErrorMessage(null);
                 setPageComplete(true);
+
+                final KarafPlatformDetails platformDetails =
+                    (KarafPlatformDetails) karafPlatform.getAdapter(KarafPlatformDetails.class);
+
+                platformName.setText(platformDetails.getName());
+                platformVersion.setText(platformDetails.getVersion());
+                platformDescription.setText(platformDetails.getDescription());
             }
         } catch (final CoreException e) {
             setErrorMessage("There was an error loading the installation: " + e.getMessage());

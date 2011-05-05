@@ -12,6 +12,7 @@ package info.evanchik.eclipse.karaf.core.model;
 
 import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
+import info.evanchik.eclipse.karaf.core.KarafPlatformDetails;
 import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.configuration.GeneralSection;
 import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
@@ -25,6 +26,7 @@ import info.evanchik.eclipse.karaf.core.configuration.internal.SystemSectionImpl
 import info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -70,10 +72,33 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
             adaptedObject = new StartupSectionImpl(this);
         } else if (adapterType == SystemSection.class) {
             return new SystemSectionImpl(this);
+        } else if (adapterType == KarafPlatformDetails.class) {
+            adaptedObject = adaptKarafPlatformDetails();
         } else {
             adaptedObject = null;
         }
 
+        return adaptedObject;
+    }
+
+    /**
+     * @return
+     */
+    private Object adaptKarafPlatformDetails() {
+        final Object adaptedObject;
+        try {
+            if(KarafCorePluginUtils.isServiceMix(this)) {
+                final File file = getRootDirectory().append("lib").append("servicemix.jar").toFile();
+                adaptedObject = new GenericKarafPlatformDetails(file); // $NON-NLS-2$
+            } else if (KarafCorePluginUtils.isFelixKaraf(this) || KarafCorePluginUtils.isKaraf(this)) {
+                final File file = getRootDirectory().append("lib").append("karaf.jar").toFile();
+                adaptedObject = new GenericKarafPlatformDetails(file); // $NON-NLS-2$
+            } else {
+                adaptedObject = null;
+            }
+        } catch (final IOException e) {
+            return null;
+        }
         return adaptedObject;
     }
 

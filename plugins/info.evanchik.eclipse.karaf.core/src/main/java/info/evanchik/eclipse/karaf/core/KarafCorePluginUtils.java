@@ -113,7 +113,9 @@ public final class KarafCorePluginUtils {
      *             sentry file
      */
     public static boolean isServiceMix(final KarafPlatformModel model) {
-        if (model.getConfigurationFile(IKarafConstants.ORG_APACHE_SERVICEMIX_MANAGEMENT_CFG_FILENAME).toFile().exists()) {
+        if (   model.getConfigurationFile(IKarafConstants.ORG_APACHE_SERVICEMIX_MANAGEMENT_CFG_FILENAME).toFile().exists()
+            || model.getConfigurationFile(IKarafConstants.ORG_APACHE_SERVICEMIX_FEATURES_CFG_FILENAME).toFile().exists())
+        {
             return true;
         } else if (model instanceof KarafWorkingPlatformModel) {
             final KarafWorkingPlatformModel workingModel = (KarafWorkingPlatformModel) model;
@@ -129,7 +131,7 @@ public final class KarafCorePluginUtils {
      * @return
      */
     public static boolean isFelixKaraf(final KarafPlatformModel model) {
-        if (model.getConfigurationFile(IKarafConstants.ORG_APACHE_FELIX_KARAF_MANAGEMENT_CFG_FILENAME).toFile().exists()) {
+        if (   model.getConfigurationFile(IKarafConstants.ORG_APACHE_FELIX_KARAF_MANAGEMENT_CFG_FILENAME).toFile().exists()) {
             return true;
         } else if (model instanceof KarafWorkingPlatformModel) {
             final KarafWorkingPlatformModel workingModel = (KarafWorkingPlatformModel) model;

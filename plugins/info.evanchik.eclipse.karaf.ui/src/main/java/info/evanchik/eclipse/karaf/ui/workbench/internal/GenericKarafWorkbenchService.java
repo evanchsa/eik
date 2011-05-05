@@ -182,6 +182,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
             configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArgs.toString());
         } catch (final CoreException e) {
+            KarafUIPluginActivator.getLogger().error("Unable to set default VM arguments", e);
         }
     }
 

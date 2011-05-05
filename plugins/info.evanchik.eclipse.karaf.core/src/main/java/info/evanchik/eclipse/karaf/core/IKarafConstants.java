@@ -53,6 +53,8 @@ public interface IKarafConstants {
 
     public static final String ORG_APACHE_KARAF_MANAGEMENT_CFG_FILENAME = "org.apache.karaf.management.cfg"; //$NON-NLS-1$
 
+    public static final String ORG_APACHE_SERVICEMIX_FEATURES_CFG_FILENAME = "org.apache.servicemix.features.cfg"; //$NON-NLS-1$
+
     public static final String ORG_APACHE_SERVICEMIX_MANAGEMENT_CFG_FILENAME = "org.apache.servicemix.management.cfg"; //$NON-NLS-1$
 
     /**

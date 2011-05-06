@@ -67,10 +67,6 @@ public class BundleEntry {
         }
 
         public Builder startLevel(final String startLevel) {
-            if (startLevel == null) {
-                throw new NullPointerException("startLevel");
-            }
-
             this.startLevel = startLevel;
             return this;
         }

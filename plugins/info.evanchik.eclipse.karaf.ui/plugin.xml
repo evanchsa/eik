@@ -47,14 +47,6 @@
       </provisioner>
    </extension>
    <extension
-         id="karaf"
-         name="Default Apache Felix Karaf Workbench Services"
-         point="info.evanchik.eclipse.karaf.ui.service">
-      <launchCustomizer
-            class="info.evanchik.eclipse.karaf.ui.workbench.internal.GenericKarafWorkbenchServiceFactory">
-      </launchCustomizer>
-   </extension>
-   <extension
          point="org.eclipse.debug.ui.launchConfigurationTabs">
       <tab
             class="info.evanchik.eclipse.karaf.ui.KarafConfigurationTab"
@@ -65,6 +57,14 @@
                after="org.eclipse.pde.ui.launch.tab.tracing">
          </placement>
       </tab>
+   </extension>
+   <extension
+         id="karaf"
+         name="Default Apache Felix Karaf Workbench Services"
+         point="info.evanchik.eclipse.karaf.ui.service">
+      <launchCustomizer
+            class="info.evanchik.eclipse.karaf.ui.workbench.internal.GenericKarafWorkbenchServiceFactory">
+      </launchCustomizer>
    </extension>
 
 </plugin>

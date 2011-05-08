@@ -18,8 +18,10 @@ import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.shell.KarafSshShellConnection.KarafSshConnectionUrl;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationConstants;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
+import info.evanchik.eclipse.karaf.ui.console.KarafRemoteConsole;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
 
 import java.util.ArrayList;
@@ -33,17 +35,146 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchListener;
+import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.debug.ui.IDebugUIConstants;
+import org.eclipse.debug.ui.console.ConsoleColorProvider;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.SocketUtil;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleManager;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
 public class GenericKarafWorkbenchService implements KarafWorkbenchService {
+
+    /**
+     *
+     * @author Stephen Evanchik (evanchsa@gmail.com)
+     *
+     */
+    private final class KarafConsoleLaunchListener implements ILaunchListener {
+
+        /**
+         * Returns the console for the given {@link IProcess}, or {@code null}
+         * if none.
+         *
+         * @param process
+         *            the {@code IProcess} whose console is to be found
+         * @return the console for the given process, or {@code null} if none
+         */
+        public IConsole findConsole(final IProcess process) {
+            final IConsoleManager manager = ConsolePlugin.getDefault().getConsoleManager();
+
+            for (final IConsole console : manager.getConsoles()) {
+                if (console instanceof KarafRemoteConsole) {
+                    final KarafRemoteConsole karafConsole = (KarafRemoteConsole) console;
+                    if (karafConsole.getProcess().equals(process)) {
+                        return karafConsole;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        /**
+         * Returns the {@link IDocument} for the {@link IProcess}, or
+         * {@code null} if none is available.
+         *
+         * @param process
+         *            the {@code IProcess} whose document is to be retrieved
+         * @return the {@code IDocument} for the specified {@code IProcess} or
+         *         {@code null} if one could not be found
+         */
+        public IDocument getConsoleDocument(final IProcess process) {
+            final KarafRemoteConsole console = (KarafRemoteConsole) findConsole(process);
+            return console != null ? console.getDocument() : null;
+        }
+
+        @Override
+        public void launchAdded(final ILaunch launch) {
+            launchChanged(launch);
+        }
+
+        @Override
+        public void launchChanged(final ILaunch launch) {
+            if (!isKarafLaunch(launch)) {
+                return;
+            }
+
+            for (final IProcess process : launch.getProcesses()) {
+                if (getConsoleDocument(process) != null) {
+                    continue;
+                }
+
+                if (process.getStreamsProxy() == null) {
+                    continue;
+                }
+
+                final String encoding = launch.getAttribute(DebugPlugin.ATTR_CONSOLE_ENCODING);
+
+                final KarafRemoteConsole remoteConsole = new KarafRemoteConsole(
+                        process,
+                        new KarafSshConnectionUrl("localhost", 8101, "smx", "smx"),
+                        new ConsoleColorProvider(),
+                        "Default Name",
+                        encoding);
+
+                remoteConsole.setAttribute(IDebugUIConstants.ATTR_CONSOLE_PROCESS, process);
+
+                ConsolePlugin.getDefault().getConsoleManager().addConsoles(new IConsole[] { remoteConsole });
+            }
+        }
+
+        @Override
+        public void launchRemoved(final ILaunch launch) {
+            if (!isKarafLaunch(launch)) {
+                return;
+            }
+
+            for (final IProcess process : launch.getProcesses()) {
+                final IConsole console = findConsole(process);
+
+                if (console != null) {
+                    final IConsoleManager manager = ConsolePlugin.getDefault().getConsoleManager();
+                    manager.removeConsoles(new IConsole[] { console });
+                }
+            }
+        }
+
+        /**
+         * Determines whether or not the {@link ILaunch} is from an EIK launch
+         *
+         * @param launch
+         *            the {@code ILaunch} to evaluate
+         * @return true if the {@code ILaunch} is an EIK launch
+         */
+        private boolean isKarafLaunch(final ILaunch launch) {
+            try {
+                final ILaunchConfiguration configuration = launch.getLaunchConfiguration();
+                if (!configuration.getAttributes().containsKey(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE)) {
+                    return false;
+                }
+
+                return true;
+            } catch (final CoreException e) {
+                return false;
+            }
+        }
+    }
+
+    public GenericKarafWorkbenchService() {
+        DebugPlugin.getDefault().getLaunchManager().addLaunchListener(new KarafConsoleLaunchListener());
+    }
 
     @Override
     public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {

@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.Platform;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class WorkbenchServiceExtensions {
+public final class WorkbenchServiceExtensions {
 
     private static final String ATT_CLASS = "class";
 
@@ -49,14 +49,14 @@ public class WorkbenchServiceExtensions {
                                     .getExtensionPoint(KarafUIPluginActivator.PLUGIN_ID, "service")
                                     .getExtensions();
 
-        for (IExtension e : extensions) {
-            for (IConfigurationElement c : e.getConfigurationElements()) {
+        for (final IExtension e : extensions) {
+            for (final IConfigurationElement c : e.getConfigurationElements()) {
 
                 if (!c.getName().equals(TAG_LAUNCHCUSTOMIZER_ITEMTYPE)) {
                     continue;
                 }
 
-                KarafWorkbenchServiceFactory f =
+                final KarafWorkbenchServiceFactory f =
                     (KarafWorkbenchServiceFactory)c.createExecutableExtension(ATT_CLASS);
 
 

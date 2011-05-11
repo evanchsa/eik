@@ -24,6 +24,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,6 +35,8 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
 
     protected final BundleContext context;
 
+    protected final ViewPart parent;
+
     protected final StructuredViewer viewer;
 
     protected final EclipseRuntimeDataProvider eclipseWorkbenchDataProvider;
@@ -42,7 +45,8 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
 
     protected final ServiceTracker dataProviderServiceTracker;
 
-    public BundlesContentProvider(StructuredViewer viewer, BundleContext context) {
+    public BundlesContentProvider(final ViewPart parent, final StructuredViewer viewer, final BundleContext context) {
+        this.parent = parent;
         this.viewer = viewer;
         this.context = context;
 
@@ -54,7 +58,7 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
     }
 
     @Override
-    public Object addingService(ServiceReference reference) {
+    public Object addingService(final ServiceReference reference) {
         final RuntimeDataProvider provider = (RuntimeDataProvider)context.getService(reference);
 
         if(!runtimeDataProviders.contains(provider)) {
@@ -75,7 +79,7 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
     }
 
     @Override
-    public void providerChange(RuntimeDataProvider source, EnumSet<RuntimeDataProviderListener.EventType> type) {
+    public void providerChange(final RuntimeDataProvider source, final EnumSet<RuntimeDataProviderListener.EventType> type) {
 
         Display.getDefault().asyncExec(new Runnable() {
 
@@ -92,7 +96,7 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
     }
 
     @Override
-    public Object[] getChildren(Object parentElement) {
+    public Object[] getChildren(final Object parentElement) {
         if (parentElement instanceof RuntimeDataProvider) {
             return ((RuntimeDataProvider) parentElement).getBundles().toArray(new Object[0]);
         }
@@ -101,18 +105,18 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
     }
 
     @Override
-    public Object[] getElements(Object inputElement) {
+    public Object[] getElements(final Object inputElement) {
         return runtimeDataProviders.toArray(new Object[0]);
     }
 
     @Override
-    public Object getParent(Object element) {
+    public Object getParent(final Object element) {
         if(element instanceof RuntimeDataProvider == false) {
             return null;
         }
 
         synchronized(runtimeDataProviders) {
-            for (RuntimeDataProvider b : runtimeDataProviders) {
+            for (final RuntimeDataProvider b : runtimeDataProviders) {
                 if (b.getBundles().contains(element)) {
                     return b;
                 }
@@ -123,7 +127,7 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
     }
 
     @Override
-    public boolean hasChildren(Object element) {
+    public boolean hasChildren(final Object element) {
         if (element instanceof RuntimeDataProvider) {
             return true;
         }
@@ -132,23 +136,23 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
     }
 
     @Override
-    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+    public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
     }
 
     @Override
-    public void modifiedService(ServiceReference reference, Object service) {
+    public void modifiedService(final ServiceReference reference, final Object service) {
     }
 
     @Override
-    public void providerStart(RuntimeDataProvider source) {
+    public void providerStart(final RuntimeDataProvider source) {
     }
 
     @Override
-    public void providerStop(RuntimeDataProvider source) {
+    public void providerStop(final RuntimeDataProvider source) {
     }
 
     @Override
-    public void removedService(ServiceReference reference, Object service) {
+    public void removedService(final ServiceReference reference, final Object service) {
         if(runtimeDataProviders.contains(service)) {
             final RuntimeDataProvider provider = (RuntimeDataProvider)service;
             provider.removeListener(this);
@@ -168,7 +172,7 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
 
     public void start() {
         synchronized (runtimeDataProviders) {
-            for (RuntimeDataProvider provider : runtimeDataProviders) {
+            for (final RuntimeDataProvider provider : runtimeDataProviders) {
                 provider.addListener(this);
             }
         }
@@ -183,7 +187,7 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
 
     public void stop() {
         synchronized (runtimeDataProviders) {
-            for (RuntimeDataProvider b : runtimeDataProviders) {
+            for (final RuntimeDataProvider b : runtimeDataProviders) {
                 b.removeListener(this);
             }
         }

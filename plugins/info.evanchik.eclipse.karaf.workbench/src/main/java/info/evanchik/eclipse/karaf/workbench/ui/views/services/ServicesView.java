@@ -53,7 +53,7 @@ public class ServicesView extends FilteredViewPart {
     protected final int[] colWidth = new int[] { 400, 200 };
 
     @Override
-    public void createMainControl(Composite parent) {
+    public void createMainControl(final Composite parent) {
         final GridLayout layout = new GridLayout(1, false);
         layout.horizontalSpacing = 0;
         layout.verticalSpacing = 0;
@@ -85,7 +85,7 @@ public class ServicesView extends FilteredViewPart {
         viewer.addFilter(nameFilter);
 
         context = KarafWorkbenchActivator.getDefault().getBundle().getBundleContext();
-        contentProvider = new ServicesContentProvider(viewer, context);
+        contentProvider = new ServicesContentProvider(this, viewer, context);
         viewer.setContentProvider(contentProvider);
 
         viewer.setInput(context);
@@ -99,7 +99,7 @@ public class ServicesView extends FilteredViewPart {
     }
 
     @Override
-    public void init(IViewSite site, IMemento memento) throws PartInitException {
+    public void init(final IViewSite site, final IMemento memento) throws PartInitException {
         super.init(site, memento);
 
         for (int i = 0; i < MAX_COLS; i++) {
@@ -114,7 +114,7 @@ public class ServicesView extends FilteredViewPart {
     }
 
     @Override
-    public void saveState(IMemento memento) {
+    public void saveState(final IMemento memento) {
         final TreeColumn[] tc = tree.getColumns();
 
         for (int i = 0; i < MAX_COLS; i++) {
@@ -127,7 +127,7 @@ public class ServicesView extends FilteredViewPart {
     }
 
     @Override
-    protected void updatedFilter(String filterString) {
+    protected void updatedFilter(final String filterString) {
         nameFilter.setServiceName(filterString);
         viewer.refresh();
     }

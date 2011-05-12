@@ -12,7 +12,7 @@ package info.evanchik.eclipse.karaf.workbench.factory;
 
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
-import info.evanchik.eclipse.karaf.workbench.internal.JMXWorkbenchService;
+import info.evanchik.eclipse.karaf.workbench.jmx.internal.JMXWorkbenchService;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)

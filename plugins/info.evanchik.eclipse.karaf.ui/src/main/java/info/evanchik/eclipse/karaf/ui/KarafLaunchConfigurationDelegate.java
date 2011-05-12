@@ -264,6 +264,8 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
         this.karafPlatform = KarafLaunchConfigurationInitializer.findKarafPlatform(configuration, monitor);
 
+        configuration.getWorkingCopy().setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_PLATFORM_PATH, karafPlatform.getRootDirectory().toOSString());
+
         monitor.worked(10);
 
         final IPath workingArea = new Path(getConfigDir(configuration).getAbsolutePath());

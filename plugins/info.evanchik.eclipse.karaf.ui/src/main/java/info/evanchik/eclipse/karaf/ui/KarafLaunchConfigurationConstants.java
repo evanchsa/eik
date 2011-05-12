@@ -10,6 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
+import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+
 
 
 /**
@@ -34,6 +36,12 @@ public final class KarafLaunchConfigurationConstants {
      * Eclipse launch configuration
      */
     public static final String KARAF_LAUNCH_FEATURES_MANAGEMENT = "karaf_features_management"; //$NON-NLS-1$
+
+    /**
+     * Contains the fully qualified path to the {@link KarafPlatformModel} that
+     * this launcher works against
+     */
+    public static final String KARAF_LAUNCH_PLATFORM_PATH = "karaf_platform_path"; //$NON-NLS-1$
 
     /**
      * PDE Launcher constant used for recording classpath entries used as part

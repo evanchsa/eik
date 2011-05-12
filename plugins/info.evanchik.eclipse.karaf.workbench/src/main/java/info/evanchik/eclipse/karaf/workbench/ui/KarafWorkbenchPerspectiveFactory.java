@@ -34,10 +34,11 @@ public class KarafWorkbenchPerspectiveFactory implements IPerspectiveFactory {
             layout.createFolder(
                     BOTTOM_FOLDER,
                     IPageLayout.BOTTOM,
-                    0.10f,
+                    0.75f,
                     layout.getEditorArea());
 
         bottomFolder.addView(BundlesView.VIEW_ID);
         bottomFolder.addView(ServicesView.VIEW_ID);
+        bottomFolder.addView("org.eclipse.ui.console.ConsoleView");
     }
 }

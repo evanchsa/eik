@@ -48,34 +48,7 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class JmxServersView extends ViewPart {
 
-    public static final String VIEW_ID = "info.evanchik.eclipse.karaf.workbench.jmx.serversView";
-
-	private ListViewer viewer;
-
-	/**
-	 *
-	 * @author Stephen Evanchik (evanchsa@gmail.com)
-	 *
-	 */
-	private static final class JMXServiceDescriptorLabelProvider extends LabelProvider {
-
-		public JMXServiceDescriptorLabelProvider() {
-			super();
-		}
-
-		@Override
-		public Image getImage(Object element) {
-			return null;
-		}
-
-		@Override
-		public String getText(Object element) {
-			final JMXServiceDescriptor jmxServiceDescriptor = (JMXServiceDescriptor)element;
-			return jmxServiceDescriptor.getName() + " - " + jmxServiceDescriptor.getUrl().toString(); //$NON-NLS-1$
-		}
-	}
-
-	/**
+    /**
 	 *
 	 * @author Stephen Evanchik (evanchsa@gmail.com)
 	 *
@@ -90,7 +63,12 @@ public class JmxServersView extends ViewPart {
 		}
 
 		@Override
-        public Object[] getElements(Object element) {
+        public void dispose() {
+			// What to do?
+		}
+
+		@Override
+        public Object[] getElements(final Object element) {
 			final IJMXServiceManager jmxServiceManager = KarafWorkbenchActivator.getDefault().getJMXServiceManager();
 			final List<JMXServiceDescriptor> jmxServiceDescriptors = jmxServiceManager.getJMXServices();
 
@@ -98,12 +76,7 @@ public class JmxServersView extends ViewPart {
 		}
 
 		@Override
-        public void dispose() {
-			// What to do?
-		}
-
-		@Override
-        public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+        public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 			if(viewer instanceof ListViewer) {
 				concreteViewer = (ListViewer) viewer;
 			}
@@ -131,8 +104,35 @@ public class JmxServersView extends ViewPart {
 		}
 	}
 
+	/**
+	 *
+	 * @author Stephen Evanchik (evanchsa@gmail.com)
+	 *
+	 */
+	private static final class JMXServiceDescriptorLabelProvider extends LabelProvider {
+
+		public JMXServiceDescriptorLabelProvider() {
+			super();
+		}
+
+		@Override
+		public Image getImage(final Object element) {
+			return KarafWorkbenchActivator.getDefault().getImageRegistry().get(KarafWorkbenchActivator.LOGO_16X16_IMG);
+		}
+
+		@Override
+		public String getText(final Object element) {
+			final JMXServiceDescriptor jmxServiceDescriptor = (JMXServiceDescriptor) element;
+			return jmxServiceDescriptor.getName();
+		}
+	}
+
+	public static final String VIEW_ID = "info.evanchik.eclipse.karaf.workbench.jmx.serversView";
+
+	private ListViewer viewer;
+
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		parent.setLayout(new FillLayout());
 
 		final JMXServiceDescriptorContentProvider contentProvider =
@@ -148,7 +148,7 @@ public class JmxServersView extends ViewPart {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override
-            public void doubleClick(DoubleClickEvent event) {
+            public void doubleClick(final DoubleClickEvent event) {
 				final IStructuredSelection selection =
 					(IStructuredSelection)event.getSelection();
 
@@ -174,22 +174,6 @@ public class JmxServersView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-    protected void initContextMenu() {
-        final MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
-        menuMgr.setRemoveAllWhenShown(true);
-        menuMgr.addMenuListener(new IMenuListener() {
-            @Override
-            public void menuAboutToShow(IMenuManager manager) {
-                menuMgr.add(new Separator());
-                menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-            }
-        });
-
-        final Menu menu = menuMgr.createContextMenu(viewer.getControl());
-        viewer.getControl().setMenu(menu);
-        getSite().registerContextMenu(menuMgr, viewer);
-    }
-
     private void addLocalMBeanServer() {
 		final MBeanServer mbs = findLocalMBeanServer();
 		if(mbs == null) {
@@ -201,7 +185,7 @@ public class JmxServersView extends ViewPart {
 		KarafWorkbenchActivator.getDefault().getJMXServiceManager().addJMXService(localJmxService);
 	}
 
-	private MBeanServer findLocalMBeanServer() {
+    private MBeanServer findLocalMBeanServer() {
 		final ArrayList<MBeanServer> mbeanServers = MBeanServerFactory.findMBeanServer(null);
 		final Iterator<MBeanServer> iter = mbeanServers.iterator();
 		while (iter.hasNext()) {
@@ -212,4 +196,20 @@ public class JmxServersView extends ViewPart {
 		}
 		return null;
 	}
+
+	protected void initContextMenu() {
+        final MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
+        menuMgr.setRemoveAllWhenShown(true);
+        menuMgr.addMenuListener(new IMenuListener() {
+            @Override
+            public void menuAboutToShow(final IMenuManager manager) {
+                menuMgr.add(new Separator());
+                menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+            }
+        });
+
+        final Menu menu = menuMgr.createContextMenu(viewer.getControl());
+        viewer.getControl().setMenu(menu);
+        getSite().registerContextMenu(menuMgr, viewer);
+    }
 }

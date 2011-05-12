@@ -26,17 +26,18 @@ public class KarafWorkbenchPerspectiveFactory implements IPerspectiveFactory {
 
     private static final String BOTTOM_FOLDER = "bottomFolder";
     @Override
-    public void createInitialLayout(IPageLayout layout) {
+    public void createInitialLayout(final IPageLayout layout) {
+
+        layout.addView(JmxServersView.VIEW_ID, IPageLayout.LEFT, 0.20f, layout.getEditorArea());
 
         final IFolderLayout bottomFolder =
             layout.createFolder(
                     BOTTOM_FOLDER,
                     IPageLayout.BOTTOM,
-                    0.20f,
+                    0.10f,
                     layout.getEditorArea());
 
         bottomFolder.addView(BundlesView.VIEW_ID);
         bottomFolder.addView(ServicesView.VIEW_ID);
-        bottomFolder.addView(JmxServersView.VIEW_ID);
     }
 }

@@ -16,6 +16,7 @@ import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.jmx.KarafJMXPlugin;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
+import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 
 import java.net.MalformedURLException;
@@ -44,8 +45,52 @@ import org.eclipse.jdt.launching.SocketUtil;
  */
 public class JMXWorkbenchService implements KarafWorkbenchService {
 
+    /**
+     *
+     * @author Stephen Evanchik (evanchsa@gmail.com)
+     *
+     */
+    private final class JMXServiceCleanupLaunchListener implements ILaunchListener {
+
+        @Override
+        public void launchAdded(final ILaunch launch) {
+        }
+
+        @Override
+        public void launchChanged(final ILaunch launch) {
+        }
+
+        @Override
+        public void launchRemoved(final ILaunch launch) {
+            try {
+                final String memento = launch.getLaunchConfiguration().getMemento();
+
+                final JMXServiceDescriptor jmxServiceDescriptor =
+                    jmxServiceDescriptorMap.get(memento);
+
+                if (jmxServiceDescriptor == null) {
+                    return;
+                }
+
+                jmxServiceManager.removeJMXService(jmxServiceDescriptor);
+
+                jmxServiceDescriptorMap.remove(memento);
+            } catch (final CoreException e) {
+                // Log something
+            }
+        }
+    };
+
+    private IJMXServiceManager jmxServiceManager;
+
     private final Map<String, JMXServiceDescriptor> jmxServiceDescriptorMap =
         Collections.synchronizedMap(new HashMap<String, JMXServiceDescriptor>());
+
+    public JMXWorkbenchService() {
+        DebugPlugin.getDefault().getLaunchManager().addLaunchListener(new JMXServiceCleanupLaunchListener());
+
+        jmxServiceManager = KarafWorkbenchActivator.getDefault().getJMXServiceManager();
+    }
 
     @Override
     public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
@@ -83,16 +128,52 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
     }
 
     @Override
-    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
+    public Map<String, String> getAdditionalEquinoxConfiguration(
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration)
+    {
         return Collections.emptyMap();
     }
 
     @Override
-    public List<String> getVMArguments(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration)
-            throws CoreException
+    public List<String> getVMArguments(
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration)
+        throws CoreException
     {
-        final List<String> arguments = new ArrayList<String>();
+        return Collections.emptyList();
+    }
 
+    @Override
+    public void initialize(
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfigurationWorkingCopy configuration)
+    {
+    }
+
+    @Override
+    public void launch(
+            final KarafWorkingPlatformModel platformModel,
+            final ILaunchConfiguration configuration,
+            final String mode,
+            final ILaunch launch,
+            final IProgressMonitor monitor)
+        throws CoreException
+    {
+        configureJMXServiceDescriptor(configuration);
+    }
+
+    /**
+     * Registers a {@link JMXServiceDescriptor} for the Karaf instance
+     *
+     * @param configuration
+     *            the launch configuration
+     * @throws CoreException
+     *             thrown if there is a problem accessing any of the launch
+     *             configuration's data
+     */
+    private void configureJMXServiceDescriptor(
+            final ILaunchConfiguration configuration) throws CoreException {
         /*
          * Establish the JMX connector port for the JMX service "jmxserver"
          */
@@ -122,72 +203,13 @@ public class JMXWorkbenchService implements KarafWorkbenchService {
                         JMXServiceDescriptor.DEFAULT_DOMAIN);
 
             jmxServiceDescriptorMap.put(configuration.getMemento(), jmxServiceDescriptor);
-
+            jmxServiceManager.addJMXService(jmxServiceDescriptor);
         } catch (final MalformedURLException e) {
             // TODO: Throw a CoreException
         }
-
-        return arguments;
     }
 
-    @Override
-    public void initialize(final KarafWorkingPlatformModel platformModel,
-            final ILaunchConfigurationWorkingCopy configuration) {
-    }
-
-    @Override
-    public void launch(
-            final KarafWorkingPlatformModel platformModel,
-            final ILaunchConfiguration configuration,
-            final String mode,
-            final ILaunch launch,
-            final IProgressMonitor monitor) throws CoreException
-    {
-        final String memento = configuration.getMemento();
-
-        final JMXServiceDescriptor jmxServiceDescriptor =
-            jmxServiceDescriptorMap.get(memento);
-
-        KarafWorkbenchActivator.getDefault().getJMXServiceManager().addJMXService(jmxServiceDescriptor);
-
-        final ILaunchListener launchListener = getLaunchListener(launch);
-        DebugPlugin.getDefault().getLaunchManager().addLaunchListener(launchListener);
-    }
-
-    /**
-     *
-     * @param launch
-     * @return
-     * @throws CoreException
-     */
-    private ILaunchListener getLaunchListener(final ILaunch launch) throws CoreException {
-
-        final String memento = launch.getLaunchConfiguration().getMemento();
-
-        return new ILaunchListener() {
-
-            @Override
-            public void launchAdded(final ILaunch l) {
-            }
-
-            @Override
-            public void launchChanged(final ILaunch l) {
-            }
-
-            @Override
-            public void launchRemoved(final ILaunch l) {
-                if (!l.equals(launch)) {
-                    return;
-                }
-
-                final JMXServiceDescriptor jmxServiceDescriptor =
-                    jmxServiceDescriptorMap.get(memento);
-
-                KarafWorkbenchActivator.getDefault().getJMXServiceManager().removeJMXService(jmxServiceDescriptor);
-
-                jmxServiceDescriptorMap.remove(memento);
-            }
-
-        };
+    public void setJmxServiceManager(final IJMXServiceManager jmxServiceManager) {
+        this.jmxServiceManager = jmxServiceManager;
     }
 }

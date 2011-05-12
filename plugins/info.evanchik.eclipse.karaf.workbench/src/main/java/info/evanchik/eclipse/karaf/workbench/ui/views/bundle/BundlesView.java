@@ -52,7 +52,7 @@ public class BundlesView extends FilteredViewPart {
     protected final int[] colWidth = new int[] { 165, 40, 100, 250, 250 };
 
     @Override
-    public void createMainControl(Composite parent) {
+    public void createMainControl(final Composite parent) {
         parent.setLayout(new FillLayout());
 
         treeTable = new Tree(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -85,14 +85,11 @@ public class BundlesView extends FilteredViewPart {
         nameFilter = new BundleSymbolicNameFilter();
         treeTableViewer.addFilter(nameFilter);
 
-        // Load data
-        contentProvider = new BundlesContentProvider(treeTableViewer, KarafWorkbenchActivator.getDefault().getBundle().getBundleContext());
+        contentProvider = new BundlesContentProvider();
 
         treeTableViewer.setContentProvider(contentProvider);
         treeTableViewer.setSorter(new BundleIdSorter());
         treeTableViewer.setInput(KarafWorkbenchActivator.getDefault().getBundle().getBundleContext());
-
-        contentProvider.start();
 
         getViewSite().setSelectionProvider(treeTableViewer);
 
@@ -103,7 +100,7 @@ public class BundlesView extends FilteredViewPart {
     }
 
     @Override
-    public void init(IViewSite site, IMemento memento) throws PartInitException {
+    public void init(final IViewSite site, final IMemento memento) throws PartInitException {
         super.init(site, memento);
 
         for (int i = 0; i < MAX_COLS; i++) {
@@ -118,7 +115,7 @@ public class BundlesView extends FilteredViewPart {
     }
 
     @Override
-    public void saveState(IMemento memento) {
+    public void saveState(final IMemento memento) {
         final TreeColumn[] tc = treeTable.getColumns();
 
         for (int i = 0; i < MAX_COLS; i++) {
@@ -137,7 +134,7 @@ public class BundlesView extends FilteredViewPart {
     }
 
     @Override
-    protected void updatedFilter(String filterString) {
+    protected void updatedFilter(final String filterString) {
         nameFilter.setFilterString(filterString);
         treeTableViewer.refresh();
     }
@@ -174,7 +171,8 @@ public class BundlesView extends FilteredViewPart {
         final MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
         menuMgr.setRemoveAllWhenShown(true);
         menuMgr.addMenuListener(new IMenuListener() {
-            public void menuAboutToShow(IMenuManager manager) {
+            @Override
+            public void menuAboutToShow(final IMenuManager manager) {
                 menuMgr.add(propertiesAction);
                 menuMgr.add(new Separator());
                 menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -188,7 +186,5 @@ public class BundlesView extends FilteredViewPart {
 
     @Override
     public void dispose() {
-        contentProvider.stop();
     }
-
 }

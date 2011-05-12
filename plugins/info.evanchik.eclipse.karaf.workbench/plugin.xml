@@ -44,9 +44,9 @@
       <view
             category="info.evanchik.eclipse.karaf.workbench.karaf"
             class="info.evanchik.eclipse.karaf.workbench.jmx.views.JmxServersView"
-            icon="icons/obj16/generic_element.gif"
+            icon="icons/obj16/felixLogo16x16.gif"
             id="info.evanchik.eclipse.karaf.workbench.jmx.serversView"
-            name="JMX MBean Servers"
+            name="Karaf Platforms"
             restorable="true">
       </view>
    </extension>

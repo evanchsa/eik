@@ -21,9 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import org.eclipse.jface.viewers.StructuredViewer;
-import org.osgi.framework.BundleContext;
-
 /**
  *
  * @author Neil Bartlett
@@ -32,12 +29,8 @@ import org.osgi.framework.BundleContext;
  */
 public class ServicesContentProvider extends BundlesContentProvider {
 
-    public ServicesContentProvider(StructuredViewer viewer, BundleContext context) {
-        super(viewer, context);
-    }
-
     @Override
-    public Object[] getChildren(Object parentElement) {
+    public Object[] getChildren(final Object parentElement) {
         Object[] result;
         if (parentElement instanceof RuntimeDataProvider) {
             result = ((RuntimeDataProvider) parentElement).getServices().toArray(new Object[0]);
@@ -54,7 +47,7 @@ public class ServicesContentProvider extends BundlesContentProvider {
                 entries.add(pi);
             } else {
 
-                for (Object o: properties.keySet()) {
+                for (final Object o: properties.keySet()) {
                     final String key = (String)o;
                     final PropertyEntry pi = new PropertyEntry(service, key, properties.get(key));
                     entries.add(pi);
@@ -72,7 +65,7 @@ public class ServicesContentProvider extends BundlesContentProvider {
     }
 
     @Override
-    public Object getParent(Object element) {
+    public Object getParent(final Object element) {
         Object result = super.getParent(element);
 
         if (result != null) {
@@ -87,8 +80,8 @@ public class ServicesContentProvider extends BundlesContentProvider {
     }
 
     @Override
-    public boolean hasChildren(Object element) {
-        boolean children = super.hasChildren(element);
+    public boolean hasChildren(final Object element) {
+        final boolean children = super.hasChildren(element);
 
         if (children == true) {
             return children;

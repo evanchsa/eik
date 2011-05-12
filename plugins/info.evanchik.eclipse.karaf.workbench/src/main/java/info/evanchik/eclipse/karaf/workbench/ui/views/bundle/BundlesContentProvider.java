@@ -16,12 +16,12 @@ import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProviderListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.BundleContext;
@@ -30,69 +30,88 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class BundlesContentProvider implements IStructuredContentProvider, ITreeContentProvider,
-        RuntimeDataProviderListener, ServiceTrackerCustomizer {
+        RuntimeDataProviderListener  {
 
-    protected final BundleContext context;
+    /**
+     *
+     * @author Stephen Evanchik (evanchsa@gmail.com)
+     *
+     */
+    private final class RuntimeDataProviderServiceTracker implements ServiceTrackerCustomizer {
 
-    protected final StructuredViewer viewer;
+        @Override
+        public Object addingService(final ServiceReference reference) {
+            final RuntimeDataProvider provider = (RuntimeDataProvider)bundleContext.getService(reference);
 
-    protected final EclipseRuntimeDataProvider eclipseWorkbenchDataProvider;
+            if(!runtimeDataProviders.contains(provider)) {
+                provider.addListener(BundlesContentProvider.this);
+                runtimeDataProviders.add(provider);
 
-    protected final List<RuntimeDataProvider> runtimeDataProviders;
+                Display.getDefault().asyncExec(new Runnable() {
 
-    protected final ServiceTracker dataProviderServiceTracker;
-
-    public BundlesContentProvider(StructuredViewer viewer, BundleContext context) {
-        this.viewer = viewer;
-        this.context = context;
-
-        this.runtimeDataProviders = new ArrayList<RuntimeDataProvider>();
-        this.eclipseWorkbenchDataProvider = new EclipseRuntimeDataProvider(context);
-        this.dataProviderServiceTracker = new ServiceTracker(context, RuntimeDataProvider.class.getName(), this);
-
-        runtimeDataProviders.add(eclipseWorkbenchDataProvider);
-    }
-
-    @Override
-    public Object addingService(ServiceReference reference) {
-        final RuntimeDataProvider provider = (RuntimeDataProvider)context.getService(reference);
-
-        if(!runtimeDataProviders.contains(provider)) {
-            provider.addListener(this);
-            runtimeDataProviders.add(provider);
-
-            Display.getDefault().asyncExec(new Runnable() {
-
-                @Override
-                public void run() {
-                    viewer.refresh();
-                }
-
-            });
-        }
-
-        return provider;
-    }
-
-    @Override
-    public void providerChange(RuntimeDataProvider source, EnumSet<RuntimeDataProviderListener.EventType> type) {
-
-        Display.getDefault().asyncExec(new Runnable() {
-
-            @Override
-            public void run() {
-                viewer.refresh();
+                    @Override
+                    public void run() {
+                        if (!viewer.getControl().isDisposed()) {
+                            viewer.refresh();
+                        }
+                    }
+                });
             }
 
-        });
-    }
+            return provider;
+        }
+
+        @Override
+        public void modifiedService(final ServiceReference reference, final Object service) {
+            // Intentionally left blank
+        }
+
+        @Override
+        public void removedService(final ServiceReference reference, final Object service) {
+            if(runtimeDataProviders.contains(service)) {
+                final RuntimeDataProvider provider = (RuntimeDataProvider)service;
+                provider.removeListener(BundlesContentProvider.this);
+
+                runtimeDataProviders.remove(service);
+
+                Display.getDefault().asyncExec(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (!viewer.getControl().isDisposed()) {
+                            viewer.refresh();
+                        }
+                    }
+                });
+            }
+        }
+    };
+
+    protected BundleContext bundleContext;
+
+    protected ServiceTracker dataProviderServiceTracker;
+
+    protected EclipseRuntimeDataProvider eclipseWorkbenchDataProvider;
+
+    protected final List<RuntimeDataProvider> runtimeDataProviders = Collections.synchronizedList(new ArrayList<RuntimeDataProvider>());
+
+    protected ServiceTrackerCustomizer serviceTrackerCustomizer;
+
+    protected volatile Viewer viewer;
 
     @Override
     public void dispose() {
+        synchronized (runtimeDataProviders) {
+            for (final RuntimeDataProvider b : runtimeDataProviders) {
+                b.removeListener(this);
+            }
+        }
+
+        dataProviderServiceTracker.close();
     }
 
     @Override
-    public Object[] getChildren(Object parentElement) {
+    public Object[] getChildren(final Object parentElement) {
         if (parentElement instanceof RuntimeDataProvider) {
             return ((RuntimeDataProvider) parentElement).getBundles().toArray(new Object[0]);
         }
@@ -101,18 +120,18 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
     }
 
     @Override
-    public Object[] getElements(Object inputElement) {
+    public Object[] getElements(final Object inputElement) {
         return runtimeDataProviders.toArray(new Object[0]);
     }
 
     @Override
-    public Object getParent(Object element) {
-        if(element instanceof RuntimeDataProvider == false) {
+    public Object getParent(final Object element) {
+        if(element instanceof RuntimeDataProvider) {
             return null;
         }
 
         synchronized(runtimeDataProviders) {
-            for (RuntimeDataProvider b : runtimeDataProviders) {
+            for (final RuntimeDataProvider b : runtimeDataProviders) {
                 if (b.getBundles().contains(element)) {
                     return b;
                 }
@@ -123,71 +142,65 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
     }
 
     @Override
-    public boolean hasChildren(Object element) {
+    public boolean hasChildren(final Object element) {
         if (element instanceof RuntimeDataProvider) {
-            return true;
+            final RuntimeDataProvider dataProvider = (RuntimeDataProvider) element;
+            final boolean hasChildren = dataProvider.getBundles().size() > 0;
+            return hasChildren;
         }
 
         return false;
     }
 
     @Override
-    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+    public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+        if (!(newInput instanceof BundleContext)) {
+            return;
+        }
+
+        this.viewer = viewer;
+        this.bundleContext = (BundleContext) newInput;
+
+        /*
+         * The Eclipse workbench RuntimeDataProvider and ServiceTracker only
+         * need to be initialized once because there is only one Eclipse
+         * workbench per content provider instance
+         */
+        if (eclipseWorkbenchDataProvider == null) {
+            eclipseWorkbenchDataProvider = new EclipseRuntimeDataProvider(bundleContext);
+            eclipseWorkbenchDataProvider.addListener(this);
+            eclipseWorkbenchDataProvider.start();
+
+            runtimeDataProviders.add(eclipseWorkbenchDataProvider);
+        }
+
+        if (serviceTrackerCustomizer == null) {
+            this.serviceTrackerCustomizer = new RuntimeDataProviderServiceTracker();
+            this.dataProviderServiceTracker = new ServiceTracker(bundleContext, RuntimeDataProvider.class.getName(), serviceTrackerCustomizer);
+            this.dataProviderServiceTracker.open();
+        }
     }
 
     @Override
-    public void modifiedService(ServiceReference reference, Object service) {
-    }
+    public void providerChange(final RuntimeDataProvider source, final EnumSet<RuntimeDataProviderListener.EventType> type) {
 
-    @Override
-    public void providerStart(RuntimeDataProvider source) {
-    }
+        Display.getDefault().asyncExec(new Runnable() {
 
-    @Override
-    public void providerStop(RuntimeDataProvider source) {
-    }
-
-    @Override
-    public void removedService(ServiceReference reference, Object service) {
-        if(runtimeDataProviders.contains(service)) {
-            final RuntimeDataProvider provider = (RuntimeDataProvider)service;
-            provider.removeListener(this);
-
-            runtimeDataProviders.remove(service);
-
-            Display.getDefault().asyncExec(new Runnable() {
-
-                @Override
-                public void run() {
+            @Override
+            public void run() {
+                if (!viewer.getControl().isDisposed()) {
                     viewer.refresh();
                 }
+            }
 
-            });
-        }
+        });
     }
 
-    public void start() {
-        synchronized (runtimeDataProviders) {
-            for (RuntimeDataProvider provider : runtimeDataProviders) {
-                provider.addListener(this);
-            }
-        }
-
-        eclipseWorkbenchDataProvider.start();
-
-        dataProviderServiceTracker.open();
-
-        // Refresh
-        viewer.refresh();
+    @Override
+    public void providerStart(final RuntimeDataProvider source) {
     }
 
-    public void stop() {
-        synchronized (runtimeDataProviders) {
-            for (RuntimeDataProvider b : runtimeDataProviders) {
-                b.removeListener(this);
-            }
-        }
-
-        dataProviderServiceTracker.close();
+    @Override
+    public void providerStop(final RuntimeDataProvider source) {
     }
 }

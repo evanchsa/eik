@@ -103,16 +103,12 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#createImageRegistry()
      */
     @Override
-    protected ImageRegistry createImageRegistry() {
-        final ImageRegistry imageRegistry = new ImageRegistry();
-
+    protected void initializeImageRegistry(final ImageRegistry imageRegistry) {
         registerImage(imageRegistry, BUNDLE_OBJ_IMG, "obj16/bundle_obj.gif"); //$NON-NLS-1$
         registerImage(imageRegistry, FEATURE_OBJ_IBM, "obj16/feature_obj.gif"); //$NON-NLS-1$
         registerImage(imageRegistry, LOGO_16X16_IMG, "obj16/felixLogo16x16.gif"); //$NON-NLS-1$
         registerImage(imageRegistry, LOGO_32X32_IMG, "obj32/felixLogo32x32.gif"); //$NON-NLS-1$
         registerImage(imageRegistry, LOGO_64X64_IMG, "obj64/felixLogo64x64.gif"); //$NON-NLS-1$
-
-        return imageRegistry;
     }
 
     /**

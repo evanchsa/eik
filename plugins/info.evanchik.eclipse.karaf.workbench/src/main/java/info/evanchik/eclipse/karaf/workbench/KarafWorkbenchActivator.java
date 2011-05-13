@@ -2,6 +2,7 @@ package info.evanchik.eclipse.karaf.workbench;
 
 import info.evanchik.eclipse.karaf.core.LogWrapper;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
+import info.evanchik.eclipse.karaf.workbench.internal.MBeanProviderManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXTransportRegistry;
 import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.jmx.internal.JMXServiceManager;
@@ -34,6 +35,8 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
     private JMXServiceManager jmxServiceManager;
 
     private JMXTransportRegistry jmxTransportRegistry;
+
+    private MBeanProviderManager mbeanProviderManager;
 
 	// The shared instance
 	private static KarafWorkbenchActivator plugin;
@@ -94,6 +97,14 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
         return jmxTransportRegistry;
     }
 
+    /**
+     *
+     * @return
+     */
+    public WorkbenchServiceManager<MBeanProvider> getMBeanProviderManager() {
+        return mbeanProviderManager;
+    }
+
 	@Override
     public void start(final BundleContext context) throws Exception {
 		super.start(context);
@@ -104,6 +115,7 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
 
         jmxServiceManager = new JMXServiceManager();
         jmxTransportRegistry = new JMXTransportRegistry();
+        mbeanProviderManager = new MBeanProviderManager();
 	}
 
 	@Override

@@ -27,6 +27,7 @@ import javax.management.NotificationListener;
 import javax.management.ObjectName;
 import javax.management.remote.JMXConnector;
 
+import org.eclipse.core.runtime.PlatformObject;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
@@ -34,7 +35,7 @@ import org.osgi.framework.ServiceRegistration;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
+public class KarafMBeanProvider extends PlatformObject implements MBeanProvider, NotificationListener {
 
     private final JMXConnector connector;
 
@@ -55,7 +56,7 @@ public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
      * @throws IOException
      *             if the connection to the MBean Server cannot be made
      */
-    public KarafMBeanProvider(JMXConnector connector) throws IOException {
+    public KarafMBeanProvider(final JMXConnector connector) throws IOException {
         this.connector = connector;
         this.mbeanServer = connector.getMBeanServerConnection();
 
@@ -74,10 +75,10 @@ public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
                 try {
                     connector.removeConnectionNotificationListener(KarafMBeanProvider.this);
                     connector.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     // Do nothing
                     // KarafWorkbenchActivator.getLogger().info("Unable to close connection to JMX MBeanServer", e);
-                } catch (ListenerNotFoundException e) {
+                } catch (final ListenerNotFoundException e) {
                     // Nothing to do since this is impossible
                 }
             }
@@ -91,7 +92,7 @@ public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
     }
 
     @Override
-    public <T> T getMBean(ObjectName objectName, Class<T> interfaceClass) {
+    public <T> T getMBean(final ObjectName objectName, final Class<T> interfaceClass) {
         return MBeanServerInvocationHandler.newProxyInstance(
                 mbeanServer,
                 objectName,
@@ -105,7 +106,7 @@ public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
     }
 
     @Override
-    public void handleNotification(Notification notification, Object handback) {
+    public void handleNotification(final Notification notification, final Object handback) {
     }
 
     /**
@@ -120,7 +121,7 @@ public class KarafMBeanProvider implements MBeanProvider, NotificationListener {
     }
 
     @Override
-    public void open(Object memento) {
+    public void open(final Object memento) {
         if (memento == null) {
             throw new NullPointerException("Cannot specify a null memento");
         }

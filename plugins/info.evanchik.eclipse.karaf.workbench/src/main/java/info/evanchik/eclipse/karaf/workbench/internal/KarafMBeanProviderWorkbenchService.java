@@ -99,6 +99,8 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
     private WorkbenchServiceManager<JMXServiceDescriptor> jmxServiceManager;
 
+    private WorkbenchServiceManager<MBeanProvider> mbeanProviderManager;
+
     private final Map<String, MBeanServerConnectionJob> mbeanConnectionJobMap =
         Collections.synchronizedMap(new HashMap<String, MBeanServerConnectionJob>());
 
@@ -115,6 +117,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
         DebugPlugin.getDefault().getLaunchManager().addLaunchListener(new JMXServiceCleanupLaunchListener());
 
         jmxServiceManager = KarafWorkbenchActivator.getDefault().getJMXServiceManager();
+        mbeanProviderManager = KarafWorkbenchActivator.getDefault().getMBeanProviderManager();
     }
 
     @Override
@@ -206,10 +209,11 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
                 final KarafMBeanProvider mbeanProvider;
                 try {
-                    mbeanProvider = new KarafMBeanProvider(mbeanConnectionJob.getJmxClient());
+                    mbeanProvider = new LocalKarafMBeanProvider(mbeanConnectionJob.getJmxClient(), platformModel);
                     mbeanProvider.open(memento);
 
                     mbeanProviderMap.put(memento, mbeanProvider);
+                    mbeanProviderManager.add(mbeanProvider);
                 } catch (final IOException e) {
                     KarafWorkbenchActivator.getLogger().error("Unable to create MBeanProvider from JMXConnector", e);
 
@@ -293,6 +297,10 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
         this.jmxServiceManager = jmxServiceManager;
     }
 
+    public void setMbeanProviderManager(final WorkbenchServiceManager<MBeanProvider> mbeanProviderManager) {
+        this.mbeanProviderManager = mbeanProviderManager;
+    }
+
     /**
      * Registers an event listener on the debug session that responds to
      * {@link DebugEvent.TERMINATE} events. This will stop the MBBean connection
@@ -340,6 +348,8 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                         }
 
                         final MBeanProvider mbeanProvider = mbeanProviderMap.get(memento);
+                        mbeanProviderManager.remove(mbeanProvider);
+
                         if (mbeanProvider != null) {
                             mbeanProvider.close();
                         }

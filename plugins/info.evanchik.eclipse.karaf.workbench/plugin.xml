@@ -35,7 +35,7 @@
       </view>
       <view
             category="info.evanchik.eclipse.karaf.workbench.karaf"
-            class="info.evanchik.eclipse.karaf.workbench.jmx.views.JmxServersView"
+            class="info.evanchik.eclipse.karaf.workbench.ui.views.JmxServersView"
             icon="icons/obj16/felixLogo16x16.gif"
             id="info.evanchik.eclipse.karaf.workbench.jmx.serversView"
             name="Karaf Platforms"

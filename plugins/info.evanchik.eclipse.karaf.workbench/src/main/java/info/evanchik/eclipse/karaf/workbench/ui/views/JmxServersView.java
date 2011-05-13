@@ -8,7 +8,7 @@
  * Contributors:
  *  Stephen Evanchik - initial implementation
  */
-package info.evanchik.eclipse.karaf.workbench.jmx.views;
+package info.evanchik.eclipse.karaf.workbench.ui.views;
 
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceListener;

@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.workbench.ui;
 
-import info.evanchik.eclipse.karaf.workbench.jmx.views.JmxServersView;
+import info.evanchik.eclipse.karaf.workbench.ui.views.JmxServersView;
 import info.evanchik.eclipse.karaf.workbench.ui.views.bundle.BundlesView;
 import info.evanchik.eclipse.karaf.workbench.ui.views.services.ServicesView;
 

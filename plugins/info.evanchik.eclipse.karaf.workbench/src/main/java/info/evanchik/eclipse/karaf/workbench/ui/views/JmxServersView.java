@@ -16,6 +16,8 @@ import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceListener;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXTransportRegistry;
 import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
+import info.evanchik.eclipse.karaf.workbench.ui.editor.KarafPlatformEditorInput;
+import info.evanchik.eclipse.karaf.workbench.ui.editor.KarafPlatformEditorPart;
 
 import java.util.List;
 
@@ -37,7 +39,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -164,7 +168,12 @@ public class JmxServersView extends ViewPart {
                 final KarafPlatformModel karafPlatform =
                     (KarafPlatformModel) jmxServiceDescriptor.getAdapter(KarafPlatformModel.class);
 				if (karafPlatform != null) {
-				    karafPlatform.toString();
+				    final IEditorInput editorInput = new KarafPlatformEditorInput(karafPlatform);
+				    try {
+                        getSite().getWorkbenchWindow().getActivePage().openEditor(editorInput, KarafPlatformEditorPart.ID);
+                    } catch (final PartInitException e) {
+                        // TODO: Handle PartInitException
+                    }
 				} else {
     				final JMXConnector connector =
     					jmxTransportRegistry.getJMXConnector(jmxServiceDescriptor);

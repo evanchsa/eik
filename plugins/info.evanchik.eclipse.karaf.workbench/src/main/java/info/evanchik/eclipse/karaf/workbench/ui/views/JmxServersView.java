@@ -10,6 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.workbench.ui.views;
 
+import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceListener;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceManager;
@@ -53,8 +54,6 @@ public class JmxServersView extends ViewPart {
 	private final class JMXServiceDescriptorContentProvider
 		implements IStructuredContentProvider, IJMXServiceListener
 	{
-		private ListViewer concreteViewer;
-
 		@Override
         public void dispose() {
 			// What to do?
@@ -73,28 +72,24 @@ public class JmxServersView extends ViewPart {
 
 		@Override
         public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-			if(viewer instanceof ListViewer) {
-				concreteViewer = (ListViewer) viewer;
-			}
 		}
 
 		@Override
         public void jmxServiceAdded(final JMXServiceDescriptor jmxService) {
-			concreteViewer.getControl().getDisplay().syncExec(new Runnable() {
+			viewer.getControl().getDisplay().syncExec(new Runnable() {
 				@Override
                 public void run() {
-					concreteViewer.add(jmxService);
+					viewer.add(jmxService);
 				}
-
 			});
 		}
 
 		@Override
         public void jmxServiceRemoved(final JMXServiceDescriptor jmxService) {
-			concreteViewer.getControl().getDisplay().syncExec(new Runnable() {
+			viewer.getControl().getDisplay().syncExec(new Runnable() {
 				@Override
                 public void run() {
-					concreteViewer.remove(jmxService);
+					viewer.remove(jmxService);
 				}
 			});
 		}
@@ -163,13 +158,17 @@ public class JmxServersView extends ViewPart {
 				final IStructuredSelection selection =
 					(IStructuredSelection) event.getSelection();
 
-				final JMXServiceDescriptor connection =
+				final JMXServiceDescriptor jmxServiceDescriptor =
 					(JMXServiceDescriptor) selection.getFirstElement();
 
-				final JMXConnector connector =
-					jmxTransportRegistry.getJMXConnector(connection);
-
-				// TODO: Update the data provided by this connector
+                final KarafPlatformModel karafPlatform =
+                    (KarafPlatformModel) jmxServiceDescriptor.getAdapter(KarafPlatformModel.class);
+				if (karafPlatform != null) {
+				    karafPlatform.toString();
+				} else {
+    				final JMXConnector connector =
+    					jmxTransportRegistry.getJMXConnector(jmxServiceDescriptor);
+				}
 			}
 		});
 

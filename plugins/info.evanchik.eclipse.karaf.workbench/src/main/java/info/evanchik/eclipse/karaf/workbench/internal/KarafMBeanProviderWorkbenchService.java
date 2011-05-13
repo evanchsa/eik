@@ -17,6 +17,7 @@ import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
+import info.evanchik.eclipse.karaf.workbench.jmx.LocalJMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 
 import java.io.IOException;
@@ -168,8 +169,9 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
             final JMXServiceURL standardJmxConnection = new JMXServiceURL(
                     "service:jmx:rmi:///jndi/rmi://localhost:" + jmxPort + "/jmxrmi"); //$NON-NLS-1$ $NON-NLS-2$
 
-            final JMXServiceDescriptor descriptor = new JMXServiceDescriptor(
+            final JMXServiceDescriptor descriptor = new LocalJMXServiceDescriptor(
                         configuration.getName(),
+                        platformModel,
                         standardJmxConnection,
                         null,
                         null,

@@ -15,6 +15,8 @@ import java.net.MalformedURLException;
 
 import javax.management.remote.JMXServiceURL;
 
+import org.eclipse.core.runtime.PlatformObject;
+
 /**
  * A {@code JMXServiceDescriptor} contains all of the elements necessary to
  * describe a connection to a JMX endpoint:<br>
@@ -33,42 +35,9 @@ import javax.management.remote.JMXServiceURL;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public final class JMXServiceDescriptor implements Serializable {
-
-    public static final String DEFAULT_DOMAIN = "jmxserver"; //$NON-NLS-1$
-
-    public static final String DEFAULT_PORT = "8118"; //$NON-NLS-1$
-
-    public static final String DEFAULT_PROTOCOL = "rmi"; //$NON-NLS-1$
-
-    public static final int DEFAULT_PORT_AS_INT = Integer.parseInt(DEFAULT_PORT);
+public class JMXServiceDescriptor extends PlatformObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-	/**
-	 * Gets the {@code JMXServiceDescriptor} for the local MBean server
-	 *
-	 * @param username
-	 *            the username or null if authentication is not necessary
-	 * @param password
-	 *            the password or null if authentication is not necessary
-	 * @return
-	 */
-    public static JMXServiceDescriptor getLocalJMXServiceDescriptor(final String username, final String password) {
-    	try {
-    		final JMXServiceURL url =
-    			new JMXServiceURL(
-    					DEFAULT_PROTOCOL,
-    					"localhost", //$NON-NLS-1$
-    					DEFAULT_PORT_AS_INT,
-    					"/" + DEFAULT_DOMAIN); //$NON-NLS-1$
-
-    		return new JMXServiceDescriptor("Local JMX Service", url, username, password, DEFAULT_DOMAIN);
-    	} catch(final MalformedURLException e) {
-    		// This is a programming error
-    		throw new AssertionError(e);
-    	}
-    }
 
     private final String name;
 

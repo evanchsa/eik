@@ -49,7 +49,7 @@ public class BundlesView extends FilteredViewPart {
     private IAction propertiesAction;
     private BundleSymbolicNameFilter nameFilter;
 
-    protected final int[] colWidth = new int[] { 165, 40, 100, 250, 250 };
+    protected final int[] colWidth = new int[] { 185, 40, 100, 250, 250 };
 
     @Override
     public void createMainControl(final Composite parent) {

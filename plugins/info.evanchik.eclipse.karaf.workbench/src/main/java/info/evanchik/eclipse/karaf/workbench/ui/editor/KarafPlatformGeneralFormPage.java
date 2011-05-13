@@ -51,7 +51,7 @@ public class KarafPlatformGeneralFormPage extends FormPage {
 
     @Override
     protected void createFormContent(final IManagedForm managedForm) {
-        final GridLayout layout = new GridLayout(2, false);
+        final GridLayout layout = new GridLayout(2, true);
 
         GridData data = new GridData(GridData.FILL_BOTH);
         data.horizontalSpan = 2;

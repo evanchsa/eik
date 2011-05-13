@@ -15,7 +15,7 @@ import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
-import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceManager;
+import info.evanchik.eclipse.karaf.workbench.WorkbenchServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.jmx.LocalJMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
@@ -83,7 +83,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                     return;
                 }
 
-                jmxServiceManager.removeJMXService(jmxServiceDescriptor);
+                jmxServiceManager.remove(jmxServiceDescriptor);
 
                 jmxServiceDescriptorMap.remove(memento);
             } catch (final CoreException e) {
@@ -97,7 +97,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
     private final Map<String, JMXServiceDescriptor> jmxServiceDescriptorMap =
         Collections.synchronizedMap(new HashMap<String, JMXServiceDescriptor>());
 
-    private IJMXServiceManager jmxServiceManager;
+    private WorkbenchServiceManager<JMXServiceDescriptor> jmxServiceManager;
 
     private final Map<String, MBeanServerConnectionJob> mbeanConnectionJobMap =
         Collections.synchronizedMap(new HashMap<String, MBeanServerConnectionJob>());
@@ -182,7 +182,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
             mbeanConnectionJobMap.put(memento, mbeanConnectionJob);
 
             jmxServiceDescriptorMap.put(memento, descriptor);
-            jmxServiceManager.addJMXService(descriptor);
+            jmxServiceManager.add(descriptor);
 
         } catch(final MalformedURLException e) {
             KarafWorkbenchActivator.getLogger().error("Unable to connect to JMX endpoint on Karaf instance", e);
@@ -289,7 +289,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
         DebugPlugin.getDefault().addDebugEventListener(debugListener);
     }
 
-    public void setJmxServiceManager(final IJMXServiceManager jmxServiceManager) {
+    public void setJmxServiceManager(final WorkbenchServiceManager<JMXServiceDescriptor> jmxServiceManager) {
         this.jmxServiceManager = jmxServiceManager;
     }
 
@@ -322,7 +322,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                         && event.getKind() == DebugEvent.TERMINATE)
                     {
                         final JMXServiceDescriptor descriptor = jmxServiceDescriptorMap.get(memento);
-                        jmxServiceManager.removeJMXService(descriptor);
+                        jmxServiceManager.remove(descriptor);
 
                         final MBeanServerConnectionJob job = mbeanConnectionJobMap.get(memento);
                         if (job != null) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2009 Stephen Evanchik
+ * Copyright (c) 2011 Stephen Evanchik
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,15 +8,14 @@
  * Contributors:
  *  Stephen Evanchik - initial implementation
  */
-package info.evanchik.eclipse.karaf.workbench.jmx.internal;
+package info.evanchik.eclipse.karaf.workbench.internal;
 
-import info.evanchik.eclipse.karaf.workbench.internal.AbstractWorkbenchServiceManager;
-import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
+import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class JMXServiceManager extends AbstractWorkbenchServiceManager<JMXServiceDescriptor>{
+public class MBeanProviderManager extends AbstractWorkbenchServiceManager<MBeanProvider> {
 
 }

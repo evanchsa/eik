@@ -12,8 +12,8 @@ package info.evanchik.eclipse.karaf.workbench.ui.views;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
-import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceListener;
-import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceManager;
+import info.evanchik.eclipse.karaf.workbench.WorkbenchServiceListener;
+import info.evanchik.eclipse.karaf.workbench.WorkbenchServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXTransportRegistry;
 import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.ui.editor.KarafPlatformEditorInput;
@@ -56,7 +56,7 @@ public class JmxServersView extends ViewPart {
 	 *
 	 */
 	private final class JMXServiceDescriptorContentProvider
-		implements IStructuredContentProvider, IJMXServiceListener
+		implements IStructuredContentProvider, WorkbenchServiceListener<JMXServiceDescriptor>
 	{
 		@Override
         public void dispose() {
@@ -66,7 +66,7 @@ public class JmxServersView extends ViewPart {
 		@Override
         public Object[] getElements(final Object element) {
 		    if (element == jmxServiceManager) {
-	            final List<JMXServiceDescriptor> jmxServiceDescriptors = jmxServiceManager.getJMXServices();
+	            final List<JMXServiceDescriptor> jmxServiceDescriptors = jmxServiceManager.getServices();
 
 	            return jmxServiceDescriptors.toArray();
 		    } else {
@@ -79,7 +79,7 @@ public class JmxServersView extends ViewPart {
 		}
 
 		@Override
-        public void jmxServiceAdded(final JMXServiceDescriptor jmxService) {
+        public void serviceAdded(final JMXServiceDescriptor jmxService) {
 			viewer.getControl().getDisplay().syncExec(new Runnable() {
 				@Override
                 public void run() {
@@ -89,7 +89,7 @@ public class JmxServersView extends ViewPart {
 		}
 
 		@Override
-        public void jmxServiceRemoved(final JMXServiceDescriptor jmxService) {
+        public void serviceRemoved(final JMXServiceDescriptor jmxService) {
 			viewer.getControl().getDisplay().syncExec(new Runnable() {
 				@Override
                 public void run() {
@@ -128,7 +128,7 @@ public class JmxServersView extends ViewPart {
 
 	public static final String VIEW_ID = "info.evanchik.eclipse.karaf.workbench.jmx.serversView";
 
-	private IJMXServiceManager jmxServiceManager;
+	private WorkbenchServiceManager<JMXServiceDescriptor> jmxServiceManager;
 
 	private IJMXTransportRegistry jmxTransportRegistry;
 
@@ -153,7 +153,7 @@ public class JmxServersView extends ViewPart {
 		viewer.setLabelProvider(new JMXServiceDescriptorLabelProvider());
 		viewer.setInput(jmxServiceManager);
 
-		jmxServiceManager.addJMXServiceListener(contentProvider);
+		jmxServiceManager.addListener(contentProvider);
 
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -191,7 +191,7 @@ public class JmxServersView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-	public void setJmxServiceManager(final IJMXServiceManager jmxServiceManager) {
+	public void setJmxServiceManager(final WorkbenchServiceManager<JMXServiceDescriptor> jmxServiceManager) {
         this.jmxServiceManager = jmxServiceManager;
     }
 

@@ -2,8 +2,8 @@ package info.evanchik.eclipse.karaf.workbench;
 
 import info.evanchik.eclipse.karaf.core.LogWrapper;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
-import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXTransportRegistry;
+import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.jmx.internal.JMXServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.internal.JMXTransportRegistry;
 
@@ -73,13 +73,14 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
 	public KarafWorkbenchActivator() {
 	}
 
-	/**
-     * Getter for the {@link IJMXServiceManager} implementation. There is only
-     * one per plugin instance.
+    /**
+     * Getter for the {@link WorkbenchServiceManager<JMXServiceDescriptor>}
+     * implementation. There is only one per plugin instance.
      *
-     * @return the {@code IJMXServiceManager} instance
+     * @return the {@code WorkbenchServiceManager<JMXServiceDescriptor>}
+     *         instance
      */
-    public IJMXServiceManager getJMXServiceManager() {
+    public WorkbenchServiceManager<JMXServiceDescriptor> getJMXServiceManager() {
         return jmxServiceManager;
     }
 

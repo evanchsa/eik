@@ -80,10 +80,10 @@ public class JMXTransportRegistry implements IJMXTransportRegistry {
         public void run() throws Exception {
 			switch (event) {
 				case ADDED:
-					listener.jmxTransportAdded(jmxConnectorProvider);
+					listener.serviceAdded(jmxConnectorProvider);
 					break;
 				case REMOVED:
-					listener.jmxTransportRemoved(jmxConnectorProvider);
+					listener.serviceRemoved(jmxConnectorProvider);
 					break;
 			}
 		}

@@ -10,6 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.workbench.jmx;
 
+import info.evanchik.eclipse.karaf.workbench.WorkbenchServiceListener;
+
 import javax.management.remote.JMXConnectorProvider;
 
 /**
@@ -22,23 +24,6 @@ import javax.management.remote.JMXConnectorProvider;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface IJMXTransportListener {
+public interface IJMXTransportListener extends WorkbenchServiceListener<JMXConnectorProvider> {
 
-	/**
-	 * Called when a {@link JMXConnectorProvider} has been added to an object
-	 * that this listener is observing.
-
-	 * @param jmxConnectorProvider
-	 * 		the {@code JMXConnectorProvider} that was added
-	 */
-	public void jmxTransportAdded(JMXConnectorProvider jmxConnectorProvider);
-
-	/**
-	 * Called when a {@link JMXConnectorProvider} has been removed from an
-	 * object that this listener is observing.
-	 *
-	 * @param jmxConnectorProvider
-	 * 		the {@code JMXConnectorProvider} that was removed
-	 */
-	public void jmxTransportRemoved(JMXConnectorProvider jmxConnectorProvider);
 }

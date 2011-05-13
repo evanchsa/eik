@@ -11,12 +11,13 @@
 package info.evanchik.eclipse.karaf.workbench.provider;
 
 import java.util.EnumSet;
+import java.util.EventListener;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface RuntimeDataProviderListener {
+public interface RuntimeDataProviderListener extends EventListener {
 
     /**
      * The type used to indicate how a {@code RuntimeDataProvider} has changed.<br>

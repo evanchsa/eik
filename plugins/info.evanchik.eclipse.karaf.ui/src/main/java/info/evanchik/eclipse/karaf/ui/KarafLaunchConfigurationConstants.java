@@ -12,6 +12,7 @@ package info.evanchik.eclipse.karaf.ui;
 
 
 
+
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *

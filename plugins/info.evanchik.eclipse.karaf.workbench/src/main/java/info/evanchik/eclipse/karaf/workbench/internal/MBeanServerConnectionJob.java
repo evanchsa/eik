@@ -44,7 +44,7 @@ public class MBeanServerConnectionJob extends Job {
      * Default number of milliseconds before attempting to connect to the JMX
      * server
      */
-    public static final long DEFAULT_INITIAL_SCHEDULE_DELAY = 20 * 1000;
+    public static final long DEFAULT_INITIAL_SCHEDULE_DELAY = 3 * 1000;
 
     /**
      * The JMX connection descriptor

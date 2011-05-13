@@ -21,10 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.ui.part.ViewPart;
-import org.osgi.framework.BundleContext;
-
 /**
  *
  * @author Neil Bartlett
@@ -32,10 +28,6 @@ import org.osgi.framework.BundleContext;
  *
  */
 public class ServicesContentProvider extends BundlesContentProvider {
-
-    public ServicesContentProvider(final ViewPart parent, final StructuredViewer viewer, final BundleContext context) {
-        super(parent, viewer, context);
-    }
 
     @Override
     public Object[] getChildren(final Object parentElement) {

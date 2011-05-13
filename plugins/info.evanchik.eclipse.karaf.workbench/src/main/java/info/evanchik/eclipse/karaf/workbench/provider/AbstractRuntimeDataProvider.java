@@ -41,16 +41,17 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
      * Constructor that simply initializes all internal data structures.
      */
     public AbstractRuntimeDataProvider() {
-        listeners = new ArrayList<RuntimeDataProviderListener>();
+        listeners = Collections.synchronizedList(new ArrayList<RuntimeDataProviderListener>());
 
-        bundleSet = new HashSet<BundleItem>();
-        idToBundleMap = new HashMap<Long, BundleItem>();
+        bundleSet = Collections.synchronizedSet(new HashSet<BundleItem>());
+        idToBundleMap = Collections.synchronizedMap(new HashMap<Long, BundleItem>());
 
-        serviceSet = new HashSet<ServiceItem>();
-        idToServiceMap = new HashMap<Long, ServiceItem>();
+        serviceSet = Collections.synchronizedSet(new HashSet<ServiceItem>());
+        idToServiceMap = Collections.synchronizedMap(new HashMap<Long, ServiceItem>());
     }
 
-    public void addListener(RuntimeDataProviderListener listener) {
+    @Override
+    public void addListener(final RuntimeDataProviderListener listener) {
         if (listeners.contains(listener)) {
             return;
         }
@@ -58,31 +59,37 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
         listeners.add(listener);
     }
 
-    public BundleItem getBundle(long id) {
+    @Override
+    public BundleItem getBundle(final long id) {
         return idToBundleMap.get(id);
     }
 
+    @Override
     public Set<BundleItem> getBundles() {
         synchronized (bundleSet) {
             return Collections.unmodifiableSet(bundleSet);
         }
     }
 
+    @Override
     public Image getIcon() {
         return KarafWorkbenchActivator.getDefault().getImageRegistry().get(KarafWorkbenchActivator.BUNDLE_OBJ_IMG);
     }
 
-    public ServiceItem getService(long id) {
+    @Override
+    public ServiceItem getService(final long id) {
         return idToServiceMap.get(id);
     }
 
+    @Override
     public Set<ServiceItem> getServices() {
         synchronized (serviceSet) {
             return Collections.unmodifiableSet(serviceSet);
         }
     }
 
-    public void removeListener(RuntimeDataProviderListener listener) {
+    @Override
+    public void removeListener(final RuntimeDataProviderListener listener) {
         if (!listeners.contains(listener)) {
             return;
         }
@@ -98,9 +105,11 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
      *            the type of change event as indicated by a {@link EnumSet} of
      *            {@link RuntimeDataProviderListener.EventType}
      */
-    protected void fireProviderChangeEvent(EnumSet<RuntimeDataProviderListener.EventType> type) {
-        for (RuntimeDataProviderListener l : listeners) {
-            l.providerChange(this, type);
+    protected void fireProviderChangeEvent(final EnumSet<RuntimeDataProviderListener.EventType> type) {
+        synchronized (listeners) {
+            for (final RuntimeDataProviderListener l : listeners) {
+                l.providerChange(this, type);
+            }
         }
     }
 
@@ -109,8 +118,10 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
      * {@link RuntimeDataProviderListener}S
      */
     protected void fireStartEvent() {
-        for (RuntimeDataProviderListener l : listeners) {
-            l.providerStart(this);
+        synchronized (listeners) {
+            for (final RuntimeDataProviderListener l : listeners) {
+                l.providerStart(this);
+            }
         }
     }
 
@@ -119,8 +130,10 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
      * {@link RuntimeDataProviderListener}S
      */
     protected void fireStopEvent() {
-        for (RuntimeDataProviderListener l : listeners) {
-            l.providerStop(this);
+        synchronized (listeners) {
+            for (final RuntimeDataProviderListener l : listeners) {
+                l.providerStop(this);
+            }
         }
     }
 }

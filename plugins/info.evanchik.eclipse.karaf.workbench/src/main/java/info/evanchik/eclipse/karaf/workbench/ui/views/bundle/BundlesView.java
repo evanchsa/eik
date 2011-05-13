@@ -11,23 +11,15 @@
  */
 package info.evanchik.eclipse.karaf.workbench.ui.views.bundle;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
-import info.evanchik.eclipse.karaf.workbench.internal.KarafRuntimeDataProvider;
-import info.evanchik.eclipse.karaf.workbench.ui.editor.KarafPlatformEditorInput;
-import info.evanchik.eclipse.karaf.workbench.ui.editor.KarafPlatformEditorPart;
 import info.evanchik.eclipse.karaf.workbench.ui.views.FilteredViewPart;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -36,7 +28,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -45,52 +36,18 @@ import org.osgi.framework.Bundle;
 
 public class BundlesView extends FilteredViewPart {
 
-    /**
-    *
-    * @author Stephen Evanchik (evanchsa@gmail.com)
-    *
-    */
-   private final class BundlesViewDoubleClickAction extends Action {
-
-       private final DoubleClickEvent event;
-
-       public BundlesViewDoubleClickAction(final DoubleClickEvent event) {
-           this.event = event;
-       }
-
-       @Override
-       public void run() {
-           final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-
-           if (!selection.isEmpty()) {
-               final Object obj = selection.getFirstElement();
-
-               if (obj instanceof KarafRuntimeDataProvider) {
-                   KarafPlatformModel platformModel;
-
-                    try {
-                        platformModel = KarafPlatformModelRegistry.findActivePlatformModel();
-                        final IEditorInput editorInput = new KarafPlatformEditorInput(platformModel);
-                        getSite().getPage().openEditor(editorInput, KarafPlatformEditorPart.ID);
-                    } catch (final CoreException e) {
-                    }
-               }
-           }
-       }
-   }
-
     public static final String VIEW_ID = "info.evanchik.eclipse.karaf.workbench.karafBundles";
+
+    protected static final int MAX_COLS = 5;
 
     private static final String TAG_COLUMN_WIDTH = "columnWidth";
 
-    protected static final int MAX_COLS = 5;
+    private Tree treeTable;
+    private TreeViewer treeTableViewer;
     private BundlesContentProvider contentProvider;
-    private BundleSymbolicNameFilter nameFilter;
 
     private IAction propertiesAction;
-    private Tree treeTable;
-
-    private TreeViewer treeTableViewer;
+    private BundleSymbolicNameFilter nameFilter;
 
     protected final int[] colWidth = new int[] { 165, 40, 100, 250, 250 };
 
@@ -128,14 +85,11 @@ public class BundlesView extends FilteredViewPart {
         nameFilter = new BundleSymbolicNameFilter();
         treeTableViewer.addFilter(nameFilter);
 
-        // Load data
-        contentProvider = new BundlesContentProvider(this, treeTableViewer, KarafWorkbenchActivator.getDefault().getBundle().getBundleContext());
+        contentProvider = new BundlesContentProvider();
 
         treeTableViewer.setContentProvider(contentProvider);
         treeTableViewer.setSorter(new BundleIdSorter());
         treeTableViewer.setInput(KarafWorkbenchActivator.getDefault().getBundle().getBundleContext());
-
-        contentProvider.start();
 
         getViewSite().setSelectionProvider(treeTableViewer);
 
@@ -143,19 +97,6 @@ public class BundlesView extends FilteredViewPart {
         fillMenu();
 
         initContextMenu();
-        hookDoubleClickAction();
-    }
-
-    @Override
-    public void dispose() {
-        contentProvider.stop();
-    }
-
-    @Override
-    public void doSetFocus() {
-        if (treeTable != null) {
-            treeTable.setFocus();
-        }
     }
 
     @Override
@@ -185,6 +126,19 @@ public class BundlesView extends FilteredViewPart {
         }
     }
 
+    @Override
+    public void doSetFocus() {
+        if (treeTable != null) {
+            treeTable.setFocus();
+        }
+    }
+
+    @Override
+    protected void updatedFilter(final String filterString) {
+        nameFilter.setFilterString(filterString);
+        treeTableViewer.refresh();
+    }
+
     private void createActions() {
         propertiesAction = new Action() {
             @Override
@@ -202,15 +156,6 @@ public class BundlesView extends FilteredViewPart {
             }
         };
         propertiesAction.setText("Properties...");
-    }
-
-    private void hookDoubleClickAction() {
-        treeTableViewer.addDoubleClickListener(new IDoubleClickListener() {
-            @Override
-            public void doubleClick(final DoubleClickEvent event) {
-                new BundlesViewDoubleClickAction(event).run();
-            }
-        });
     }
 
     protected void fillMenu() {
@@ -240,8 +185,6 @@ public class BundlesView extends FilteredViewPart {
     }
 
     @Override
-    protected void updatedFilter(final String filterString) {
-        nameFilter.setFilterString(filterString);
-        treeTableViewer.refresh();
+    public void dispose() {
     }
 }

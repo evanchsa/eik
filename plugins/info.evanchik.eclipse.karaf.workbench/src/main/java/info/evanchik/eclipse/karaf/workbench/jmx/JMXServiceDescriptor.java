@@ -15,6 +15,8 @@ import java.net.MalformedURLException;
 
 import javax.management.remote.JMXServiceURL;
 
+import org.eclipse.core.runtime.PlatformObject;
+
 /**
  * A {@code JMXServiceDescriptor} contains all of the elements necessary to
  * describe a connection to a JMX endpoint:<br>
@@ -33,42 +35,9 @@ import javax.management.remote.JMXServiceURL;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public final class JMXServiceDescriptor implements Serializable {
-
-    public static final String DEFAULT_DOMAIN = "jmxserver"; //$NON-NLS-1$
-
-    public static final String DEFAULT_PORT = "8118"; //$NON-NLS-1$
-
-    public static final String DEFAULT_PROTOCOL = "rmi"; //$NON-NLS-1$
-
-    public static final int DEFAULT_PORT_AS_INT = Integer.parseInt(DEFAULT_PORT);
+public class JMXServiceDescriptor extends PlatformObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-	/**
-	 * Gets the {@code JMXServiceDescriptor} for the local MBean server
-	 *
-	 * @param username
-	 *            the username or null if authentication is not necessary
-	 * @param password
-	 *            the password or null if authentication is not necessary
-	 * @return
-	 */
-    public static JMXServiceDescriptor getLocalJMXServiceDescriptor(String username, String password) {
-    	try {
-    		final JMXServiceURL url =
-    			new JMXServiceURL(
-    					DEFAULT_PROTOCOL,
-    					"localhost", //$NON-NLS-1$
-    					DEFAULT_PORT_AS_INT,
-    					"/" + DEFAULT_DOMAIN); //$NON-NLS-1$
-
-    		return new JMXServiceDescriptor("Local JMX Service", url, username, password, DEFAULT_DOMAIN);
-    	} catch(MalformedURLException e) {
-    		// This is a programming error
-    		throw new AssertionError(e);
-    	}
-    }
 
     private final String name;
 
@@ -99,11 +68,11 @@ public final class JMXServiceDescriptor implements Serializable {
      *            the JMX domain used in {@code url}
      */
     public JMXServiceDescriptor(
-    		String name,
-    		JMXServiceURL url,
-    		String username,
-    		String password,
-    		String domain)
+    		final String name,
+    		final JMXServiceURL url,
+    		final String username,
+    		final String password,
+    		final String domain)
 	{
         this.name = name;
         this.username = username;
@@ -131,11 +100,11 @@ public final class JMXServiceDescriptor implements Serializable {
 	 * @throws MalformedURLException if the given string URL is not well formed
 	 */
     public JMXServiceDescriptor(
-    		String name,
-    		String url,
-    		String username,
-    		String password,
-    		String domain) throws MalformedURLException
+    		final String name,
+    		final String url,
+    		final String username,
+    		final String password,
+    		final String domain) throws MalformedURLException
 	{
     	this(name, new JMXServiceURL(url), username, password, domain);
     }
@@ -164,16 +133,16 @@ public final class JMXServiceDescriptor implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((domain == null) ? 0 : domain.hashCode());
-        result = prime * result + ((jmxServiceUrl == null) ? 0 : jmxServiceUrl.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((username == null) ? 0 : username.hashCode());
+        result = prime * result + (domain == null ? 0 : domain.hashCode());
+        result = prime * result + (jmxServiceUrl == null ? 0 : jmxServiceUrl.hashCode());
+        result = prime * result + (name == null ? 0 : name.hashCode());
+        result = prime * result + (password == null ? 0 : password.hashCode());
+        result = prime * result + (username == null ? 0 : username.hashCode());
         return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -186,7 +155,7 @@ public final class JMXServiceDescriptor implements Serializable {
             return false;
         }
 
-        JMXServiceDescriptor other = (JMXServiceDescriptor) obj;
+        final JMXServiceDescriptor other = (JMXServiceDescriptor) obj;
         if (domain == null) {
             if (other.domain != null) {
                 return false;
@@ -228,5 +197,10 @@ public final class JMXServiceDescriptor implements Serializable {
         }
 
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return name + "[" + username + "@" + jmxServiceUrl.toString() + "]";
     }
 }

@@ -85,12 +85,10 @@ public class ServicesView extends FilteredViewPart {
         viewer.addFilter(nameFilter);
 
         context = KarafWorkbenchActivator.getDefault().getBundle().getBundleContext();
-        contentProvider = new ServicesContentProvider(this, viewer, context);
+        contentProvider = new ServicesContentProvider();
         viewer.setContentProvider(contentProvider);
 
         viewer.setInput(context);
-
-        contentProvider.start();
     }
 
     @Override

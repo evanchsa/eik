@@ -15,6 +15,7 @@ import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
+import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 
@@ -43,6 +44,7 @@ import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.SocketUtil;
 import org.osgi.framework.BundleContext;
@@ -54,15 +56,53 @@ import org.osgi.framework.ServiceRegistration;
  */
 public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService {
 
-    public static final String JMX_DOMAIN_SERVICE_KEY = "jmxDomain"; //$NON-NLS-1$
+    /**
+     *
+     * @author Stephen Evanchik (evanchsa@gmail.com)
+     *
+     */
+    private final class JMXServiceCleanupLaunchListener implements ILaunchListener {
+
+        @Override
+        public void launchAdded(final ILaunch launch) {
+        }
+
+        @Override
+        public void launchChanged(final ILaunch launch) {
+        }
+
+        @Override
+        public void launchRemoved(final ILaunch launch) {
+            try {
+                final String memento = launch.getLaunchConfiguration().getMemento();
+
+                final JMXServiceDescriptor jmxServiceDescriptor = jmxServiceDescriptorMap.get(memento);
+
+                if (jmxServiceDescriptor == null) {
+                    return;
+                }
+
+                jmxServiceManager.removeJMXService(jmxServiceDescriptor);
+
+                jmxServiceDescriptorMap.remove(memento);
+            } catch (final CoreException e) {
+                // Log something
+            }
+        }
+    };
 
     public static final String JMX_JMXRMI_DOMAIN = "jmxrmi"; //$NON-NLS-1$
 
-    private final Map<String, KarafMBeanProvider> mbeanProviderMap =
-        Collections.synchronizedMap(new HashMap<String, KarafMBeanProvider>());
+    private final Map<String, JMXServiceDescriptor> jmxServiceDescriptorMap =
+        Collections.synchronizedMap(new HashMap<String, JMXServiceDescriptor>());
+
+    private IJMXServiceManager jmxServiceManager;
 
     private final Map<String, MBeanServerConnectionJob> mbeanConnectionJobMap =
         Collections.synchronizedMap(new HashMap<String, MBeanServerConnectionJob>());
+
+    private final Map<String, KarafMBeanProvider> mbeanProviderMap =
+        Collections.synchronizedMap(new HashMap<String, KarafMBeanProvider>());
 
     private final Map<String, RuntimeDataProvider> runtimeDataProviderMap =
         Collections.synchronizedMap(new HashMap<String, RuntimeDataProvider>());
@@ -70,13 +110,25 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
     private final Map<String, ServiceRegistration> serviceRegistrationMap =
         Collections.synchronizedMap(new HashMap<String, ServiceRegistration>());
 
+    public KarafMBeanProviderWorkbenchService() {
+        DebugPlugin.getDefault().getLaunchManager().addLaunchListener(new JMXServiceCleanupLaunchListener());
+
+        jmxServiceManager = KarafWorkbenchActivator.getDefault().getJMXServiceManager();
+    }
+
     @Override
-    public List<BundleEntry> getAdditionalBundles(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
+    public List<BundleEntry> getAdditionalBundles(
+        final KarafWorkingPlatformModel platformModel,
+        final ILaunchConfiguration configuration)
+    {
         return Collections.emptyList();
     }
 
     @Override
-    public Map<String, String> getAdditionalEquinoxConfiguration(final KarafWorkingPlatformModel platformModel, final ILaunchConfiguration configuration) {
+    public Map<String, String> getAdditionalEquinoxConfiguration(
+        final KarafWorkingPlatformModel platformModel,
+        final ILaunchConfiguration configuration)
+    {
         return Collections.emptyMap();
     }
 
@@ -109,10 +161,9 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
         arguments.add("-Dcom.sun.management.jmxremote.port=" + new Integer(jmxPort).toString()); //$NON-NLS-1$
         arguments.add("-Dcom.sun.management.jmxremote.ssl=false"); //$NON-NLS-1$
 
-        final MBeanServerConnectionJob mbeanConnectionJob;
-
         final String memento = configuration.getMemento();
 
+        final MBeanServerConnectionJob mbeanConnectionJob;
         try {
             final JMXServiceURL standardJmxConnection = new JMXServiceURL(
                     "service:jmx:rmi:///jndi/rmi://localhost:" + jmxPort + "/jmxrmi"); //$NON-NLS-1$ $NON-NLS-2$
@@ -122,16 +173,19 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                         standardJmxConnection,
                         null,
                         null,
-                        "jmxrmi");
+                        JMX_JMXRMI_DOMAIN);
 
             mbeanConnectionJob = new MBeanServerConnectionJob(configuration.getName(), descriptor);
 
             mbeanConnectionJobMap.put(memento, mbeanConnectionJob);
 
+            jmxServiceDescriptorMap.put(memento, descriptor);
+            jmxServiceManager.addJMXService(descriptor);
+
         } catch(final MalformedURLException e) {
             KarafWorkbenchActivator.getLogger().error("Unable to connect to JMX endpoint on Karaf instance", e);
 
-            throw new CoreException(new Status(IStatus.ERROR, "", ""));
+            throw new CoreException(new Status(IStatus.ERROR, "", "")); //$NON-NLS-1$ $NON-NLS-2$
         }
 
         final IJobChangeListener listener = new JobChangeAdapter() {
@@ -233,6 +287,10 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
         DebugPlugin.getDefault().addDebugEventListener(debugListener);
     }
 
+    public void setJmxServiceManager(final IJMXServiceManager jmxServiceManager) {
+        this.jmxServiceManager = jmxServiceManager;
+    }
+
     /**
      * Registers an event listener on the debug session that responds to
      * {@link DebugEvent.TERMINATE} events. This will stop the MBBean connection
@@ -261,6 +319,9 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                         && process.equals(event.getSource())
                         && event.getKind() == DebugEvent.TERMINATE)
                     {
+                        final JMXServiceDescriptor descriptor = jmxServiceDescriptorMap.get(memento);
+                        jmxServiceManager.removeJMXService(descriptor);
+
                         final MBeanServerConnectionJob job = mbeanConnectionJobMap.get(memento);
                         if (job != null) {
                             job.cancel();

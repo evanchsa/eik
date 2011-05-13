@@ -3,14 +3,6 @@
 <plugin>
    <extension-point id="jmxConnectorProvider" name="JMX Connector Provider" schema="schema/jmxConnectorProvider.exsd"/>
    <extension
-         id="monitoring"
-         name="JMX Monitoring and Management"
-         point="info.evanchik.eclipse.karaf.ui.service">
-      <launchCustomizer
-            class="info.evanchik.eclipse.karaf.workbench.factory.JMXWorkbenchServiceFactory">
-      </launchCustomizer>
-   </extension>
-   <extension
          id="runtimeData"
          name="OSGi C&amp;C Runtime Data provider"
          point="info.evanchik.eclipse.karaf.ui.service">

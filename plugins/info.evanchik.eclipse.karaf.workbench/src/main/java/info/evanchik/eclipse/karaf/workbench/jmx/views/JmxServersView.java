@@ -13,14 +13,11 @@ package info.evanchik.eclipse.karaf.workbench.jmx.views;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceListener;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXServiceManager;
+import info.evanchik.eclipse.karaf.workbench.jmx.IJMXTransportRegistry;
 import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.management.MBeanServer;
-import javax.management.MBeanServerFactory;
 import javax.management.remote.JMXConnector;
 
 import org.eclipse.jface.action.IMenuListener;
@@ -53,14 +50,10 @@ public class JmxServersView extends ViewPart {
 	 * @author Stephen Evanchik (evanchsa@gmail.com)
 	 *
 	 */
-	private static final class JMXServiceDescriptorContentProvider
+	private final class JMXServiceDescriptorContentProvider
 		implements IStructuredContentProvider, IJMXServiceListener
 	{
-		protected ListViewer concreteViewer;
-
-		public JMXServiceDescriptorContentProvider() {
-			// This space intentionally left blank
-		}
+		private ListViewer concreteViewer;
 
 		@Override
         public void dispose() {
@@ -69,10 +62,13 @@ public class JmxServersView extends ViewPart {
 
 		@Override
         public Object[] getElements(final Object element) {
-			final IJMXServiceManager jmxServiceManager = KarafWorkbenchActivator.getDefault().getJMXServiceManager();
-			final List<JMXServiceDescriptor> jmxServiceDescriptors = jmxServiceManager.getJMXServices();
+		    if (element == jmxServiceManager) {
+	            final List<JMXServiceDescriptor> jmxServiceDescriptors = jmxServiceManager.getJMXServices();
 
-			return jmxServiceDescriptors.toArray();
+	            return jmxServiceDescriptors.toArray();
+		    } else {
+		        return null;
+		    }
 		}
 
 		@Override
@@ -109,27 +105,42 @@ public class JmxServersView extends ViewPart {
 	 * @author Stephen Evanchik (evanchsa@gmail.com)
 	 *
 	 */
-	private static final class JMXServiceDescriptorLabelProvider extends LabelProvider {
-
-		public JMXServiceDescriptorLabelProvider() {
-			super();
-		}
+	private final class JMXServiceDescriptorLabelProvider extends LabelProvider {
 
 		@Override
 		public Image getImage(final Object element) {
-			return KarafWorkbenchActivator.getDefault().getImageRegistry().get(KarafWorkbenchActivator.LOGO_16X16_IMG);
+		    if (element == jmxServiceManager) {
+		        return KarafWorkbenchActivator.getDefault().getImageRegistry().get(KarafWorkbenchActivator.LOGO_16X16_IMG);
+		    } else {
+		        return null;
+		    }
 		}
 
 		@Override
 		public String getText(final Object element) {
-			final JMXServiceDescriptor jmxServiceDescriptor = (JMXServiceDescriptor) element;
-			return jmxServiceDescriptor.getName();
+		    if (element instanceof JMXServiceDescriptor) {
+    			final JMXServiceDescriptor jmxServiceDescriptor = (JMXServiceDescriptor) element;
+    			return jmxServiceDescriptor.getName();
+		    } else {
+		        return null;
+		    }
 		}
 	}
 
 	public static final String VIEW_ID = "info.evanchik.eclipse.karaf.workbench.jmx.serversView";
 
+	private IJMXServiceManager jmxServiceManager;
+
+	private IJMXTransportRegistry jmxTransportRegistry;
+
 	private ListViewer viewer;
+
+	public JmxServersView() {
+	    super();
+
+	    jmxServiceManager = KarafWorkbenchActivator.getDefault().getJMXServiceManager();
+	    jmxTransportRegistry = KarafWorkbenchActivator.getDefault().getJMXTransportRegistry();
+    }
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -141,32 +152,30 @@ public class JmxServersView extends ViewPart {
 		viewer = new ListViewer(parent, SWT.SINGLE);
 		viewer.setContentProvider(contentProvider);
 		viewer.setLabelProvider(new JMXServiceDescriptorLabelProvider());
-		viewer.setInput(KarafWorkbenchActivator.getDefault().getJMXServiceManager());
+		viewer.setInput(jmxServiceManager);
 
-		KarafWorkbenchActivator.getDefault().getJMXServiceManager().addJMXServiceListener(contentProvider);
+		jmxServiceManager.addJMXServiceListener(contentProvider);
 
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override
             public void doubleClick(final DoubleClickEvent event) {
 				final IStructuredSelection selection =
-					(IStructuredSelection)event.getSelection();
+					(IStructuredSelection) event.getSelection();
 
 				final JMXServiceDescriptor connection =
-					(JMXServiceDescriptor)selection.getFirstElement();
+					(JMXServiceDescriptor) selection.getFirstElement();
 
 				final JMXConnector connector =
-					KarafWorkbenchActivator.getDefault()
-						.getJMXTransportRegistry().getJMXConnector(connection);
+					jmxTransportRegistry.getJMXConnector(connection);
 
 				// TODO: Update the data provided by this connector
 			}
 		});
 
-		addLocalMBeanServer();
 		initContextMenu();
 
-		KarafWorkbenchActivator.getDefault().getJMXTransportRegistry().loadTransportExtensions();
+		jmxTransportRegistry.loadTransportExtensions();
 	}
 
 	@Override
@@ -174,28 +183,13 @@ public class JmxServersView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-    private void addLocalMBeanServer() {
-		final MBeanServer mbs = findLocalMBeanServer();
-		if(mbs == null) {
-			return;
-		}
+	public void setJmxServiceManager(final IJMXServiceManager jmxServiceManager) {
+        this.jmxServiceManager = jmxServiceManager;
+    }
 
-		final JMXServiceDescriptor localJmxService =
-			JMXServiceDescriptor.getLocalJMXServiceDescriptor(null, null);
-		KarafWorkbenchActivator.getDefault().getJMXServiceManager().addJMXService(localJmxService);
-	}
-
-    private MBeanServer findLocalMBeanServer() {
-		final ArrayList<MBeanServer> mbeanServers = MBeanServerFactory.findMBeanServer(null);
-		final Iterator<MBeanServer> iter = mbeanServers.iterator();
-		while (iter.hasNext()) {
-			final MBeanServer mbeanServer = iter.next();
-			if (mbeanServer.getDefaultDomain().equals(JMXServiceDescriptor.DEFAULT_DOMAIN)) {
-				return mbeanServer;
-			}
-		}
-		return null;
-	}
+	public void setJmxTransportRegistry(final IJMXTransportRegistry jmxTransportRegistry) {
+        this.jmxTransportRegistry = jmxTransportRegistry;
+    }
 
 	protected void initContextMenu() {
         final MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$

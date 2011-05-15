@@ -18,10 +18,8 @@ import info.evanchik.eclipse.karaf.workbench.provider.ServiceItem;
 import info.evanchik.eclipse.karaf.workbench.ui.views.PropertyEntry;
 import info.evanchik.eclipse.karaf.workbench.ui.views.bundle.BundleTableLabelProvider;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -35,17 +33,12 @@ public class ServiceLabelProvider extends BundleTableLabelProvider {
     private static final String LABEL_NULL = "<null>";
     private static final String LABEL_ERROR = "<error>";
 
-    private final Image imgObject;
-
     public ServiceLabelProvider() {
         super();
-
-        final ImageDescriptor desc = KarafWorkbenchActivator.imageDescriptorFromPlugin(KarafWorkbenchActivator.PLUGIN_ID, "/icons/obj16/generic_element.gif");
-        imgObject = desc.createImage();
     }
 
     @Override
-    public Image getColumnImage(Object element, int columnIndex) {
+    public Image getColumnImage(final Object element, final int columnIndex) {
         Image image = super.getColumnImage(element, columnIndex);
 
         if (image != null) {
@@ -53,14 +46,14 @@ public class ServiceLabelProvider extends BundleTableLabelProvider {
         }
 
         if (element instanceof ServiceItem && columnIndex == 0) {
-            image = imgObject;
+            image = KarafWorkbenchActivator.getDefault().getImageRegistry().get(KarafWorkbenchActivator.SERVICE_IMG);
         }
 
         return image;
     }
 
     @Override
-    public String getColumnText(Object element, int columnIndex) {
+    public String getColumnText(final Object element, final int columnIndex) {
         String label;
         if (element instanceof RuntimeDataProvider) {
             if (columnIndex == 0) {
@@ -109,7 +102,7 @@ public class ServiceLabelProvider extends BundleTableLabelProvider {
     }
 
     // TODO: This is just join
-    protected static String arrayToString(Object[] array) {
+    protected static String arrayToString(final Object[] array) {
         final StringBuffer buffer = new StringBuffer();
 
         for (int i = 0; i < array.length; i++) {
@@ -126,13 +119,5 @@ public class ServiceLabelProvider extends BundleTableLabelProvider {
     @Override
     public void dispose() {
         super.dispose();
-
-        try {
-            final Method disposeMethod = imgObject.getClass().getMethod("dispose", new Class[0]);
-            disposeMethod.invoke(imgObject, new Object[0]);
-        } catch (Exception e) {
-            // Ignore
-        }
     }
-
 }

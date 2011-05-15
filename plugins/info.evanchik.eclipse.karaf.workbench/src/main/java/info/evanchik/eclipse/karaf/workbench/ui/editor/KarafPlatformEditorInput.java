@@ -11,21 +11,29 @@
 package info.evanchik.eclipse.karaf.workbench.ui.editor;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
+import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
+
+import org.eclipse.jface.resource.ImageDescriptor;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class KarafPlatformEditorInput extends AbstractEditorInput implements EditableObject<KarafPlatformModel> {
+public class KarafPlatformEditorInput extends AbstractEditorInput {
 
     private final KarafPlatformModel karafPlatform;
+
+    private final MBeanProvider mbeanProvider;
 
     /**
      *
      * @param karafPlatform
+     * @param mbeanProvider
      */
-    public KarafPlatformEditorInput(final KarafPlatformModel karafPlatform) {
+    public KarafPlatformEditorInput(final KarafPlatformModel karafPlatform, final MBeanProvider mbeanProvider) {
         this.karafPlatform = karafPlatform;
+        this.mbeanProvider = mbeanProvider;
     }
 
     @Override
@@ -51,17 +59,33 @@ public class KarafPlatformEditorInput extends AbstractEditorInput implements Edi
             return false;
         }
 
+        if (mbeanProvider == null) {
+            if (other.mbeanProvider != null) {
+                return false;
+            }
+        } else if (!mbeanProvider.equals(other.mbeanProvider)) {
+            return false;
+        }
+
         return true;
+    }
+
+    @Override
+    public ImageDescriptor getImageDescriptor() {
+        return KarafWorkbenchActivator.getDefault().getImageRegistry().getDescriptor(KarafWorkbenchActivator.LOGO_16X16_IMG);
+    }
+
+    public KarafPlatformModel getKarafPlatform() {
+        return karafPlatform;
+    }
+
+    public MBeanProvider getMBeanProvider() {
+        return mbeanProvider;
     }
 
     @Override
     public String getName() {
         return karafPlatform.getRootDirectory().lastSegment();
-    }
-
-    @Override
-    public KarafPlatformModel getObject() {
-        return karafPlatform;
     }
 
     @Override
@@ -74,13 +98,7 @@ public class KarafPlatformEditorInput extends AbstractEditorInput implements Edi
         final int prime = 31;
         int result = 1;
         result = prime * result + (karafPlatform == null ? 0 : karafPlatform.hashCode());
+        result = prime * result + (mbeanProvider == null ? 0 : mbeanProvider.hashCode());
         return result;
     }
-
-    @Override
-    public boolean isNewObject() {
-        return false;
-    }
-
-
 }

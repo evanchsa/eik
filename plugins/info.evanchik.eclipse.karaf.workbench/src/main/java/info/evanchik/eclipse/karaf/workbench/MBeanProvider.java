@@ -10,6 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.workbench;
 
+import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
+
 import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
 
@@ -37,6 +39,13 @@ public interface MBeanProvider {
      * This method is idempotent from the caller's perspective.
      */
     public void close();
+
+    /**
+     * Retrieves the {@link JMXServiceDescriptor} for this {@code MBeanProvider}
+     *
+     * @return the {@code JMXServiceDescriptor} for this {@code MBeanProvider}
+     */
+    public JMXServiceDescriptor getJMXServiceDescriptor();
 
     /**
      * Retrieves an MBean proxy of the given interface class

@@ -11,6 +11,7 @@
 package info.evanchik.eclipse.karaf.workbench.internal;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 
 import java.io.IOException;
 
@@ -25,12 +26,13 @@ public class LocalKarafMBeanProvider extends KarafMBeanProvider {
     private final KarafPlatformModel platformModel;
 
     /**
+     * @param jmxServiceDescriptor
      * @param connector
      * @param platformModel
      * @throws IOException
      */
-    public LocalKarafMBeanProvider(final JMXConnector connector, final KarafPlatformModel platforModel) throws IOException {
-        super(connector);
+    public LocalKarafMBeanProvider(final JMXServiceDescriptor jmxServiceDescriptor, final JMXConnector connector, final KarafPlatformModel platforModel) throws IOException {
+        super(jmxServiceDescriptor, connector);
 
         this.platformModel = platforModel;
     }

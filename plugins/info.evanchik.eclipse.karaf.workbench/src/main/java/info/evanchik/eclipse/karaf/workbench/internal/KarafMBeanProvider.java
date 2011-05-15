@@ -12,6 +12,7 @@ package info.evanchik.eclipse.karaf.workbench.internal;
 
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
+import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 
 import java.io.IOException;
 import java.util.Dictionary;
@@ -41,6 +42,8 @@ public class KarafMBeanProvider extends PlatformObject implements MBeanProvider,
 
     private final ExecutorService connectionHandler;
 
+    private final JMXServiceDescriptor jmxServiceDescriptor;
+
     private final MBeanServerConnection mbeanServer;
 
     private Object memento;
@@ -51,13 +54,17 @@ public class KarafMBeanProvider extends PlatformObject implements MBeanProvider,
      * Constructs an {@link MBeanProvider} that opens a connection to a
      * {@link MBeanServerConnection}
      *
+     * @param jmxServiceDescriptor
+     *            the {@link JMXServiceDescriptor} which was used to make the
+     *            connection to the JMX end point
      * @param connector
      *            the {@link JMXConnector} that represents the JMX connection
      * @throws IOException
      *             if the connection to the MBean Server cannot be made
      */
-    public KarafMBeanProvider(final JMXConnector connector) throws IOException {
+    public KarafMBeanProvider(final JMXServiceDescriptor jmxServiceDescriptor, final JMXConnector connector) throws IOException {
         this.connector = connector;
+        this.jmxServiceDescriptor = jmxServiceDescriptor;
         this.mbeanServer = connector.getMBeanServerConnection();
 
         this.connectionHandler = Executors.newSingleThreadExecutor();
@@ -89,6 +96,11 @@ public class KarafMBeanProvider extends PlatformObject implements MBeanProvider,
         if (isOpen()) {
             unregisterServices();
         }
+    }
+
+    @Override
+    public JMXServiceDescriptor getJMXServiceDescriptor() {
+        return jmxServiceDescriptor;
     }
 
     @Override

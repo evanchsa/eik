@@ -12,6 +12,7 @@ package info.evanchik.eclipse.karaf.workbench.ui.editor;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformDetails;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
@@ -29,6 +30,8 @@ public class KarafPlatformEditorPart extends FormEditor {
 
     private KarafPlatformModel karafPlatform;
 
+    private MBeanProvider mbeanProvider;
+
     private KarafPlatformDetails platformDetails;
 
     @Override
@@ -43,6 +46,10 @@ public class KarafPlatformEditorPart extends FormEditor {
         return karafPlatform;
     }
 
+    public MBeanProvider getMBeanProvider() {
+        return mbeanProvider;
+    }
+
     public KarafPlatformDetails getPlatformDetails() {
         return platformDetails;
     }
@@ -51,11 +58,10 @@ public class KarafPlatformEditorPart extends FormEditor {
     public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
         super.init(site, input);
 
-        @SuppressWarnings("unchecked")
-        final EditableObject<KarafPlatformModel> accountEditableObject =
-            (EditableObject<KarafPlatformModel>) getEditorInput();
+        final KarafPlatformEditorInput editorInput = (KarafPlatformEditorInput) input;
 
-        karafPlatform = accountEditableObject.getObject();
+        karafPlatform = editorInput.getKarafPlatform();
+        mbeanProvider = editorInput.getMBeanProvider();
 
         setPartName(karafPlatform.getRootDirectory().lastSegment());
 
@@ -71,6 +77,7 @@ public class KarafPlatformEditorPart extends FormEditor {
     protected void addPages() {
         try {
             addPage(new KarafPlatformGeneralFormPage(this));
+            addPage(new KarafPlatformRuntimeFormPage(this));
         } catch (final PartInitException e) {
             // TODO: Handle PartInitException
         }

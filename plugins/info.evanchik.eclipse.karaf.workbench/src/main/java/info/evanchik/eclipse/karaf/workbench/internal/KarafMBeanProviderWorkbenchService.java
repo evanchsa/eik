@@ -10,6 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.workbench.internal;
 
+import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
@@ -24,9 +25,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -48,8 +47,6 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.SocketUtil;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -77,7 +74,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
             try {
                 final String memento = launch.getLaunchConfiguration().getMemento();
 
-                final JMXServiceDescriptor jmxServiceDescriptor = jmxServiceDescriptorMap.get(memento);
+                final JMXServiceDescriptor jmxServiceDescriptor = mbeanProviderDataMap.get(memento).getJmxServiceDescriptor();
 
                 if (jmxServiceDescriptor == null) {
                     return;
@@ -85,39 +82,74 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
                 jmxServiceManager.remove(jmxServiceDescriptor);
 
-                jmxServiceDescriptorMap.remove(memento);
+                mbeanProviderDataMap.remove(memento);
             } catch (final CoreException e) {
                 // Log something
             }
         }
     };
 
-    public static final String JMX_JMXRMI_DOMAIN = "jmxrmi"; //$NON-NLS-1$
+    private static final class KarafMBeanProviderEntry {
 
-    private final Map<String, JMXServiceDescriptor> jmxServiceDescriptorMap =
-        Collections.synchronizedMap(new HashMap<String, JMXServiceDescriptor>());
+        private JMXServiceDescriptor jmxServiceDescriptor;
+
+        private MBeanProvider mbeanProvider;
+
+        private MBeanServerConnectionJob mbeanServerConnectionJob;
+
+        private RuntimeDataProvider runtimeDataProvider;
+
+        public JMXServiceDescriptor getJmxServiceDescriptor() {
+            return jmxServiceDescriptor;
+        }
+
+        public MBeanProvider getMbeanProvider() {
+            return mbeanProvider;
+        }
+
+        public MBeanServerConnectionJob getMBeanServerConnectionJob() {
+            return mbeanServerConnectionJob;
+        }
+
+        public RuntimeDataProvider getRuntimeDataProvider() {
+            return runtimeDataProvider;
+        }
+
+        public void setJmxServiceDescriptor(
+                final JMXServiceDescriptor jmxServiceDescriptor) {
+            this.jmxServiceDescriptor = jmxServiceDescriptor;
+        }
+
+        public void setMbeanConnectionJob(final MBeanServerConnectionJob mbeanServerConnectionJob) {
+            this.mbeanServerConnectionJob = mbeanServerConnectionJob;
+        }
+
+        public void setMbeanProvider(final MBeanProvider mbeanProvider) {
+            this.mbeanProvider = mbeanProvider;
+        }
+
+        public void setRuntimeDataProvider(final RuntimeDataProvider runtimeDataProvider) {
+            this.runtimeDataProvider = runtimeDataProvider;
+        }
+    };
+
+    public static final String JMX_JMXRMI_DOMAIN = "jmxrmi"; //$NON-NLS-1$
 
     private WorkbenchServiceManager<JMXServiceDescriptor> jmxServiceManager;
 
+    private final Map<String, KarafMBeanProviderEntry> mbeanProviderDataMap =
+        Collections.synchronizedMap(new HashMap<String, KarafMBeanProviderEntry>());
+
     private WorkbenchServiceManager<MBeanProvider> mbeanProviderManager;
 
-    private final Map<String, MBeanServerConnectionJob> mbeanConnectionJobMap =
-        Collections.synchronizedMap(new HashMap<String, MBeanServerConnectionJob>());
-
-    private final Map<String, KarafMBeanProvider> mbeanProviderMap =
-        Collections.synchronizedMap(new HashMap<String, KarafMBeanProvider>());
-
-    private final Map<String, RuntimeDataProvider> runtimeDataProviderMap =
-        Collections.synchronizedMap(new HashMap<String, RuntimeDataProvider>());
-
-    private final Map<String, ServiceRegistration> serviceRegistrationMap =
-        Collections.synchronizedMap(new HashMap<String, ServiceRegistration>());
+    private WorkbenchServiceManager<RuntimeDataProvider> runtimeDataProviderManager;
 
     public KarafMBeanProviderWorkbenchService() {
         DebugPlugin.getDefault().getLaunchManager().addLaunchListener(new JMXServiceCleanupLaunchListener());
 
         jmxServiceManager = KarafWorkbenchActivator.getDefault().getJMXServiceManager();
         mbeanProviderManager = KarafWorkbenchActivator.getDefault().getMBeanProviderManager();
+        runtimeDataProviderManager = KarafWorkbenchActivator.getDefault().getRuntimeDataProviderManager();
     }
 
     @Override
@@ -149,6 +181,9 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
             final KarafWorkingPlatformModel platformModel,
             final ILaunchConfiguration configuration) throws CoreException
     {
+        final String memento = configuration.getMemento();
+        mbeanProviderDataMap.put(memento, new KarafMBeanProviderEntry());
+
         final List<String> arguments = new ArrayList<String>();
 
         /*
@@ -161,11 +196,18 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                     "Could not find suitable TCP/IP port for JMX connection"));
         }
 
-        arguments.add("-Dcom.sun.management.jmxremote.authenticate=false"); //$NON-NLS-1$
-        arguments.add("-Dcom.sun.management.jmxremote.port=" + new Integer(jmxPort).toString()); //$NON-NLS-1$
-        arguments.add("-Dcom.sun.management.jmxremote.ssl=false"); //$NON-NLS-1$
-
-        final String memento = configuration.getMemento();
+        arguments.add(
+                KarafCorePluginUtils.constructSystemProperty(
+                        "com.sun.management.jmxremote.authenticate", //$NON-NLS-1$
+                        "false")); //$NON-NLS-1$
+        arguments.add(
+                KarafCorePluginUtils.constructSystemProperty(
+                        "com.sun.management.jmxremote.ssl", //$NON-NLS-1$
+                        "false")); //$NON-NLS-1$
+        arguments.add(
+                KarafCorePluginUtils.constructSystemProperty(
+                        "com.sun.management.jmxremote.port", //$NON-NLS-1$
+                        new Integer(jmxPort).toString()));
 
         final MBeanServerConnectionJob mbeanConnectionJob;
         try {
@@ -182,11 +224,10 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
             mbeanConnectionJob = new MBeanServerConnectionJob(configuration.getName(), descriptor);
 
-            mbeanConnectionJobMap.put(memento, mbeanConnectionJob);
+            mbeanProviderDataMap.get(memento).setMbeanConnectionJob(mbeanConnectionJob);
+            mbeanProviderDataMap.get(memento).setJmxServiceDescriptor(descriptor);
 
-            jmxServiceDescriptorMap.put(memento, descriptor);
             jmxServiceManager.add(descriptor);
-
         } catch(final MalformedURLException e) {
             KarafWorkbenchActivator.getLogger().error("Unable to connect to JMX endpoint on Karaf instance", e);
 
@@ -209,10 +250,11 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
                 final KarafMBeanProvider mbeanProvider;
                 try {
-                    mbeanProvider = new LocalKarafMBeanProvider(mbeanConnectionJob.getJmxClient(), platformModel);
+                    final JMXServiceDescriptor jmxServiceDescriptor = mbeanProviderDataMap.get(memento).getJmxServiceDescriptor();
+                    mbeanProvider = new LocalKarafMBeanProvider(jmxServiceDescriptor, mbeanConnectionJob.getJmxClient(), platformModel);
                     mbeanProvider.open(memento);
 
-                    mbeanProviderMap.put(memento, mbeanProvider);
+                    mbeanProviderDataMap.get(memento).setMbeanProvider(mbeanProvider);
                     mbeanProviderManager.add(mbeanProvider);
                 } catch (final IOException e) {
                     KarafWorkbenchActivator.getLogger().error("Unable to create MBeanProvider from JMXConnector", e);
@@ -220,54 +262,12 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                     return;
                 }
 
-                final KarafRuntimeDataProvider runtimeDataProvider =
-                    createRuntimeDataProvider(configuration, memento, mbeanProvider);
-
-                registerRuntimeDataProviderService(memento, runtimeDataProvider);
-            }
-
-            /**
-             * @param configuration
-             * @param memento
-             * @param mbeanProvider
-             * @return
-             */
-            private KarafRuntimeDataProvider createRuntimeDataProvider(
-                    final ILaunchConfiguration configuration,
-                    final String memento, final KarafMBeanProvider mbeanProvider) {
                 final KarafRuntimeDataProvider runtimeDataProvider = new KarafRuntimeDataProvider(configuration.getName(), mbeanProvider);
                 runtimeDataProvider.start();
 
-                runtimeDataProviderMap.put(memento, runtimeDataProvider);
-                return runtimeDataProvider;
+                mbeanProviderDataMap.get(memento).setRuntimeDataProvider(runtimeDataProvider);
+                runtimeDataProviderManager.add(runtimeDataProvider);
             }
-
-            /**
-             * @param memento
-             * @param runtimeDataProvider
-             */
-            private void registerRuntimeDataProviderService(
-                    final String memento,
-                    final KarafRuntimeDataProvider runtimeDataProvider) {
-                /*
-                 * Registers services against the running Karaf instance so that the Eclipse
-                 * workbench can control and retrieve information from the process.
-                 */
-                final BundleContext bundleContext =
-                    KarafWorkbenchActivator.getDefault().getBundle().getBundleContext();
-
-                final Dictionary<String, Object> dictionary =
-                    new Hashtable<String, Object>();
-
-                final ServiceRegistration runtimeDataProviderServiceReg =
-                    bundleContext.registerService(
-                            RuntimeDataProvider.class.getName(),
-                            runtimeDataProvider,
-                            dictionary);
-
-                serviceRegistrationMap.put(memento, runtimeDataProviderServiceReg);
-            }
-
         };
 
         mbeanConnectionJob.addJobChangeListener(listener);
@@ -301,6 +301,10 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
         this.mbeanProviderManager = mbeanProviderManager;
     }
 
+    public void setRuntimeDataProviderManager(final WorkbenchServiceManager<RuntimeDataProvider> runtimeDataProviderManager) {
+        this.runtimeDataProviderManager = runtimeDataProviderManager;
+    }
+
     /**
      * Registers an event listener on the debug session that responds to
      * {@link DebugEvent.TERMINATE} events. This will stop the MBBean connection
@@ -329,25 +333,21 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                         && process.equals(event.getSource())
                         && event.getKind() == DebugEvent.TERMINATE)
                     {
-                        final JMXServiceDescriptor descriptor = jmxServiceDescriptorMap.get(memento);
+                        final JMXServiceDescriptor descriptor = mbeanProviderDataMap.get(memento).getJmxServiceDescriptor();
                         jmxServiceManager.remove(descriptor);
 
-                        final MBeanServerConnectionJob job = mbeanConnectionJobMap.get(memento);
+                        final MBeanServerConnectionJob job = mbeanProviderDataMap.get(memento).getMBeanServerConnectionJob();
                         if (job != null) {
                             job.cancel();
                         }
 
-                        final ServiceRegistration serviceRegistration = serviceRegistrationMap.get(memento);
-                        if (serviceRegistration != null) {
-                            serviceRegistration.unregister();
-                        }
-
-                        final RuntimeDataProvider runtimeDataProvider = runtimeDataProviderMap.get(memento);
+                        final RuntimeDataProvider runtimeDataProvider = mbeanProviderDataMap.get(memento).getRuntimeDataProvider();
+                        runtimeDataProviderManager.remove(runtimeDataProvider);
                         if (runtimeDataProvider != null) {
                             runtimeDataProvider.stop();
                         }
 
-                        final MBeanProvider mbeanProvider = mbeanProviderMap.get(memento);
+                        final MBeanProvider mbeanProvider = mbeanProviderDataMap.get(memento).getMbeanProvider();
                         mbeanProviderManager.remove(mbeanProvider);
 
                         if (mbeanProvider != null) {

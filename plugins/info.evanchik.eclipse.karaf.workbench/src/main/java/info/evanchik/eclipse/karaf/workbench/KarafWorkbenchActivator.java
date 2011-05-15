@@ -3,15 +3,12 @@ package info.evanchik.eclipse.karaf.workbench;
 import info.evanchik.eclipse.karaf.core.LogWrapper;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 import info.evanchik.eclipse.karaf.workbench.internal.MBeanProviderManager;
+import info.evanchik.eclipse.karaf.workbench.internal.RuntimeDataProviderManager;
+import info.evanchik.eclipse.karaf.workbench.internal.eclipse.EclipseRuntimeDataProvider;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXTransportRegistry;
 import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.jmx.internal.JMXServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.internal.JMXTransportRegistry;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -32,24 +29,19 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
 
     public static final String LOGO_16X16_IMG = "logo16"; //$NON-NLS-1$
 
+    public static final String SERVICE_IMG = "service";
+
+    private EclipseRuntimeDataProvider eclipseWorkbenchDataProvider;
+
     private JMXServiceManager jmxServiceManager;
 
     private JMXTransportRegistry jmxTransportRegistry;
 
     private MBeanProviderManager mbeanProviderManager;
 
-	// The shared instance
+    private RuntimeDataProviderManager runtimeDataProviderManager;
+
 	private static KarafWorkbenchActivator plugin;
-
-    // Root URL for icons
-    private static URL ICON_ROOT_URL;
-
-    /**
-     * A {@link Map} of all the {@link ImageDescriptor}S used by this plugin
-     */
-    private static final Map<String, ImageDescriptor> IMAGE_DESCRIPTORS =
-        new HashMap<String, ImageDescriptor>();
-
 
     /**
      * Returns the shared instance
@@ -105,17 +97,21 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
         return mbeanProviderManager;
     }
 
+    public RuntimeDataProviderManager getRuntimeDataProviderManager() {
+        return runtimeDataProviderManager;
+    }
+
 	@Override
     public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 
-        final String pathSuffix = "icons/"; // $NON-NLS-1$
-        ICON_ROOT_URL = getBundle().getEntry(pathSuffix);
-
         jmxServiceManager = new JMXServiceManager();
         jmxTransportRegistry = new JMXTransportRegistry();
         mbeanProviderManager = new MBeanProviderManager();
+        runtimeDataProviderManager = new RuntimeDataProviderManager();
+
+        registerEclipseRuntimeDataProvider();
 	}
 
 	@Override
@@ -125,6 +121,11 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
 
         jmxServiceManager = null;
         jmxTransportRegistry = null;
+        mbeanProviderManager = null;
+        runtimeDataProviderManager = null;
+
+        runtimeDataProviderManager.remove(eclipseWorkbenchDataProvider);
+        eclipseWorkbenchDataProvider = null;
 	}
 
     /**
@@ -136,10 +137,18 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
      */
     @Override
     protected void initializeImageRegistry(final ImageRegistry imageRegistry) {
-        registerImage(imageRegistry, BUNDLE_OBJ_IMG, "obj16/bundle_obj.gif");
-        registerImage(imageRegistry, LOGO_16X16_IMG, "obj16/felixLogo16x16.gif");
-        registerImage(imageRegistry, "logo32", "obj32/felixLogo32x32.gif");
-        registerImage(imageRegistry, "logo64", "obj64/felixLogo64x64.gif");
+        registerImage(imageRegistry, BUNDLE_OBJ_IMG, "icons/obj16/bundle_obj.gif");
+        registerImage(imageRegistry, LOGO_16X16_IMG, "icons/obj16/felixLogo16x16.gif");
+        registerImage(imageRegistry, "logo32", "icons/obj32/felixLogo32x32.gif");
+        registerImage(imageRegistry, "logo64", "icons/obj64/felixLogo64x64.gif");
+        registerImage(imageRegistry, SERVICE_IMG, "icons/obj16/generic_element.gif");
+    }
+
+    private void registerEclipseRuntimeDataProvider() {
+        eclipseWorkbenchDataProvider = new EclipseRuntimeDataProvider(getBundle().getBundleContext());
+        eclipseWorkbenchDataProvider.start();
+
+        runtimeDataProviderManager.add(eclipseWorkbenchDataProvider);
     }
 
     /**
@@ -150,22 +159,10 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
      * @param key
      *            the key to register the image under
      * @param imageUrl
-     *            the URL, relative to the {@link ICON_ROOT_URL}, of the image
-     *            to be registered
+     *            the URL of the image to be registered
      */
     private void registerImage(final ImageRegistry registry, final String key, final String imageUrl) {
-
-        try {
-            final ImageDescriptor id = ImageDescriptor.createFromURL(new URL(ICON_ROOT_URL,
-                            imageUrl));
-
-            registry.put(key, id);
-
-            // Store this as an ImageDescriptor for future use in Wizards
-            IMAGE_DESCRIPTORS.put(key, id);
-        } catch (final MalformedURLException e) {
-            getLogger().error("Could not create image descriptor for: " + key + " -> " + imageUrl,
-                            e);
-        }
+        final ImageDescriptor id = imageDescriptorFromPlugin(PLUGIN_ID, imageUrl);
+        registry.put(key, id);
     }
 }

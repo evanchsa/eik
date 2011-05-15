@@ -12,6 +12,7 @@ package info.evanchik.eclipse.karaf.workbench.ui.views;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
+import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 import info.evanchik.eclipse.karaf.workbench.WorkbenchServiceListener;
 import info.evanchik.eclipse.karaf.workbench.WorkbenchServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.IJMXTransportRegistry;
@@ -56,7 +57,7 @@ public class JmxServersView extends ViewPart {
 	 *
 	 */
 	private final class JMXServiceDescriptorContentProvider
-		implements IStructuredContentProvider, WorkbenchServiceListener<JMXServiceDescriptor>
+		implements IStructuredContentProvider, WorkbenchServiceListener<MBeanProvider>
 	{
 		@Override
         public void dispose() {
@@ -65,8 +66,8 @@ public class JmxServersView extends ViewPart {
 
 		@Override
         public Object[] getElements(final Object element) {
-		    if (element == jmxServiceManager) {
-	            final List<JMXServiceDescriptor> jmxServiceDescriptors = jmxServiceManager.getServices();
+		    if (element == mbeanProviderManager) {
+	            final List<MBeanProvider> jmxServiceDescriptors = mbeanProviderManager.getServices();
 
 	            return jmxServiceDescriptors.toArray();
 		    } else {
@@ -79,21 +80,21 @@ public class JmxServersView extends ViewPart {
 		}
 
 		@Override
-        public void serviceAdded(final JMXServiceDescriptor jmxService) {
+        public void serviceAdded(final MBeanProvider mbeanProvider) {
 			viewer.getControl().getDisplay().syncExec(new Runnable() {
 				@Override
                 public void run() {
-					viewer.add(jmxService);
+					viewer.add(mbeanProvider);
 				}
 			});
 		}
 
 		@Override
-        public void serviceRemoved(final JMXServiceDescriptor jmxService) {
+        public void serviceRemoved(final MBeanProvider mbeanProvider) {
 			viewer.getControl().getDisplay().syncExec(new Runnable() {
 				@Override
                 public void run() {
-					viewer.remove(jmxService);
+					viewer.remove(mbeanProvider);
 				}
 			});
 		}
@@ -108,7 +109,7 @@ public class JmxServersView extends ViewPart {
 
 		@Override
 		public Image getImage(final Object element) {
-		    if (element == jmxServiceManager) {
+		    if (element instanceof MBeanProvider) {
 		        return KarafWorkbenchActivator.getDefault().getImageRegistry().get(KarafWorkbenchActivator.LOGO_16X16_IMG);
 		    } else {
 		        return null;
@@ -117,8 +118,9 @@ public class JmxServersView extends ViewPart {
 
 		@Override
 		public String getText(final Object element) {
-		    if (element instanceof JMXServiceDescriptor) {
-    			final JMXServiceDescriptor jmxServiceDescriptor = (JMXServiceDescriptor) element;
+		    if (element instanceof MBeanProvider) {
+		        final MBeanProvider mbeanProvider = (MBeanProvider) element;
+    			final JMXServiceDescriptor jmxServiceDescriptor = mbeanProvider.getJMXServiceDescriptor();
     			return jmxServiceDescriptor.getName();
 		    } else {
 		        return null;
@@ -128,17 +130,17 @@ public class JmxServersView extends ViewPart {
 
 	public static final String VIEW_ID = "info.evanchik.eclipse.karaf.workbench.jmx.serversView";
 
-	private WorkbenchServiceManager<JMXServiceDescriptor> jmxServiceManager;
-
 	private IJMXTransportRegistry jmxTransportRegistry;
+
+	private WorkbenchServiceManager<MBeanProvider> mbeanProviderManager;
 
 	private ListViewer viewer;
 
 	public JmxServersView() {
 	    super();
 
-	    jmxServiceManager = KarafWorkbenchActivator.getDefault().getJMXServiceManager();
 	    jmxTransportRegistry = KarafWorkbenchActivator.getDefault().getJMXTransportRegistry();
+	    mbeanProviderManager = KarafWorkbenchActivator.getDefault().getMBeanProviderManager();
     }
 
 	@Override
@@ -151,9 +153,9 @@ public class JmxServersView extends ViewPart {
 		viewer = new ListViewer(parent, SWT.SINGLE);
 		viewer.setContentProvider(contentProvider);
 		viewer.setLabelProvider(new JMXServiceDescriptorLabelProvider());
-		viewer.setInput(jmxServiceManager);
+		viewer.setInput(mbeanProviderManager);
 
-		jmxServiceManager.addListener(contentProvider);
+		mbeanProviderManager.addListener(contentProvider);
 
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -162,13 +164,13 @@ public class JmxServersView extends ViewPart {
 				final IStructuredSelection selection =
 					(IStructuredSelection) event.getSelection();
 
-				final JMXServiceDescriptor jmxServiceDescriptor =
-					(JMXServiceDescriptor) selection.getFirstElement();
+				final MBeanProvider mbeanProvider = (MBeanProvider) selection.getFirstElement();
+				final JMXServiceDescriptor jmxServiceDescriptor = mbeanProvider.getJMXServiceDescriptor();
 
                 final KarafPlatformModel karafPlatform =
                     (KarafPlatformModel) jmxServiceDescriptor.getAdapter(KarafPlatformModel.class);
 				if (karafPlatform != null) {
-				    final IEditorInput editorInput = new KarafPlatformEditorInput(karafPlatform);
+				    final IEditorInput editorInput = new KarafPlatformEditorInput(karafPlatform, mbeanProvider);
 				    try {
                         getSite().getWorkbenchWindow().getActivePage().openEditor(editorInput, KarafPlatformEditorPart.ID);
                     } catch (final PartInitException e) {
@@ -191,12 +193,12 @@ public class JmxServersView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-	public void setJmxServiceManager(final WorkbenchServiceManager<JMXServiceDescriptor> jmxServiceManager) {
-        this.jmxServiceManager = jmxServiceManager;
-    }
-
 	public void setJmxTransportRegistry(final IJMXTransportRegistry jmxTransportRegistry) {
         this.jmxTransportRegistry = jmxTransportRegistry;
+    }
+
+	public void setMbeanProviderManager(final WorkbenchServiceManager<MBeanProvider> mbeanProviderManager) {
+        this.mbeanProviderManager = mbeanProviderManager;
     }
 
 	protected void initContextMenu() {

@@ -61,7 +61,7 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
             CM_SERVICE = new ObjectName("osgi.core:type=cm,version=1.3");
             PACKAGE_STATE = new ObjectName("osgi.core:type=packageState,version=1.5");
             SERVICE_STATE = new ObjectName("osgi.core:type=serviceState,version=1.5");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new IllegalStateException("The OSGi JMX implementation references an invalid ObjectName", e);
         }
     }
@@ -85,7 +85,7 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
      * @param provider
      *            the {@link MBeanProvider} for the running Karaf instance
      */
-    public KarafRuntimeDataProvider(String name, MBeanProvider provider) {
+    public KarafRuntimeDataProvider(final String name, final MBeanProvider provider) {
         super();
 
         this.name = name;
@@ -153,6 +153,15 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
     }
 
     @Override
+    public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
+        if (MBeanProvider.class.equals(adapter)) {
+            return mbeanProvider;
+        } else {
+            return super.getAdapter(adapter);
+        }
+    }
+
+    @Override
     public Image getIcon() {
         return KarafWorkbenchActivator.getDefault().getImageRegistry().get(KarafWorkbenchActivator.LOGO_16X16_IMG);
     }
@@ -190,7 +199,7 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
         fireStopEvent();
     }
 
-    private IStatus loadBundleData(IProgressMonitor monitor) {
+    private IStatus loadBundleData(final IProgressMonitor monitor) {
         monitor.subTask("OSGi Bundles");
 
         if (monitor.isCanceled()) {
@@ -209,7 +218,7 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
                 idToBundleMap.clear();
             }
 
-            for (Object o : rawBundleData.values()) {
+            for (final Object o : rawBundleData.values()) {
                 final CompositeData composite = (CompositeData) o;
                 final BundleItem bundle = new BundleItem(composite);
 
@@ -226,16 +235,16 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
 
             }
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return new Status(IStatus.ERROR, KarafWorkbenchActivator.PLUGIN_ID, "Unable to connect to MBeanServer", e);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             KarafWorkbenchActivator.getLogger().warn("Unable to update OSGi Bundles", e);
         }
 
         return Status.OK_STATUS;
     }
 
-    private IStatus loadServiceData(IProgressMonitor monitor) {
+    private IStatus loadServiceData(final IProgressMonitor monitor) {
         monitor.subTask("OSGi Services");
 
         if (monitor.isCanceled()) {
@@ -254,7 +263,7 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
                 idToServiceMap.clear();
             }
 
-            for (Object o : rawServiceData.values()) {
+            for (final Object o : rawServiceData.values()) {
                 final CompositeData composite = (CompositeData) o;
                 final ServiceData service = ServiceData.from(composite);
 
@@ -279,13 +288,13 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
                 }
 
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
         	if (monitor.isCanceled()) {
         		return new Status(IStatus.CANCEL, KarafWorkbenchActivator.PLUGIN_ID, "Unable to connect to MBeanServer", e);
         	} else {
         		return new Status(IStatus.ERROR, KarafWorkbenchActivator.PLUGIN_ID, "Unable to connect to MBeanServer", e);
         	}
-        } catch (Exception e) {
+        } catch (final Exception e) {
             KarafWorkbenchActivator.getLogger().warn("Unable to update OSGi Services", e);
         }
 

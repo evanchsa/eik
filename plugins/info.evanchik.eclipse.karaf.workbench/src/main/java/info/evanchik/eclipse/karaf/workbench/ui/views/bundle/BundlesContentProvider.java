@@ -87,7 +87,7 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
     @Override
     public Object[] getChildren(final Object parentElement) {
         if (parentElement instanceof RuntimeDataProvider) {
-            return ((RuntimeDataProvider) parentElement).getBundles().toArray(new Object[0]);
+            return ((RuntimeDataProvider) parentElement).getBundles().toArray();
         }
 
         return null;
@@ -95,7 +95,7 @@ public class BundlesContentProvider implements IStructuredContentProvider, ITree
 
     @Override
     public Object[] getElements(final Object inputElement) {
-        return runtimeDataProviderManager.getServices().toArray(new Object[0]);
+        return runtimeDataProviderManager.getServices().toArray();
     }
 
     @Override

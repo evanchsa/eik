@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -57,6 +58,11 @@ public abstract class AbstractRuntimeDataProvider implements RuntimeDataProvider
         }
 
         listeners.add(listener);
+    }
+
+    @Override
+    public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
+        return Platform.getAdapterManager().getAdapter(this, adapter);
     }
 
     @Override

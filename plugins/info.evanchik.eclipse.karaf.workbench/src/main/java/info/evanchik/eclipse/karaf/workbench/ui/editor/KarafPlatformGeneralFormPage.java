@@ -10,21 +10,19 @@
  */
 package info.evanchik.eclipse.karaf.workbench.ui.editor;
 
+import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
+
 import java.lang.management.RuntimeMXBean;
 
 import javax.management.ObjectName;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.events.ExpansionAdapter;
-import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 
 /**
@@ -60,42 +58,44 @@ public class KarafPlatformGeneralFormPage extends FormPage {
     @Override
     protected void createFormContent(final IManagedForm managedForm) {
         final GridLayout layout = new GridLayout(2, true);
-
-        final GridData data = new GridData(GridData.FILL_BOTH);
-        data.horizontalSpan = 2;
+        GridData data = new GridData(GridData.FILL_BOTH);
 
         managedForm.getForm().getBody().setLayout(layout);
         managedForm.getForm().getBody().setLayoutData(data);
 
-        createKarafPlatformDetailsSection(managedForm, data);
-        createKarafJVMDetailsSection(managedForm, data);
+        managedForm.getForm().setImage(KarafWorkbenchActivator.getDefault().getImageRegistry().get(KarafWorkbenchActivator.LOGO_16X16_IMG));
+        managedForm.getForm().setText("Platform Overview");
+
+        final Composite left = managedForm.getToolkit().createComposite(managedForm.getForm().getBody());
+        data = new GridData(GridData.FILL_BOTH);
+        left.setLayout(new GridLayout(1, true));
+        left.setLayoutData(data);
+
+        createKarafPlatformDetailsSection(managedForm, left);
+        createKarafJVMDetailsSection(managedForm, left);
+
+        final Composite right = managedForm.getToolkit().createComposite(managedForm.getForm().getBody());
     }
 
     /**
      * @param managedForm
-     * @param data
      */
-    private void createKarafJVMDetailsSection(final IManagedForm managedForm,
-            GridData data) {
+    private void createKarafJVMDetailsSection(final IManagedForm managedForm, final Composite parent) {
         final Section section = managedForm.getToolkit().createSection(
-                managedForm.getForm().getBody(),
-                  Section.DESCRIPTION
-                | Section.TITLE_BAR
-                | Section.TWISTIE
+                parent,
+                  Section.TITLE_BAR
                 | Section.EXPANDED);
 
-        section.addExpansionListener(new ExpansionAdapter() {
-            @Override
-            public void expansionStateChanged(final ExpansionEvent e) {
-                managedForm.reflow(true);
-            }
-        });
+        section.setText("JVM Information");
 
-        section.setText("Karaf JVM Information");
-        section.setDescription("This is the description that goes below the title");
+        GridData data = new GridData(GridData.FILL_HORIZONTAL);
+        section.setLayout(new GridLayout(1, true));
+        section.setLayoutData(data);
+
+        data = new GridData(GridData.FILL_HORIZONTAL);
 
         final Composite sectionClient = managedForm.getToolkit().createComposite(section);
-        sectionClient.setLayout(new GridLayout(2, false));
+        sectionClient.setLayout(new GridLayout(2, true));
         sectionClient.setLayoutData(data);
 
         section.setClient(sectionClient);
@@ -105,8 +105,7 @@ public class KarafPlatformGeneralFormPage extends FormPage {
         final RuntimeMXBean runtimeMXBean =
             editor.getMBeanProvider().getMBean(createObjectName("java.lang:type=Runtime"), RuntimeMXBean.class);
 
-        Label l = managedForm.getToolkit().createLabel(sectionClient, "Virtual Machine");
-        Dialog.applyDialogFont(l);
+        managedForm.getToolkit().createLabel(sectionClient, "Virtual Machine");
 
         final String version = runtimeMXBean.getVmName() + " version " + runtimeMXBean.getVmVersion();
         vmVersion = managedForm.getToolkit().createText(sectionClient, version, SWT.BORDER);
@@ -114,8 +113,7 @@ public class KarafPlatformGeneralFormPage extends FormPage {
         vmVersion.setLayoutData(data);
         vmVersion.setEnabled(false);
 
-        l = managedForm.getToolkit().createLabel(sectionClient, "Vendor");
-        Dialog.applyDialogFont(l);
+        managedForm.getToolkit().createLabel(sectionClient, "Vendor");
 
         final String vendor = runtimeMXBean.getVmVendor();
         vmVendor = managedForm.getToolkit().createText(sectionClient, vendor, SWT.BORDER);
@@ -123,8 +121,7 @@ public class KarafPlatformGeneralFormPage extends FormPage {
         vmVendor.setLayoutData(data);
         vmVendor.setEnabled(false);
 
-        l = managedForm.getToolkit().createLabel(sectionClient, "Name");
-        Dialog.applyDialogFont(l);
+        managedForm.getToolkit().createLabel(sectionClient, "Name");
 
         final String name = runtimeMXBean.getName();
         vmName = managedForm.getToolkit().createText(sectionClient, name, SWT.BORDER);
@@ -137,32 +134,27 @@ public class KarafPlatformGeneralFormPage extends FormPage {
      * @param managedForm
      * @param data
      */
-    private void createKarafPlatformDetailsSection(final IManagedForm managedForm, GridData data) {
+    private void createKarafPlatformDetailsSection(final IManagedForm managedForm, final Composite parent) {
         final Section section = managedForm.getToolkit().createSection(
-                managedForm.getForm().getBody(),
-                  Section.DESCRIPTION
-                | Section.TITLE_BAR
-                | Section.TWISTIE
+                parent,
+                  Section.TITLE_BAR
                 | Section.EXPANDED);
 
-        section.addExpansionListener(new ExpansionAdapter() {
-            @Override
-            public void expansionStateChanged(final ExpansionEvent e) {
-                managedForm.reflow(true);
-            }
-        });
+        section.setText("Installation Details");
 
-        section.setText("Karaf Platform Overview");
-        section.setDescription("This is the description that goes below the title");
+        GridData data = new GridData(GridData.FILL_HORIZONTAL);
+        section.setLayout(new GridLayout(1, true));
+        section.setLayoutData(data);
+
+        data = new GridData(GridData.FILL_HORIZONTAL);
 
         final Composite sectionClient = managedForm.getToolkit().createComposite(section);
-        sectionClient.setLayout(new GridLayout(2, false));
+        sectionClient.setLayout(new GridLayout(2, true));
         sectionClient.setLayoutData(data);
 
         section.setClient(sectionClient);
 
-        Label l = managedForm.getToolkit().createLabel(sectionClient, "Name");
-        Dialog.applyDialogFont(l);
+        managedForm.getToolkit().createLabel(sectionClient, "Name");
 
         final String name = editor.getPlatformDetails().getName();
         platformName = managedForm.getToolkit().createText(sectionClient, name, SWT.BORDER);
@@ -170,8 +162,7 @@ public class KarafPlatformGeneralFormPage extends FormPage {
         platformName.setLayoutData(data);
         platformName.setEnabled(false);
 
-        l = managedForm.getToolkit().createLabel(sectionClient, "Version");
-        Dialog.applyDialogFont(l);
+        managedForm.getToolkit().createLabel(sectionClient, "Version");
 
         final String version = editor.getPlatformDetails().getVersion();
         platformVersion = managedForm.getToolkit().createText(sectionClient, version, SWT.BORDER);
@@ -179,8 +170,7 @@ public class KarafPlatformGeneralFormPage extends FormPage {
         platformVersion.setLayoutData(data);
         platformVersion.setEnabled(false);
 
-        l = managedForm.getToolkit().createLabel(sectionClient, "Description");
-        Dialog.applyDialogFont(l);
+        managedForm.getToolkit().createLabel(sectionClient, "Description");
 
         final String description = editor.getPlatformDetails().getDescription();
         platformDescription = managedForm.getToolkit().createText(sectionClient, description, SWT.BORDER);

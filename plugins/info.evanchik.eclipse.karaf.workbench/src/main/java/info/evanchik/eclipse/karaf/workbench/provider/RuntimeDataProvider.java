@@ -13,6 +13,7 @@ package info.evanchik.eclipse.karaf.workbench.provider;
 import java.util.Set;
 
 import org.apache.aries.jmx.codec.BundleData;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.graphics.Image;
 
@@ -20,7 +21,7 @@ import org.eclipse.swt.graphics.Image;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface RuntimeDataProvider {
+public interface RuntimeDataProvider extends IAdaptable {
 
     /**
      * Adds a listener for events issued by this {@code RuntimeDataProvider}.<br>

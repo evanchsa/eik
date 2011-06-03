@@ -119,12 +119,13 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
 		plugin = null;
 		super.stop(context);
 
+        runtimeDataProviderManager.remove(eclipseWorkbenchDataProvider);
+
         jmxServiceManager = null;
         jmxTransportRegistry = null;
         mbeanProviderManager = null;
-        runtimeDataProviderManager = null;
 
-        runtimeDataProviderManager.remove(eclipseWorkbenchDataProvider);
+        runtimeDataProviderManager = null;
         eclipseWorkbenchDataProvider = null;
 	}
 

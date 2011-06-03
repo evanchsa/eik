@@ -122,7 +122,6 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
                 final String encoding = launch.getAttribute(DebugPlugin.ATTR_CONSOLE_ENCODING);
 
-                // TODO: Make the username, password and port configurable
                 final KarafRemoteConsole remoteConsole = new KarafRemoteConsole(
                         process,
                         new KarafSshConnectionUrl("localhost", 8101, "smx", "smx"),
@@ -185,7 +184,6 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
         final String[] bundles = {
                 "info.evanchik.karaf.app", //$NON-NLS-1$
-                "info.evanchik.eclipse.karaf.data", //$NON-NLS-1$
                 "org.eclipse.core.contenttype", //$NON-NLS-1$
                 "org.eclipse.core.jobs", //$NON-NLS-1$
                 "org.eclipse.core.runtime", //$NON-NLS-1$

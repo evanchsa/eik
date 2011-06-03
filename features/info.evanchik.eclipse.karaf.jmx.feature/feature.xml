@@ -2,7 +2,7 @@
 <feature
       id="info.evanchik.eclipse.karaf.jmx.feature"
       label="Eclipse JMX Integration Feature for Apache Felix Karaf"
-      version="0.5.1.qualifier"
+      version="0.5.2.qualifier"
       provider-name="evanchik.info">
 
    <description>
@@ -23,10 +23,14 @@
       <import plugin="org.eclipse.debug.core" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.ui" version="3.2.0" match="compatible"/>
-      <import plugin="info.evanchik.eclipse.karaf.core" version="0.5.0" match="greaterOrEqual"/>
       <import plugin="info.evanchik.eclipse.karaf.jmx" version="0.5.0" match="greaterOrEqual"/>
-      <import plugin="info.evanchik.eclipse.karaf.ui" version="0.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.osgi.services"/>
+      <import plugin="org.eclipse.jface.databinding" version="1.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text" version="3.6.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.6.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.forms" version="3.5.2" match="greaterOrEqual"/>
+      <import plugin="info.evanchik.eclipse.karaf.core" version="0.5.2" match="greaterOrEqual"/>
+      <import plugin="info.evanchik.eclipse.karaf.ui" version="0.5.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin

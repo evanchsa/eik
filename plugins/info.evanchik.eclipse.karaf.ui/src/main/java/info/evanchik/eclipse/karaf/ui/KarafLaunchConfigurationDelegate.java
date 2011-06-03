@@ -14,6 +14,7 @@ package info.evanchik.eclipse.karaf.ui;
 import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.core.PropertyUtils;
 import info.evanchik.eclipse.karaf.core.SystemBundleNames;
@@ -262,7 +263,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     protected void preLaunchCheck(final ILaunchConfiguration configuration, final ILaunch launch, final IProgressMonitor monitor) throws CoreException {
         super.preLaunchCheck(configuration, launch, monitor);
 
-        this.karafPlatform = KarafLaunchConfigurationInitializer.findKarafPlatform(configuration, monitor);
+        this.karafPlatform = KarafPlatformModelRegistry.findActivePlatformModel();
 
         monitor.worked(10);
 

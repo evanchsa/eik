@@ -29,12 +29,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.pde.core.plugin.IPluginBase;
@@ -55,34 +50,6 @@ import org.osgi.framework.Version;
 public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfigurationInitializer {
 
     public static final char VERSION_SEPARATOR = '*';
-
-    /**
-     * Loads a Karaf platform
-     *
-     * @param configuration
-     * @param monitor
-     * @throws CoreException
-     */
-    public static KarafPlatformModel findKarafPlatform(final ILaunchConfiguration configuration, final IProgressMonitor monitor) throws CoreException {
-    	monitor.subTask("Locating Karaf Platform");
-
-    	final KarafPlatformModel karafPlatformModel =
-            KarafPlatformModelRegistry.findActivePlatformModel();
-
-        monitor.worked(10);
-
-        if (karafPlatformModel == null) {
-            throw new CoreException(
-                    new Status(
-                            IStatus.ERROR,
-                            KarafUIPluginActivator.PLUGIN_ID,
-                            "Unable to locate compatible Apache Felix Karaf platform model"));
-        }
-
-        monitor.worked(10);
-
-        return karafPlatformModel;
-    }
 
     /**
      * Convenience method for initializing a Karaf launch configuration
@@ -248,7 +215,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      */
     protected void loadKarafPlatform(final ILaunchConfigurationWorkingCopy configuration) {
         try {
-            this.karafPlatform = findKarafPlatform(configuration, new NullProgressMonitor());
+            this.karafPlatform = KarafPlatformModelRegistry.findActivePlatformModel();
             this.karafPlatformFactory = KarafPlatformModelRegistry.findPlatformModelFactory(karafPlatform.getRootDirectory());
 
             this.startupSection = (StartupSection) this.karafPlatform.getAdapter(StartupSection.class);

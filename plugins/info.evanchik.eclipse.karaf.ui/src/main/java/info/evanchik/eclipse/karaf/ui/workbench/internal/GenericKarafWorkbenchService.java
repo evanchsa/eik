@@ -228,7 +228,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         try {
             currentConfig =
                 KarafCorePluginUtils.loadProperties(
-                    platformModel.getConfigurationDirectory().toFile(),
+                    platformModel.getParentKarafModel().getConfigurationDirectory().toFile(),
                     IKarafConstants.KARAF_DEFAULT_CONFIG_PROPERTIES_FILE,
                     true);
 
@@ -241,7 +241,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
                 equinoxProperties.put((String)e.getKey(), (String)e.getValue());
             }
         } catch(final CoreException e) {
-            KarafUIPluginActivator.getLogger().error("Unable to load configuration file: " + platformModel.getConfigurationDirectory(), e);
+            KarafUIPluginActivator.getLogger().error("Unable to load configuration file: " + platformModel.getParentKarafModel().getConfigurationDirectory(), e);
         }
 
         equinoxProperties.put(

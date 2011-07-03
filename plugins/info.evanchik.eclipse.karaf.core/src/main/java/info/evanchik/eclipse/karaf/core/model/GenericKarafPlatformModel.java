@@ -24,6 +24,7 @@ import info.evanchik.eclipse.karaf.core.configuration.internal.ManagementSection
 import info.evanchik.eclipse.karaf.core.configuration.internal.StartupSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.SystemSectionImpl;
 import info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator;
+import info.evanchik.eclipse.karaf.core.shell.KarafSshConnectionUrl;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,31 +75,12 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
             return new SystemSectionImpl(this);
         } else if (adapterType == KarafPlatformDetails.class) {
             adaptedObject = adaptKarafPlatformDetails();
+        } else if (adapterType == KarafSshConnectionUrl.class) {
+            adaptedObject = adaptKarafSshConnectionUrl();
         } else {
             adaptedObject = null;
         }
 
-        return adaptedObject;
-    }
-
-    /**
-     * @return
-     */
-    private Object adaptKarafPlatformDetails() {
-        final Object adaptedObject;
-        try {
-            if(KarafCorePluginUtils.isServiceMix(this)) {
-                final File file = getRootDirectory().append("lib").append("servicemix.jar").toFile();
-                adaptedObject = new GenericKarafPlatformDetails(file); // $NON-NLS-2$
-            } else if (KarafCorePluginUtils.isFelixKaraf(this) || KarafCorePluginUtils.isKaraf(this)) {
-                final File file = getRootDirectory().append("lib").append("karaf.jar").toFile();
-                adaptedObject = new GenericKarafPlatformDetails(file); // $NON-NLS-2$
-            } else {
-                adaptedObject = null;
-            }
-        } catch (final IOException e) {
-            return null;
-        }
         return adaptedObject;
     }
 
@@ -114,7 +96,6 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
 
         return bootClasspath;
     }
-
     @Override
     public IPath getConfigurationDirectory() {
         return rootPlatformPath.append("etc"); //$NON-NLS-1$
@@ -147,16 +128,6 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
         return false;
     }
 
-    @Override
-    protected List<URL> getPlatformBundles() {
-
-        final List<File> jarFiles = new ArrayList<File>();
-        KarafCorePluginUtils.getJarFileList(getPluginRootDirectory().toFile(), jarFiles,
-                        MAX_SEARCH_DEPTH);
-
-        return filesToUrls(jarFiles);
-    }
-
     /**
      * Convert a {@link List} of {@link File} to a {@code List} of {@link URL}
      *
@@ -178,6 +149,45 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
         }
 
         return urls;
+    }
+
+    @Override
+    protected List<URL> getPlatformBundles() {
+
+        final List<File> jarFiles = new ArrayList<File>();
+        KarafCorePluginUtils.getJarFileList(getPluginRootDirectory().toFile(), jarFiles,
+                        MAX_SEARCH_DEPTH);
+
+        return filesToUrls(jarFiles);
+    }
+
+    /**
+     *
+     * @return
+     */
+    private Object adaptKarafSshConnectionUrl() {
+        return null;
+    }
+
+    /**
+     * @return
+     */
+    private Object adaptKarafPlatformDetails() {
+        final Object adaptedObject;
+        try {
+            if(KarafCorePluginUtils.isServiceMix(this)) {
+                final File file = getRootDirectory().append("lib").append("servicemix.jar").toFile();
+                adaptedObject = new GenericKarafPlatformDetails(file); // $NON-NLS-2$
+            } else if (KarafCorePluginUtils.isFelixKaraf(this) || KarafCorePluginUtils.isKaraf(this)) {
+                final File file = getRootDirectory().append("lib").append("karaf.jar").toFile();
+                adaptedObject = new GenericKarafPlatformDetails(file); // $NON-NLS-2$
+            } else {
+                adaptedObject = null;
+            }
+        } catch (final IOException e) {
+            return null;
+        }
+        return adaptedObject;
     }
 
     /**

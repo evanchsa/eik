@@ -61,6 +61,16 @@ public final class KarafLaunchConfigurationConstants {
     public static final String KARAF_LAUNCH_START_REMOTE_CONSOLE = "karaf_start_remote_console"; //$NON-NLS-1$
 
     /**
+     * The password used to authenticate to the remote console
+     */
+    public static final String KARAF_REMOTE_CONSOLE_PASSWORD = "karaf_remote_console_password"; //$NON-NLS-1$
+
+    /**
+     * The username used to authenticate to the remote console
+     */
+    public static final String KARAF_REMOTE_CONSOLE_USERNAME = "karaf_remote_console_username"; //$NON-NLS-1$
+
+    /**
      * Private constructor to prevent instantiation.
      */
     private KarafLaunchConfigurationConstants() {

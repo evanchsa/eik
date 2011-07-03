@@ -49,6 +49,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
@@ -60,7 +62,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.PlatformUI;
@@ -325,6 +329,10 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
     private Button remoteConsole;
 
+    private Text remoteConsoleUsername;
+
+    private Text remoteConsolePassword;
+
     private final List<String> selectedFeatures = Collections.synchronizedList(new ArrayList<String>());
 
     @Override
@@ -427,6 +435,8 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
     public void performApply(final ILaunchConfigurationWorkingCopy configuration) {
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, localConsole.getSelection());
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE, remoteConsole.getSelection());
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_REMOTE_CONSOLE_PASSWORD, remoteConsolePassword.getText());
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_REMOTE_CONSOLE_USERNAME, remoteConsoleUsername.getText());
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_FEATURES_MANAGEMENT, enableFeaturesManagement.getSelection());
         final String featuresString = KarafCorePluginUtils.join(selectedFeatures, ",");
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, featuresString);
@@ -434,15 +444,18 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
-        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, true);
-        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE, false);
-        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_FEATURES_MANAGEMENT, true);
 
         try {
             initializeKarafPlatformModel();
         } catch (final CoreException e) {
             // TODO: Do something sensible here
         }
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, true);
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE, false);
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_FEATURES_MANAGEMENT, true);
+
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_REMOTE_CONSOLE_USERNAME, "karaf");
+        configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_REMOTE_CONSOLE_PASSWORD, "karaf");
 
         final List<String> featuresList = featuresSection.getBootFeatureNames();
 
@@ -474,24 +487,72 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
         group.setText("Console");
 
-        final SelectionListener listener = new SelectionListener() {
-
-            @Override
-            public void widgetDefaultSelected(final SelectionEvent e) {
-                scheduleUpdateJob();
-            }
+        localConsole = createCheckButton(group, "Local console");
+        localConsole.addSelectionListener(new SelectionListener() {
 
             @Override
             public void widgetSelected(final SelectionEvent e) {
                 scheduleUpdateJob();
             }
+
+            @Override
+            public void widgetDefaultSelected(final SelectionEvent e) {
+                scheduleUpdateJob();
+            }
+        });
+
+        final KeyListener keyListener = new KeyListener() {
+
+            @Override
+            public void keyReleased(final KeyEvent e) {
+                scheduleUpdateJob();
+            }
+
+            @Override
+            public void keyPressed(final KeyEvent e) {
+                scheduleUpdateJob();
+            }
         };
 
-        localConsole = createCheckButton(group, "Local console");
-        localConsole.addSelectionListener(listener);
-
         remoteConsole = createCheckButton(group, "Remote console");
-        remoteConsole.addSelectionListener(listener);
+
+        Label l = new Label(group, SWT.NONE);
+        l.setText("Username");
+        remoteConsoleUsername = new Text(group, SWT.BORDER);
+        remoteConsoleUsername.setText("karaf");
+        remoteConsoleUsername.setLayoutData(new GridData(175, 20));
+        remoteConsoleUsername.addKeyListener(keyListener);
+
+        l = new Label(group, SWT.NONE);
+        l.setText("Password");
+        remoteConsolePassword = new Text(group, SWT.BORDER|SWT.PASSWORD);
+        remoteConsolePassword.setText("karaf");
+        remoteConsolePassword.setLayoutData(new GridData(175, 20));
+        remoteConsolePassword.addKeyListener(keyListener);
+
+        remoteConsole.addSelectionListener(new SelectionListener() {
+
+            @Override
+            public void widgetSelected(final SelectionEvent e) {
+                updateRemoteConsoleControls();
+            }
+
+            @Override
+            public void widgetDefaultSelected(final SelectionEvent e) {
+                updateRemoteConsoleControls();
+            }
+
+            /**
+             *
+             */
+            private void updateRemoteConsoleControls() {
+                final boolean enable = remoteConsole.getSelection();
+                remoteConsoleUsername.setEnabled(enable);
+                remoteConsolePassword.setEnabled(enable);
+
+                scheduleUpdateJob();
+            }
+        });
     }
 
     /**

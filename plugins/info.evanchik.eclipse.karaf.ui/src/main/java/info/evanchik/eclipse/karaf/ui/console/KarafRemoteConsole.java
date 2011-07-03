@@ -50,8 +50,6 @@ public class KarafRemoteConsole extends IOConsole implements IDebugEventSetListe
 
     private final IConsoleColorProvider colorProvider;
 
-    private final KarafSshShellConnection.Credentials credentials;
-
     private final IOConsoleInputStream inputStream;
 
     private final IProcess process;
@@ -85,7 +83,6 @@ public class KarafRemoteConsole extends IOConsole implements IDebugEventSetListe
         this.process = process;
         this.inputStream = getInputStream();
         this.colorProvider = colorProvider;
-        this.credentials = credentials;
 
         final Color color = this.colorProvider.getColor(IDebugUIConstants.ID_STANDARD_INPUT_STREAM);
         this.inputStream.setColor(color);
@@ -103,7 +100,8 @@ public class KarafRemoteConsole extends IOConsole implements IDebugEventSetListe
         boolean remoteShellEnabled = false;
         try {
             final ILaunchConfiguration configuration = process.getLaunch().getLaunchConfiguration();
-            remoteShellEnabled = configuration.getAttribute(
+            remoteShellEnabled =
+                configuration.getAttribute(
                     KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE,
                     false);
         } catch (final CoreException e) {
@@ -111,7 +109,13 @@ public class KarafRemoteConsole extends IOConsole implements IDebugEventSetListe
         }
 
         if (remoteShellEnabled) {
-            shellConnection = new KarafSshShellConnection(connectionUrl, credentials, noAvailableInputStream, outputStream, outputStream);
+            shellConnection =
+                new KarafSshShellConnection(
+                    connectionUrl,
+                    credentials,
+                    noAvailableInputStream,
+                    outputStream,
+                    outputStream);
 
             final KarafRemoteShellConnectJob job = new KarafRemoteShellConnectJob(name, shellConnection);
             job.schedule(15 * 1000);

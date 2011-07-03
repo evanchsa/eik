@@ -130,10 +130,23 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
                 final KarafSshConnectionUrl sshConnectionUrl =
                     (KarafSshConnectionUrl) karafPlatform.getAdapter(KarafSshConnectionUrl.class);
 
+                final KarafSshShellConnection.Credentials credentials;
+
+                try {
+                    final String username =
+                        launch.getLaunchConfiguration().getAttribute(KarafLaunchConfigurationConstants.KARAF_REMOTE_CONSOLE_USERNAME, "karaf");
+                    final String password =
+                        launch.getLaunchConfiguration().getAttribute(KarafLaunchConfigurationConstants.KARAF_REMOTE_CONSOLE_PASSWORD, "karaf");
+
+                    credentials = new KarafSshShellConnection.Credentials(username, password);
+                } catch (final CoreException e) {
+                    throw new AssertionError(e);
+                }
+
                 final KarafRemoteConsole remoteConsole = new KarafRemoteConsole(
                         process,
                         sshConnectionUrl,
-                        new KarafSshShellConnection.Credentials("karaf", "karaf"),
+                        credentials,
                         new ConsoleColorProvider(),
                         "Default Name",
                         encoding);

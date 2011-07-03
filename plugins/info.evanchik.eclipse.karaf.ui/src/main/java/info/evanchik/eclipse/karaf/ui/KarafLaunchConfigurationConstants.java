@@ -43,8 +43,8 @@ public final class KarafLaunchConfigurationConstants {
     public static final String KARAF_LAUNCH_REQUIRED_BOOT_CLASSPATH = "karaf_required_boot_classpath"; //$NON-NLS-1$
 
     /**
-     * Contains the root directory that this launch configuration will use for
-     * its source configuration data
+     * Contains the root directory of the Karaf platform that this launch
+     * configuration is configured against
      */
     public static final String KARAF_LAUNCH_SOURCE_RUNTIME = "karaf_source_runtime"; //$NON-NLS-1$
 

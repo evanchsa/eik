@@ -29,58 +29,6 @@ import org.fusesource.jansi.AnsiConsole;
  */
 public class KarafSshShellConnection implements KarafRemoteShellConnection {
 
-    /**
-     *
-     * @author Stephen Evanchik (evanchsa@gmail.com)
-     *
-     */
-    public static final class KarafSshConnectionUrl {
-
-        private final String host;
-
-        private final String password;
-
-        private final int port;
-
-        private final String username;
-
-        /**
-         * This object represents the necessary connection information
-         *
-         * @param host
-         *            the remote host
-         * @param port
-         *            the port of the remote host
-         * @param username
-         *            the username
-         * @param password
-         *            the password
-         */
-        public KarafSshConnectionUrl(final String host, final int port, final String username, final String password) {
-            this.host = host;
-            this.port = port;
-
-            this.username = username;
-            this.password = password;
-        }
-
-        public String getHost() {
-            return host;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public int getPort() {
-            return port;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-    }
-
     private ClientChannel clientChannel;
 
     private ClientSession clientSession;

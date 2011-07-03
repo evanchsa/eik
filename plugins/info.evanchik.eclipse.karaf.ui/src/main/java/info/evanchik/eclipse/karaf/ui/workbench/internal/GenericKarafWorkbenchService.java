@@ -12,13 +12,14 @@ package info.evanchik.eclipse.karaf.ui.workbench.internal;
 
 import info.evanchik.eclipse.karaf.core.IKarafConstants;
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
+import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.core.PropertyUtils;
 import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.shell.KarafSshShellConnection.KarafSshConnectionUrl;
+import info.evanchik.eclipse.karaf.core.shell.KarafSshConnectionUrl;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationConstants;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 import info.evanchik.eclipse.karaf.ui.console.KarafRemoteConsole;
@@ -122,9 +123,15 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
                 final String encoding = launch.getAttribute(DebugPlugin.ATTR_CONSOLE_ENCODING);
 
+                final KarafPlatformModel karafPlatform =
+                    (KarafPlatformModel) launch.getLaunchConfiguration().getAdapter(KarafPlatformModel.class);
+
+                final KarafSshConnectionUrl sshConnectionUrl =
+                    (KarafSshConnectionUrl) karafPlatform.getAdapter(KarafSshConnectionUrl.class);
+
                 final KarafRemoteConsole remoteConsole = new KarafRemoteConsole(
                         process,
-                        new KarafSshConnectionUrl("localhost", 8101, "smx", "smx"),
+                        sshConnectionUrl,
                         new ConsoleColorProvider(),
                         "Default Name",
                         encoding);

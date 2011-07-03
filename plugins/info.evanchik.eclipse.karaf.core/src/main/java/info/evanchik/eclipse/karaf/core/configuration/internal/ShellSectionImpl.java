@@ -23,10 +23,12 @@ import java.io.File;
 public class ShellSectionImpl extends AbstractPropertiesConfigurationSection
         implements ShellSection {
 
+    public static final String FILENAME = "org.apache.karaf.shell.cfg"; // $NON-NLS-1$
+
     public static final String SECTION_ID = "info.evanchik.eclipse.karaf.configuration.section.Shell"; //$NON-NLS-1$
 
-    public ShellSectionImpl(final KarafPlatformModel parent, final String filename) {
-        super(SECTION_ID, filename, parent);
+    public ShellSectionImpl(final KarafPlatformModel parent) {
+        super(SECTION_ID, FILENAME, parent);
     }
 
     @Override

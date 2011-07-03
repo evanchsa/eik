@@ -16,11 +16,13 @@ import info.evanchik.eclipse.karaf.core.KarafPlatformDetails;
 import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.configuration.GeneralSection;
 import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
+import info.evanchik.eclipse.karaf.core.configuration.ShellSection;
 import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
 import info.evanchik.eclipse.karaf.core.configuration.SystemSection;
 import info.evanchik.eclipse.karaf.core.configuration.internal.FeaturesSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.GeneralSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.ManagementSectionImpl;
+import info.evanchik.eclipse.karaf.core.configuration.internal.ShellSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.StartupSectionImpl;
 import info.evanchik.eclipse.karaf.core.configuration.internal.SystemSectionImpl;
 import info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator;
@@ -65,7 +67,9 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
         final Object adaptedObject;
         if (adapterType == FeaturesSection.class) {
             adaptedObject = new FeaturesSectionImpl(this);
-        } else if (adapterType == GeneralSection.class) {
+        } else if (adapterType == ShellSection.class) {
+            adaptedObject = new ShellSectionImpl(this);
+        }else if (adapterType == GeneralSection.class) {
             adaptedObject = new GeneralSectionImpl(this);
         } else if (adapterType == ManagementSection.class) {
             adaptedObject = adaptManagementSection();
@@ -166,7 +170,10 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
      * @return
      */
     private Object adaptKarafSshConnectionUrl() {
-        return null;
+        final ShellSection shellSection = (ShellSection) getAdapter(ShellSection.class);
+        shellSection.load();
+
+        return new KarafSshConnectionUrl(shellSection.getSshHost(), shellSection.getSshPort(), "karaf", "karaf");
     }
 
     /**

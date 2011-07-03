@@ -19,11 +19,7 @@ public final class KarafSshConnectionUrl {
 
     private final String host;
 
-    private final String password;
-
     private final int port;
-
-    private final String username;
 
     /**
      * This object represents the necessary connection information for a Karaf
@@ -33,17 +29,10 @@ public final class KarafSshConnectionUrl {
      *            the remote host
      * @param port
      *            the port of the remote host
-     * @param username
-     *            the username
-     * @param password
-     *            the password
      */
-    public KarafSshConnectionUrl(final String host, final int port, final String username, final String password) {
+    public KarafSshConnectionUrl(final String host, final int port) {
         this.host = host;
         this.port = port;
-
-        this.username = username;
-        this.password = password;
     }
 
     @Override
@@ -65,23 +54,7 @@ public final class KarafSshConnectionUrl {
             return false;
         }
 
-        if (password == null) {
-            if (other.password != null) {
-                return false;
-            }
-        } else if (!password.equals(other.password)) {
-            return false;
-        }
-
         if (port != other.port) {
-            return false;
-        }
-
-        if (username == null) {
-            if (other.username != null) {
-                return false;
-            }
-        } else if (!username.equals(other.username)) {
             return false;
         }
 
@@ -92,16 +65,8 @@ public final class KarafSshConnectionUrl {
         return host;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public int getPort() {
         return port;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     @Override
@@ -109,9 +74,7 @@ public final class KarafSshConnectionUrl {
         final int prime = 31;
         int result = 1;
         result = prime * result + (host == null ? 0 : host.hashCode());
-        result = prime * result + (password == null ? 0 : password.hashCode());
         result = prime * result + port;
-        result = prime * result + (username == null ? 0 : username.hashCode());
         return result;
     }
 

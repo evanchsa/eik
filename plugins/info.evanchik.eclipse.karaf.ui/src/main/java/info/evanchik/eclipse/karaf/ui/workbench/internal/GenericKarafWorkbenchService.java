@@ -20,6 +20,7 @@ import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.shell.KarafSshConnectionUrl;
+import info.evanchik.eclipse.karaf.core.shell.KarafSshShellConnection;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationConstants;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 import info.evanchik.eclipse.karaf.ui.console.KarafRemoteConsole;
@@ -132,6 +133,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
                 final KarafRemoteConsole remoteConsole = new KarafRemoteConsole(
                         process,
                         sshConnectionUrl,
+                        new KarafSshShellConnection.Credentials("karaf", "karaf"),
                         new ConsoleColorProvider(),
                         "Default Name",
                         encoding);

@@ -173,7 +173,7 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
         final ShellSection shellSection = (ShellSection) getAdapter(ShellSection.class);
         shellSection.load();
 
-        return new KarafSshConnectionUrl(shellSection.getSshHost(), shellSection.getSshPort(), "karaf", "karaf");
+        return new KarafSshConnectionUrl(shellSection.getSshHost(), shellSection.getSshPort());
     }
 
     /**

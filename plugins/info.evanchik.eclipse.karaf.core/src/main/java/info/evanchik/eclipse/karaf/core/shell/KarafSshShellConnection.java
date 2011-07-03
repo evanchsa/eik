@@ -29,13 +29,90 @@ import org.fusesource.jansi.AnsiConsole;
  */
 public class KarafSshShellConnection implements KarafRemoteShellConnection {
 
+    /**
+     *
+     * @author Stephen Evanchik (evanchsa@gmail.com)
+     *
+     */
+    public static final class Credentials {
+
+        private final String password;
+
+        private final String username;
+
+        /**
+         *
+         * @param username
+         * @param password
+         */
+        public Credentials(final String username, final String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+
+            if (obj == null) {
+                return false;
+            }
+
+            if (!(obj instanceof Credentials)) {
+                return false;
+            }
+
+            final Credentials other = (Credentials) obj;
+            if (password == null) {
+                if (other.password != null) {
+                    return false;
+                }
+            } else if (!password.equals(other.password)) {
+                return false;
+            }
+
+            if (username == null) {
+                if (other.username != null) {
+                    return false;
+                }
+            } else if (!username.equals(other.username)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + (password == null ? 0 : password.hashCode());
+            result = prime * result + (username == null ? 0 : username.hashCode());
+            return result;
+        }
+    }
+
     private ClientChannel clientChannel;
 
     private ClientSession clientSession;
 
     private final AtomicBoolean connected = new AtomicBoolean();
 
+    private int connectionStatus;
+
     private final KarafSshConnectionUrl connectionUrl;
+
+    private final Credentials credentials;
 
     private final OutputStream errorStream;
 
@@ -45,14 +122,14 @@ public class KarafSshShellConnection implements KarafRemoteShellConnection {
 
     private SshClient sshClient;
 
-    private int connectionStatus;
-
     /**
      * Creates a remote shell connection to a Karaf instance using the SSH
      * protocol
      *
      * @param connectionUrl
      *            the coordinates used to establish the connection
+     * @param credentials
+     *            the username and password used to authenticate when connection
      * @param inputStream
      *            the {@link InputStream} used to interact with the remote
      *            system
@@ -65,12 +142,14 @@ public class KarafSshShellConnection implements KarafRemoteShellConnection {
      */
     public KarafSshShellConnection(
             final KarafSshConnectionUrl connectionUrl,
+            final Credentials credentials,
             final InputStream inputStream,
             final OutputStream outputStream,
             final OutputStream errorStream)
     {
 
         this.connectionUrl = connectionUrl;
+        this.credentials = credentials;
 
         this.inputStream = inputStream;
         this.outputStream = outputStream;
@@ -89,7 +168,7 @@ public class KarafSshShellConnection implements KarafRemoteShellConnection {
 
             clientSession = connectFuture.getSession();
 
-            final AuthFuture authFuture = clientSession.authPassword(connectionUrl.getUsername(), connectionUrl.getPassword());
+            final AuthFuture authFuture = clientSession.authPassword(credentials.getUsername(), credentials.getPassword());
 
             authFuture.await(15 * 1000);
 

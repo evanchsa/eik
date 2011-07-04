@@ -10,6 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.core.shell;
 
+import java.io.IOException;
+
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
@@ -21,14 +23,14 @@ public interface KarafRemoteShellConnection {
      * <p>
      * This method will block until the connection has been established.
      */
-    public void connect();
+    public void connect() throws IOException;
 
     /**
      * Disconnects from the remote shell of a Karaf instance
      * <p>
      * This method will block until the connection has been severed
      */
-    public void disconnect();
+    public void disconnect() throws IOException;
 
     /**
      * Determines whether or not there is a connection to the Karaf remote shell

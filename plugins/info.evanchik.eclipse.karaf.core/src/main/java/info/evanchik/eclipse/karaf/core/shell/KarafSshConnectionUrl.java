@@ -11,6 +11,8 @@
 package info.evanchik.eclipse.karaf.core.shell;
 
 /**
+ * This object represents the necessary information for a Karaf
+ * SSH connection
  *
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
@@ -22,7 +24,7 @@ public final class KarafSshConnectionUrl {
     private final int port;
 
     /**
-     * This object represents the necessary connection information for a Karaf
+     * This object represents the necessary information for a Karaf
      * SSH connection
      *
      * @param host
@@ -61,10 +63,20 @@ public final class KarafSshConnectionUrl {
         return true;
     }
 
+    /**
+     * Getter for the remote host
+     *
+     * @return the remote host
+     */
     public String getHost() {
         return host;
     }
 
+    /**
+     * Getter for the SSH server's port
+     *
+     * @return the SSH server's port
+     */
     public int getPort() {
         return port;
     }

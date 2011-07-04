@@ -26,6 +26,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
@@ -118,14 +120,32 @@ public class KarafRemoteConsole extends IOConsole implements IDebugEventSetListe
                     outputStream);
 
             final KarafRemoteShellConnectJob job = new KarafRemoteShellConnectJob(name, shellConnection);
+            job.addJobChangeListener(new JobChangeAdapter() {
+                @Override
+                public void done(final IJobChangeEvent event) {
+                    if (!event.getResult().isOK()) {
+                        final Throwable t = event.getResult().getException();
+                        writeTo(outputStream, "Unable to connect to SSH server: " + (t != null ? t.getLocalizedMessage() : "Unknown error"));
+                    }
+                }
+            });
+
             job.schedule(15 * 1000);
         } else {
-            try {
-                outputStream.write("The Karaf remote shell is disabled. Enable it in the launch configuration dialog");
-                outputStream.flush();
-            } catch (final IOException e) {
-                // Do nothing
-            }
+            writeTo(outputStream, "The Karaf remote shell is disabled. Enable it in the launch configuration dialog");
+        }
+    }
+
+    /**
+     * @param outputStream
+     * @param message
+     */
+    private void writeTo(final IOConsoleOutputStream outputStream, final String message) {
+        try {
+            outputStream.write(message);
+            outputStream.flush();
+        } catch (final IOException e) {
+            // Do nothing
         }
     }
 
@@ -144,7 +164,11 @@ public class KarafRemoteConsole extends IOConsole implements IDebugEventSetListe
             if (event.getSource().equals(process)) {
                 if (event.getKind() == DebugEvent.TERMINATE) {
                     if (shellConnection != null) {
-                        shellConnection.disconnect();
+                        try {
+                            shellConnection.disconnect();
+                        } catch (final IOException e) {
+                            KarafUIPluginActivator.getLogger().error("Unable to disconnect from SSH server", e);
+                        }
                     }
                     DebugPlugin.getDefault().removeDebugEventListener(this);
 
@@ -211,7 +235,11 @@ public class KarafRemoteConsole extends IOConsole implements IDebugEventSetListe
 
         if (process.isTerminated()) {
             if (shellConnection != null) {
-                shellConnection.disconnect();
+                try {
+                    shellConnection.disconnect();
+                } catch (final IOException e) {
+                    KarafUIPluginActivator.getLogger().error("Unable to disconnect from SSH server", e);
+                }
             }
         } else {
             DebugPlugin.getDefault().addDebugEventListener(this);

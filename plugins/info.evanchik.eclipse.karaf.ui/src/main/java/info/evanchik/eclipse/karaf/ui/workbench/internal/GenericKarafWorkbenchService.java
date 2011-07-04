@@ -148,7 +148,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
                         sshConnectionUrl,
                         credentials,
                         new ConsoleColorProvider(),
-                        "Default Name",
+                        launch.getLaunchConfiguration().getName(),
                         encoding);
 
                 remoteConsole.setAttribute(IDebugUIConstants.ATTR_CONSOLE_PROCESS, process);

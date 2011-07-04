@@ -542,9 +542,6 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
                 updateRemoteConsoleControls();
             }
 
-            /**
-             *
-             */
             private void updateRemoteConsoleControls() {
                 final boolean enable = remoteConsole.getSelection();
                 remoteConsoleUsername.setEnabled(enable);

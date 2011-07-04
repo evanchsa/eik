@@ -10,6 +10,9 @@
  */
 package info.evanchik.eclipse.karaf.core.shell;
 
+import info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -116,6 +119,8 @@ public class KarafSshShellConnection implements KarafRemoteShellConnection {
 
     private final OutputStream errorStream;
 
+    private volatile Throwable exception;
+
     private final InputStream inputStream;
 
     private final OutputStream outputStream;
@@ -155,11 +160,13 @@ public class KarafSshShellConnection implements KarafRemoteShellConnection {
         this.outputStream = outputStream;
         this.errorStream = errorStream;
 
+        this.exception = null;
+
         this.sshClient = SshClient.setUpDefaultClient();
     }
 
     @Override
-    public void connect() {
+    public void connect() throws IOException {
         sshClient.start();
 
         try {
@@ -169,13 +176,18 @@ public class KarafSshShellConnection implements KarafRemoteShellConnection {
             clientSession = connectFuture.getSession();
 
             final AuthFuture authFuture = clientSession.authPassword(credentials.getUsername(), credentials.getPassword());
-
             authFuture.await(15 * 1000);
 
             if (!authFuture.isSuccess()) {
-                // TODO: Authentication failure
-                disconnect();
-                return;
+                exception = authFuture.getException();
+
+                try {
+                    disconnect();
+                } catch (final IOException e) {
+                    KarafCorePluginActivator.getLogger().warn("Error while disconnecting after authenticate failure", e);
+                }
+
+                throw new IOException(exception);
             }
 
             clientChannel = clientSession.createChannel(ClientChannel.CHANNEL_SHELL);
@@ -189,13 +201,12 @@ public class KarafSshShellConnection implements KarafRemoteShellConnection {
             clientChannel.open();
             connectionStatus = clientChannel.waitFor(ClientChannel.CLOSED, 15 * 1000);
         } catch (final Exception e) {
-            // TODO: Handle the exception
-            e.printStackTrace();
+            throw new IOException(e);
         }
     }
 
     @Override
-    public void disconnect() {
+    public void disconnect() throws IOException {
         try {
             if (clientChannel != null) {
                 clientChannel.close(true).await();
@@ -204,18 +215,22 @@ public class KarafSshShellConnection implements KarafRemoteShellConnection {
             if (clientSession != null) {
                 clientSession.close(true).await();
             }
-
-            sshClient.stop();
+        } catch (final Exception e) {
+            throw new IOException(e);
+        } finally {
+            clientChannel = null;
+            clientSession = null;
 
             connected.set(false);
-        } catch (final Exception e) {
-            // TODO: Handle the exception
-            e.printStackTrace();
         }
     }
 
     public int getConnectionStatus() {
         return connectionStatus;
+    }
+
+    public Throwable getException() {
+        return exception;
     }
 
     @Override

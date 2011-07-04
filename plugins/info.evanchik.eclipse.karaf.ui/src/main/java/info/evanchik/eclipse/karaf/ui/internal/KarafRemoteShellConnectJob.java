@@ -19,6 +19,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
+ * A s{@link Job} that will connect to a Karaf SSH server using the specified
+ * {@link KarafRemoteShellConnection}
+ *
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
@@ -27,9 +30,13 @@ public class KarafRemoteShellConnectJob extends Job {
     private final KarafRemoteShellConnection karafRemoteShellConnection;
 
     /**
+     * Creates a {@link Job} that will connect to a Karaf SSH server using the
+     * specified {@link KarafRemoteShellConnection}
      *
      * @param name
+     *            the name of the {@code Job}
      * @param karafRemoteShellConnection
+     *            the {@code KarafRemoteShellConnection} to use
      */
     public KarafRemoteShellConnectJob(final String name, final KarafRemoteShellConnection karafRemoteShellConnection) {
         super(name);
@@ -41,14 +48,24 @@ public class KarafRemoteShellConnectJob extends Job {
     protected IStatus run(final IProgressMonitor monitor) {
 
         try {
-            karafRemoteShellConnection.connect();
-        } catch (final Exception e) {
-            e.printStackTrace();
+            monitor.worked(1);
 
+            karafRemoteShellConnection.connect();
+            if (monitor.isCanceled()) {
+                karafRemoteShellConnection.disconnect();
+
+                return Status.CANCEL_STATUS;
+            }
+
+            monitor.done();
+        } catch (final Exception e) {
             return new Status(Status.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to connect to Karaf remote shell", e);
         }
 
         return Status.OK_STATUS;
     }
 
+    public boolean isConnected() {
+        return karafRemoteShellConnection.isConnected();
+    }
 }

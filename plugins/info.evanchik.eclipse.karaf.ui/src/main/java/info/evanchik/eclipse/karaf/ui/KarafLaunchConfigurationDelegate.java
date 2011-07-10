@@ -24,8 +24,6 @@ import info.evanchik.eclipse.karaf.ui.internal.WorkbenchServiceExtensions;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -158,22 +156,6 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     private final Map<String, BundleEntry> deployedBundles =
         new HashMap<String, BundleEntry>();
 
-	/**
-	 * Saves a properties file
-	 *
-	 * @param file
-	 * @param properties
-	 */
-    public static void save(final File file, final Properties properties) {
-        try {
-            final FileOutputStream stream = new FileOutputStream(file);
-            properties.store(stream, "Configuration File"); //$NON-NLS-1$
-            stream.flush();
-            stream.close();
-        } catch (final IOException e) {
-            //PDECore.logException(e);
-        }
-    }
     /**
      * Adds the items typically found in {@code KARAF_HOME/lib} as system
      * classpath entries.<br>
@@ -385,7 +367,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
         PropertyUtils.interpolateVariables(equinoxProperties, equinoxProperties);
 
-        save(new File(getConfigDir(configuration), ECLIPSE_CONFIG_INI_FILE), equinoxProperties);
+        KarafCorePluginUtils.save(new File(getConfigDir(configuration), ECLIPSE_CONFIG_INI_FILE), equinoxProperties);
     }
 
     /**

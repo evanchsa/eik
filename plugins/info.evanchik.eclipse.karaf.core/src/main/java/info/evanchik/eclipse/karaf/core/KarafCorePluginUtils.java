@@ -436,6 +436,32 @@ public final class KarafCorePluginUtils {
 
     }
 
+    /**
+     * Saves a properties file
+     *
+     * @param file
+     * @param properties
+     */
+    public static void save(final File file, final Properties properties) {
+        FileOutputStream stream = null;
+        try {
+            stream = new FileOutputStream(file);
+            properties.store(stream, "Configuration File"); //$NON-NLS-1$
+            stream.flush();
+        } catch (final IOException e) {
+            KarafCorePluginActivator.getLogger().error("Unable to store properties in: " + file.getAbsolutePath(), e);
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (final IOException e) {
+                    // Intentionally left blank
+                }
+            }
+
+        }
+    }
+
     private KarafCorePluginUtils() {
         throw new AssertionError("Cannot instantiate " + KarafCorePluginUtils.class.getName());
     }

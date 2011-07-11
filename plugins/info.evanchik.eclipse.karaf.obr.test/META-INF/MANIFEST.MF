@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OBR Test project
+Bundle-SymbolicName: info.evanchik.eclipse.karaf.obr.test
+Bundle-Version: 0.5.2.qualifier
+Require-Bundle: org.eclipse.core.runtime,
+ org.junit
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Fragment-Host: info.evanchik.eclipse.karaf.obr

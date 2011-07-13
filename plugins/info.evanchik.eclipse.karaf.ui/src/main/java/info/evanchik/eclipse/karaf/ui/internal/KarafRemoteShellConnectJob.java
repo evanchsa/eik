@@ -47,19 +47,27 @@ public class KarafRemoteShellConnectJob extends Job {
     @Override
     protected IStatus run(final IProgressMonitor monitor) {
 
+        monitor.beginTask("Connecting to Karaf remote shell: " + getName(), 1);
+
         try {
-            monitor.worked(1);
 
             karafRemoteShellConnection.connect();
+
+            monitor.worked(1);
+
             if (monitor.isCanceled()) {
                 karafRemoteShellConnection.disconnect();
 
                 return Status.CANCEL_STATUS;
             }
-
-            monitor.done();
         } catch (final Exception e) {
-            return new Status(Status.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to connect to Karaf remote shell", e);
+            if (monitor.isCanceled()) {
+                return Status.CANCEL_STATUS;
+            } else {
+                return new Status(Status.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to connect to Karaf remote shell", e);
+            }
+        } finally {
+            monitor.done();
         }
 
         return Status.OK_STATUS;

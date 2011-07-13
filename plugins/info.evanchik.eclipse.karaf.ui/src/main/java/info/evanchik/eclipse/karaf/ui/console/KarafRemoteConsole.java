@@ -130,6 +130,22 @@ public class KarafRemoteConsole extends IOConsole implements IDebugEventSetListe
                 }
             });
 
+            DebugPlugin.getDefault().addDebugEventListener(new IDebugEventSetListener() {
+
+                @Override
+                public void handleDebugEvents(final DebugEvent[] events) {
+
+                    for (final DebugEvent event : events) {
+                        if (   process != null
+                            && process.equals(event.getSource())
+                            && event.getKind() == DebugEvent.TERMINATE)
+                        {
+                            job.cancel();
+                        }
+                    }
+                }
+            });
+
             job.schedule(15 * 1000);
         } else {
             writeTo(outputStream, "The Karaf remote shell is disabled. Enable it in the launch configuration dialog");

@@ -93,8 +93,12 @@ public final class ObrWorkbenchService implements KarafWorkbenchService {
     }
 
     /**
+     * Copies the generated OBR from the temporary location to the
+     * {@link KarafWorkingPlatformModel}'s root directory
      *
      * @param platformModel
+     *            the {@code KarafWorkingPlatformModel} where teh OBR data will
+     *            be copied
      */
     private void copyObrContent(final KarafWorkingPlatformModel platformModel) {
         final InputStream in = KarafObrActivator.getDefault().getObrInputStream();
@@ -130,7 +134,12 @@ public final class ObrWorkbenchService implements KarafWorkbenchService {
     }
 
     /**
+     * Registers the generated OBR from this Eclipse installation with the
+     * running Karaf platform
+     *
      * @param platformModel
+     *            the {@link KarafWorkingPlatformModel} that the OBR will be
+     *            registered
      */
     private void registerEclipseObr(
             final KarafWorkingPlatformModel platformModel)

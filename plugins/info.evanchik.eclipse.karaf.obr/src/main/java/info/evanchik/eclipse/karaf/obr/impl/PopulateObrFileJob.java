@@ -40,6 +40,12 @@ public class PopulateObrFileJob extends Job {
 
     private volatile boolean obrComplete;
 
+    /**
+     * Creates a {@link Job} that will populate a {@link File} with OBR data
+     *
+     * @param name
+     *            the name of the {@code Job}
+     */
     public PopulateObrFileJob(final String name) {
         super(name);
     }
@@ -61,7 +67,7 @@ public class PopulateObrFileJob extends Job {
         final AntRunner runner = new AntRunner();
 
         try {
-            buildFile = getFile();
+            buildFile = getAntBuildFile();
 
             runner.setBuildFileLocation(buildFile.getAbsolutePath());
             runner.setArguments("-Dobr.filename=" + baseObrFilename);
@@ -86,27 +92,32 @@ public class PopulateObrFileJob extends Job {
     }
 
     /**
+     * Getter for the {@link File} that contains the OBR data
      *
-     * @return
+     * @return the {@code File} that contains the OBR data
      */
     public File getObrFile() {
         return obrFile;
     }
 
     /**
+     * Determines whether or the OBR file population has complated
      *
-     * @return
+     * @return true if the OBR file is complete, false otherwise
      */
     public boolean isObrPopulationComplete() {
         return obrComplete;
     }
 
     /**
+     * Getter for the {@code build.xml} file used to execute the
+     * {@link AntRunner}
      *
-     * @return
+     * @return the {@link File} that the {@code AntRunner} will execute
      * @throws IOException
+     *             thrown if the {@code File} cannot be created
      */
-    protected File getFile() throws IOException {
+    private File getAntBuildFile() throws IOException {
         final Bundle thisBundle = KarafObrActivator.getDefault().getBundle();
         final URL[] urls = FileLocator.findEntries(thisBundle, new Path(ANT_BUILD_OBR_FILE));
 
@@ -122,5 +133,4 @@ public class PopulateObrFileJob extends Job {
             throw new IOException("Unable to convert URI to File", e);
         }
     }
-
 }

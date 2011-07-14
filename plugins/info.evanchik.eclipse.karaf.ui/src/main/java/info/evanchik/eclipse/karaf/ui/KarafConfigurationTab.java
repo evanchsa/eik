@@ -253,15 +253,8 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
      */
     private final class FeaturesResolverJob extends Job {
 
-        private volatile boolean cancel;
-
-        private final List<FeaturesRepository> featuresRepositories =
-            Collections.synchronizedList(new ArrayList<FeaturesRepository>());
-
         public FeaturesResolverJob() {
-            super("Features Resolver");
-
-            setSystem(true);
+            super("Resolving Features for " + KarafConfigurationTab.this.getName());
         }
 
         @Override
@@ -270,42 +263,8 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
         }
 
         @Override
-        protected void canceling() {
-            cancel = true;
-        }
-
-        @Override
         protected IStatus run(final IProgressMonitor monitor) {
-            featuresRepositories.clear();
-
-            featuresSection.load();
-
-            for (final String repository : featuresSection.getRepositoryList()) {
-                try {
-                    final InputStream stream = new URL(repository).openConnection().getInputStream();
-
-                    final String repositoryName;
-                    if (repository.startsWith(MVN_URL_PREFIX)) {
-                        final String[] repositoryComponents = repository.split("/"); //$NON-NLS-1$
-                        repositoryName = repositoryComponents[1] + "-" + repositoryComponents[2]; //$NON-NLS-1$
-                    } else {
-                        repositoryName = repository;
-                    }
-
-                    final FeaturesRepository newRepo = new XmlFeaturesRepository(repositoryName, stream);
-                    featuresRepositories.add(newRepo);
-                } catch (final MalformedURLException e) {
-                    // What to do here?
-                } catch (final IOException e) {
-                    // What to do here?
-                }
-
-                if (cancel) {
-                    return Status.CANCEL_STATUS;
-                }
-            }
-
-            return Status.OK_STATUS;
+            return resolveFeatures(monitor);
         }
     }
 
@@ -320,6 +279,9 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
     private final FeaturesResolverJob featuresResolverJob = new FeaturesResolverJob();
 
     private FeaturesSection featuresSection;
+
+    private final List<FeaturesRepository> featuresRepositories =
+        Collections.synchronizedList(new ArrayList<FeaturesRepository>());
 
     private ContainerCheckedTreeViewer installedFeatures;
 
@@ -386,7 +348,8 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
             selectedFeatures.addAll(Arrays.asList(features));
 
         } catch (final CoreException e) {
-            // TODO: Do something sensible here
+            KarafUIPluginActivator.getLogger().error("Unable to initialize launch configuration tab", e);
+            return;
         }
 
         featuresResolverJob.addJobChangeListener(new JobChangeAdapter() {
@@ -401,7 +364,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
                                 KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES,
                                 "");
 
-                        final FeatureResolverImpl fr = new FeatureResolverImpl(featuresResolverJob.featuresRepositories);
+                        final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
 
                         final List<Object> checkedFeatures = new ArrayList<Object>();
                         for (final String s : storedBootFeatures.split(",")) {
@@ -413,14 +376,14 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
                             @Override
                             public void run() {
                                 if (!getControl().isDisposed()) {
-                                    installedFeatures.setInput(featuresResolverJob.featuresRepositories);
+                                    installedFeatures.setInput(featuresRepositories);
                                     installedFeatures.setCheckedElements(checkedFeatures.toArray());
                                 }
                             };
                         });
 
                     } catch (final CoreException e) {
-                        // TODO: Do something sensible
+                        KarafUIPluginActivator.getLogger().error("Unable to set Karaf Boot Features", e);
                     }
                }
             }
@@ -448,8 +411,9 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
         try {
             initializeKarafPlatformModel();
         } catch (final CoreException e) {
-            // TODO: Do something sensible here
+            KarafUIPluginActivator.getLogger().error("Unable to initialize Karaf Platform model", e);
         }
+
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, true);
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_REMOTE_CONSOLE, false);
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_FEATURES_MANAGEMENT, true);
@@ -645,9 +609,76 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
      */
     private void initializeKarafPlatformModel() throws CoreException {
         karafPlatformModel = KarafPlatformModelRegistry.findActivePlatformModel();
+        if (karafPlatformModel == null) {
+            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to locate active Karaf Platform Model"));
+        }
 
         featuresSection = (FeaturesSection) karafPlatformModel.getAdapter(FeaturesSection.class);
+        if (featuresSection == null) {
+            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to load Features for Karaf Platform Model: " + karafPlatformModel.getRootDirectory()));
+        }
 
         featuresSection.load();
+    }
+
+    /**
+     * Helper method that resolves Karaf Features.
+     * <p>
+     * This method is suitable from being called within a {@link Job}
+     *
+     * @param monitor
+     *            the {@link IProgressMonitor} instance
+     * @return the {@link Status#OK_STATUS} if the Features are successfully
+     *         resolved
+     */
+    private IStatus resolveFeatures(final IProgressMonitor monitor) {
+        monitor.beginTask("Loading Karaf Features", featuresSection.getRepositoryList().size());
+        try {
+
+            featuresRepositories.clear();
+
+            featuresSection.load();
+
+            for (final String repository : featuresSection.getRepositoryList()) {
+
+                if (monitor.isCanceled()) {
+                    return Status.CANCEL_STATUS;
+                }
+
+                try {
+                    final InputStream stream = new URL(repository).openConnection().getInputStream();
+
+                    final String repositoryName;
+                    if (repository.startsWith(MVN_URL_PREFIX)) {
+                        final String[] repositoryComponents = repository.split("/"); //$NON-NLS-1$
+                        repositoryName = repositoryComponents[1] + "-" + repositoryComponents[2]; //$NON-NLS-1$
+                    } else {
+                        repositoryName = repository;
+                    }
+
+                    final FeaturesRepository newRepo = new XmlFeaturesRepository(repositoryName, stream);
+                    featuresRepositories.add(newRepo);
+
+                    monitor.worked(1);
+
+                } catch (final MalformedURLException e) {
+                    if (monitor.isCanceled()) {
+                        return Status.CANCEL_STATUS;
+                    } else {
+                        return new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable determine location for Features repository: " + repository, e);
+                    }
+                } catch (final IOException e) {
+                    if (monitor.isCanceled()) {
+                        return Status.CANCEL_STATUS;
+                    } else {
+                        return new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable load Features repository: " + repository, e);
+                    }
+                }
+            }
+
+            return Status.OK_STATUS;
+        } finally {
+            monitor.done();
+        }
     }
 }

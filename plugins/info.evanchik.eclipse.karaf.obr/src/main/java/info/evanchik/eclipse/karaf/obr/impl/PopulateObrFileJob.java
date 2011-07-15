@@ -58,6 +58,7 @@ public class PopulateObrFileJob extends Job {
 
         if (AntRunner.isBuildRunning()) {
             schedule(15 * 1000);
+            return Status.OK_STATUS;
         }
 
         obrComplete = false;
@@ -75,11 +76,11 @@ public class PopulateObrFileJob extends Job {
 
             obrFile.deleteOnExit();
         } catch (final CoreException e) {
-            e.printStackTrace();
+            monitor.setCanceled(true);
 
             return Status.CANCEL_STATUS;
         } catch (final IOException e) {
-            e.printStackTrace();
+            monitor.setCanceled(true);
 
             return Status.CANCEL_STATUS;
         } finally {
@@ -122,7 +123,7 @@ public class PopulateObrFileJob extends Job {
         final URL[] urls = FileLocator.findEntries(thisBundle, new Path(ANT_BUILD_OBR_FILE));
 
         if (urls.length > 1 || urls.length == 0) {
-            // TODO: This is a problem
+            throw new AssertionError("Error locating Bundle URL for " + ANT_BUILD_OBR_FILE);
         }
 
         final URL fileUrl = FileLocator.toFileURL(urls[0]);

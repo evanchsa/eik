@@ -124,7 +124,7 @@ public class KarafObrActivator extends Plugin {
         plugin = this;
 
         populateObrJob.addJobChangeListener(obrJobListener);
-        // populateObrJob.schedule(30 * 1000);
+        populateObrJob.schedule();
     }
 
     @Override

@@ -25,6 +25,7 @@ import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,6 +140,12 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     public static final String OSGI_BUNDLES_KEY = "osgi.bundles"; //$NON-NLS-1$
 
     /**
+     * From the Equinox runtime documentation:<br>
+     * <br>
+     */
+    public static final String OSGI_EXTRA_SYSTEM_PACKAGES_KEY = "org.osgi.framework.system.packages.extra"; //$NON-NLS-1$
+
+    /**
      * The source Karaf platform model for this launch configuration
      */
     protected KarafPlatformModel karafPlatform;
@@ -171,11 +178,8 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     public String[] getClasspath(final ILaunchConfiguration configuration) throws CoreException {
         final String[] mainClasspath = super.getClasspath(configuration);
 
-        final List<String> classpath = karafPlatform.getBootClasspath();
-
-        for (final String s : mainClasspath) {
-            classpath.add(s);
-        }
+        final List<String> classpath = new ArrayList<String>(Arrays.asList(mainClasspath));
+        classpath.addAll(karafPlatform.getBootClasspath());
 
         return classpath.toArray(new String[0]);
     }
@@ -364,6 +368,14 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         equinoxProperties.put(OSGI_FRAMEWORK_PARENT_CLASSLOADER_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
         equinoxProperties.put(OSGI_CONTEXT_CLASSLOADER_PARENT_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
         equinoxProperties.put(OSGI_PARENT_CLASSLOADER_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
+
+        /*
+         * Eclipse 3.7 (Indigo) has a bug that does not ignore
+         */
+        final String extraSystemPackages = (String) equinoxProperties.get(OSGI_EXTRA_SYSTEM_PACKAGES_KEY);
+        if (extraSystemPackages.trim().isEmpty()) {
+            equinoxProperties.remove(OSGI_EXTRA_SYSTEM_PACKAGES_KEY);
+        }
 
         PropertyUtils.interpolateVariables(equinoxProperties, equinoxProperties);
 

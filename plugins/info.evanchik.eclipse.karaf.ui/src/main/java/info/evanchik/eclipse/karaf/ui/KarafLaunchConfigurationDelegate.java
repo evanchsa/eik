@@ -24,12 +24,22 @@ import info.evanchik.eclipse.karaf.ui.internal.WorkbenchServiceExtensions;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -52,14 +62,20 @@ import org.osgi.framework.Bundle;
 public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration {
 
     /**
+     * Eclipse Equinox configuration file name
+     */
+    public static final String ECLIPSE_CONFIG_INI_FILE = "config.ini"; //$NON-NLS-1$
+
+    /**
      * Java Specification Version system property
      */
     public static final String JAVA_SPECIFICATION_VERSION = "java.specification.version"; //$NON-NLS-1$
 
     /**
-     * Eclipse Equinox configuration file name
+     * From the Equinox runtime documentation:<br>
+     * <br>
      */
-    public static final String ECLIPSE_CONFIG_INI_FILE = "config.ini"; //$NON-NLS-1$
+    public static final String OSGI_BUNDLES_KEY = "osgi.bundles"; //$NON-NLS-1$
 
     /**
      * The classloader type to use as the parent {@link ClassLoader} of the
@@ -78,9 +94,21 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     public static final String OSGI_CONTEXT_CLASSLOADER_PARENT_KEY = "osgi.contextClassLoaderParent"; //$NON-NLS-1$
 
     /**
+     * From the Equinox runtime documentation:<br>
+     * <br>
+     */
+    public static final String OSGI_EXTRA_SYSTEM_PACKAGES_KEY = "org.osgi.framework.system.packages.extra"; //$NON-NLS-1$
+
+    /**
      * This property is a list of OSGi Framework Extension bundles.
      */
     public static final String OSGI_FRAMEWORK_EXTENSION = "osgi.framework.extensions"; //$NON-NLS-1$
+
+    /**
+     * The value used to indicate that the application classloader should be
+     * used as the parent for the Framework.
+     */
+    public static final String OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP = "app"; //$NON-NLS-1$
 
     /**
      * From the Equinox runtime documentation:<br>
@@ -96,12 +124,6 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      * </ul>
      */
     public static final String OSGI_FRAMEWORK_PARENT_CLASSLOADER_KEY = "osgi.frameworkParentClassloader"; //$NON-NLS-1$
-
-    /**
-     * The value used to indicate that the application classloader should be
-     * used as the parent for the Framework.
-     */
-    public static final String OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP = "app"; //$NON-NLS-1$
 
     /**
      * From the Equinox runtime documentation:<br>
@@ -132,18 +154,6 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      * default value is 6.
      */
     public static final String OSGI_START_LEVEL_KEY = "osgi.startLevel"; //$NON-NLS-1$
-
-    /**
-     * From the Equinox runtime documentation:<br>
-     * <br>
-     */
-    public static final String OSGI_BUNDLES_KEY = "osgi.bundles"; //$NON-NLS-1$
-
-    /**
-     * From the Equinox runtime documentation:<br>
-     * <br>
-     */
-    public static final String OSGI_EXTRA_SYSTEM_PACKAGES_KEY = "org.osgi.framework.system.packages.extra"; //$NON-NLS-1$
 
     /**
      * The source Karaf platform model for this launch configuration
@@ -179,7 +189,10 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         final String[] mainClasspath = super.getClasspath(configuration);
 
         final List<String> classpath = new ArrayList<String>(Arrays.asList(mainClasspath));
-        classpath.addAll(karafPlatform.getBootClasspath());
+        final List<String> karafModelClasspath = fixKarafJarClasspathEntry(classpath);
+        classpath.addAll(karafModelClasspath);
+
+        augmentClasspathWithEquinox(classpath);
 
         return classpath.toArray(new String[0]);
     }
@@ -302,6 +315,22 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     }
 
     /**
+     * Augment the boot classpath with the Equinox JAR that is running Karaf.
+     * <p>
+     * There is normally an OSGi Framework JAR as a boot classpath item when
+     * Karaf launches. This preserves that behavior.
+     *
+     * @param classpath
+     *            the boot classpath
+     */
+    private void augmentClasspathWithEquinox(final List<String> classpath) {
+        final IPath frameworkPath =
+            new Path(karafPlatform.getState().getBundle(SystemBundleNames.EQUINOX.toString(), null).getLocation());
+
+        classpath.add(frameworkPath.toFile().getAbsolutePath());
+    }
+
+    /**
      * Construct a config.ini from the Karaf configuration of this launcher.
      *
      * @param configuration
@@ -370,7 +399,8 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         equinoxProperties.put(OSGI_PARENT_CLASSLOADER_KEY, OSGI_FRAMEWORK_PARENT_CLASSLOADER_APP);
 
         /*
-         * Eclipse 3.7 (Indigo) has a bug that does not ignore
+         * Eclipse 3.7 (Indigo) has a bug that does not ignore the empty
+         * org.osgi.framework.system.packages.extra property
          */
         final String extraSystemPackages = (String) equinoxProperties.get(OSGI_EXTRA_SYSTEM_PACKAGES_KEY);
         if (extraSystemPackages.trim().isEmpty()) {
@@ -380,6 +410,138 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         PropertyUtils.interpolateVariables(equinoxProperties, equinoxProperties);
 
         KarafCorePluginUtils.save(new File(getConfigDir(configuration), ECLIPSE_CONFIG_INI_FILE), equinoxProperties);
+    }
+
+    /**
+     * Copies the data of a {@link JarEntry} or {@link ZipEntry} from one JAR to
+     * another
+     *
+     * @param in
+     *            the source JAR {@link JarInputStream}
+     * @param out
+     *            the destination JAR {@link JarOutputStream}
+     * @throws IOException
+     *             thrown if there is a problem copying the data
+     */
+    private void copyJarEntryData(final JarInputStream in, final JarOutputStream out) throws IOException {
+        final byte buffer[] = new byte[4096];
+        int bytesRead;
+        while ((bytesRead = in.read(buffer)) > 0) {
+            out.write(buffer, 0, bytesRead);
+        }
+    }
+
+    /**
+     * Filters all of the JAR entries that begin with {@code org/osgi}.
+     *
+     * @param karafJar
+     *            the source JAR
+     * @return the {@link File} pointing to the filtered JAR
+     * @throws CoreException
+     *             if there is a problem filtering the input JAR's contents
+     */
+    private File filterOsgiInterfaceClasses(final File karafJar) throws CoreException {
+        JarInputStream sourceJar = null;
+        JarOutputStream destJar = null;
+
+        try {
+            sourceJar = new JarInputStream(new FileInputStream(karafJar));
+            final File filteredKarafJar = new File(workingKarafPlatform.getRootDirectory().toFile(), "generatedKaraf.jar");
+
+            /*
+             * If the file already exists assume it is up to date
+             */
+            if (filteredKarafJar.exists()) {
+                return filteredKarafJar;
+            }
+
+            final Manifest mf = sourceJar.getManifest();
+            if (mf != null) {
+                destJar = new JarOutputStream(new FileOutputStream(filteredKarafJar), mf);
+            } else {
+                destJar = new JarOutputStream(new FileOutputStream(filteredKarafJar));
+            }
+
+            ZipEntry z = sourceJar.getNextEntry();
+            while (z != null) {
+                if (!z.getName().startsWith("org/osgi")) {
+                    destJar.putNextEntry(z);
+
+                    copyJarEntryData(sourceJar, destJar);
+                } else {
+                    sourceJar.closeEntry();
+                }
+
+                z = sourceJar.getNextEntry();
+            }
+
+            return filteredKarafJar;
+        } catch (final FileNotFoundException e) {
+            throw new CoreException(null);
+        } catch (final IOException e) {
+            throw new CoreException(null);
+        } finally {
+            if (sourceJar != null) {
+                try {
+                    sourceJar.close();
+                } catch (final IOException e) {
+                    // ignore
+                }
+            }
+
+            if (destJar != null) {
+                try {
+                    destJar.close();
+                } catch (final IOException e) {
+                    // ignore
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Fixes the {@code karaf.jar} classpath entry so that it is compatible with
+     * all versions of Eclipse.
+     * <p>
+     * This JAR ordinarily contains classes in the {@code org/osgi} package.
+     * These classes conflict with Eclipse Indigo (3.7) and later versions of
+     * the same classes found in the org.eclipse.osgi bundle.
+     *
+     * @param classpath
+     *            the list of classpath entries to process
+     * @return the list of classpath entries after being fixed to work in all
+     *         versions of Eclipse
+     * @throws CoreException
+     *             if there is a problem fixing the classpath
+     */
+    private List<String> fixKarafJarClasspathEntry(final List<String> classpath)
+            throws CoreException
+    {
+        final List<String> karafModelClasspath = karafPlatform.getBootClasspath();
+
+        File karafJar = null;
+        File filteredKarafJar = null;
+
+        final Iterator<String> itr = karafModelClasspath.iterator();
+        while (itr.hasNext()) {
+            final String classpathEntry = itr.next();
+            karafJar = new File(classpathEntry);
+            if (!karafJar.getName().equalsIgnoreCase("karaf.jar")) {
+                continue;
+            }
+
+            itr.remove();
+
+            filteredKarafJar = filterOsgiInterfaceClasses(karafJar);
+        }
+
+        if (filteredKarafJar != null) {
+            classpath.add(filteredKarafJar.getAbsolutePath());
+        } else {
+            classpath.add(karafJar.getAbsolutePath());
+        }
+        return karafModelClasspath;
     }
 
     /**

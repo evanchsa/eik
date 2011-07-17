@@ -38,7 +38,7 @@ public class KarafInstallationProvisionerWizard extends Wizard implements IProvi
     public KarafInstallationProvisionerWizard() {
         setDialogSettings(KarafUIPluginActivator.getDefault().getDialogSettings());
 
-        setWindowTitle("Select an Apache Felix Karaf Installation Directory");
+        setWindowTitle("Select an Apache Karaf Installation Directory");
     }
 
     @Override
@@ -55,6 +55,7 @@ public class KarafInstallationProvisionerWizard extends Wizard implements IProvi
      *
      * @return the directories that contain JARs in the Karaf platform
      */
+    @Override
     public File[] getLocations() {
         final List<File> jarFiles = new ArrayList<File>();
         KarafCorePluginUtils.getJarFileList(
@@ -70,7 +71,7 @@ public class KarafInstallationProvisionerWizard extends Wizard implements IProvi
         // Add each JAR file's directory to the list of directories that contain
         // plugins
         final Set<File> directories = new HashSet<File>();
-        for (File f : jarFiles) {
+        for (final File f : jarFiles) {
             directories.add(f.getParentFile());
         }
 
@@ -83,7 +84,7 @@ public class KarafInstallationProvisionerWizard extends Wizard implements IProvi
 
     @Override
     public void addPages() {
-        page = new KarafInstallationSelectionPage("Locate a Karaf Installation");
+        page = new KarafInstallationSelectionPage("Locate an Apache Karaf Installation");
         addPage(page);
         super.addPages();
     }

@@ -22,6 +22,7 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.ops4j.pax.url.mvn.Handler;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -43,6 +44,8 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
 
     // The shared instance
     private static KarafUIPluginActivator plugin;
+
+    private BundleContext bundleContext;
 
     // Root URL for icons
     private static URL ICON_ROOT_URL;
@@ -78,10 +81,32 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
         super();
     }
 
+    /**
+     * Returns a service with the specified name or {@code null} if none.
+     *
+     * @param serviceName
+     *            name of service
+     * @return service object or {@code null} if none
+     */
+    public Object getService(final String serviceName) {
+        final ServiceReference reference = bundleContext.getServiceReference(serviceName);
+        if (reference == null) {
+            return null;
+        }
+
+        final Object service = bundleContext.getService(reference);
+        if (service != null) {
+            bundleContext.ungetService(reference);
+        }
+
+        return service;
+    }
+
     @Override
     public void start(final BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
+        bundleContext = context;
 
         new Handler();
 
@@ -92,6 +117,8 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
     @Override
     public void stop(final BundleContext context) throws Exception {
         plugin = null;
+        bundleContext = null;
+
         super.stop(context);
     }
 

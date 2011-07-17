@@ -42,7 +42,7 @@ public class KarafInstallationSelectionPage extends WizardPage {
     protected KarafPlatformModel karafPlatform;
 
     /**
-     * The Karaf Runtime installation directory as selected by the user
+     * The Karaf platform installation directory as selected by the user
      */
     protected Text installDir;
 
@@ -58,11 +58,11 @@ public class KarafInstallationSelectionPage extends WizardPage {
      * @param pageName
      *            the name of the page
      */
-    protected KarafInstallationSelectionPage(final String pageName) {
+    public KarafInstallationSelectionPage(final String pageName) {
         super(pageName);
 
-        setTitle("Apache Felix Karaf Provisioner");
-        setDescription("Browse for a Karaf installation directory to use as your target platform");
+        setTitle("Apache Karaf Provisioner");
+        setDescription("Browse for an Apache Karaf installation directory to use as your target platform");
 
         setPageComplete(false);
         setImageDescriptor(KarafUIPluginActivator.getDefault().getImageRegistry().getDescriptor(KarafUIPluginActivator.LOGO_64X64_IMG)); // $NON-NLS-1$
@@ -107,7 +107,7 @@ public class KarafInstallationSelectionPage extends WizardPage {
             public void widgetSelected(final SelectionEvent se) {
                 final DirectoryDialog dialog = new DirectoryDialog(
                         KarafInstallationSelectionPage.this.getShell());
-                dialog.setMessage("Select Karaf installation directory");
+                dialog.setMessage("Select the Apache Karaf installation directory");
                 dialog.setFilterPath(installDir.getText());
 
                 final String selectedDirectory = dialog.open();

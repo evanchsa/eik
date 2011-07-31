@@ -18,21 +18,16 @@ import info.evanchik.eclipse.karaf.core.features.Bundle;
 import info.evanchik.eclipse.karaf.core.features.Feature;
 import info.evanchik.eclipse.karaf.core.features.FeatureResolverImpl;
 import info.evanchik.eclipse.karaf.core.features.Features;
-import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
-import info.evanchik.eclipse.karaf.core.features.XmlFeaturesRepository;
+import info.evanchik.eclipse.karaf.ui.features.FeaturesContentProvider;
+import info.evanchik.eclipse.karaf.ui.features.FeaturesLabelProvider;
+import info.evanchik.eclipse.karaf.ui.features.FeaturesResolverJob;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.collections.ListUtils;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
@@ -44,10 +39,6 @@ import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -76,212 +67,15 @@ import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
  */
 public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
-    /**
-     *
-     * @author Stephen Evanchik (evanchsa@gmail.com)
-     *
-     */
-    private final class FeaturesContentProvider implements ITreeContentProvider {
-
-        private List<FeaturesRepository> featuresRepositories;
-
-        @Override
-        public void dispose() {
-            if (featuresResolverJob != null) {
-                featuresResolverJob.cancel();
-            }
-        }
-
-        @Override
-        public Object[] getChildren(final Object parentElement) {
-            if (parentElement == featuresRepositories) {
-                return featuresRepositories.toArray();
-            } else if (parentElement instanceof FeaturesRepository) {
-                final FeaturesRepository featuresRepository = (FeaturesRepository) parentElement;
-                return featuresRepository.getFeatures().getFeatures().toArray();
-            } else if (parentElement instanceof Features) {
-                final Features features = (Features) parentElement;
-                return features.getFeatures().toArray();
-            } else if (parentElement instanceof Feature) {
-                final Feature feature = (Feature) parentElement;
-                return ListUtils.union(feature.getFeatures(), feature.getBundles()).toArray();
-            } else {
-                return new Object[0];
-            }
-        }
-
-        @Override
-        public Object[] getElements(final Object inputElement) {
-            if (inputElement == featuresRepositories && inputElement != null) {
-                return featuresRepositories.toArray();
-            } else if (inputElement instanceof FeaturesRepository) {
-                final FeaturesRepository featuresRepo = (FeaturesRepository) inputElement;
-                return new Object[] { featuresRepo.getFeatures() };
-            } else if (inputElement instanceof Features) {
-                final Features features = (Features) inputElement;
-                return features.getFeatures().toArray();
-            } else if (inputElement instanceof Feature) {
-                final Feature feature = (Feature) inputElement;
-                return ListUtils.union(feature.getFeatures(), feature.getBundles()).toArray();
-            } else {
-                return new Object[0];
-            }
-        }
-
-        @Override
-        public Object getParent(final Object element) {
-            if (element instanceof FeaturesRepository) {
-                return featuresRepositories;
-            } else if (element instanceof Features) {
-                final Features features = (Features) element;
-                return features.getParent();
-            } else if (element instanceof Feature) {
-                return ((Feature)element).getParent();
-            } else {
-                return null;
-            }
-        }
-
-        @Override
-        public boolean hasChildren(final Object element) {
-            if (element == featuresRepositories && element != null) {
-                return featuresRepositories.size() > 0;
-            } else if (element instanceof FeaturesRepository) {
-                final FeaturesRepository featuresRepository = (FeaturesRepository) element;
-                return featuresRepository.getFeatures().getFeatures().size() > 0;
-            } else if (element instanceof Features) {
-                final Features features = (Features) element;
-                return features.getFeatures().size() > 0;
-            } else if (element instanceof Feature) {
-                final Feature feature = (Feature) element;
-                return feature.getBundles().size() > 0 || feature.getFeatures().size() > 0;
-            } else {
-                return false;
-            }
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-            if (newInput != null) {
-                featuresRepositories = (List<FeaturesRepository>) newInput;
-            }
-        }
-    }
-
-    /**
-     *
-     * @author Stephen Evanchik (evanchsa@gmail.com)
-     *
-     */
-    private final class FeaturesLabelProvider extends LabelProvider implements ITableLabelProvider {
-
-        @Override
-        public Image getColumnImage(final Object element, final int columnIndex) {
-            switch (columnIndex) {
-            case 0:
-                if (element instanceof FeaturesRepository) {
-                    return KarafUIPluginActivator.getDefault().getImageRegistry().get(KarafUIPluginActivator.LOGO_16X16_IMG);
-                } else if (element instanceof Feature) {
-                    return KarafUIPluginActivator.getDefault().getImageRegistry().get(KarafUIPluginActivator.FEATURE_OBJ_IBM);
-                } else if (element instanceof Bundle) {
-                    return KarafUIPluginActivator.getDefault().getImageRegistry().get(KarafUIPluginActivator.BUNDLE_OBJ_IMG);
-                } else {
-                    return null;
-                }
-
-            default:
-                return null;
-            }
-        }
-
-        @Override
-        public String getColumnText(final Object element, final int columnIndex) {
-
-            switch (columnIndex) {
-            case 0:
-                if (element instanceof FeaturesRepository) {
-                    final FeaturesRepository featuresRepository = (FeaturesRepository) element;
-                    if (featuresRepository.getFeatures().getName() != null) {
-                        return featuresRepository.getFeatures().getName();
-                    } else {
-                        return featuresRepository.getName();
-                    }
-                } else if (element instanceof Features) {
-                    final Features features = (Features) element;
-                    if (features.getName() != null) {
-                        return features.getName();
-                    } else  if (features.getParent() != null) {
-                        return features.getParent().getName();
-                    } else {
-                        return null;
-                    }
-                } else if (element instanceof Feature) {
-                    final Feature feature = (Feature) element;
-                    return feature.getName();
-                } else if (element instanceof Bundle) {
-                    final Bundle bundle = (Bundle) element;
-                    final String label;
-                    if (bundle.getBundleUrl().startsWith(MVN_URL_PREFIX)) {
-                        final String[] bundleComponents = bundle.getBundleUrl().split("/"); //$NON-NLS-1$
-                        label = bundleComponents[1];
-                    } else {
-                        label = element.toString();
-                    }
-
-                    return label;
-                } else {
-                    return element.toString();
-                }
-            case 1:
-                if (element instanceof Feature) {
-                    final Feature feature = (Feature) element;
-                    return feature.getVersion();
-                } else {
-                    return null;
-                }
-            default:
-                return null;
-            }
-        }
-    }
-
-    /**
-     *
-     * @author Stephen Evanchik (evanchsa@gmail.com)
-     *
-     */
-    private final class FeaturesResolverJob extends Job {
-
-        public FeaturesResolverJob() {
-            super("Resolving Features for " + KarafConfigurationTab.this.getName());
-        }
-
-        @Override
-        public boolean shouldRun() {
-            return !getControl().isDisposed();
-        }
-
-        @Override
-        protected IStatus run(final IProgressMonitor monitor) {
-            return resolveFeatures(monitor);
-        }
-    }
-
     public static final String ID = "info.evanchik.eclipse.karaf.ui.karafGeneralLaunchConfigurationTab"; //$NON-NLS-1$
-
-    private static final String MVN_URL_PREFIX = "mvn:"; //$NON-NLS-1$
 
     private Composite control;
 
     private Button enableFeaturesManagement;
 
-    private final FeaturesResolverJob featuresResolverJob = new FeaturesResolverJob();
+    private FeaturesResolverJob featuresResolverJob;
 
     private FeaturesSection featuresSection;
-
-    private final List<FeaturesRepository> featuresRepositories =
-        Collections.synchronizedList(new ArrayList<FeaturesRepository>());
 
     private ContainerCheckedTreeViewer installedFeatures;
 
@@ -364,7 +158,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
                                 KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES,
                                 "");
 
-                        final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
+                        final FeatureResolverImpl fr = new FeatureResolverImpl(featuresResolverJob.getFeaturesRepositories());
 
                         final List<Object> checkedFeatures = new ArrayList<Object>();
                         for (final String s : storedBootFeatures.split(",")) {
@@ -376,7 +170,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
                             @Override
                             public void run() {
                                 if (!getControl().isDisposed()) {
-                                    installedFeatures.setInput(featuresRepositories);
+                                    installedFeatures.setInput(featuresResolverJob.getFeaturesRepositories());
                                     installedFeatures.setCheckedElements(checkedFeatures.toArray());
                                 }
                             };
@@ -522,6 +316,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
      * @param parent
      */
     private void createFeaturesBlock(final Composite parent) {
+
         final Font font = parent.getFont();
         final Composite comp = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout(1, true);
@@ -618,67 +413,8 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
             throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to load Features for Karaf Platform Model: " + karafPlatformModel.getRootDirectory()));
         }
 
+        featuresResolverJob = new FeaturesResolverJob(getName(), featuresSection);
         featuresSection.load();
     }
 
-    /**
-     * Helper method that resolves Karaf Features.
-     * <p>
-     * This method is suitable from being called within a {@link Job}
-     *
-     * @param monitor
-     *            the {@link IProgressMonitor} instance
-     * @return the {@link Status#OK_STATUS} if the Features are successfully
-     *         resolved
-     */
-    private IStatus resolveFeatures(final IProgressMonitor monitor) {
-        monitor.beginTask("Loading Karaf Features", featuresSection.getRepositoryList().size());
-        try {
-
-            featuresRepositories.clear();
-
-            featuresSection.load();
-
-            for (final String repository : featuresSection.getRepositoryList()) {
-
-                if (monitor.isCanceled()) {
-                    return Status.CANCEL_STATUS;
-                }
-
-                try {
-                    final InputStream stream = new URL(repository).openConnection().getInputStream();
-
-                    final String repositoryName;
-                    if (repository.startsWith(MVN_URL_PREFIX)) {
-                        final String[] repositoryComponents = repository.split("/"); //$NON-NLS-1$
-                        repositoryName = repositoryComponents[1] + "-" + repositoryComponents[2]; //$NON-NLS-1$
-                    } else {
-                        repositoryName = repository;
-                    }
-
-                    final FeaturesRepository newRepo = new XmlFeaturesRepository(repositoryName, stream);
-                    featuresRepositories.add(newRepo);
-
-                    monitor.worked(1);
-
-                } catch (final MalformedURLException e) {
-                    if (monitor.isCanceled()) {
-                        return Status.CANCEL_STATUS;
-                    } else {
-                        return new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable determine location for Features repository: " + repository, e);
-                    }
-                } catch (final IOException e) {
-                    if (monitor.isCanceled()) {
-                        return Status.CANCEL_STATUS;
-                    } else {
-                        return new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable load Features repository: " + repository, e);
-                    }
-                }
-            }
-
-            return Status.OK_STATUS;
-        } finally {
-            monitor.done();
-        }
-    }
 }

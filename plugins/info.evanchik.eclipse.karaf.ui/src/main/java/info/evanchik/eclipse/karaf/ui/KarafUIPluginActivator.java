@@ -12,11 +12,6 @@ package info.evanchik.eclipse.karaf.ui;
 
 import info.evanchik.eclipse.karaf.core.LogWrapper;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -47,9 +42,6 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
 
     private BundleContext bundleContext;
 
-    // Root URL for icons
-    private static URL ICON_ROOT_URL;
-
     /**
      * Returns the shared instance
      *
@@ -68,11 +60,6 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
     public static LogWrapper getLogger() {
         return new LogWrapper(getDefault().getLog(), PLUGIN_ID);
     }
-
-    /**
-     * A {@link Map} of all the {@link ImageDescriptor}S used by this plugin
-     */
-    private final Map<String, ImageDescriptor> IMAGE_DESCRIPTORS = new HashMap<String, ImageDescriptor>();
 
     /**
      * The constructor
@@ -109,9 +96,6 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
         bundleContext = context;
 
         new Handler();
-
-        final String pathSuffix = "icons/"; // $NON-NLS-1$
-        ICON_ROOT_URL = getBundle().getEntry(pathSuffix);
     }
 
     @Override
@@ -131,11 +115,13 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
      */
     @Override
     protected void initializeImageRegistry(final ImageRegistry imageRegistry) {
-        registerImage(imageRegistry, BUNDLE_OBJ_IMG, "obj16/bundle_obj.gif"); //$NON-NLS-1$
-        registerImage(imageRegistry, FEATURE_OBJ_IBM, "obj16/feature_obj.gif"); //$NON-NLS-1$
-        registerImage(imageRegistry, LOGO_16X16_IMG, "obj16/felixLogo16x16.gif"); //$NON-NLS-1$
-        registerImage(imageRegistry, LOGO_32X32_IMG, "obj32/felixLogo32x32.gif"); //$NON-NLS-1$
-        registerImage(imageRegistry, LOGO_64X64_IMG, "obj64/felixLogo64x64.gif"); //$NON-NLS-1$
+        registerImage(imageRegistry, BUNDLE_OBJ_IMG, "icons/obj16/bundle_obj.gif"); //$NON-NLS-1$
+        registerImage(imageRegistry, FEATURE_OBJ_IBM, "icons/obj16/feature_obj.gif"); //$NON-NLS-1$
+        registerImage(imageRegistry, "runtime_obj", "icons/obj16/runtime_obj.gif"); //$NON-NLS-1$
+        registerImage(imageRegistry, "details_view", "icons/obj16/details_view.gif"); //$NON-NLS-1$
+        registerImage(imageRegistry, LOGO_16X16_IMG, "icons/obj16/karaf-logo-16x16.png"); //$NON-NLS-1$
+        registerImage(imageRegistry, LOGO_32X32_IMG, "icons/obj32/karaf-logo-32x32.png"); //$NON-NLS-1$
+        registerImage(imageRegistry, LOGO_64X64_IMG, "icons/obj64/karaf-logo-64x64.png"); //$NON-NLS-1$
     }
 
     /**
@@ -150,18 +136,7 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
      *            to be registered
      */
     private void registerImage(final ImageRegistry registry, final String key, final String imageUrl) {
-
-        try {
-            final ImageDescriptor id = ImageDescriptor.createFromURL(new URL(ICON_ROOT_URL,
-                            imageUrl));
-
-            registry.put(key, id);
-
-            // Store this as an ImageDescriptor for future use in Wizards
-            IMAGE_DESCRIPTORS.put(key, id);
-        } catch (final MalformedURLException e) {
-            getLogger().error("Could not create image descriptor for: " + key + " -> " + imageUrl,
-                            e);
-        }
+        final ImageDescriptor id = imageDescriptorFromPlugin(PLUGIN_ID, imageUrl);
+        registry.put(key, id);
     }
 }

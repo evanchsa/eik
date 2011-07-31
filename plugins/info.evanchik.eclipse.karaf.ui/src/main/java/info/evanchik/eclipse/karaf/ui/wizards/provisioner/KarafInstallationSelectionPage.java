@@ -161,7 +161,7 @@ public class KarafInstallationSelectionPage extends WizardPage {
      *
      * @return the newly identified {@link KarafPlatformModel}
      */
-    public KarafPlatformModel getKarafPlatform() {
+    public KarafPlatformModel getKarafPlatformModel() {
         return karafPlatform;
     }
 

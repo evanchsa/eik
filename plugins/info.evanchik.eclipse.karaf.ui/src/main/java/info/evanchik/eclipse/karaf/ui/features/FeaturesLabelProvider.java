@@ -21,9 +21,16 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 /**
+ * A {@link LabelProvider} and {@link ITableLabelProvider} suitable for
+ * displaying Apache Karaf Features Repositories.
+ *
+ * @see FeaturesResolverJob
+ * @see FeaturesRepository
+ * @see Features
+ * @see Feature
+ * @see Bundle
  *
  * @author Stephen Evanchik (evanchsa@gmail.com)
- *
  */
 public final class FeaturesLabelProvider extends LabelProvider implements ITableLabelProvider {
 

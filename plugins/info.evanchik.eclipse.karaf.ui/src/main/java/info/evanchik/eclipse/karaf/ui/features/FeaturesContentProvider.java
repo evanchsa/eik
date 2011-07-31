@@ -1,5 +1,6 @@
 package info.evanchik.eclipse.karaf.ui.features;
 
+import info.evanchik.eclipse.karaf.core.features.Bundle;
 import info.evanchik.eclipse.karaf.core.features.Feature;
 import info.evanchik.eclipse.karaf.core.features.Features;
 import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
@@ -11,9 +12,16 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 /**
+ * A {@link ITreeContentProvider} suitable for displaying Apache Karaf Features
+ * Repositories.
+ *
+ * @see FeaturesResolverJob
+ * @see FeaturesRepository
+ * @see Features
+ * @see Feature
+ * @see Bundle
  *
  * @author Stephen Evanchik (evanchsa@gmail.com)
- *
  */
 public final class FeaturesContentProvider implements ITreeContentProvider {
 

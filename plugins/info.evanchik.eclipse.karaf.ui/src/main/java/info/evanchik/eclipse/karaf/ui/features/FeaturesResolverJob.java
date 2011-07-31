@@ -19,6 +19,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
+ * A {@link Job} that loads an Apache Karaf features configuration file
+ * {@code org.apache.karaf.features.cfg} and examines all of the referenced
+ * Features Repositories. It then attempts to resolve each of the repositories
+ * in order to produce a {@link List} of {@link FeaturesRepository}
  *
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
@@ -34,15 +38,24 @@ public final class FeaturesResolverJob extends Job {
         super("Resolving Features for " + name);
 
         this.featuresSection = featuresSection;
-        this.featuresSection.load();
     }
 
+    /**
+     * Getter for the {@link List} of {@link FeaturesRepository} objects. This
+     * {@code List} is read-only and is a synchronized list via
+     * {@link Collections#synchronizedList(List)}.
+     *
+     * @return the {@link List} of {@link FeaturesRepository} objects.
+     */
     public List<FeaturesRepository> getFeaturesRepositories() {
         return Collections.unmodifiableList(featuresRepositories);
     }
 
     @Override
     protected IStatus run(final IProgressMonitor monitor) {
+        featuresSection.load();
+        featuresRepositories.clear();
+
         return resolveFeatures(monitor);
     }
 
@@ -57,10 +70,6 @@ public final class FeaturesResolverJob extends Job {
     private IStatus resolveFeatures(final IProgressMonitor monitor) {
         monitor.beginTask("Loading Karaf Features", featuresSection.getRepositoryList().size());
         try {
-
-            featuresRepositories.clear();
-
-            featuresSection.load();
 
             for (final String repository : featuresSection.getRepositoryList()) {
 

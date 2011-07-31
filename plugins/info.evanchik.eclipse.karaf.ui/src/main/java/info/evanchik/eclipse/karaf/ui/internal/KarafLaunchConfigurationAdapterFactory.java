@@ -12,8 +12,11 @@ package info.evanchik.eclipse.karaf.ui.internal;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
+import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationConstants;
+import info.evanchik.eclipse.karaf.ui.project.KarafProject;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.Path;
@@ -43,6 +46,12 @@ public final class KarafLaunchConfigurationAdapterFactory implements IAdapterFac
             } catch (final CoreException e) {
                 throw new IllegalStateException(e);
             }
+        } else if (IKarafProject.class.equals(adapterType) && adaptableObject instanceof IProject) {
+            if (KarafProject.isKarafProject((IProject) adaptableObject)) {
+                return new KarafProject((IProject) adaptableObject);
+            } else {
+                return null;
+            }
         } else {
             adapted = null;
         }
@@ -53,6 +62,6 @@ public final class KarafLaunchConfigurationAdapterFactory implements IAdapterFac
     @SuppressWarnings("rawtypes")
     @Override
     public Class[] getAdapterList() {
-        return new Class[] { KarafPlatformModel.class };
+        return new Class[] { KarafPlatformModel.class, IKarafProject.class };
     }
 }

@@ -20,8 +20,6 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
@@ -61,23 +59,6 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         this.karafPlatformModel = karafPlatformModel;
         this.newKarafProject = newKarafProject;
         this.workingPlatformModel = workingPlatformModel;
-    }
-
-    /**
-     *
-     * @param folder
-     * @throws CoreException
-     */
-    public void createFolder(final IFolder folder) throws CoreException {
-        if (!folder.exists()) {
-            final IContainer parent = folder.getParent();
-
-            if (parent instanceof IFolder) {
-                createFolder((IFolder) parent);
-            }
-
-            folder.create(true, true, null);
-        }
     }
 
     @Override

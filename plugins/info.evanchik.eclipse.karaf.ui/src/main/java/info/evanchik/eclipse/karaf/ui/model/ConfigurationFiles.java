@@ -32,7 +32,7 @@ public class ConfigurationFiles extends AbstractContentModel {
      * @author Stephen Evanchik (evanchsa@gmail.com)
      *
      */
-    private final class FeatureRepositoryContentModel extends AbstractContentModel {
+    private static final class FeatureRepositoryContentModel extends AbstractContentModel {
 
         private final FeaturesSection featuresSection;
 

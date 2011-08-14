@@ -11,7 +11,6 @@
 package info.evanchik.eclipse.karaf.ui.model;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 
 import java.io.File;
@@ -34,8 +33,6 @@ public class ConfigurationFiles extends AbstractContentModel {
      */
     private static final class FeatureRepositoryContentModel extends AbstractContentModel {
 
-        private final FeaturesSection featuresSection;
-
         /**
          *
          * @param project
@@ -44,15 +41,13 @@ public class ConfigurationFiles extends AbstractContentModel {
          */
         public FeatureRepositoryContentModel(final IProject project, final KarafPlatformModel karafPlatformModel, final File featuresFile) {
             super(project, karafPlatformModel);
-
-            featuresSection = (FeaturesSection) karafPlatformModel.getAdapter(FeaturesSection.class);
         }
 
         @Override
         public Object[] getElements() {
-            featuresSection.load();
-            return featuresSection.getRepositoryList().toArray(new Object[0]);
+            return new Object[0];
         }
+
         @Override
         public Image getImage() {
             return KarafUIPluginActivator.getDefault().getImageRegistry().get(KarafUIPluginActivator.FEATURE_OBJ_IBM);

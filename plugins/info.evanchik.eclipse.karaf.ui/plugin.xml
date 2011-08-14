@@ -131,25 +131,6 @@
             </adapt>
          </triggerPoints>
       </navigatorContent>
-      <navigatorContent
-            appearsBefore="org.eclipse.ui.navigator.resourceContent"
-            contentProvider="info.evanchik.eclipse.karaf.ui.features.FeaturesContentProvider"
-            icon="icons/obj16/feature_obj.gif"
-            id="info.evanchik.eclipse.karaf.ui.navigator.Features"
-            labelProvider="info.evanchik.eclipse.karaf.ui.features.FeaturesLabelProvider"
-            name="Apache Karaf Features">
-         <triggerPoints>
-            <and>
-               <instanceof
-                     value="java.io.File">
-               </instanceof>
-               <test
-                     property="info.evanchik.eclipse.karaf.ui.name"
-                     value="org.apache.karaf.features.cfg">
-               </test>
-            </and>
-         </triggerPoints>
-      </navigatorContent>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.viewer">

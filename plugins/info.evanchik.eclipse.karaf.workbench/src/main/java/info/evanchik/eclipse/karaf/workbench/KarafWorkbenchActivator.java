@@ -68,6 +68,14 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
 	public KarafWorkbenchActivator() {
 	}
 
+	/**
+	 *
+	 * @return
+	 */
+	public EclipseRuntimeDataProvider getEclipseWorkbenchDataProvider() {
+        return eclipseWorkbenchDataProvider;
+    }
+
     /**
      * Getter for the {@link WorkbenchServiceManager<JMXServiceDescriptor>}
      * implementation. There is only one per plugin instance.
@@ -110,6 +118,7 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
         jmxTransportRegistry = new JMXTransportRegistry();
         mbeanProviderManager = new MBeanProviderManager();
         runtimeDataProviderManager = new RuntimeDataProviderManager();
+        eclipseWorkbenchDataProvider = new EclipseRuntimeDataProvider(getBundle().getBundleContext());
 
         registerEclipseRuntimeDataProvider();
 	}
@@ -146,7 +155,6 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
     }
 
     private void registerEclipseRuntimeDataProvider() {
-        eclipseWorkbenchDataProvider = new EclipseRuntimeDataProvider(getBundle().getBundleContext());
         eclipseWorkbenchDataProvider.start();
 
         runtimeDataProviderManager.add(eclipseWorkbenchDataProvider);

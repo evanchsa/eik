@@ -114,6 +114,14 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
      * @throws CoreException
      */
     private void createKarafPlatformResources(final IProgressMonitor monitor) throws CoreException {
+        newKarafProject.getProjectHandle().getFolder(".bin").create(true, true, monitor);
+        newKarafProject.getProjectHandle().getFolder(".bin/platform").create(true, true, monitor);
+        newKarafProject.getProjectHandle().getFolder(".bin/platform/etc").createLink(workingPlatformModel.getParentKarafModel().getConfigurationDirectory(), 0, monitor);
+        newKarafProject.getProjectHandle().getFolder(".bin/platform/deploy").createLink(workingPlatformModel.getParentKarafModel().getUserDeployedDirectory(), 0, monitor);
+        newKarafProject.getProjectHandle().getFolder(".bin/platform/lib").createLink(workingPlatformModel.getParentKarafModel().getRootDirectory().append("lib"), 0, monitor);
+        newKarafProject.getProjectHandle().getFolder(".bin/platform/system").createLink(workingPlatformModel.getParentKarafModel().getPluginRootDirectory(), 0, monitor);
+        // newKarafProject.getProjectHandle().getFolder(".bin/platform/system").createLink($[eclipse.home}/plugins, 0, monitor);
+
         newKarafProject.getProjectHandle().setPersistentProperty(new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafProject"), "true");
         newKarafProject.getProjectHandle().setPersistentProperty(new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafModel"), karafPlatformModel.getRootDirectory().toString());
     }

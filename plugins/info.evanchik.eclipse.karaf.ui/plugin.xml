@@ -3,6 +3,14 @@
 <plugin>
    <extension-point id="service" name="Apache Karaf Workbench Service" schema="schema/service.exsd"/>
    <extension
+         point="org.eclipse.ant.core.extraClasspathEntries">
+      <extraClasspathEntry
+            eclipseRuntime="false"
+            headless="true"
+            library="ant/lib/org.apache.ivy_2.2.1.alpha_20110704083644.jar">
+      </extraClasspathEntry>
+   </extension>
+   <extension
          point="org.eclipse.pde.ui.launchShortcuts">
       <shortcut
             id="info.evanchik.eclipse.karaf.ui.KarafLaunchShortcut"

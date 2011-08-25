@@ -13,6 +13,7 @@ package info.evanchik.eclipse.karaf.core.features;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,12 +21,16 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
 public class XmlFeaturesRepository implements FeaturesRepository {
+
+    private final Document document;
 
     private final Features features;
 
@@ -49,7 +54,7 @@ public class XmlFeaturesRepository implements FeaturesRepository {
         }
 
         try {
-            final Document document = new SAXBuilder().build(inputStream);
+            document = new SAXBuilder().build(inputStream);
 
             final Element rootElement = document.getRootElement();
             if (rootElement == null) {
@@ -123,5 +128,11 @@ public class XmlFeaturesRepository implements FeaturesRepository {
     @Override
     public String toString() {
         return repositoryName;
+    }
+
+    @Override
+    public void write(final OutputStream out) throws IOException {
+        final XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+        xmlOutputter.output(document, out);
     }
 }

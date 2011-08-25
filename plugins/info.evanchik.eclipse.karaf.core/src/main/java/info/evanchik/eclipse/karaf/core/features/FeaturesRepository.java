@@ -11,6 +11,8 @@
 package info.evanchik.eclipse.karaf.core.features;
 
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -42,4 +44,16 @@ public interface FeaturesRepository {
      *         empty
      */
     public List<Repository> getRepositories();
+
+    /**
+     * Writes the contents of the {@code FeaturesRepository} to the specified
+     * {@link OutputStream}
+     *
+     * @param out
+     *            the {@code OutputStream}
+     * @throws IOException
+     *             if there is a problem writing the contents of the
+     *             {@code FeaturesRepository}
+     */
+    public void write(OutputStream out) throws IOException;
 }

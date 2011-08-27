@@ -25,8 +25,11 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.variables.IDynamicVariable;
+import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.pde.internal.core.target.provisional.IBundleContainer;
 import org.eclipse.pde.internal.core.target.provisional.ITargetDefinition;
 import org.eclipse.pde.internal.core.target.provisional.ITargetHandle;
@@ -120,10 +123,18 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         newKarafProject.getProjectHandle().getFolder(".bin/platform/deploy").createLink(workingPlatformModel.getParentKarafModel().getUserDeployedDirectory(), 0, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/platform/lib").createLink(workingPlatformModel.getParentKarafModel().getRootDirectory().append("lib"), 0, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/platform/system").createLink(workingPlatformModel.getParentKarafModel().getPluginRootDirectory(), 0, monitor);
-        // newKarafProject.getProjectHandle().getFolder(".bin/platform/system").createLink($[eclipse.home}/plugins, 0, monitor);
 
-        newKarafProject.getProjectHandle().setPersistentProperty(new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafProject"), "true");
-        newKarafProject.getProjectHandle().setPersistentProperty(new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafModel"), karafPlatformModel.getRootDirectory().toString());
+        final IDynamicVariable eclipseHomeVariable = VariablesPlugin.getDefault().getStringVariableManager().getDynamicVariable("eclipse_home");
+        final String eclipseHome = eclipseHomeVariable.getValue("");
+        newKarafProject.getProjectHandle().getFolder(".bin/platform/eclipse").createLink(new Path(eclipseHome), 0, monitor);
+
+        newKarafProject.getProjectHandle().setPersistentProperty(
+                new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafProject"),
+                "true");
+
+        newKarafProject.getProjectHandle().setPersistentProperty(
+                new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafModel"),
+                karafPlatformModel.getRootDirectory().toString());
     }
 
     /**

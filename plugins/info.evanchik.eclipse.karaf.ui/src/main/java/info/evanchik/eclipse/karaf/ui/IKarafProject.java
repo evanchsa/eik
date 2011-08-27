@@ -10,6 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
@@ -19,6 +21,20 @@ import org.eclipse.core.runtime.IPath;
  *
  */
 public interface IKarafProject extends IAdaptable {
+
+    /**
+     *
+     * @param name
+     * @return
+     */
+    public IFile getFile(String name);
+
+    /**
+     *
+     * @param name
+     * @return
+     */
+    public IFolder getFolder(String name);
 
     /**
      *

@@ -21,5 +21,8 @@ public class NewKarafProjectWizardPage extends WizardNewProjectCreationPage {
 
     public NewKarafProjectWizardPage(final String pageName, final IStructuredSelection selection) {
         super(pageName);
+
+        setTitle("Create an Apache Karaf project");
+        setDescription("Name the project");
     }
 }

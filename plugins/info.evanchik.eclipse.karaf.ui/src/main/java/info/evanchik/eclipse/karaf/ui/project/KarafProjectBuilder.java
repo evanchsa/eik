@@ -70,45 +70,62 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         return null;
     }
 
+    /**
+     * Performs a full build of this {@link IKarafProject}
+     *
+     * @param monitor
+     * @throws CoreException
+     */
     private void fullBuild(final IProgressMonitor monitor) throws CoreException {
         buildFeaturesRepositories(monitor);
         buildObr(monitor);
     }
 
     /**
+     * Build the Apache Karaf features repository files in this
+     * {@link IKarafProject}'s project location
+     *
      * @param monitor
      * @throws CoreException
      */
     private void buildFeaturesRepositories(final IProgressMonitor monitor)
             throws CoreException
     {
-        final IProject project = getProject();
+        final IKarafProject karafProject = getKarafProject();
+        final KarafPlatformModel karafPlatformModel = getKarafPlatformModel();
 
-        monitor.subTask("Resolving Features Repository for Apache Karaf Project: " + project.getName());
-
-        final IKarafProject karafProject = (IKarafProject) project.getAdapter(IKarafProject.class);
-        final KarafPlatformModel karafPlatformModel = (KarafPlatformModel) karafProject.getAdapter(KarafPlatformModel.class);
+        monitor.subTask("Resolving Features Repository for Apache Karaf Project: " + karafProject.getName());
 
         final FeaturesSection featuresSection = (FeaturesSection) karafPlatformModel.getAdapter(FeaturesSection.class);
-
-        final FeaturesResolverJob job = new FeaturesResolverJob(project.getName(), featuresSection);
+        final FeaturesResolverJob job = new FeaturesResolverJob(karafProject.getName(), featuresSection);
         job.schedule();
         try {
             job.join();
 
             final List<FeaturesRepository> featuresRepositories = job.getFeaturesRepositories();
 
-            final IFolder folder = getProject().getFolder(new Path(".bin/features"));
+            final IFolder folder = getKarafProject().getFolder("features");
             if (!folder.exists()) {
                 folder.create(true, true, monitor);
             }
 
             for (final FeaturesRepository repo : featuresRepositories) {
-                final File file = new File(folder.getRawLocation().append(repo.getName()).addFileExtension("xml").toString());
+                final IPath featuresRepositoryFilename = new Path(repo.getName()).addFileExtension("xml");
+                final File file = new File(folder.getRawLocation().append(featuresRepositoryFilename).toString());
 
-                final FileOutputStream fout = new FileOutputStream(file);
-                repo.write(fout);
-                fout.close();
+                FileOutputStream fout = null;
+                try {
+                    fout = new FileOutputStream(file);
+                    repo.write(fout);
+                } finally {
+                    if (fout != null) {
+                        try {
+                            fout.close();
+                        } catch (final IOException e) {
+                            // This space left blank
+                        }
+                    }
+                }
             }
 
             monitor.worked(1);
@@ -119,15 +136,22 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         }
     }
 
+    /**
+     * Builds the OBR file for the installed Eclipse platform in this
+     * {@link IKarafProject}'s project location
+     *
+     * @param monitor
+     * @throws CoreException
+     */
     private void buildObr(final IProgressMonitor monitor) throws CoreException {
-        final IProject project = getProject();
+        final IKarafProject karafProject = getKarafProject();
 
-        monitor.subTask("Creating OBR for Apache Karaf Project: " + project.getName());
+        monitor.subTask("Creating OBR for Apache Karaf Project: " + karafProject.getName());
 
         final IPath obrFile =
-            project.getFolder(".bin/platform").getRawLocation().append("obr").addFileExtension("xml");
+            karafProject.getFolder("platform").getRawLocation().append("eclipse.obr").addFileExtension("xml");
 
-        final PopulateObrFileJob populateObrJob = new PopulateObrFileJob(project.getName(), obrFile.toFile());
+        final PopulateObrFileJob populateObrJob = new PopulateObrFileJob(karafProject.getName(), obrFile.toFile());
         populateObrJob.schedule();
 
         try {
@@ -137,6 +161,34 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         }
     }
 
+    /**
+     * Getter for the {@link IKarafProject} of this builder's {@link IProject}
+     *
+     * @return the {@code IKarafProject}
+     */
+    private IKarafProject getKarafProject() {
+        final IProject project = getProject();
+        return (IKarafProject) project.getAdapter(IKarafProject.class);
+    }
+
+    /**
+     * Getter for the {@link KarafPlatformModel} that this builder's
+     * {@link IProject} is bound to
+     *
+     * @return the {@code KarafPlatformModel} that this builder's
+     *         {@code IProject} is bound to
+     */
+    private KarafPlatformModel getKarafPlatformModel() {
+        return (KarafPlatformModel) getKarafProject().getAdapter(KarafPlatformModel.class);
+    }
+
+    /**
+     * Performs an incremental build of this {@link IKarafProject}
+     *
+     * @param delta
+     * @param monitor
+     * @throws CoreException
+     */
     private void incrementalBuild(final IResourceDelta delta, final IProgressMonitor monitor) throws CoreException {
         try {
             delta.accept(new IResourceDeltaVisitor() {

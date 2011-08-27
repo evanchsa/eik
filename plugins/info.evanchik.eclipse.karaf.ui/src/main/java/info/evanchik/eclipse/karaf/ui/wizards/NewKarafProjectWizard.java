@@ -48,7 +48,6 @@ public class NewKarafProjectWizard extends Wizard implements INewWizard {
     public NewKarafProjectWizard() {
         setDefaultPageImageDescriptor(KarafUIPluginActivator.getDefault().getImageRegistry().getDescriptor(KarafUIPluginActivator.LOGO_64X64_IMG));
         setDialogSettings(KarafUIPluginActivator.getDefault().getDialogSettings());
-        setWindowTitle("Apache Karaf Project");
         setNeedsProgressMonitor(true);
     }
 
@@ -80,6 +79,9 @@ public class NewKarafProjectWizard extends Wizard implements INewWizard {
                     new WorkingKarafPlatformModel(mainPage.getLocationPath().append(mainPage.getProjectName()), karafPlatformModel);
 
                 final IKarafProject karafProject = new KarafProject(mainPage.getProjectHandle());
+                if (mainPage.getProjectHandle().exists()) {
+                    return false;
+                }
 
                 getContainer().run(false, true, new NewKarafProjectOperation(karafPlatformModel, workingPlatformModel, karafProject));
 

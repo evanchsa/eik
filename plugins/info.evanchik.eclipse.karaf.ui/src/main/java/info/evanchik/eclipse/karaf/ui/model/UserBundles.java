@@ -11,14 +11,13 @@
 package info.evanchik.eclipse.karaf.ui.model;
 
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -30,10 +29,9 @@ public class UserBundles extends AbstractContentModel {
     /**
     *
     * @param project
-    * @param karafPlatformModel
     */
-   public UserBundles(final IProject project, final KarafPlatformModel karafPlatformModel) {
-       super(project, karafPlatformModel);
+   public UserBundles(final IKarafProject project) {
+       super(project);
    }
 
     @Override

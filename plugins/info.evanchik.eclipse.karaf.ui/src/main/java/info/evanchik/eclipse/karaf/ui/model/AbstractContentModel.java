@@ -11,8 +11,8 @@
 package info.evanchik.eclipse.karaf.ui.model;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.ui.IKarafProject;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.PlatformObject;
 
 /**
@@ -23,16 +23,15 @@ public abstract class AbstractContentModel extends PlatformObject implements Con
 
     protected final KarafPlatformModel karafPlatformModel;
 
-    protected final IProject project;
+    protected final IKarafProject project;
 
     /**
      *
      * @param project
-     * @param karafPlatformModel
      */
-    public AbstractContentModel(final IProject project, final KarafPlatformModel karafPlatformModel) {
+    public AbstractContentModel(final IKarafProject project) {
         this.project = project;
-        this.karafPlatformModel = karafPlatformModel;
+        this.karafPlatformModel = (KarafPlatformModel) project.getAdapter(KarafPlatformModel.class);
     }
 
     @Override
@@ -46,6 +45,6 @@ public abstract class AbstractContentModel extends PlatformObject implements Con
 
     @Override
     public Object getParent() {
-        return project;
+        return project.getProjectHandle();
     }
 }

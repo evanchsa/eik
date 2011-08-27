@@ -10,13 +10,12 @@
  */
 package info.evanchik.eclipse.karaf.ui.model;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -28,10 +27,9 @@ public class BootClasspath extends AbstractContentModel {
     /**
      *
      * @param project
-     * @param karafPlatformModel
      */
-    public BootClasspath(final IProject project, final KarafPlatformModel karafPlatformModel) {
-        super(project, karafPlatformModel);
+    public BootClasspath(final IKarafProject project) {
+        super(project);
     }
 
     /**

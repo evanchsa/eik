@@ -10,17 +10,11 @@
  */
 package info.evanchik.eclipse.karaf.ui.navigator;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.model.AbstractContentModel;
-import info.evanchik.eclipse.karaf.ui.model.BootClasspath;
-import info.evanchik.eclipse.karaf.ui.model.ConfigurationFiles;
-import info.evanchik.eclipse.karaf.ui.model.SystemBundles;
-import info.evanchik.eclipse.karaf.ui.model.UserBundles;
+import info.evanchik.eclipse.karaf.ui.model.ContentModel;
 import info.evanchik.eclipse.karaf.ui.project.KarafProject;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -37,20 +31,9 @@ public class KarafPlatformModelContentProvider implements ITreeContentProvider {
     @Override
     public Object[] getChildren(final Object parentElement) {
         if (parentElement instanceof IProject && KarafProject.isKarafProject((IProject) parentElement)) {
-            final IProject project = (IProject) parentElement;
-            final IKarafProject karafProject =
-                (IKarafProject) Platform.getAdapterManager().getAdapter(project, IKarafProject.class);
-
-            final KarafPlatformModel karafPlatformModel = (KarafPlatformModel) karafProject.getAdapter(KarafPlatformModel.class);
-
-            return new Object[] {
-                    new ConfigurationFiles(project, karafPlatformModel),
-                    new BootClasspath(project, karafPlatformModel),
-                    new SystemBundles(project, karafPlatformModel),
-                    new UserBundles(project, karafPlatformModel)
-            };
-        } else if (parentElement instanceof AbstractContentModel) {
-            final AbstractContentModel model = (AbstractContentModel) parentElement;
+            return new Object[0];
+        } else if (parentElement instanceof ContentModel) {
+            final ContentModel model = (ContentModel) parentElement;
             return model.getElements();
         } else {
             return new Object[0];

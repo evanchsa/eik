@@ -14,11 +14,8 @@ import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
-import info.evanchik.eclipse.karaf.ui.internal.KarafLaunchUtils;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -30,10 +27,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.variables.IDynamicVariable;
 import org.eclipse.core.variables.VariablesPlugin;
-import org.eclipse.pde.internal.core.target.provisional.IBundleContainer;
-import org.eclipse.pde.internal.core.target.provisional.ITargetDefinition;
-import org.eclipse.pde.internal.core.target.provisional.ITargetHandle;
-import org.eclipse.pde.internal.core.target.provisional.ITargetPlatformService;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 /**
@@ -68,17 +61,13 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
     protected void execute(final IProgressMonitor monitor)
         throws CoreException, InvocationTargetException, InterruptedException
     {
-        monitor.beginTask("Creating Apache Karaf Project", 4);
+        monitor.beginTask("Creating Apache Karaf Project", 3);
 
         createProject(monitor);
 
         monitor.worked(1);
 
         addNatureToProject(KarafProjectNature.ID, monitor);
-
-        monitor.worked(1);
-
-        createTargetPlatform(monitor);
 
         monitor.worked(1);
 
@@ -155,36 +144,5 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         }
 
         project.open(null);
-    }
-
-    /**
-     * @return
-     */
-    private File createTargetDefinitionFile() {
-        final File targetLocation = workingPlatformModel.getRootDirectory().append(newKarafProject.getName()).addFileExtension("target").toFile();
-        return targetLocation;
-    }
-
-    /**
-     *
-     * @param monitor
-     * @throws CoreException
-     */
-    @SuppressWarnings("restriction")
-    private void createTargetPlatform(final IProgressMonitor monitor) throws CoreException {
-        final ITargetPlatformService targetPlatformService =
-            (ITargetPlatformService) KarafUIPluginActivator.getDefault().getService(ITargetPlatformService.class.getName());
-
-        final File targetLocation = createTargetDefinitionFile();
-        final ITargetHandle targetHandle = targetPlatformService.getTarget(targetLocation.toURI());
-
-        final ITargetDefinition target = targetHandle.getTargetDefinition();
-
-        target.setName(newKarafProject.getName());
-
-        final List<IBundleContainer> bundleContainers = KarafLaunchUtils.getBundleContainers(karafPlatformModel);
-        target.setBundleContainers(bundleContainers.toArray(new IBundleContainer[0]));
-
-        targetPlatformService.saveTargetDefinition(target);
     }
 }

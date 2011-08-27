@@ -74,6 +74,8 @@ public class KarafProject extends PlatformObject implements IKarafProject {
                 KarafUIPluginActivator.getLogger().error("Unable to find Karaf Platform at the root directory: " + getPlatformRootDirectory().toOSString(), e);
                 return null;
             }
+        } else if(IProject.class.equals(adapter)) {
+            return project;
         } else {
             return super.getAdapter(adapter);
         }

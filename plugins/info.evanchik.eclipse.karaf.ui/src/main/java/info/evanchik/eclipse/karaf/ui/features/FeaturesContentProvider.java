@@ -4,10 +4,16 @@ import info.evanchik.eclipse.karaf.core.features.Bundle;
 import info.evanchik.eclipse.karaf.core.features.Feature;
 import info.evanchik.eclipse.karaf.core.features.Features;
 import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
+import info.evanchik.eclipse.karaf.ui.IKarafProject;
+import info.evanchik.eclipse.karaf.ui.model.AbstractContentModel;
+import info.evanchik.eclipse.karaf.ui.model.ContentModel;
+import info.evanchik.eclipse.karaf.ui.model.FeatureRepositoryContentModel;
+import info.evanchik.eclipse.karaf.ui.project.KarafProject;
 
 import java.util.List;
 
 import org.apache.commons.collections.ListUtils;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -33,7 +39,15 @@ public final class FeaturesContentProvider implements ITreeContentProvider {
 
     @Override
     public Object[] getChildren(final Object parentElement) {
-        if (parentElement == featuresRepositories) {
+        if (parentElement instanceof IProject && KarafProject.isKarafProject((IProject) parentElement)) {
+            final IProject project = (IProject) parentElement;
+            final IKarafProject karafProject = (IKarafProject) project.getAdapter(IKarafProject.class);
+
+            return new Object[] { new FeatureRepositoryContentModel(karafProject) };
+        } else if (parentElement instanceof ContentModel) {
+            final ContentModel contentModel = (ContentModel) parentElement;
+            return contentModel.getElements();
+        } else if (parentElement == featuresRepositories && parentElement != null) {
             return featuresRepositories.toArray();
         } else if (parentElement instanceof FeaturesRepository) {
             final FeaturesRepository featuresRepository = (FeaturesRepository) parentElement;
@@ -51,25 +65,14 @@ public final class FeaturesContentProvider implements ITreeContentProvider {
 
     @Override
     public Object[] getElements(final Object inputElement) {
-        if (inputElement == featuresRepositories && inputElement != null) {
-            return featuresRepositories.toArray();
-        } else if (inputElement instanceof FeaturesRepository) {
-            final FeaturesRepository featuresRepo = (FeaturesRepository) inputElement;
-            return new Object[] { featuresRepo.getFeatures() };
-        } else if (inputElement instanceof Features) {
-            final Features features = (Features) inputElement;
-            return features.getFeatures().toArray();
-        } else if (inputElement instanceof Feature) {
-            final Feature feature = (Feature) inputElement;
-            return ListUtils.union(feature.getFeatures(), feature.getBundles()).toArray();
-        } else {
-            return new Object[0];
-        }
+        return getChildren(inputElement);
     }
 
     @Override
     public Object getParent(final Object element) {
-        if (element instanceof FeaturesRepository) {
+        if (element instanceof AbstractContentModel) {
+            return ((AbstractContentModel) element).getParent();
+        } else if (element instanceof FeaturesRepository) {
             return featuresRepositories;
         } else if (element instanceof Features) {
             final Features features = (Features) element;
@@ -83,7 +86,9 @@ public final class FeaturesContentProvider implements ITreeContentProvider {
 
     @Override
     public boolean hasChildren(final Object element) {
-        if (element == featuresRepositories && element != null) {
+        if (element instanceof AbstractContentModel) {
+            return ((AbstractContentModel) element).getElements().length > 0;
+        } else if (element == featuresRepositories && element != null) {
             return featuresRepositories.size() > 0;
         } else if (element instanceof FeaturesRepository) {
             final FeaturesRepository featuresRepository = (FeaturesRepository) element;
@@ -103,7 +108,9 @@ public final class FeaturesContentProvider implements ITreeContentProvider {
     @SuppressWarnings("unchecked")
     public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
         if (newInput != null) {
-            featuresRepositories = (List<FeaturesRepository>) newInput;
+            if (newInput instanceof List) {
+                featuresRepositories = (List<FeaturesRepository>) newInput;
+            }
         }
     }
 }

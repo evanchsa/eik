@@ -178,7 +178,8 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
      * @return
      */
     private IFile createTargetDefinitionFile() {
-        final IPath targetFilename = new Path(getKarafProject().getName()).addFileExtension("target");
+        final String projectName = getKarafProject().getName();
+        final IPath targetFilename = new Path(projectName).addFileExtension("target");
         return getKarafProject().getProjectHandle().getFile(targetFilename);
     }
 

@@ -113,9 +113,12 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         newKarafProject.getProjectHandle().getFolder(".bin/platform/lib").createLink(workingPlatformModel.getParentKarafModel().getRootDirectory().append("lib"), 0, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/platform/system").createLink(workingPlatformModel.getParentKarafModel().getPluginRootDirectory(), 0, monitor);
 
+        // TODO: Is this the right way to add the current installation?
         final IDynamicVariable eclipseHomeVariable = VariablesPlugin.getDefault().getStringVariableManager().getDynamicVariable("eclipse_home");
         final String eclipseHome = eclipseHomeVariable.getValue("");
-        newKarafProject.getProjectHandle().getFolder(".bin/platform/eclipse").createLink(new Path(eclipseHome), 0, monitor);
+        newKarafProject.getProjectHandle().getFolder(".bin/platform/eclipse").create(true, true, monitor);
+        newKarafProject.getProjectHandle().getFolder(".bin/platform/eclipse/dropins").createLink(new Path(eclipseHome).append("dropins"), 0, monitor);
+        newKarafProject.getProjectHandle().getFolder(".bin/platform/eclipse/plugins").createLink(new Path(eclipseHome).append("plugins"), 0, monitor);
 
         newKarafProject.getProjectHandle().setPersistentProperty(
                 new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafProject"),

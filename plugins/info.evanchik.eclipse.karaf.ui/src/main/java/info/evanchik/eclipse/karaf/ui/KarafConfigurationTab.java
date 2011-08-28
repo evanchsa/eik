@@ -18,21 +18,25 @@ import info.evanchik.eclipse.karaf.core.features.Bundle;
 import info.evanchik.eclipse.karaf.core.features.Feature;
 import info.evanchik.eclipse.karaf.core.features.FeatureResolverImpl;
 import info.evanchik.eclipse.karaf.core.features.Features;
+import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
+import info.evanchik.eclipse.karaf.core.features.XmlFeaturesRepository;
 import info.evanchik.eclipse.karaf.ui.features.FeaturesContentProvider;
 import info.evanchik.eclipse.karaf.ui.features.FeaturesLabelProvider;
-import info.evanchik.eclipse.karaf.ui.features.FeaturesResolverJob;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -73,13 +77,11 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
     private Button enableFeaturesManagement;
 
-    private FeaturesResolverJob featuresResolverJob;
-
-    private FeaturesSection featuresSection;
-
     private ContainerCheckedTreeViewer installedFeatures;
 
     private KarafPlatformModel karafPlatformModel;
+
+    private IKarafProject karafProject;
 
     private Button localConsole;
 
@@ -126,6 +128,8 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
     @Override
     public void initializeFrom(final ILaunchConfiguration configuration) {
+
+        FileInputStream fin = null;
         try {
             localConsole.setSelection(
                     configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, true));
@@ -141,50 +145,63 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
             selectedFeatures.clear();
             selectedFeatures.addAll(Arrays.asList(features));
 
+            // TODO: This should be factored out and it should be easy to get a List of FeaturesRepository
+            final IFolder featuresFolder = karafProject.getFolder("features");
+            if (featuresFolder.exists()) {
+                final List<FeaturesRepository> featuresRepositories = new ArrayList<FeaturesRepository>();
+                final IResource[] resources = featuresFolder.members();
+                for (final IResource resource : resources) {
+                    if (resource.getFileExtension().equalsIgnoreCase("xml")) {
+                        fin = new FileInputStream(resource.getRawLocation().toFile());
+                        final XmlFeaturesRepository xmlFeatureRepository = new XmlFeaturesRepository(resource.getName(), fin);
+                        featuresRepositories.add(xmlFeatureRepository);
+                        fin.close();
+                    }
+                }
+
+                Collections.sort(featuresRepositories, new Comparator<FeaturesRepository>() {
+                    @Override
+                    public int compare(final FeaturesRepository o1, final FeaturesRepository o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
+
+                final String storedBootFeatures =
+                    configuration.getAttribute(
+                        KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES,
+                        "");
+
+                final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
+
+                final List<Object> checkedFeatures = new ArrayList<Object>();
+                for (final String s : storedBootFeatures.split(",")) {
+                    final Object[] path = fr.getFeaturePath(s);
+                    Collections.addAll(checkedFeatures, path);
+                }
+
+                Display.getDefault().syncExec(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!getControl().isDisposed()) {
+                            installedFeatures.setInput(featuresRepositories);
+                            installedFeatures.setCheckedElements(checkedFeatures.toArray());
+                        }
+                    };
+                });
+            }
+        } catch (final IOException e) {
+            KarafUIPluginActivator.getLogger().error("Uable to load file", e);
         } catch (final CoreException e) {
             KarafUIPluginActivator.getLogger().error("Unable to initialize launch configuration tab", e);
             return;
-        }
-
-        featuresResolverJob.addJobChangeListener(new JobChangeAdapter() {
-           @Override
-            public void done(final IJobChangeEvent event) {
-               if (event.getResult().isOK()) {
-                   featuresResolverJob.removeJobChangeListener(this);
-
-                    try {
-                        final String storedBootFeatures =
-                            configuration.getAttribute(
-                                KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES,
-                                "");
-
-                        final FeatureResolverImpl fr = new FeatureResolverImpl(featuresResolverJob.getFeaturesRepositories());
-
-                        final List<Object> checkedFeatures = new ArrayList<Object>();
-                        for (final String s : storedBootFeatures.split(",")) {
-                            final Object[] path = fr.getFeaturePath(s);
-                            Collections.addAll(checkedFeatures, path);
-                        }
-
-                        Display.getDefault().syncExec(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!getControl().isDisposed()) {
-                                    installedFeatures.setInput(featuresResolverJob.getFeaturesRepositories());
-                                    installedFeatures.setCheckedElements(checkedFeatures.toArray());
-                                }
-                            };
-                        });
-
-                    } catch (final CoreException e) {
-                        KarafUIPluginActivator.getLogger().error("Unable to set Karaf Boot Features", e);
-                    }
-               }
+        } finally {
+            if (fin != null) {
+                try {
+                    fin.close();
+                } catch (final IOException e) {
+                    // Nothing to do here
+                }
             }
-        });
-
-        if (featuresResolverJob.getState() == Job.NONE) {
-            featuresResolverJob.schedule();
         }
     }
 
@@ -206,6 +223,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
             initializeKarafPlatformModel();
         } catch (final CoreException e) {
             KarafUIPluginActivator.getLogger().error("Unable to initialize Karaf Platform model", e);
+            return;
         }
 
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, true);
@@ -214,6 +232,9 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_REMOTE_CONSOLE_USERNAME, "karaf");
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_REMOTE_CONSOLE_PASSWORD, "karaf");
+
+        final FeaturesSection featuresSection = (FeaturesSection) karafPlatformModel.getAdapter(FeaturesSection.class);
+        featuresSection.load();
 
         final List<String> featuresList = featuresSection.getBootFeatureNames();
 
@@ -408,13 +429,9 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
             throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to locate active Karaf Platform Model"));
         }
 
-        featuresSection = (FeaturesSection) karafPlatformModel.getAdapter(FeaturesSection.class);
-        if (featuresSection == null) {
-            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to load Features for Karaf Platform Model: " + karafPlatformModel.getRootDirectory()));
+        karafProject = (IKarafProject) Platform.getAdapterManager().getAdapter(karafPlatformModel, IKarafProject.class);
+        if (karafProject== null) {
+            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to locate Karaf Project in Workspace"));
         }
-
-        featuresResolverJob = new FeaturesResolverJob(getName(), featuresSection);
-        featuresSection.load();
     }
-
 }

@@ -83,10 +83,10 @@
          </adapter>
       </factory>
       <factory
-            adaptableType="info.evanchik.eclipse.karaf.ui.IKarafProject"
+            adaptableType="info.evanchik.eclipse.karaf.core.KarafPlatformModel"
             class="info.evanchik.eclipse.karaf.ui.internal.KarafLaunchConfigurationAdapterFactory">
          <adapter
-               type="info.evanchik.eclipse.karaf.core.KarafPlatformModel">
+               type="info.evanchik.eclipse.karaf.ui.IKarafProject">
          </adapter>
       </factory>
    </extension>

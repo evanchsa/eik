@@ -18,6 +18,7 @@ import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 import info.evanchik.eclipse.karaf.ui.project.KarafProject;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.Path;
@@ -31,6 +32,9 @@ public final class KarafLaunchConfigurationAdapterFactory implements IAdapterFac
 
     @Override
     public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
+
+        // TODO: This entire method is ugly and needs to be cleaned up
+
         final Object adapted;
         if (     KarafPlatformModel.class.equals(adapterType)
               && adaptableObject instanceof ILaunchConfiguration)
@@ -47,16 +51,21 @@ public final class KarafLaunchConfigurationAdapterFactory implements IAdapterFac
                 KarafUIPluginActivator.getLogger().error("Unable to find Karaf Platform model", e);
                 return null;
             }
-        } else if (    KarafPlatformModel.class.equals(adapterType)
-                    && adaptableObject instanceof IKarafProject)
+        } else if (    IKarafProject.class.equals(adapterType)
+                    && adaptableObject instanceof KarafPlatformModel)
         {
-            final IKarafProject karafProject = (IKarafProject) adaptableObject;
-            try {
-                adapted = KarafPlatformModelRegistry.findPlatformModel(karafProject.getPlatformRootDirectory());
-            } catch (final CoreException e) {
-                KarafUIPluginActivator.getLogger().error("Unable to find Karaf Platform model", e);
-                return null;
+            IKarafProject karafProject = null;
+            final KarafPlatformModel karafPlatformModel = (KarafPlatformModel) adaptableObject;
+            for (final IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+                if (KarafProject.isKarafProject(project)) {
+                    karafProject = new KarafProject(project);
+                    if (karafPlatformModel.getRootDirectory().equals(karafProject.getPlatformRootDirectory())) {
+                        break;
+                    }
+                }
             }
+
+            adapted = karafProject;
         } else if (    IKarafProject.class.equals(adapterType)
                     && adaptableObject instanceof IProject)
         {

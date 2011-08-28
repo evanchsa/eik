@@ -15,11 +15,13 @@ import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
 
+import org.eclipse.core.runtime.IAdaptable;
+
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface MBeanProvider {
+public interface MBeanProvider extends IAdaptable {
 
     /**
      * A string constant used as a key to distinguish multiple implementations

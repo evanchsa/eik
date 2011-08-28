@@ -11,6 +11,7 @@
 package info.evanchik.eclipse.karaf.workbench.ui.editor;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 
@@ -22,18 +23,10 @@ import org.eclipse.jface.resource.ImageDescriptor;
  */
 public class KarafPlatformEditorInput extends AbstractEditorInput {
 
-    private final KarafPlatformModel karafPlatform;
+    private final IKarafProject karafProject;
 
-    private final MBeanProvider mbeanProvider;
-
-    /**
-     *
-     * @param karafPlatform
-     * @param mbeanProvider
-     */
-    public KarafPlatformEditorInput(final KarafPlatformModel karafPlatform, final MBeanProvider mbeanProvider) {
-        this.karafPlatform = karafPlatform;
-        this.mbeanProvider = mbeanProvider;
+    public KarafPlatformEditorInput(final IKarafProject karafProject) {
+        this.karafProject = karafProject;
     }
 
     @Override
@@ -51,19 +44,11 @@ public class KarafPlatformEditorInput extends AbstractEditorInput {
         }
 
         final KarafPlatformEditorInput other = (KarafPlatformEditorInput) obj;
-        if (karafPlatform == null) {
-            if (other.karafPlatform != null) {
+        if (karafProject == null) {
+            if (other.karafProject!= null) {
                 return false;
             }
-        } else if (!karafPlatform.equals(other.karafPlatform)) {
-            return false;
-        }
-
-        if (mbeanProvider == null) {
-            if (other.mbeanProvider != null) {
-                return false;
-            }
-        } else if (!mbeanProvider.equals(other.mbeanProvider)) {
+        } else if (!karafProject.equals(other.karafProject)) {
             return false;
         }
 
@@ -76,29 +61,28 @@ public class KarafPlatformEditorInput extends AbstractEditorInput {
     }
 
     public KarafPlatformModel getKarafPlatform() {
-        return karafPlatform;
+        return (KarafPlatformModel) karafProject.getAdapter(KarafPlatformModel.class);
     }
 
     public MBeanProvider getMBeanProvider() {
-        return mbeanProvider;
+        return (MBeanProvider) karafProject.getAdapter(MBeanProvider.class);
     }
 
     @Override
     public String getName() {
-        return karafPlatform.getRootDirectory().lastSegment();
+        return karafProject.getName();
     }
 
     @Override
     public String getToolTipText() {
-        return karafPlatform.getRootDirectory().toOSString();
+        return karafProject.getName() + " located at: " + getKarafPlatform().getRootDirectory().toOSString();
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (karafPlatform == null ? 0 : karafPlatform.hashCode());
-        result = prime * result + (mbeanProvider == null ? 0 : mbeanProvider.hashCode());
+        result = prime * result + (karafProject == null ? 0 : karafProject.hashCode());
         return result;
     }
 }

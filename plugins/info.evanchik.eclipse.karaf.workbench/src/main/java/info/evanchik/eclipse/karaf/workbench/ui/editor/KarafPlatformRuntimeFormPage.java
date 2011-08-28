@@ -10,9 +10,13 @@
  */
 package info.evanchik.eclipse.karaf.workbench.ui.editor;
 
+import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
+import info.evanchik.eclipse.karaf.workbench.WorkbenchServiceListener;
 import info.evanchik.eclipse.karaf.workbench.WorkbenchServiceManager;
+import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.provider.BundleItem;
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProviderListener;
@@ -20,6 +24,8 @@ import info.evanchik.eclipse.karaf.workbench.ui.views.bundle.BundleIdSorter;
 
 import java.util.EnumSet;
 
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -87,7 +93,9 @@ public class KarafPlatformRuntimeFormPage extends FormPage {
 
         @Override
         public void dispose() {
-            runtimeDataProvider.removeListener(this);
+            if (runtimeDataProvider != null) {
+                runtimeDataProvider.removeListener(this);
+            }
         }
 
         @Override
@@ -130,6 +138,26 @@ public class KarafPlatformRuntimeFormPage extends FormPage {
         }
     }
 
+    private final class RuntimeListener implements WorkbenchServiceListener<RuntimeDataProvider> {
+        @Override
+        public void serviceAdded(final RuntimeDataProvider service) {
+            final MBeanProvider mbeanProvider  = (MBeanProvider) service.getAdapter(MBeanProvider.class);
+
+            if (mbeanProvider == null) {
+                return;
+            }
+
+            final IPath rootDirecotry = getKarafPlatformRootPath(mbeanProvider);
+            if (editor.getKarafPlatform().getRootDirectory().equals(rootDirecotry)) {
+                bundlesViewer.setInput(service);
+            }
+        }
+
+        @Override
+        public void serviceRemoved(final RuntimeDataProvider service) {
+        }
+    }
+
     public static final String ID = "info.evanchik.eclipse.karaf.editors.page.Runtime";
 
     private static final String TITLE = "Runtime";
@@ -142,6 +170,8 @@ public class KarafPlatformRuntimeFormPage extends FormPage {
 
     private TableViewer bundlesViewer;
 
+    private final WorkbenchServiceListener<RuntimeDataProvider> runtimeDataProviderListener;
+
     private WorkbenchServiceManager<RuntimeDataProvider> runtimeDataProviderManager;
 
     public KarafPlatformRuntimeFormPage(final KarafPlatformEditorPart editor) {
@@ -149,7 +179,15 @@ public class KarafPlatformRuntimeFormPage extends FormPage {
 
         this.editor = editor;
 
+        runtimeDataProviderListener = new RuntimeListener();
         runtimeDataProviderManager = KarafWorkbenchActivator.getDefault().getRuntimeDataProviderManager();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        runtimeDataProviderManager.removeListener(runtimeDataProviderListener);
     }
 
     public void setRuntimeDataProviderManager(final WorkbenchServiceManager<RuntimeDataProvider> runtimeDataProviderManager) {
@@ -158,6 +196,8 @@ public class KarafPlatformRuntimeFormPage extends FormPage {
 
     @Override
     protected void createFormContent(final IManagedForm managedForm) {
+        runtimeDataProviderManager.addListener(runtimeDataProviderListener);
+
         final GridLayout layout = new GridLayout(2, true);
         GridData data = new GridData(GridData.FILL_BOTH);
 
@@ -217,26 +257,21 @@ public class KarafPlatformRuntimeFormPage extends FormPage {
         bundlesViewer.setContentProvider(new BundlesTableContentProvider());
         bundlesViewer.setSorter(new BundleIdSorter());
 
-        final RuntimeDataProvider runtimeDataProvider = findRuntimeDataProviderFor(editor.getMBeanProvider());
-        bundlesViewer.setInput(runtimeDataProvider);
 
         managedForm.reflow(true);
-    }
 
-    /**
-     *
-     * @param mbeanProvider
-     * @return
-     */
-    private RuntimeDataProvider findRuntimeDataProviderFor(final MBeanProvider mbeanProvider) {
-        for (final RuntimeDataProvider rdp : runtimeDataProviderManager.getServices()) {
-            final MBeanProvider candidateMBeanProvider = (MBeanProvider) rdp.getAdapter(MBeanProvider.class);
-            if (mbeanProvider.equals(candidateMBeanProvider)) {
-                return rdp;
+        for (final RuntimeDataProvider runtimeDataProvider : runtimeDataProviderManager.getServices()) {
+            final MBeanProvider mbeanProvider  = (MBeanProvider) runtimeDataProvider.getAdapter(MBeanProvider.class);
+
+            if (mbeanProvider == null) {
+                continue;
+            }
+
+            final IPath rootDirecotry = getKarafPlatformRootPath(mbeanProvider);
+            if (editor.getKarafPlatform().getRootDirectory().equals(rootDirecotry)) {
+                bundlesViewer.setInput(runtimeDataProvider);
             }
         }
-
-        return null;
     }
 
     private void safeRefresh(final Viewer viewer) {
@@ -252,4 +287,27 @@ public class KarafPlatformRuntimeFormPage extends FormPage {
         });
     }
 
+    /**
+     * @param service
+     * @return
+     */
+    private IPath getKarafPlatformRootPath(final MBeanProvider service) {
+        final JMXServiceDescriptor jmxServiceDescriptor = service.getJMXServiceDescriptor();
+        final KarafPlatformModel karafPlatformModel =
+            (KarafPlatformModel) jmxServiceDescriptor.getAdapter(KarafPlatformModel.class);
+
+        if (karafPlatformModel == null) {
+            return new Path("");
+        }
+
+        // TODO: It should be easy to compare to KarafPlatformModel's for equality
+        final IPath rootDirectory;
+        if (karafPlatformModel instanceof KarafWorkingPlatformModel) {
+            rootDirectory = ((KarafWorkingPlatformModel) karafPlatformModel).getParentKarafModel().getRootDirectory();
+        } else {
+            rootDirectory = karafPlatformModel.getRootDirectory();
+        }
+
+        return rootDirectory;
+    }
 }

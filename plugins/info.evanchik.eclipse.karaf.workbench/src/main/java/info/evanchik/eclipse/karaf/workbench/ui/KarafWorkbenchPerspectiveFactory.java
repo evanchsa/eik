@@ -10,7 +10,6 @@
  */
 package info.evanchik.eclipse.karaf.workbench.ui;
 
-import info.evanchik.eclipse.karaf.workbench.ui.views.JmxServersView;
 import info.evanchik.eclipse.karaf.workbench.ui.views.bundle.BundlesView;
 import info.evanchik.eclipse.karaf.workbench.ui.views.services.ServicesView;
 
@@ -25,10 +24,26 @@ import org.eclipse.ui.IPerspectiveFactory;
 public class KarafWorkbenchPerspectiveFactory implements IPerspectiveFactory {
 
     private static final String BOTTOM_FOLDER = "bottomFolder";
+
+    private static final String LEFT_FOLDER = "leftFolder";
+
     @Override
     public void createInitialLayout(final IPageLayout layout) {
 
-        layout.addView(JmxServersView.VIEW_ID, IPageLayout.LEFT, 0.20f, layout.getEditorArea());
+        layout.addActionSet("org.eclipse.debug.ui.debugActionSet");
+        layout.addActionSet("org.eclipse.debug.ui.launchActionSet");
+        layout.addActionSet("org.eclipse.debug.ui.profileActionSet");
+
+        layout.addNewWizardShortcut("info.evanchik.eclipse.karaf.ui.karafPlatformProject");
+
+        final IFolderLayout leftFolder =
+            layout.createFolder(
+                    LEFT_FOLDER,
+                    IPageLayout.LEFT,
+                    0.20f,
+                    layout.getEditorArea());
+
+        leftFolder.addView("org.eclipse.ui.navigator.ProjectExplorer");
 
         final IFolderLayout bottomFolder =
             layout.createFolder(

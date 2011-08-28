@@ -28,6 +28,8 @@ public class KarafPlatformEditorPart extends FormEditor {
 
     public static final String ID = "info.evanchik.eclipse.karaf.ui.editors.KarafPlatformEditor";
 
+    private KarafPlatformEditorInput karafEditorInput;
+
     private KarafPlatformModel karafPlatform;
 
     private MBeanProvider mbeanProvider;
@@ -40,6 +42,10 @@ public class KarafPlatformEditorPart extends FormEditor {
 
     @Override
     public void doSaveAs() {
+    }
+
+    public KarafPlatformEditorInput getKarafEditorInput() {
+        return karafEditorInput;
     }
 
     public KarafPlatformModel getKarafPlatform() {
@@ -58,12 +64,12 @@ public class KarafPlatformEditorPart extends FormEditor {
     public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
         super.init(site, input);
 
-        final KarafPlatformEditorInput editorInput = (KarafPlatformEditorInput) input;
+        karafEditorInput = (KarafPlatformEditorInput) input;
 
-        karafPlatform = editorInput.getKarafPlatform();
-        mbeanProvider = editorInput.getMBeanProvider();
+        karafPlatform = karafEditorInput.getKarafPlatform();
+        mbeanProvider = karafEditorInput.getMBeanProvider();
 
-        setPartName(karafPlatform.getRootDirectory().lastSegment());
+        setPartName(karafEditorInput.getName());
 
         platformDetails = (KarafPlatformDetails) karafPlatform.getAdapter(KarafPlatformDetails.class);
     }

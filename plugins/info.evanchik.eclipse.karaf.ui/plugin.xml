@@ -35,18 +35,6 @@
       </framework>
    </extension>
    <extension
-         point="org.eclipse.pde.ui.targetProvisioners">
-      <provisioner
-            class="info.evanchik.eclipse.karaf.ui.wizards.provisioner.KarafInstallationProvisionerWizard"
-            icon="icons/obj16/karaf-logo-16x16.png"
-            id="info.evanchik.eclipse.karaf.ui.karaf.installation"
-            name="Apache Karaf Installation">
-         <description>
-            Provisions a target platform based on a Apache Karaf installation.
-         </description>
-      </provisioner>
-   </extension>
-   <extension
          point="org.eclipse.debug.ui.launchConfigurationTabs">
       <tab
             class="info.evanchik.eclipse.karaf.ui.KarafConfigurationTab"

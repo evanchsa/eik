@@ -13,7 +13,6 @@ package info.evanchik.eclipse.karaf.workbench.ui.editor;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
-import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -62,10 +61,6 @@ public class KarafPlatformEditorInput extends AbstractEditorInput {
 
     public KarafPlatformModel getKarafPlatform() {
         return (KarafPlatformModel) karafProject.getAdapter(KarafPlatformModel.class);
-    }
-
-    public MBeanProvider getMBeanProvider() {
-        return (MBeanProvider) karafProject.getAdapter(MBeanProvider.class);
     }
 
     @Override

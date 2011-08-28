@@ -12,7 +12,6 @@ package info.evanchik.eclipse.karaf.workbench.ui.editor;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformDetails;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
@@ -32,8 +31,6 @@ public class KarafPlatformEditorPart extends FormEditor {
 
     private KarafPlatformModel karafPlatform;
 
-    private MBeanProvider mbeanProvider;
-
     private KarafPlatformDetails platformDetails;
 
     @Override
@@ -52,10 +49,6 @@ public class KarafPlatformEditorPart extends FormEditor {
         return karafPlatform;
     }
 
-    public MBeanProvider getMBeanProvider() {
-        return mbeanProvider;
-    }
-
     public KarafPlatformDetails getPlatformDetails() {
         return platformDetails;
     }
@@ -67,7 +60,6 @@ public class KarafPlatformEditorPart extends FormEditor {
         karafEditorInput = (KarafPlatformEditorInput) input;
 
         karafPlatform = karafEditorInput.getKarafPlatform();
-        mbeanProvider = karafEditorInput.getMBeanProvider();
 
         setPartName(karafEditorInput.getName());
 

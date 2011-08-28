@@ -10,6 +10,10 @@ import info.evanchik.eclipse.karaf.workbench.jmx.JMXServiceDescriptor;
 import info.evanchik.eclipse.karaf.workbench.jmx.internal.JMXServiceManager;
 import info.evanchik.eclipse.karaf.workbench.jmx.internal.JMXTransportRegistry;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -120,7 +124,17 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
         runtimeDataProviderManager = new RuntimeDataProviderManager();
         eclipseWorkbenchDataProvider = new EclipseRuntimeDataProvider(getBundle().getBundleContext());
 
-        registerEclipseRuntimeDataProvider();
+        final Job eclipseRuntimeDataProviderStarter = new Job("Eclipse Runtime Data Starter") {
+
+            @Override
+            protected IStatus run(final IProgressMonitor monitor) {
+                registerEclipseRuntimeDataProvider();
+                return Status.OK_STATUS;
+            }
+        };
+
+        eclipseRuntimeDataProviderStarter.setSystem(true);
+        eclipseRuntimeDataProviderStarter.schedule();
 	}
 
 	@Override

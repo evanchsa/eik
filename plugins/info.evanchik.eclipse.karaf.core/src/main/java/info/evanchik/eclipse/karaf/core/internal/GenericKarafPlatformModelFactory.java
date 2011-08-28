@@ -12,7 +12,6 @@ package info.evanchik.eclipse.karaf.core.internal;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelFactory;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelSynchronizer;
 import info.evanchik.eclipse.karaf.core.KarafPlatformValidator;
 import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
 
@@ -27,7 +26,8 @@ public class GenericKarafPlatformModelFactory implements KarafPlatformModelFacto
     private static final GenericKarafPlatformValidator platformValidator =
         new GenericKarafPlatformValidator();
 
-    public KarafPlatformModel getPlatformModel(IPath rootDirectory) {
+    @Override
+    public KarafPlatformModel getPlatformModel(final IPath rootDirectory) {
         if (!platformValidator.isValid(rootDirectory)) {
 
         }
@@ -35,14 +35,7 @@ public class GenericKarafPlatformModelFactory implements KarafPlatformModelFacto
         return new GenericKarafPlatformModel(rootDirectory);
     }
 
-    public KarafPlatformModelSynchronizer getPlatformSynchronizer(KarafPlatformModel platformModel) {
-        if (!platformValidator.isValid(platformModel.getRootDirectory())) {
-
-        }
-
-        return new StandardKarafPlatformModelSynchronizer(platformModel);
-    }
-
+    @Override
     public KarafPlatformValidator getPlatformValidator() {
         return platformValidator;
     }

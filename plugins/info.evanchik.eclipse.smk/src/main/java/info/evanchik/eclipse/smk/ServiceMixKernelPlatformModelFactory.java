@@ -12,10 +12,8 @@ package info.evanchik.eclipse.smk;
 
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelFactory;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelSynchronizer;
 import info.evanchik.eclipse.karaf.core.KarafPlatformValidator;
 import info.evanchik.eclipse.smk.internal.ServiceMixKernelPlatformModel;
-import info.evanchik.eclipse.smk.internal.ServiceMixKernelPlatformModelSynchronizer;
 import info.evanchik.eclipse.smk.internal.ServiceMixKernelPlatformValidator;
 
 import org.eclipse.core.runtime.IPath;
@@ -30,17 +28,12 @@ public class ServiceMixKernelPlatformModelFactory implements KarafPlatformModelF
         new ServiceMixKernelPlatformValidator();
 
     @Override
-    public KarafPlatformModel getPlatformModel(IPath rootDirectory) {
+    public KarafPlatformModel getPlatformModel(final IPath rootDirectory) {
         if (!platformValidator.isValid(rootDirectory)) {
 
         }
 
         return new ServiceMixKernelPlatformModel(rootDirectory);
-    }
-
-    @Override
-    public KarafPlatformModelSynchronizer getPlatformSynchronizer(KarafPlatformModel platformModel) {
-        return new ServiceMixKernelPlatformModelSynchronizer(platformModel);
     }
 
     @Override

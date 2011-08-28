@@ -26,14 +26,6 @@ public interface KarafPlatformModelFactory {
 
     /**
      *
-     * @param platformModel
-     * @return
-     */
-    public KarafPlatformModelSynchronizer getPlatformSynchronizer(KarafPlatformModel platformModel);
-
-
-    /**
-     *
      * @return
      */
     public KarafPlatformValidator getPlatformValidator();

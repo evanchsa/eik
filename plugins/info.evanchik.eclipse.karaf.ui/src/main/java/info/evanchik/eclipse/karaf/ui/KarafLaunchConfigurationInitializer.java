@@ -15,7 +15,6 @@ import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelFactory;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelSynchronizer;
 import info.evanchik.eclipse.karaf.core.SystemBundleNames;
 import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
 import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
@@ -84,11 +83,6 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
 
         workingKarafPlatform.getConfigurationDirectory().toFile().mkdirs();
         workingKarafPlatform.getUserDeployedDirectory().toFile().mkdirs();
-
-        final KarafPlatformModelSynchronizer synchronizer =
-            karafPlatformFactory.getPlatformSynchronizer(karafPlatform);
-
-        synchronizer.synchronize(workingKarafPlatform, true);
 
         // TODO: Factor this out so that it pulls the ID from this plugins
         // registry

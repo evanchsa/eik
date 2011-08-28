@@ -109,7 +109,6 @@ public class KarafPlatformGeneralFormPage extends FormPage {
         managedForm.getForm().getBody().setLayout(layout);
         managedForm.getForm().getBody().setLayoutData(data);
 
-        managedForm.getForm().setImage(KarafWorkbenchActivator.getDefault().getImageRegistry().get(KarafWorkbenchActivator.LOGO_16X16_IMG));
         managedForm.getForm().setText("Platform Overview");
 
         final Composite left = managedForm.getToolkit().createComposite(managedForm.getForm().getBody());

@@ -2,7 +2,7 @@
 <feature
       id="info.evanchik.eclipse.karaf.feature"
       label="%featureName"
-      version="0.5.2.qualifier"
+      version="0.5.3.qualifier"
       provider-name="%providerName">
 
    <description>
@@ -53,8 +53,7 @@
          id="info.evanchik.eclipse.karaf.ui"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="info.evanchik.karaf.app"
@@ -86,12 +85,5 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-
-   <plugin
-         id="info.evanchik.eclipse.karaf.obr"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
 </feature>

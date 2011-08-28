@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/info.evanchik.eclipse.karaf.wtp.feature_0.5.1.201104292043.jar" id="info.evanchik.eclipse.karaf.wtp.feature" version="0.5.1.201104292043">
-      <category name="Eclipse Web Tools Platform Integration for Apache Karaf"/>
-   </feature>
-   <feature url="features/info.evanchik.smk.feature_0.5.1.201104292043.jar" id="info.evanchik.smk.feature" version="0.5.1.201104292043">
+   <feature url="features/info.evanchik.smk.feature_0.5.1.201108281051.jar" id="info.evanchik.smk.feature" version="0.5.1.201108281051">
       <category name="Eclipse Integration for Apache ServiceMix Kernel"/>
    </feature>
-   <feature url="features/info.evanchik.eclipse.karaf.feature_0.5.1.201104292043.jar" id="info.evanchik.eclipse.karaf.feature" version="0.5.1.201104292043">
+   <feature url="features/info.evanchik.eclipse.karaf.feature_0.5.3.201108281051.jar" id="info.evanchik.eclipse.karaf.feature" version="0.5.3.201108281051">
       <category name="Eclipse Integration for Apache Karaf"/>
    </feature>
-   <feature url="features/info.evanchik.eclipse.karaf.jmx.feature_0.5.1.201104292043.jar" id="info.evanchik.eclipse.karaf.jmx.feature" version="0.5.1.201104292043">
+   <feature url="features/info.evanchik.eclipse.karaf.jmx.feature_0.5.3.201108281051.jar" id="info.evanchik.eclipse.karaf.jmx.feature" version="0.5.3.201108281051">
       <category name="Eclipse Integration for Apache Karaf"/>
+   </feature>
+   <feature url="features/info.evanchik.eclipse.karaf.wtp.feature_0.5.2.201108281051.jar" id="info.evanchik.eclipse.karaf.wtp.feature" version="0.5.2.201108281051">
+      <category name="Eclipse Web Tools Platform Integration for Apache Karaf"/>
    </feature>
    <category-def name="Eclipse Integration for Apache Karaf" label="Eclipse Integration for Apache Karaf">
       <description>

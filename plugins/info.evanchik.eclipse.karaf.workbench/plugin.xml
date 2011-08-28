@@ -38,7 +38,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="info.evanchik.eclipse.karaf.workbench.ui.KarafWorkbenchPerspectiveFactory"
-            icon="icons/obj16/felixLogo16x16.gif"
+            icon="icons/obj16/karaf-logo-16x16.png"
             id="info.evanchik.eclipse.karaf.workbench.karafPerspective"
             name="Apache Karaf">
          <description>
@@ -58,7 +58,7 @@
       <editor
             class="info.evanchik.eclipse.karaf.workbench.ui.editor.KarafPlatformEditorPart"
             default="false"
-            icon="icons/obj16/felixLogo16x16.gif"
+            icon="icons/obj16/karaf-logo-16x16.png"
             id="info.evanchik.eclipse.karaf.ui.editors.KarafPlatformEditor"
             name="Karaf Platform">
       </editor>

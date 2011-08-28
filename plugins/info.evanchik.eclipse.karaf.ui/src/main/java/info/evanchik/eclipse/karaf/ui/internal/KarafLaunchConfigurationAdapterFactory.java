@@ -14,6 +14,7 @@ import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationConstants;
+import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 import info.evanchik.eclipse.karaf.ui.project.KarafProject;
 
 import org.eclipse.core.resources.IProject;
@@ -34,7 +35,6 @@ public final class KarafLaunchConfigurationAdapterFactory implements IAdapterFac
         if (     KarafPlatformModel.class.equals(adapterType)
               && adaptableObject instanceof ILaunchConfiguration)
         {
-
             final ILaunchConfiguration configuration = (ILaunchConfiguration) adaptableObject;
             try {
                 if (configuration.getAttributes().containsKey(KarafLaunchConfigurationConstants.KARAF_LAUNCH_SOURCE_RUNTIME)) {
@@ -44,11 +44,24 @@ public final class KarafLaunchConfigurationAdapterFactory implements IAdapterFac
                     adapted = null;
                 }
             } catch (final CoreException e) {
-                throw new IllegalStateException(e);
+                KarafUIPluginActivator.getLogger().error("Unable to find Karaf Platform model", e);
+                return null;
             }
-        } else if (IKarafProject.class.equals(adapterType) && adaptableObject instanceof IProject) {
+        } else if (    KarafPlatformModel.class.equals(adapterType)
+                    && adaptableObject instanceof IKarafProject)
+        {
+            final IKarafProject karafProject = (IKarafProject) adaptableObject;
+            try {
+                adapted = KarafPlatformModelRegistry.findPlatformModel(karafProject.getPlatformRootDirectory());
+            } catch (final CoreException e) {
+                KarafUIPluginActivator.getLogger().error("Unable to find Karaf Platform model", e);
+                return null;
+            }
+        } else if (    IKarafProject.class.equals(adapterType)
+                    && adaptableObject instanceof IProject)
+        {
             if (KarafProject.isKarafProject((IProject) adaptableObject)) {
-                return new KarafProject((IProject) adaptableObject);
+                adapted = new KarafProject((IProject) adaptableObject);
             } else {
                 return null;
             }

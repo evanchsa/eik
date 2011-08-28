@@ -82,6 +82,13 @@
                type="info.evanchik.eclipse.karaf.ui.IKarafProject">
          </adapter>
       </factory>
+      <factory
+            adaptableType="info.evanchik.eclipse.karaf.ui.IKarafProject"
+            class="info.evanchik.eclipse.karaf.ui.internal.KarafLaunchConfigurationAdapterFactory">
+         <adapter
+               type="info.evanchik.eclipse.karaf.core.KarafPlatformModel">
+         </adapter>
+      </factory>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">

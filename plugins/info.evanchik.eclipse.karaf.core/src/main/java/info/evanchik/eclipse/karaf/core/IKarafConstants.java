@@ -47,6 +47,8 @@ public interface IKarafConstants {
 
     public static final String KARAF_MAIN_BUNDLE_SYMBOLIC_NAME = "org.apache.felix.karaf.main";
 
+    public static final String KARAF_OBR_REPOSITORY_PROP = "obr.repository.url";
+
     public static final String KARAF_OSGI_FRAMEWORK_ID = "info.evanchik.eclipse.karaf.Framework"; //$NON-NLS-1$
 
     public static final String ORG_APACHE_FELIX_KARAF_MANAGEMENT_CFG_FILENAME = "org.apache.felix.karaf.management.cfg"; //$NON-NLS-1$

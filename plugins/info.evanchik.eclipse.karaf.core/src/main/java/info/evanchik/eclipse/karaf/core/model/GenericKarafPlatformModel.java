@@ -37,6 +37,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -82,7 +83,7 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
         } else if (adapterType == KarafSshConnectionUrl.class) {
             adaptedObject = adaptKarafSshConnectionUrl();
         } else {
-            adaptedObject = null;
+            adaptedObject = Platform.getAdapterManager().getAdapter(this, adapterType);
         }
 
         return adaptedObject;

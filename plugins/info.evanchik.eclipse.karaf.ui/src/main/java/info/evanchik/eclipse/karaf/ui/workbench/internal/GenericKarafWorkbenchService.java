@@ -21,6 +21,7 @@ import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.shell.KarafSshConnectionUrl;
 import info.evanchik.eclipse.karaf.core.shell.KarafSshShellConnection;
+import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationConstants;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 import info.evanchik.eclipse.karaf.ui.console.KarafRemoteConsole;
@@ -33,7 +34,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -266,6 +269,8 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
             KarafUIPluginActivator.getLogger().error("Unable to load configuration file: " + platformModel.getParentKarafModel().getConfigurationDirectory(), e);
         }
 
+        addEclipseObrFile(platformModel, equinoxProperties);
+
         equinoxProperties.put(
                 IKarafConstants.KARAF_BASE_PROP,
                 platformModel.getParentKarafModel().getRootDirectory().toOSString());
@@ -353,6 +358,33 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
 
         configureKarafFeatures(platformModel, configuration);
         configureJMXConnector(platformModel);
+    }
+
+    /**
+     * @param platformModel
+     * @param equinoxProperties
+     */
+    private void addEclipseObrFile(
+            final KarafWorkingPlatformModel platformModel,
+            final Map<String, String> equinoxProperties) {
+        final IKarafProject karafProject = (IKarafProject) platformModel.getAdapter(IKarafProject.class);
+        // TODO: This should be factored out somehow
+        final IFile file = karafProject.getFile("platform/eclipse/eclipse.obr.xml");
+        final IPath path = file.getRawLocation();
+
+        final String obr = equinoxProperties.get(IKarafConstants.KARAF_OBR_REPOSITORY_PROP);
+        if (obr.indexOf(path.toOSString()) > 0) {
+            if (obr.trim().length() > 0) {
+                final String obrUrls = obr + "," + path.toOSString();
+                equinoxProperties.put(
+                        IKarafConstants.KARAF_OBR_REPOSITORY_PROP,
+                        obrUrls);
+            } else {
+                equinoxProperties.put(
+                        IKarafConstants.KARAF_OBR_REPOSITORY_PROP,
+                        path.toOSString());
+            }
+        }
     }
 
     /**

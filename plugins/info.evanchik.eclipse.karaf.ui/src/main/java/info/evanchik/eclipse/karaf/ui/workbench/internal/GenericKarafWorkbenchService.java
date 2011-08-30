@@ -373,17 +373,16 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         final IPath path = file.getRawLocation();
 
         final String obr = equinoxProperties.get(IKarafConstants.KARAF_OBR_REPOSITORY_PROP);
-        if (obr.indexOf(path.toOSString()) > 0) {
-            if (obr.trim().length() > 0) {
-                final String obrUrls = obr + "," + path.toOSString();
-                equinoxProperties.put(
-                        IKarafConstants.KARAF_OBR_REPOSITORY_PROP,
-                        obrUrls);
+        if (obr.indexOf("eclipse.obr.xml") == -1) {
+            final String obrUrls;
+            if (obr.trim().length() > 1) {
+                obrUrls = obr + "," + "file://" + path.toFile().getAbsolutePath();
             } else {
-                equinoxProperties.put(
-                        IKarafConstants.KARAF_OBR_REPOSITORY_PROP,
-                        path.toOSString());
+                obrUrls = "file://" + path.toFile().getAbsolutePath();
             }
+            equinoxProperties.put(
+                    IKarafConstants.KARAF_OBR_REPOSITORY_PROP,
+                    obrUrls);
         }
     }
 

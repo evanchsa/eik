@@ -44,8 +44,10 @@ import java.util.zip.ZipEntry;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -448,6 +450,8 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
             sourceJar = new JarInputStream(new FileInputStream(karafJar));
             final File filteredKarafJar = new File(workingKarafPlatform.getRootDirectory().toFile(), "generatedKaraf.jar");
 
+            filteredKarafJar.getParentFile().mkdirs();
+
             /*
              * If the file already exists assume it is up to date
              */
@@ -477,9 +481,9 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
             return filteredKarafJar;
         } catch (final FileNotFoundException e) {
-            throw new CoreException(null);
+            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Could not filter OSGi Interfaces from JAR", e));
         } catch (final IOException e) {
-            throw new CoreException(null);
+            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Could not filter OSGi Interfaces from JAR", e));
         } finally {
             if (sourceJar != null) {
                 try {

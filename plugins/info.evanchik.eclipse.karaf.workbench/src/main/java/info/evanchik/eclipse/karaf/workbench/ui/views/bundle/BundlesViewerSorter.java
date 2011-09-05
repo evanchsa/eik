@@ -24,7 +24,6 @@ import org.eclipse.jface.viewers.ViewerSorter;
 
 /**
  *
- * @author Neil Bartlett
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */

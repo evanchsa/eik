@@ -20,14 +20,12 @@ package info.evanchik.eclipse.karaf.workbench.ui.views.services;
 
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 import info.evanchik.eclipse.karaf.workbench.provider.ServiceItem;
-import info.evanchik.eclipse.karaf.workbench.ui.views.PropertyEntry;
 
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 /**
  *
- * @author Neil Bartlett
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
@@ -49,16 +47,12 @@ public class ServiceNameFilter extends ViewerFilter {
 
         if (element instanceof RuntimeDataProvider) {
             result = true;
-        } else if (element instanceof PropertyEntry) {
-            result = true;
-        }
-
-        else if (element instanceof ServiceItem) {
+        } else if (element instanceof ServiceItem) {
             result = false;
 
             final String[] interfaces = ((ServiceItem) element).getServiceInterfaces();
-            for (int i = 0; i < interfaces.length; i++) {
-                if (interfaces[i].toLowerCase().indexOf(serviceName.toLowerCase()) > -1) {
+            for (String serviceInterface : interfaces) {
+                if (serviceInterface.toLowerCase().indexOf(serviceName.toLowerCase()) > -1) {
                     result = true;
                     break;
                 }

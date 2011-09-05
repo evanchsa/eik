@@ -20,13 +20,10 @@ package info.evanchik.eclipse.karaf.workbench.ui.views.bundle;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.ui.views.FilteredViewPart;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -52,7 +49,6 @@ public class BundlesView extends FilteredViewPart {
     private TreeViewer treeTableViewer;
     private BundlesContentProvider contentProvider;
 
-    private IAction propertiesAction;
     private BundleSymbolicNameFilter nameFilter;
 
     protected final int[] colWidth = new int[] { 185, 40, 100, 250, 250 };
@@ -99,7 +95,6 @@ public class BundlesView extends FilteredViewPart {
 
         getViewSite().setSelectionProvider(treeTableViewer);
 
-        createActions();
         fillMenu();
 
         initContextMenu();
@@ -145,25 +140,6 @@ public class BundlesView extends FilteredViewPart {
         treeTableViewer.refresh();
     }
 
-    private void createActions() {
-        propertiesAction = new Action() {
-            @Override
-            public void run() {
-                final IStructuredSelection selection =
-                    (IStructuredSelection) treeTableViewer.getSelection();
-                if (!selection.isEmpty()) {
-                    /*
-                    final BundleItem bundle = (BundleItem) selection.getFirstElement();
-
-                    final BundlePropertiesDialog propsDialog = new BundlePropertiesDialog(getSite().getShell(), bundle);
-                    propsDialog.open();
-                    */
-                }
-            }
-        };
-        propertiesAction.setText("Properties...");
-    }
-
     protected void fillMenu() {
         final IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
         menuManager.add(new ExcludeBundlesFilterAction("Installed", Bundle.INSTALLED, treeTableViewer));
@@ -179,7 +155,6 @@ public class BundlesView extends FilteredViewPart {
         menuMgr.addMenuListener(new IMenuListener() {
             @Override
             public void menuAboutToShow(final IMenuManager manager) {
-                menuMgr.add(propertiesAction);
                 menuMgr.add(new Separator());
                 menuMgr.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
             }

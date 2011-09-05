@@ -39,7 +39,7 @@ import org.eclipse.ui.part.ViewPart;
  */
 public abstract class FilteredViewPart extends ViewPart {
 
-	private Text txtFilter;
+	private Text textFilter;
 	private Action filterAction;
 
 	private Composite stackPanel;
@@ -63,16 +63,16 @@ public abstract class FilteredViewPart extends ViewPart {
 		// Filter panel
 		Composite filterPanel = new Composite(topPanel, SWT.NONE);
 		new Label(filterPanel, SWT.NONE).setText("Filter:");
-		txtFilter = new Text(filterPanel, SWT.SEARCH);
+		textFilter = new Text(filterPanel, SWT.SEARCH);
 
 		// Main panel
 		mainPanel = new Composite(stackPanel, SWT.NONE);
 		createMainControl(mainPanel);
 
 		// Add listeners
-		txtFilter.addModifyListener(new ModifyListener() {
+		textFilter.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				updatedFilter(txtFilter.getText());
+				updatedFilter(textFilter.getText());
 			}
 		});
 
@@ -88,7 +88,7 @@ public abstract class FilteredViewPart extends ViewPart {
 
 		filterPanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		filterPanel.setLayout(new GridLayout(2, false));
-		txtFilter.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		textFilter.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		mainPanel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 
 		// Toolbar
@@ -144,7 +144,7 @@ public abstract class FilteredViewPart extends ViewPart {
 			if(filterAction.isChecked()) {
 				stack.topControl = topPanel;
 				mainPanel.setParent(topPanel);
-				updatedFilter(txtFilter.getText());
+				updatedFilter(textFilter.getText());
 			} else {
 				stack.topControl = mainPanel;
 				mainPanel.setParent(stackPanel);
@@ -158,7 +158,7 @@ public abstract class FilteredViewPart extends ViewPart {
 	@Override
     public void setFocus() {
 		if(filterAction.isChecked()) {
-			txtFilter.setFocus();
+			textFilter.setFocus();
 		} else {
 			doSetFocus();
 		}

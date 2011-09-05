@@ -24,11 +24,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.osgi.framework.Bundle;
 
-/**
- *
- * @author Neil Bartlett
- *
- */
 public class ExcludeBundlesViewerFilter extends ViewerFilter {
 
     private final String state;
@@ -48,31 +43,30 @@ public class ExcludeBundlesViewerFilter extends ViewerFilter {
         return bundle.getState().equals(state) == false;
     }
 
-    protected String stateName(int i) {
-        String name;
+	protected String stateName(int i) {
+		String name;
 
-        switch (i) {
-        case Bundle.ACTIVE:
-            name = "ACTIVE";
-            break;
-        case Bundle.INSTALLED:
-            name = "INSTALLED";
-            break;
-        case Bundle.RESOLVED:
-            name = "RESOLVED";
-            break;
-        case Bundle.STARTING:
-            name = "STARTING";
-            break;
-        case Bundle.STOPPING:
-            name = "STOPPING";
-            break;
-        default:
-            name = "<<unknown>>";
-            break;
-        }
+		switch (i) {
+		case Bundle.ACTIVE:
+			name = "ACTIVE";
+			break;
+		case Bundle.INSTALLED:
+			name = "INSTALLED";
+			break;
+		case Bundle.RESOLVED:
+			name = "RESOLVED";
+			break;
+		case Bundle.STARTING:
+			name = "STARTING";
+			break;
+		case Bundle.STOPPING:
+			name = "STOPPING";
+			break;
+		default:
+			name = "Unknown";
+			break;
+		}
 
-        return name;
-    }
-
+		return name;
+	}
 }

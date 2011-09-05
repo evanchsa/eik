@@ -21,7 +21,6 @@ import info.evanchik.eclipse.karaf.workbench.provider.BundleItem;
 
 /**
  *
- * @author Neil Bartlett
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */

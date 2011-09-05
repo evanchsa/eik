@@ -34,7 +34,6 @@ import org.osgi.framework.BundleContext;
 
 /**
  *
- * @author Neil Bartlett
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
@@ -95,11 +94,6 @@ public class ServicesView extends FilteredViewPart {
         viewer.setContentProvider(contentProvider);
 
         viewer.setInput(context);
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
     }
 
     @Override

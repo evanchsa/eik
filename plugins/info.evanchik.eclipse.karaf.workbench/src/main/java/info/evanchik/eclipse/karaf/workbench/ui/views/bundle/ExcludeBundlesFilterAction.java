@@ -21,20 +21,18 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.StructuredViewer;
 
-/**
- *
- * @author Neil Bartlett
- *
- */
 public class ExcludeBundlesFilterAction extends Action {
 
     private final ExcludeBundlesViewerFilter filter;
+
     private final StructuredViewer viewer;
 
     public ExcludeBundlesFilterAction(String label, int state, StructuredViewer viewer) {
         super(label, IAction.AS_CHECK_BOX);
+        
         this.viewer = viewer;
         setChecked(true);
+        
         filter = new ExcludeBundlesViewerFilter(state);
     }
 
@@ -46,5 +44,4 @@ public class ExcludeBundlesFilterAction extends Action {
             viewer.removeFilter(filter);
         }
     }
-
 }

@@ -17,11 +17,11 @@
  */
 package info.evanchik.eclipse.karaf.workbench.ui.views.services;
 
+import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.provider.BundleItem;
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 import info.evanchik.eclipse.karaf.workbench.provider.ServiceItem;
-import info.evanchik.eclipse.karaf.workbench.ui.views.PropertyEntry;
 import info.evanchik.eclipse.karaf.workbench.ui.views.bundle.BundleTableLabelProvider;
 
 import java.util.Arrays;
@@ -30,13 +30,11 @@ import org.eclipse.swt.graphics.Image;
 
 /**
  *
- * @author Neil Bartlett
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
 public class ServiceLabelProvider extends BundleTableLabelProvider {
 
-    private static final String LABEL_NULL = "<null>";
     private static final String LABEL_ERROR = "<error>";
 
     public ServiceLabelProvider() {
@@ -73,7 +71,7 @@ public class ServiceLabelProvider extends BundleTableLabelProvider {
             if (columnIndex == 0) {
                 final String[] interfaces = service.getServiceInterfaces();
                 Arrays.sort(interfaces);
-                label = arrayToString(interfaces);
+                label = KarafCorePluginUtils.join(Arrays.asList(interfaces), ",");
             } else {
                 final BundleItem bundle = (BundleItem) service.getAdapter(BundleItem.class);
                 if (bundle != null) {
@@ -82,48 +80,10 @@ public class ServiceLabelProvider extends BundleTableLabelProvider {
                     label = LABEL_ERROR;
                 }
             }
-        } else if (element instanceof PropertyEntry) {
-            final PropertyEntry prop = (PropertyEntry) element;
-
-            if (columnIndex == 0) {
-                label = prop.getKey();
-            } else if (columnIndex == 1) {
-                final Object value = prop.getValue();
-
-                if (value == null) {
-                    label = LABEL_NULL;
-                } else if (value instanceof Object[]) {
-                    label = arrayToString((Object[]) value);
-                } else {
-                    label = value.toString();
-                }
-            } else {
-                label = null;
-            }
         } else {
             label = LABEL_ERROR;
         }
 
         return label;
-    }
-
-    // TODO: This is just join
-    protected static String arrayToString(final Object[] array) {
-        final StringBuffer buffer = new StringBuffer();
-
-        for (int i = 0; i < array.length; i++) {
-            if (i > 0) {
-                buffer.append(',');
-            }
-
-            buffer.append(array[i] == null ? LABEL_NULL : array[i].toString());
-        }
-
-        return buffer.toString();
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
     }
 }

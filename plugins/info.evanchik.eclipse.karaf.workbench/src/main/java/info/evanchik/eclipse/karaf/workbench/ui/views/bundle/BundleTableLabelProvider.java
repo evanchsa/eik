@@ -27,7 +27,6 @@ import org.eclipse.swt.graphics.Image;
 
 /**
  *
- * @author Neil Bartlett
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */

@@ -25,7 +25,6 @@ import org.eclipse.jface.viewers.ViewerFilter;
 
 /**
  *
- * @author Neil Bartlett
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */

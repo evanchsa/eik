@@ -19,17 +19,10 @@ package info.evanchik.eclipse.karaf.workbench.ui.views.services;
 
 import info.evanchik.eclipse.karaf.workbench.provider.RuntimeDataProvider;
 import info.evanchik.eclipse.karaf.workbench.provider.ServiceItem;
-import info.evanchik.eclipse.karaf.workbench.ui.views.PropertyEntry;
 import info.evanchik.eclipse.karaf.workbench.ui.views.bundle.BundlesContentProvider;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
 
 /**
  *
- * @author Neil Bartlett
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
@@ -40,29 +33,6 @@ public class ServicesContentProvider extends BundlesContentProvider {
         Object[] result;
         if (parentElement instanceof RuntimeDataProvider) {
             result = ((RuntimeDataProvider) parentElement).getServices().toArray(new Object[0]);
-        } else if (parentElement instanceof ServiceItem) {
-
-            final ServiceItem service = (ServiceItem) parentElement;
-
-            final Properties properties = (Properties) service.getAdapter(Properties.class);
-
-            final List<PropertyEntry> entries = new ArrayList<PropertyEntry>();
-
-            if (properties == null) {
-                final PropertyEntry pi = new PropertyEntry(service, "Properties unavailable", "");
-                entries.add(pi);
-            } else {
-
-                for (final Object o: properties.keySet()) {
-                    final String key = (String)o;
-                    final PropertyEntry pi = new PropertyEntry(service, key, properties.get(key));
-                    entries.add(pi);
-                }
-            }
-
-            result = entries.toArray(new Object[0]);
-            Arrays.sort(result);
-
         } else {
             result = new Object[0];
         }
@@ -76,10 +46,6 @@ public class ServicesContentProvider extends BundlesContentProvider {
 
         if (result != null) {
             return result;
-        }
-
-        if (element instanceof PropertyEntry) {
-            result = ((PropertyEntry) element).getOwner();
         }
 
         return result;

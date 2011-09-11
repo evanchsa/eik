@@ -108,7 +108,7 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         monitor.subTask("Resolving Features Repository for Apache Karaf Project: " + karafProject.getName());
 
         final FeaturesSection featuresSection = (FeaturesSection) karafPlatformModel.getAdapter(FeaturesSection.class);
-        final FeaturesResolverJob job = new FeaturesResolverJob(karafProject.getName(), featuresSection);
+        final FeaturesResolverJob job = new FeaturesResolverJob(karafProject.getName(), karafPlatformModel, featuresSection);
         job.schedule();
         try {
             job.join();

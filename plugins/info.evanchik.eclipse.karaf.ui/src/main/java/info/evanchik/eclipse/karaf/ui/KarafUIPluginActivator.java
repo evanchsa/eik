@@ -15,7 +15,6 @@ import info.evanchik.eclipse.karaf.core.LogWrapper;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.ops4j.pax.url.mvn.Handler;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -94,8 +93,6 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
         super.start(context);
         plugin = this;
         bundleContext = context;
-
-        new Handler();
     }
 
     @Override

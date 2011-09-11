@@ -1,5 +1,7 @@
 package info.evanchik.eclipse.karaf.ui.features;
 
+import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
+import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
 import info.evanchik.eclipse.karaf.core.features.XmlFeaturesRepository;
@@ -12,11 +14,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.ops4j.pax.url.mvn.MvnURLConnectionFactory;
 
 /**
  * A {@link Job} that loads an Apache Karaf features configuration file
@@ -29,15 +34,20 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public final class FeaturesResolverJob extends Job {
 
+    private static final String ORG_OPS4J_PAX_URL_MVN_CFG = "org.ops4j.pax.url.mvn.cfg";
+
     private final List<FeaturesRepository> featuresRepositories =
         Collections.synchronizedList(new ArrayList<FeaturesRepository>());
 
     private final FeaturesSection featuresSection;
 
-    public FeaturesResolverJob(final String name, final FeaturesSection featuresSection) {
+    private final KarafPlatformModel karafPlatformModel;
+
+    public FeaturesResolverJob(final String name, final KarafPlatformModel karafPlatformModel, final FeaturesSection featuresSection) {
         super("Resolving Features for " + name);
 
         this.featuresSection = featuresSection;
+        this.karafPlatformModel = karafPlatformModel;
     }
 
     /**
@@ -78,7 +88,11 @@ public final class FeaturesResolverJob extends Job {
                 }
 
                 try {
-                    final InputStream stream = new URL(repository).openConnection().getInputStream();
+                    final Properties mvnConfiguration =
+                        KarafCorePluginUtils.loadProperties(karafPlatformModel.getConfigurationDirectory().toFile(), ORG_OPS4J_PAX_URL_MVN_CFG);
+
+                    final MvnURLConnectionFactory urlConnectionFactory = new MvnURLConnectionFactory(mvnConfiguration);
+                    final InputStream stream = urlConnectionFactory.create(new URL(repository)).getInputStream();
 
                     final String repositoryName;
                     if (repository.startsWith(FeaturesLabelProvider.MVN_URL_PREFIX)) {
@@ -100,6 +114,12 @@ public final class FeaturesResolverJob extends Job {
                         return new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable determine location for Features repository: " + repository, e);
                     }
                 } catch (final IOException e) {
+                    if (monitor.isCanceled()) {
+                        return Status.CANCEL_STATUS;
+                    } else {
+                        return new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable load Features repository: " + repository, e);
+                    }
+                } catch (final CoreException e) {
                     if (monitor.isCanceled()) {
                         return Status.CANCEL_STATUS;
                     } else {

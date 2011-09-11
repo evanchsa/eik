@@ -22,7 +22,6 @@ import info.evanchik.eclipse.karaf.ui.internal.KarafLaunchUtils;
 import info.evanchik.eclipse.karaf.ui.internal.PopulateObrFileJob;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -39,7 +38,9 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.pde.internal.core.target.provisional.IBundleContainer;
 import org.eclipse.pde.internal.core.target.provisional.ITargetDefinition;
 import org.eclipse.pde.internal.core.target.provisional.ITargetHandle;
@@ -92,37 +93,47 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
      */
     private void fullBuild(final IProgressMonitor monitor) throws CoreException {
         createTargetPlatform(monitor);
-        buildConfigurationFiles(monitor);
+        buildRuntimeProperties(monitor);
         buildFeaturesRepositories(monitor);
         buildObr(monitor);
     }
 
-    private void buildConfigurationFiles(final IProgressMonitor monitor)
+    private void buildRuntimeProperties(final IProgressMonitor monitor)
         throws CoreException
     {
         final String karafHome = getKarafPlatformModel().getRootDirectory().toOSString();
 
-        final Properties properties = new Properties();
-        properties.put("karaf.home", karafHome);
-        properties.put("karaf.base", karafHome);
-        properties.put("karaf.data", getKarafPlatformModel().getRootDirectory().append("data").toOSString());
+        final Properties combinedProperties = new Properties();
+        combinedProperties.put("karaf.home", karafHome);
+        combinedProperties.put("karaf.base", karafHome);
+        combinedProperties.put("karaf.data", getKarafPlatformModel().getRootDirectory().append("data").toOSString());
 
         for (final String filename : new String[] { "config.properties", "system.properties", "users.properties" }) {
             final Properties fileProperties = KarafCorePluginUtils.loadProperties(getKarafPlatformModel().getConfigurationDirectory().toFile(), filename, true);
-            properties.putAll(fileProperties);
+            combinedProperties.putAll(fileProperties);
         }
 
-        PropertyUtils.interpolateVariables(properties, properties);
+        PropertyUtils.interpolateVariables(combinedProperties, combinedProperties);
 
-        final IPath processConfigurationFile =
-            getKarafProject().getFolder("platform").getRawLocation().append("interpolatedConfiguration").addFileExtension("properties");
+        final IFolder runtimeFolder = getKarafProject().getFolder("runtime");
+        if (!runtimeFolder.exists()) {
+            runtimeFolder.create(true, true, monitor);
+        }
+
+        final IPath runtimeProperties =
+            runtimeFolder.getRawLocation().append("runtime").addFileExtension("properties");
 
         FileOutputStream out;
         try {
-            out = new FileOutputStream(processConfigurationFile.toFile());
-            properties.store(out, "Interpolated Platform Properties");
-        } catch (final FileNotFoundException e) {
+            out = new FileOutputStream(runtimeProperties.toFile());
+            combinedProperties.store(out, "Combined interpolated runtime properties");
         } catch (final IOException e) {
+            throw new CoreException(
+                    new Status(
+                            IStatus.ERROR,
+                            KarafUIPluginActivator.PLUGIN_ID,
+                            "Unable to build runtime property file",
+                            e));
         }
     }
 

@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -90,21 +91,33 @@ public final class FeaturesResolverJob extends Job {
                 }
 
                 try {
+                    // Begin: Refactor this out in to an OPS4j mvn URL configuration
                     final Properties mvnConfiguration =
                         KarafCorePluginUtils.loadProperties(karafPlatformModel.getConfigurationDirectory().toFile(), ORG_OPS4J_PAX_URL_MVN_CFG);
 
                     final IKarafProject karafProject = (IKarafProject) karafPlatformModel.getAdapter(IKarafProject.class);
-                    final Properties configuration = KarafCorePluginUtils.loadProperties(karafProject.getFolder("platform").getRawLocation().toFile(), "interpolatedConfiguration.properties");
-                    PropertyUtils.interpolateVariables(mvnConfiguration, configuration);
+                    final Properties runtimeProperties = karafProject.getRuntimeProperties();
 
-                    final MvnURLConnectionFactory urlConnectionFactory = new MvnURLConnectionFactory(mvnConfiguration);
-                    final InputStream stream = urlConnectionFactory.create(new URL(repository)).getInputStream();
+                    PropertyUtils.interpolateVariables(mvnConfiguration, runtimeProperties);
+
+                    final String defaultRepos = (String) mvnConfiguration.get("org.ops4j.pax.url.mvn.defaultRepositories");
+                    final String repos = (String) mvnConfiguration.get("org.ops4j.pax.url.mvn.repositories");
+
+                    final String combinedRepos = KarafCorePluginUtils.join(Arrays.asList(new String[] { defaultRepos, repos }), ",");
+                    mvnConfiguration.put("org.ops4j.pax.url.mvn.repositories", combinedRepos);
+                    // End: Refactor
 
                     final String repositoryName;
+                    final InputStream stream;
                     if (repository.startsWith(FeaturesLabelProvider.MVN_URL_PREFIX)) {
+                        final MvnURLConnectionFactory urlConnectionFactory = new MvnURLConnectionFactory(mvnConfiguration);
+                        stream = urlConnectionFactory.create(new URL(repository)).getInputStream();
+
                         final String[] repositoryComponents = repository.split("/"); //$NON-NLS-1$
                         repositoryName = repositoryComponents[1] + "-" + repositoryComponents[2]; //$NON-NLS-1$
                     } else {
+                        stream = new URL(repository).openStream();
+
                         repositoryName = repository;
                     }
 

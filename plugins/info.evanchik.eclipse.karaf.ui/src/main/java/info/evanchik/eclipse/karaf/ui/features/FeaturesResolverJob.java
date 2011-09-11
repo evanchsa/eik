@@ -2,9 +2,11 @@ package info.evanchik.eclipse.karaf.ui.features;
 
 import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.PropertyUtils;
 import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
 import info.evanchik.eclipse.karaf.core.features.XmlFeaturesRepository;
+import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 
 import java.io.IOException;
@@ -91,6 +93,10 @@ public final class FeaturesResolverJob extends Job {
                     final Properties mvnConfiguration =
                         KarafCorePluginUtils.loadProperties(karafPlatformModel.getConfigurationDirectory().toFile(), ORG_OPS4J_PAX_URL_MVN_CFG);
 
+                    final IKarafProject karafProject = (IKarafProject) karafPlatformModel.getAdapter(IKarafProject.class);
+                    final Properties configuration = KarafCorePluginUtils.loadProperties(karafProject.getFolder("platform").getRawLocation().toFile(), "interpolatedConfiguration.properties");
+                    PropertyUtils.interpolateVariables(mvnConfiguration, configuration);
+
                     final MvnURLConnectionFactory urlConnectionFactory = new MvnURLConnectionFactory(mvnConfiguration);
                     final InputStream stream = urlConnectionFactory.create(new URL(repository)).getInputStream();
 
@@ -111,13 +117,13 @@ public final class FeaturesResolverJob extends Job {
                     if (monitor.isCanceled()) {
                         return Status.CANCEL_STATUS;
                     } else {
-                        return new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable determine location for Features repository: " + repository, e);
+                        return new Status(IStatus.WARNING, KarafUIPluginActivator.PLUGIN_ID, "Unable determine location for Features repository: " + repository, e);
                     }
                 } catch (final IOException e) {
                     if (monitor.isCanceled()) {
                         return Status.CANCEL_STATUS;
                     } else {
-                        return new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable load Features repository: " + repository, e);
+                        return new Status(IStatus.WARNING, KarafUIPluginActivator.PLUGIN_ID, "Unable load Features repository: " + repository, e);
                     }
                 } catch (final CoreException e) {
                     if (monitor.isCanceled()) {

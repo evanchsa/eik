@@ -10,7 +10,9 @@
  */
 package info.evanchik.eclipse.karaf.ui.project;
 
+import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.PropertyUtils;
 import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
@@ -20,10 +22,12 @@ import info.evanchik.eclipse.karaf.ui.internal.KarafLaunchUtils;
 import info.evanchik.eclipse.karaf.ui.internal.PopulateObrFileJob;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -88,8 +92,38 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
      */
     private void fullBuild(final IProgressMonitor monitor) throws CoreException {
         createTargetPlatform(monitor);
+        buildConfigurationFiles(monitor);
         buildFeaturesRepositories(monitor);
         buildObr(monitor);
+    }
+
+    private void buildConfigurationFiles(final IProgressMonitor monitor)
+        throws CoreException
+    {
+        final String karafHome = getKarafPlatformModel().getRootDirectory().toOSString();
+
+        final Properties properties = new Properties();
+        properties.put("karaf.home", karafHome);
+        properties.put("karaf.base", karafHome);
+        properties.put("karaf.data", getKarafPlatformModel().getRootDirectory().append("data").toOSString());
+
+        for (final String filename : new String[] { "config.properties", "system.properties", "users.properties" }) {
+            final Properties fileProperties = KarafCorePluginUtils.loadProperties(getKarafPlatformModel().getConfigurationDirectory().toFile(), filename, true);
+            properties.putAll(fileProperties);
+        }
+
+        PropertyUtils.interpolateVariables(properties, properties);
+
+        final IPath processConfigurationFile =
+            getKarafProject().getFolder("platform").getRawLocation().append("interpolatedConfiguration").addFileExtension("properties");
+
+        FileOutputStream out;
+        try {
+            out = new FileOutputStream(processConfigurationFile.toFile());
+            properties.store(out, "Interpolated Platform Properties");
+        } catch (final FileNotFoundException e) {
+        } catch (final IOException e) {
+        }
     }
 
     /**

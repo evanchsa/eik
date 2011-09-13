@@ -38,5 +38,6 @@
         <module>info.evanchik.karaf.app</module>
         <module>info.evanchik.eclipse.smk</module>
         <module>info.evanchik.smk.app</module>
+        <module>info.evanchik.eclipse.felix</module>
     </modules>
 </project>

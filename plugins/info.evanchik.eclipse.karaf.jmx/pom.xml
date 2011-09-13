@@ -8,7 +8,7 @@
     
      Contributors:
       Stephen Evanchik - initial implementation
- -->
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>info.evanchik.eclipse.karaf</groupId>
@@ -17,12 +17,12 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>info.evanchik.eclipse.karaf</groupId>
-  <artifactId>info.evanchik.eclipse.karaf.jmx</artifactId>
-  <packaging>jar</packaging>
-  <name>Eclipse Integration for Karaf :: JMX MBeans for Control and Instrumentation</name>
-  <description>JMX MBeans for remote control and information gathering</description>
+  <artifactId>info.evanchik.eclipse.karaf.core</artifactId>
+  <version>0.5.0-SNAPSHOT</version>
+  <packaging>eclipse-plugin</packaging>
+  <name>Eclipse Integration for Karaf :: JMX-Eclipse Bridge</name>
+  <description>Bridge between JMX and Eclipse</description>
   <build>
-    <finalName>${artifactId}_${version}</finalName>
     <resources>
       <resource>
         <filtering>true</filtering>
@@ -31,37 +31,22 @@
           <include>**/*</include>
         </includes>
       </resource>
-      <resource>
-        <directory>${pom.basedir}</directory>
-        <includes>
-          <include>plugin.xml</include>
-          <include>plugin.properties</include>
-          <include>build.properties</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>${pom.basedir}/src/main/resources</directory>
-        <includes>
-          <include>**/*</include>
-        </includes>
-      </resource>
     </resources>
     <plugins>
+      <!-- enable source bundle generation -->
       <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
-          </archive>
-        </configuration>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-source-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <executions>
+          <execution>
+            <id>plugin-source</id>
+            <goals>
+              <goal>plugin-source</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>org.eclipse</groupId>
-      <artifactId>osgi</artifactId>
-      <version>3.3.0-v20070530</version>
-    </dependency>
-  </dependencies>
 </project>

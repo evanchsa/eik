@@ -18,11 +18,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>info.evanchik.eclipse.karaf.wtp</groupId>
   <artifactId>info.evanchik.eclipse.karaf.wtp.core</artifactId>
-  <packaging>jar</packaging>
+  <version>0.5.2-SNAPSHOT</version>
+  <packaging>eclipse-plugin</packaging>
   <name>Eclipse Integration for Karaf :: Eclipse WTP Core Integration</name>
   <description>Provides core functionalty for WTP Integration</description>
   <build>
-    <finalName>${artifactId}_${version}</finalName>
     <resources>
       <resource>
         <filtering>true</filtering>
@@ -31,37 +31,22 @@
           <include>**/*</include>
         </includes>
       </resource>
-      <resource>
-        <directory>${pom.basedir}</directory>
-        <includes>
-          <include>plugin.xml</include>
-          <include>plugin.properties</include>
-          <include>build.properties</include>
-          <include>icons/**/*.gif</include>
-        </includes>
-      </resource>
-      <resource>
-        <directory>${pom.basedir}/src/main/resources</directory>
-        <includes>
-          <include>**/*</include>
-        </includes>
-      </resource>
     </resources>
     <plugins>
+      <!-- enable source bundle generation -->
       <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
-          </archive>
-        </configuration>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-source-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <executions>
+          <execution>
+            <id>plugin-source</id>
+            <goals>
+              <goal>plugin-source</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>jmx</artifactId>
-    </dependency>
-  </dependencies>
 </project>

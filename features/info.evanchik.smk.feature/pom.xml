@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <packaging>eclipse-feature</packaging>
   <groupId>info.evanchik.eclipse.karaf</groupId>
-  <artifactId>info.evanchik.eclipse.karaf.wtp.feature</artifactId>
-  <version>0.5.2-SNAPSHOT</version>
-  <name>Eclipse Integration for Karaf :: Eclipse WTP Integration feature</name>
+  <artifactId>info.evanchik.smk.feature</artifactId>
+  <version>0.5.1-SNAPSHOT</version>
+  <name>Eclipse Integration for Karaf :: Eclipse ServiceMix Kernel Integration feature</name>
 </project>

@@ -17,35 +17,34 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>info.evanchik.eclipse.karaf</groupId>
-  <artifactId>info.evanchik.eclipse.karaf.core</artifactId>
-  <version>0.5.2-SNAPSHOT</version>
+  <artifactId>org.apache.servicemix.kernel.main</artifactId>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
-  <name>Eclipse Integration for Karaf :: WTP UI Integration</name>
-  <description>Provides UI integration for Web Tools Platform</description>
+  <name>Eclipse Integration for Karaf :: Apache SerivceMix Kernel Main interface wrapper</name>
+  <description>Apache SerivceMix Kernel Main interface wrapper bundle</description>
   <build>
     <resources>
       <resource>
-        <filtering>true</filtering>
-        <directory>${pom.basedir}/src/main/filtered-resources</directory>
+        <directory>${pom.basedir}</directory>
+        <includes>
+          <include>lib/**/*.jar</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${pom.basedir}/src/main/resources</directory>
         <includes>
           <include>**/*</include>
         </includes>
       </resource>
     </resources>
     <plugins>
-      <!-- enable source bundle generation -->
       <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-source-plugin</artifactId>
-        <version>${tycho-version}</version>
-        <executions>
-          <execution>
-            <id>plugin-source</id>
-            <goals>
-              <goal>plugin-source</goal>
-            </goals>
-          </execution>
-        </executions>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
       </plugin>
     </plugins>
   </build>

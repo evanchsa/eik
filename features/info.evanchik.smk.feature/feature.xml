@@ -26,7 +26,6 @@
       <import plugin="info.evanchik.eclipse.karaf.core" version="0.5.0" match="greaterOrEqual"/>
       <import plugin="info.evanchik.eclipse.karaf.ui" version="0.5.0" match="greaterOrEqual"/>
       <import plugin="info.evanchik.eclipse.karaf.workbench" version="0.5.0" match="greaterOrEqual"/>
-      <import plugin="info.evanchik.smk.app" version="0.5.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

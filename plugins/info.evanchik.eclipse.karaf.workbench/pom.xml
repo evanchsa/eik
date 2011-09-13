@@ -17,11 +17,11 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>info.evanchik.eclipse.karaf</groupId>
-  <artifactId>info.evanchik.eclipse.karaf.core</artifactId>
-  <version>0.5.2-SNAPSHOT</version>
+  <artifactId>info.evanchik.eclipse.karaf.workbench</artifactId>
+  <version>0.5.3-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
-  <name>Eclipse Integration for Karaf :: WTP UI Integration</name>
-  <description>Provides UI integration for Web Tools Platform</description>
+  <name>Eclipse Integration for Karaf :: EIK Workbench</name>
+  <description>Advanced Eclipse workbench integration</description>
   <build>
     <resources>
       <resource>

@@ -17,11 +17,11 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>info.evanchik.eclipse.karaf</groupId>
-  <artifactId>info.evanchik.eclipse.karaf.core</artifactId>
-  <version>0.5.2-SNAPSHOT</version>
+  <artifactId>info.evanchik.smk.app</artifactId>
+  <version>0.5.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
-  <name>Eclipse Integration for Karaf :: WTP UI Integration</name>
-  <description>Provides UI integration for Web Tools Platform</description>
+  <name>Eclipse Integration for Karaf :: Eclipse OSGi Application for ServiceMix Kernel</name>
+  <description>Eclipse OSGi Application for Apache ServiceMix Kernel</description>
   <build>
     <resources>
       <resource>

@@ -22,48 +22,21 @@
     <name>Eclipse Integration for Karaf :: Eclipse Plugins Integration Parent</name>
     <description>Eclipse integration plugins</description>
     <modules>
+        <module>org.apache.sshd.core</module>
+        <module>org.fusesource.jansi</module>
+        <module>org.apache.mina.core</module>
+        <module>org.osgi.jmx</module>
+        <module>org.ops4j.pax.url.mvn</module>
+        <module>org.apache.aries.jmx.core</module>
+        <module>org.apache.servicemix.kernel.main</module>
         <module>info.evanchik.eclipse.karaf.core</module>
-        <module>info.evanchik.eclipse.karaf.ui</module>
-        <module>info.evanchik.eclipse.karaf.hooks</module>
         <module>info.evanchik.eclipse.karaf.jmx</module>
+        <module>info.evanchik.eclipse.karaf.ui</module>
+        <module>info.evanchik.eclipse.karaf.workbench</module>
         <module>info.evanchik.eclipse.karaf.wtp.core</module>
         <module>info.evanchik.eclipse.karaf.wtp.ui</module>
+        <module>info.evanchik.karaf.app</module>
+        <module>info.evanchik.eclipse.smk</module>
+        <module>info.evanchik.smk.app</module>
     </modules>
-    <properties>
-        <org.osgi.jmx.version>1.0-r6125-patched</org.osgi.jmx.version>
-    </properties>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.eclipse</groupId>
-                <artifactId>pde</artifactId>
-                <version>${org.eclipse.pde.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse</groupId>
-                <artifactId>ui</artifactId>
-                <version>${org.eclipse.ui.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.equinox</groupId>
-                <artifactId>org.eclipse.equinox.common</artifactId>
-                <version>${org.eclipse.equinox.common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.equinox</groupId>
-                <artifactId>org.eclipse.osgi</artifactId>
-                <version>${org.eclipse.osgi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.osgi</groupId>
-                <artifactId>jmx</artifactId>
-                <version>${org.osgi.jmx.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oracle.osgi</groupId>
-                <artifactId>jmx-impl</artifactId>
-                <version>${org.osgi.jmx.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 </project>

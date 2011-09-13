@@ -16,7 +16,7 @@
   <packaging>pom</packaging>
   <name>Eclipse Integration for Karaf</name>
   <version>1.0.0</version>
-  <description>Integration between Apache Felix Karaf and Eclipse PDE</description>
+  <description>Integration between Apache Karaf and Eclipse</description>
  <contributors>
     <contributor>
       <name>Stephen Evanchik</name>
@@ -40,61 +40,27 @@
   </licenses>
   <organization>
     <name>Eclipse Integration for Karaf</name>
-    <url>http://fusesource.com/forge/projects/EIK</url>
+    <url>http://code.google.com/a/eclipselabs.org/p/eik/</url>
   </organization>
-  <scm>
-    <connection>scm:svn:http://fusesource.com/forge/svn/eik/trunk</connection>
-    <developerConnection>scm:svn:http://fusesource.com/forge/svn/eik/trunk</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+  <prerequisites>
+    <maven>3.0</maven>
+  </prerequisites>
   <properties>
-    <apache.karaf.version>1.2.0-SNAPSHOT</apache.karaf.version>
+    <tycho-version>0.12.0</tycho-version>
+    <platform-version-name>helios</platform-version-name>
+    <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
+    <wikitext-site>http://download.eclipse.org/tools/mylyn/update/weekly</wikitext-site>
+    <swtbot-site>http://download.eclipse.org/technology/swtbot/${platform-version-name}/dev-build/update-site</swtbot-site>
+    <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
+
+    <apache.karaf.version>2.2.2</apache.karaf.version>
     <apache.nmr.version>1.0.0</apache.nmr.version>
-    <apache.servicemix.version>4.0.0</apache.servicemix.version>
+    <apache.servicemix.version>4.3.0</apache.servicemix.version>
     <apache.integration.version>1.0.0</apache.integration.version>
-    <!-- Eclipse Equinox SDK Versions -->
-    <javax.servlet.version>2.4.0.v200806031604</javax.servlet.version>
-    <javax.servlet.jsp.version>2.0.0.v200806031607</javax.servlet.jsp.version>
-    <org.apache.commons.el.version>1.0.0.v200806031608</org.apache.commons.el.version>
-    <org.apache.commons.logging.version>1.0.4.v20080605-1930</org.apache.commons.logging.version>
-    <org.apache.jasper.version>5.5.17.v200806031609</org.apache.jasper.version>
-    <org.mortbay.jetty.version>5.1.14.v200806031611</org.mortbay.jetty.version>
-    <org.eclipse.core.runtime.version>3.3.100-v20070530</org.eclipse.core.runtime.version>
-    <org.eclipse.equinox.app.version>1.1.0.v20080421-2006</org.eclipse.equinox.app.version>
-    <org.eclipse.equinox.cm.version>1.0.1.R34x_v20090107-1200</org.eclipse.equinox.cm.version>
-    <org.eclipse.equinox.common.version>3.4.0.v20080421-2006</org.eclipse.equinox.common.version>
-    <org.eclipse.equinox.device.version>1.0.1.v20080303</org.eclipse.equinox.device.version>
-    <org.eclipse.equinox.ds.version>1.0.0.v20080427-0830</org.eclipse.equinox.ds.version>
-    <org.eclipse.equinox.event.version>1.1.0.v20080225</org.eclipse.equinox.event.version>
-    <org.eclipse.equinox.jsp.jasper.registry.version>1.0.0.v20080427-0830</org.eclipse.equinox.jsp.jasper.registry.version>
-    <org.eclipse.equinox.jsp.jasper.version>1.0.100.v20080427-0830</org.eclipse.equinox.jsp.jasper.version>
-    <org.eclipse.equinox.http.version>1.0.200.v20080421-2006</org.eclipse.equinox.http.version>
-    <org.eclipse.equinox.http.jetty.version>1.1.0.v20080425</org.eclipse.equinox.http.jetty.version>
-    <org.eclipse.equinox.http.registry.version>1.0.100.v20080427-0830</org.eclipse.equinox.http.registry.version>
-    <org.eclipse.equinox.http.servlet.version>1.0.100.v20080427-0830</org.eclipse.equinox.http.servlet.version>
-    <org.eclipse.equinox.http.servletbridge.version>1.0.0.v20080427-0830</org.eclipse.equinox.http.servletbridge.version>
-    <org.eclipse.equinox.io.version>1.0.0.v20080218</org.eclipse.equinox.io.version>
-    <org.eclipse.equinox.ip.version>1.0.0.v20080218</org.eclipse.equinox.ip.version>
-    <org.eclipse.equinox.launcher.version>1.0.101.R34x_v20081125</org.eclipse.equinox.launcher.version>
-    <org.eclipse.equinox.log.version>1.1.0.v20080414</org.eclipse.equinox.log.version>
-    <org.eclipse.equinox.metatype.version>1.0.0.v20070827</org.eclipse.equinox.metatype.version>
-    <org.eclipse.equinox.preferences.version>3.2.201.R34x_v20080709</org.eclipse.equinox.preferences.version>
-    <org.eclipse.equinox.registry.version>3.4.0.v20080516-0950</org.eclipse.equinox.registry.version>
-    <org.eclipse.equinox.servletbridge.version>1.0.101.R34x_v20090114-1346</org.eclipse.equinox.servletbridge.version>
-    <org.eclipse.equinox.simpleconfigurator.version>1.0.0.v20080604</org.eclipse.equinox.simpleconfigurator.version>
-    <org.eclipse.equinox.useradmin.version>1.1.1.R34x_v20090107-1200</org.eclipse.equinox.useradmin.version>
-    <org.eclipse.equinox.util.version>1.0.0.v20080414</org.eclipse.equinox.util.version>
-    <org.eclipse.equinox.transforms.hook.version>1.0.0.v20080610</org.eclipse.equinox.transforms.hook.version>
-    <org.eclipse.equinox.transforms.xslt.version>1.0.0.v20080610</org.eclipse.equinox.transforms.xslt.version>
-    <org.eclipse.equinox.wireadmin.version>1.0.0.v20080407</org.eclipse.equinox.wireadmin.version>
-    <org.eclipse.osgi.services.version>3.1.200.v20071203</org.eclipse.osgi.services.version>
-    <org.eclipse.osgi.util.version>3.1.300.v20080303</org.eclipse.osgi.util.version>
-    <org.eclipse.osgi.version>3.4.3.R34x_v20081215-1030</org.eclipse.osgi.version>
-    <org.eclipse.pde.version>3.3.0-v20070608-1300</org.eclipse.pde.version>
-    <org.eclipse.ui.version>3.3.0-I20070614-0800</org.eclipse.ui.version>
   </properties>
   <modules>
     <module>plugins</module>
+    <module>features</module>
   </modules>
   <dependencyManagement>
     <dependencies>
@@ -138,33 +104,100 @@
     </dependencies>
   </dependencyManagement>
   <build>
+    <pluginManagement>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.tycho</groupId>
+            <artifactId>tycho-compiler-plugin</artifactId>
+            <version>${tycho-version}</version>
+            <configuration>
+              <encoding>UTF-8</encoding>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.3</version>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+              <archive>
+                <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
+              </archive>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>2.4.1</version>
+            <configuration>
+              <encoding>ISO-8859-1</encoding>
+            </configuration>
+          </plugin>
+        </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
+        </configuration>
+      </plugin>
+     <plugin>
+        <!-- enable tycho build extension -->
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <!-- configure the p2 target environments for multi-platform build -->
+          <environments>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86</arch>
+            </environment>
+          </environments>
         </configuration>
       </plugin>
     </plugins>
   </build>
   <repositories>
     <repository>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-        <checksumPolicy>warn</checksumPolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-        <updatePolicy>never</updatePolicy>
-        <checksumPolicy>fail</checksumPolicy>
-      </snapshots>
-      <id>eik</id>
-      <name>Eclipse Integration for Karaf Build</name>
-      <url>http://eik.fusesource.org/maven2</url>
-      <layout>default</layout>
+      <id>helios</id>
+      <layout>p2</layout>
+      <url>${eclipse-site}</url>
+    </repository>
+    <repository>
+      <id>swtbot</id>
+      <layout>p2</layout>
+      <url>${swtbot-site}</url>
+    </repository>
+    <repository>
+      <id>wikitext</id>
+      <layout>p2</layout>
+      <url>${wikitext-site}</url>
+    </repository>
+    <repository>
+      <id>orbit</id>
+      <layout>p2</layout>
+      <url>${orbit-site}</url>
     </repository>
     <repository>
       <releases>
@@ -183,4 +216,34 @@
       <layout>default</layout>
     </repository>
   </repositories>
+  <profiles>
+    <profile>
+      <id>platform-helios</id>
+      <activation>
+        <property>
+          <name>platform-version-name</name>
+          <value>helios</value>
+        </property>
+      </activation>
+      <properties>
+        <eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
+        <platform-version>[3.6,3.7)</platform-version>
+        <swtbot-site>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</swtbot-site>
+      </properties>
+    </profile>
+    <profile>
+      <id>platform-indigo</id>
+      <activation>
+        <property>
+          <name>platform-version-name</name>
+          <value>indigo</value>
+        </property>
+      </activation>
+      <properties>
+        <eclipse-site>http://download.eclipse.org/releases/indigo</eclipse-site>
+        <platform-version>[3.7,3.8)</platform-version>
+        <swtbot-site>http://download.eclipse.org/technology/swtbot/indigo/dev-build/update-site</swtbot-site>
+      </properties>
+    </profile>
+  </profiles> 
 </project>

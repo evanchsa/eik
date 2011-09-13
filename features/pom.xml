@@ -19,7 +19,7 @@
   <groupId>info.evanchik.eclipse.karaf</groupId>
   <artifactId>eik-features-parent</artifactId>
   <packaging>pom</packaging>
-  <name>Eclipse Integration for Karaf Features</name>
+  <name>Eclipse Integration for Karaf :: Features</name>
   <version>1.0.0</version>
   <description>Eclipse Features for EIK</description>
   <modules>

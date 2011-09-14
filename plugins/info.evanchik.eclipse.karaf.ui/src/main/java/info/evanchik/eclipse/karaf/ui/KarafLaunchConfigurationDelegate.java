@@ -24,10 +24,6 @@ import info.evanchik.eclipse.karaf.ui.internal.WorkbenchServiceExtensions;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,19 +31,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
-import java.util.jar.JarOutputStream;
-import java.util.jar.Manifest;
-import java.util.zip.ZipEntry;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -415,96 +405,6 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     }
 
     /**
-     * Copies the data of a {@link JarEntry} or {@link ZipEntry} from one JAR to
-     * another
-     *
-     * @param in
-     *            the source JAR {@link JarInputStream}
-     * @param out
-     *            the destination JAR {@link JarOutputStream}
-     * @throws IOException
-     *             thrown if there is a problem copying the data
-     */
-    private void copyJarEntryData(final JarInputStream in, final JarOutputStream out) throws IOException {
-        final byte buffer[] = new byte[4096];
-        int bytesRead;
-        while ((bytesRead = in.read(buffer)) > 0) {
-            out.write(buffer, 0, bytesRead);
-        }
-    }
-
-    /**
-     * Filters all of the JAR entries that begin with {@code org/osgi}.
-     *
-     * @param karafJar
-     *            the source JAR
-     * @return the {@link File} pointing to the filtered JAR
-     * @throws CoreException
-     *             if there is a problem filtering the input JAR's contents
-     */
-    private File filterOsgiInterfaceClasses(final File karafJar) throws CoreException {
-        JarInputStream sourceJar = null;
-        JarOutputStream destJar = null;
-
-        try {
-            sourceJar = new JarInputStream(new FileInputStream(karafJar));
-            final File filteredKarafJar = new File(workingKarafPlatform.getRootDirectory().toFile(), "generatedKaraf.jar");
-
-            filteredKarafJar.getParentFile().mkdirs();
-
-            /*
-             * If the file already exists assume it is up to date
-             */
-            if (filteredKarafJar.exists()) {
-                return filteredKarafJar;
-            }
-
-            final Manifest mf = sourceJar.getManifest();
-            if (mf != null) {
-                destJar = new JarOutputStream(new FileOutputStream(filteredKarafJar), mf);
-            } else {
-                destJar = new JarOutputStream(new FileOutputStream(filteredKarafJar));
-            }
-
-            ZipEntry z = sourceJar.getNextEntry();
-            while (z != null) {
-                if (!z.getName().startsWith("org/osgi")) {
-                    destJar.putNextEntry(z);
-
-                    copyJarEntryData(sourceJar, destJar);
-                } else {
-                    sourceJar.closeEntry();
-                }
-
-                z = sourceJar.getNextEntry();
-            }
-
-            return filteredKarafJar;
-        } catch (final FileNotFoundException e) {
-            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Could not filter OSGi Interfaces from JAR", e));
-        } catch (final IOException e) {
-            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Could not filter OSGi Interfaces from JAR", e));
-        } finally {
-            if (sourceJar != null) {
-                try {
-                    sourceJar.close();
-                } catch (final IOException e) {
-                    // ignore
-                }
-            }
-
-            if (destJar != null) {
-                try {
-                    destJar.close();
-                } catch (final IOException e) {
-                    // ignore
-                }
-            }
-        }
-
-    }
-
-    /**
      * Fixes the {@code karaf.jar} classpath entry so that it is compatible with
      * all versions of Eclipse.
      * <p>
@@ -537,7 +437,11 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
             itr.remove();
 
-            filteredKarafJar = filterOsgiInterfaceClasses(karafJar);
+            // TODO: This should be factored out somehow
+            final IKarafProject karafProject = (IKarafProject) karafPlatform.getAdapter(IKarafProject.class);
+            final IFile file = karafProject.getFile(".bin/runtime/generatedKaraf.jar");
+            final IPath path = file.getRawLocation();
+            filteredKarafJar = path.toFile();
         }
 
         if (filteredKarafJar != null) {

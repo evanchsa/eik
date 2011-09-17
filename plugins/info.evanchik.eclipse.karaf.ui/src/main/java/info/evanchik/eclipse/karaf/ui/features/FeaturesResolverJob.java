@@ -17,9 +17,13 @@
  */
 package info.evanchik.eclipse.karaf.ui.features;
 
+import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
+import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import info.evanchik.eclipse.karaf.core.PropertyUtils;
 import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
 import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
 import info.evanchik.eclipse.karaf.core.features.XmlFeaturesRepository;
+import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 
 import java.io.IOException;
@@ -27,13 +31,17 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.ops4j.pax.url.mvn.MvnURLConnectionFactory;
 
 /**
  * A {@link Job} that loads an Apache Karaf features configuration file
@@ -46,15 +54,20 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public final class FeaturesResolverJob extends Job {
 
+    private static final String ORG_OPS4J_PAX_URL_MVN_CFG = "org.ops4j.pax.url.mvn.cfg";
+
     private final List<FeaturesRepository> featuresRepositories =
         Collections.synchronizedList(new ArrayList<FeaturesRepository>());
 
     private final FeaturesSection featuresSection;
 
-    public FeaturesResolverJob(final String name, final FeaturesSection featuresSection) {
+    private final KarafPlatformModel karafPlatformModel;
+
+    public FeaturesResolverJob(final String name, final KarafPlatformModel karafPlatformModel, final FeaturesSection featuresSection) {
         super("Resolving Features for " + name);
 
         this.featuresSection = featuresSection;
+        this.karafPlatformModel = karafPlatformModel;
     }
 
     /**
@@ -95,13 +108,33 @@ public final class FeaturesResolverJob extends Job {
                 }
 
                 try {
-                    final InputStream stream = new URL(repository).openConnection().getInputStream();
+                    // Begin: Refactor this out in to an OPS4j mvn URL configuration
+                    final Properties mvnConfiguration =
+                        KarafCorePluginUtils.loadProperties(karafPlatformModel.getConfigurationDirectory().toFile(), ORG_OPS4J_PAX_URL_MVN_CFG);
+
+                    final IKarafProject karafProject = (IKarafProject) karafPlatformModel.getAdapter(IKarafProject.class);
+                    final Properties runtimeProperties = karafProject.getRuntimeProperties();
+
+                    PropertyUtils.interpolateVariables(mvnConfiguration, runtimeProperties);
+
+                    final String defaultRepos = (String) mvnConfiguration.get("org.ops4j.pax.url.mvn.defaultRepositories");
+                    final String repos = (String) mvnConfiguration.get("org.ops4j.pax.url.mvn.repositories");
+
+                    final String combinedRepos = KarafCorePluginUtils.join(Arrays.asList(new String[] { defaultRepos, repos }), ",");
+                    mvnConfiguration.put("org.ops4j.pax.url.mvn.repositories", combinedRepos);
+                    // End: Refactor
 
                     final String repositoryName;
+                    final InputStream stream;
                     if (repository.startsWith(FeaturesLabelProvider.MVN_URL_PREFIX)) {
+                        final MvnURLConnectionFactory urlConnectionFactory = new MvnURLConnectionFactory(mvnConfiguration);
+                        stream = urlConnectionFactory.create(new URL(repository)).getInputStream();
+
                         final String[] repositoryComponents = repository.split("/"); //$NON-NLS-1$
                         repositoryName = repositoryComponents[1] + "-" + repositoryComponents[2]; //$NON-NLS-1$
                     } else {
+                        stream = new URL(repository).openStream();
+
                         repositoryName = repository;
                     }
 
@@ -114,9 +147,15 @@ public final class FeaturesResolverJob extends Job {
                     if (monitor.isCanceled()) {
                         return Status.CANCEL_STATUS;
                     } else {
-                        return new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable determine location for Features repository: " + repository, e);
+                        return new Status(IStatus.WARNING, KarafUIPluginActivator.PLUGIN_ID, "Unable determine location for Features repository: " + repository, e);
                     }
                 } catch (final IOException e) {
+                    if (monitor.isCanceled()) {
+                        return Status.CANCEL_STATUS;
+                    } else {
+                        return new Status(IStatus.WARNING, KarafUIPluginActivator.PLUGIN_ID, "Unable load Features repository: " + repository, e);
+                    }
+                } catch (final CoreException e) {
                     if (monitor.isCanceled()) {
                         return Status.CANCEL_STATUS;
                     } else {

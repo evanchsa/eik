@@ -376,7 +376,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
             final Map<String, String> equinoxProperties) {
         final IKarafProject karafProject = (IKarafProject) platformModel.getAdapter(IKarafProject.class);
         // TODO: This should be factored out somehow
-        final IFile file = karafProject.getFile("platform/eclipse/eclipse.obr.xml");
+        final IFile file = karafProject.getFile("platform/eclipse.obr.xml");
         final IPath path = file.getRawLocation();
 
         final String obr = equinoxProperties.get(IKarafConstants.KARAF_OBR_REPOSITORY_PROP);

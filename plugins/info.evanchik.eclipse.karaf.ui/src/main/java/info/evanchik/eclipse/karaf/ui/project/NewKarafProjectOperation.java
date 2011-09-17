@@ -20,6 +20,7 @@ package info.evanchik.eclipse.karaf.ui.project;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
+import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationInitializer;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 
 import java.lang.reflect.InvocationTargetException;
@@ -34,6 +35,9 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.variables.IDynamicVariable;
 import org.eclipse.core.variables.VariablesPlugin;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 /**
@@ -119,6 +123,7 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         newKarafProject.getProjectHandle().getFolder(".bin/platform/deploy").createLink(workingPlatformModel.getParentKarafModel().getUserDeployedDirectory(), 0, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/platform/lib").createLink(workingPlatformModel.getParentKarafModel().getRootDirectory().append("lib"), 0, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/platform/system").createLink(workingPlatformModel.getParentKarafModel().getPluginRootDirectory(), 0, monitor);
+        newKarafProject.getProjectHandle().getFolder(".bin/runtime").create(true, true, monitor);
 
         // TODO: Is this the right way to add the current installation?
         final IDynamicVariable eclipseHomeVariable = VariablesPlugin.getDefault().getStringVariableManager().getDynamicVariable("eclipse_home");
@@ -134,6 +139,16 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         newKarafProject.getProjectHandle().setPersistentProperty(
                 new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafModel"),
                 karafPlatformModel.getRootDirectory().toString());
+
+        final ILaunchConfigurationType launchType =
+            DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType("org.eclipse.pde.ui.EquinoxLauncher");
+
+        final ILaunchConfigurationWorkingCopy launchConfiguration =
+            launchType.newInstance(newKarafProject.getProjectHandle(), newKarafProject.getName());
+
+        KarafLaunchConfigurationInitializer.initializeConfiguration(launchConfiguration);
+
+        launchConfiguration.doSave();
     }
 
     /**

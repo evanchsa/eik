@@ -17,10 +17,13 @@
  */
 package info.evanchik.eclipse.karaf.ui.project;
 
+import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
+
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -125,5 +128,16 @@ public class KarafProject extends PlatformObject implements IKarafProject {
     @Override
     public IProject getProjectHandle() {
         return project;
+    }
+
+    @Override
+    public Properties getRuntimeProperties() {
+        try {
+            return KarafCorePluginUtils.loadProperties(
+                    project.getFolder("runtime").getRawLocation().toFile(),
+                    "runtime.properties");
+        } catch (final CoreException e) {
+            return new Properties();
+        }
     }
 }

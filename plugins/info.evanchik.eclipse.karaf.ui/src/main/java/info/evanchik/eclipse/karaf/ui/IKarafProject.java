@@ -17,6 +17,8 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
+import java.util.Properties;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -66,4 +68,10 @@ public interface IKarafProject extends IAdaptable {
      * @return
      */
     public IProject getProjectHandle();
+
+    /**
+     *
+     * @return
+     */
+    public Properties getRuntimeProperties();
 }

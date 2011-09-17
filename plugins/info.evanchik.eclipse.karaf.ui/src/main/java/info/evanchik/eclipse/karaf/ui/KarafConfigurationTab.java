@@ -21,21 +21,18 @@ import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
-import info.evanchik.eclipse.karaf.core.features.Bundle;
 import info.evanchik.eclipse.karaf.core.features.Feature;
 import info.evanchik.eclipse.karaf.core.features.FeatureResolverImpl;
 import info.evanchik.eclipse.karaf.core.features.Features;
 import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
 import info.evanchik.eclipse.karaf.core.features.XmlFeaturesRepository;
-import info.evanchik.eclipse.karaf.ui.features.FeaturesContentProvider;
-import info.evanchik.eclipse.karaf.ui.features.FeaturesLabelProvider;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
@@ -49,7 +46,16 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -66,11 +72,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -78,13 +83,219 @@ import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
  */
 public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
+    /**
+     *
+     * @author Stephen Evanchik (evanchsa@gmail.com)
+     *
+     */
+    private static final class AvailableFeature {
+
+        private final String feature;
+
+        private final String featuresRepository;
+
+        /**
+         *
+         * @param feature
+         * @param featuresRepository
+         */
+        public AvailableFeature(final Feature feature, final FeaturesRepository featuresRepository) {
+            if (feature == null) {
+                throw new NullPointerException("feature");
+            }
+
+            this.feature = feature.getName();
+
+            if (featuresRepository != null) {
+                this.featuresRepository = featuresRepository.getName();
+            } else {
+                this.featuresRepository = "";
+            }
+        }
+
+        /**
+         *
+         * @param feature
+         * @param featuresRepository
+         */
+        public AvailableFeature(final String feature, final String featuresRepository) {
+            this.feature = feature;
+            this.featuresRepository = featuresRepository;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+
+            if (obj == null) {
+                return false;
+            }
+
+            if (!(obj instanceof AvailableFeature)) {
+                return false;
+            }
+
+            final AvailableFeature other = (AvailableFeature) obj;
+            if (feature == null) {
+                if (other.feature != null) {
+                    return false;
+                }
+            } else if (!feature.equals(other.feature)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        public String getFeatureName() {
+            return feature;
+        }
+
+        public String getFeatureVersion() {
+            return feature;
+        }
+
+        public String getRepositoryName() {
+            return featuresRepository;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + (feature == null ? 0 : feature.hashCode());
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return feature;
+        }
+    }
+
+    /**
+     *
+     * @author Stephen Evanchik (evanchsa@gmail.com)
+     *
+     */
+    private final class AvailableFeaturesContentProvider implements IStructuredContentProvider {
+
+        private final List<AvailableFeature> availableFeatures =
+            Collections.synchronizedList(new ArrayList<AvailableFeature>());
+
+        @Override
+        public void dispose() {
+        }
+
+        @Override
+        public Object[] getElements(final Object inputElement) {
+            return availableFeatures.toArray();
+        }
+
+        @Override
+        public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+            if (newInput == null) {
+                return;
+            }
+
+            availableFeatures.clear();
+
+            @SuppressWarnings("unchecked")
+            final List<FeaturesRepository> featuresRepositories = (List<FeaturesRepository>) newInput;
+            for (final FeaturesRepository  repository : featuresRepositories) {
+                for (final Feature f : repository.getFeatures().getFeatures()) {
+                    availableFeatures.add(new AvailableFeature(f, repository));
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @author Stephen Evanchik (evanchsa@gmail.com)
+     *
+     */
+    private final class AvailableFeaturesLabelProvider extends LabelProvider implements ITableLabelProvider {
+
+        @Override
+        public Image getColumnImage(final Object element, final int columnIndex) {
+            if (columnIndex == 0) {
+                return KarafUIPluginActivator.getDefault().getImageRegistry().get(KarafUIPluginActivator.FEATURE_OBJ_IBM);
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public String getColumnText(final Object element, final int columnIndex) {
+
+            final AvailableFeature feature = (AvailableFeature) element;
+            switch (columnIndex) {
+            case 0:
+                return feature.getFeatureName();
+            case 1:
+                return feature.getFeatureVersion();
+            case 2:
+                return feature.getRepositoryName();
+            default:
+                return null;
+            }
+        }
+    }
+
+    /**
+     *
+     * @author Stephen Evanchik (evanchsa@gmail.com)
+     *
+     */
+    private final class BootFeaturesContentProvider implements IStructuredContentProvider {
+
+        @Override
+        public void dispose() {
+        }
+
+        @Override
+        public Object[] getElements(final Object inputElement) {
+            return bootFeaturesList.toArray();
+        }
+
+        @Override
+        public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+        }
+    }
+
+    /**
+     *
+     * @author Stephen Evanchik (evanchsa@gmail.com)
+     *
+     */
+    private final class BootFeaturesLabelProvider extends LabelProvider {
+
+        @Override
+        public Image getImage(final Object element) {
+            return KarafUIPluginActivator.getDefault().getImageRegistry().get(KarafUIPluginActivator.FEATURE_OBJ_IBM);
+        }
+    }
+
     public static final String ID = "info.evanchik.eclipse.karaf.ui.karafGeneralLaunchConfigurationTab"; //$NON-NLS-1$
+
+    private CheckboxTableViewer availableFeaturesViewer;
+
+    private Button bootFeatureOrderDecreaseButton;
+
+    private Button bootFeatureOrderIncreaseButton;
+
+    private Button bootFeatureRemoveButton;
+
+    private final List<String> bootFeaturesList = Collections.synchronizedList(new ArrayList<String>());
+
+    private TableViewer bootFeaturesViewer;
 
     private Composite control;
 
     private Button enableFeaturesManagement;
-
-    private ContainerCheckedTreeViewer installedFeatures;
 
     private KarafPlatformModel karafPlatformModel;
 
@@ -94,11 +305,9 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
     private Button remoteConsole;
 
-    private Text remoteConsoleUsername;
-
     private Text remoteConsolePassword;
 
-    private final List<String> selectedFeatures = Collections.synchronizedList(new ArrayList<String>());
+    private Text remoteConsoleUsername;
 
     @Override
     public void createControl(final Composite parent) {
@@ -147,10 +356,14 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
             initializeKarafPlatformModel();
 
-            final String featuresString = configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, "");
-            final String[] features = featuresString.split(",");
-            selectedFeatures.clear();
-            selectedFeatures.addAll(Arrays.asList(features));
+            final String storedBootFeatures = configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, "");
+            final String[] features = storedBootFeatures.split(",");
+            for (final String feature : features) {
+                // TODO: Not really efficient
+                if (!feature.isEmpty() && !bootFeaturesList.contains(feature)) {
+                    bootFeaturesList.add(feature);
+                }
+            }
 
             // TODO: This should be factored out and it should be easy to get a List of FeaturesRepository
             final IFolder featuresFolder = karafProject.getFolder("features");
@@ -173,25 +386,32 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
                     }
                 });
 
-                final String storedBootFeatures =
-                    configuration.getAttribute(
-                        KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES,
-                        "");
-
                 final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
 
                 final List<Object> checkedFeatures = new ArrayList<Object>();
-                for (final String s : storedBootFeatures.split(",")) {
-                    final Object[] path = fr.getFeaturePath(s);
-                    Collections.addAll(checkedFeatures, path);
+                for (final String s : bootFeaturesList) {
+                    final Feature f = fr.findFeature(s);
+
+                    if (f == null) {
+                        // TODO: Set some sort of warning
+                        continue;
+                    }
+
+                    final Features featuresContainer = (Features) f.getParent();
+                    final FeaturesRepository featuresRepository = featuresContainer.getParent();
+
+                    checkedFeatures.add(new AvailableFeature(f, featuresRepository));
                 }
 
                 Display.getDefault().syncExec(new Runnable() {
                     @Override
                     public void run() {
                         if (!getControl().isDisposed()) {
-                            installedFeatures.setInput(featuresRepositories);
-                            installedFeatures.setCheckedElements(checkedFeatures.toArray());
+                            bootFeaturesViewer.setInput(bootFeaturesList);
+                            bootFeaturesViewer.refresh();
+
+                            availableFeaturesViewer.setInput(featuresRepositories);
+                            availableFeaturesViewer.setCheckedElements(checkedFeatures.toArray());
                         }
                     };
                 });
@@ -219,7 +439,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_REMOTE_CONSOLE_PASSWORD, remoteConsolePassword.getText());
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_REMOTE_CONSOLE_USERNAME, remoteConsoleUsername.getText());
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_FEATURES_MANAGEMENT, enableFeaturesManagement.getSelection());
-        final String featuresString = KarafCorePluginUtils.join(selectedFeatures, ",");
+        final String featuresString = KarafCorePluginUtils.join(bootFeaturesList, ",");
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, featuresString);
     }
 
@@ -250,23 +470,152 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
     }
 
     /**
+     * @param group
+     */
+    private void createAvailableFeaturesControls(final Group group) {
+        GridData gd;
+        availableFeaturesViewer = CheckboxTableViewer.newCheckList(group, SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
+        final Table tree = availableFeaturesViewer.getTable();
+
+        final TableColumn column1 = new TableColumn(tree, SWT.LEFT);
+        column1.setText("Feature");
+        column1.setWidth(250);
+
+        final TableColumn column2 = new TableColumn(tree, SWT.LEFT);
+        column2.setText("Version");
+        column2.setWidth(150);
+
+        final TableColumn column3 = new TableColumn(tree, SWT.LEFT);
+        column3.setText("Repository");
+        column3.setWidth(150);
+
+        gd = new GridData(GridData.FILL_BOTH);
+        gd.heightHint = 200;
+        tree.setLayoutData(gd);
+        tree.setHeaderVisible(true);
+
+        availableFeaturesViewer.setContentProvider(new AvailableFeaturesContentProvider());
+        availableFeaturesViewer.setLabelProvider(new AvailableFeaturesLabelProvider());
+        availableFeaturesViewer.setInput(null);
+        availableFeaturesViewer.addCheckStateListener(new ICheckStateListener() {
+
+            @Override
+            public void checkStateChanged(final CheckStateChangedEvent event) {
+                final AvailableFeature f = (AvailableFeature) event.getElement();
+                if (event.getChecked()) {
+                    if (!bootFeaturesList.contains(f.getFeatureName())) {
+                        bootFeaturesList.add(f.getFeatureName());
+                        bootFeaturesViewer.refresh();
+                    }
+                } else {
+                    bootFeaturesList.remove(f.getFeatureName());
+                    bootFeaturesViewer.refresh();
+                }
+                KarafConfigurationTab.this.updateLaunchConfigurationDialog();
+            }
+        });
+    }
+
+    /**
+     * @param group
+     */
+    private void createBootFeatureManagementControls(final Group group) {
+        // Boot feature management
+        final Composite viewerComposite = new Composite(group, SWT.NONE);
+        GridLayout layout = new GridLayout(2, false);
+        layout.marginHeight = layout.marginWidth = 0;
+
+        viewerComposite.setLayout(layout);
+
+        GridData data = new GridData(GridData.FILL_BOTH);
+        data.heightHint = 200;
+        data.widthHint = 200;
+        viewerComposite.setLayoutData(data);
+
+        bootFeaturesViewer = new TableViewer(viewerComposite, SWT.BORDER | SWT.MULTI);
+        bootFeaturesViewer.setLabelProvider(new BootFeaturesLabelProvider());
+        bootFeaturesViewer.setContentProvider(new BootFeaturesContentProvider());
+        bootFeaturesViewer.setInput(bootFeaturesList);
+        bootFeaturesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            @Override
+            public void selectionChanged(final SelectionChangedEvent event) {
+                handleBootFeatureSelectionChange();
+            }
+        });
+
+        data = new GridData(GridData.FILL_BOTH);
+        data.heightHint = 50;
+        data.widthHint = 200;
+        bootFeaturesViewer.getTable().setLayoutData(data);
+
+        final Composite buttonComposite = new Composite(viewerComposite, SWT.RIGHT);
+        layout = new GridLayout();
+        layout.marginHeight = layout.marginWidth = 0;
+        buttonComposite.setLayout(layout);
+
+        data = new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.GRAB_VERTICAL);
+        buttonComposite.setLayoutData(data);
+
+        bootFeatureOrderIncreaseButton = new Button(buttonComposite, SWT.PUSH);
+        bootFeatureOrderIncreaseButton.setText("Up");
+        bootFeatureOrderIncreaseButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        bootFeatureOrderIncreaseButton.addListener(SWT.Selection, new Listener() {
+
+            @Override
+            public void handleEvent(final Event event) {
+                if (event.widget == bootFeatureOrderIncreaseButton) {
+                    handleBootFeatureMove(-1);
+                    KarafConfigurationTab.this.updateLaunchConfigurationDialog();
+                }
+            }
+        });
+
+        bootFeatureRemoveButton = new Button(buttonComposite, SWT.PUSH);
+        bootFeatureRemoveButton.setText("Remove");
+        bootFeatureRemoveButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        bootFeatureRemoveButton.addListener(SWT.Selection, new Listener() {
+
+            @Override
+            public void handleEvent(final Event event) {
+                if (event.widget == bootFeatureRemoveButton) {
+                    removeSelectedBootFeatures();
+                    KarafConfigurationTab.this.updateLaunchConfigurationDialog();
+                }
+            }
+        });
+
+        bootFeatureOrderDecreaseButton = new Button(buttonComposite, SWT.PUSH);
+        bootFeatureOrderDecreaseButton.setText("Down");
+        bootFeatureOrderDecreaseButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        bootFeatureOrderDecreaseButton.addListener(SWT.Selection, new Listener() {
+
+            @Override
+            public void handleEvent(final Event event) {
+                if (event.widget == bootFeatureOrderDecreaseButton) {
+                    handleBootFeatureMove(1);
+                    KarafConfigurationTab.this.updateLaunchConfigurationDialog();
+                }
+            }
+        });
+    }
+
+    /**
      * Creates the necessary UI elements that control what kind of console to
      * use (i.e. remote, local or both)
      *
      * @param parent
      */
     private void createConsoleBlock(final Composite parent) {
-        final Font font = parent.getFont();
         final Composite comp = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout(1, true);
         comp.setLayout(layout);
-        comp.setFont(font);
+        comp.setFont(parent.getFont());
 
         final GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         comp.setLayoutData(gd);
 
         final Group group = new Group(comp, SWT.NONE);
-        group.setFont(font);
         layout = new GridLayout(1, false);
         group.setLayout(layout);
         group.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -277,12 +626,12 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
         localConsole.addSelectionListener(new SelectionListener() {
 
             @Override
-            public void widgetSelected(final SelectionEvent e) {
+            public void widgetDefaultSelected(final SelectionEvent e) {
                 scheduleUpdateJob();
             }
 
             @Override
-            public void widgetDefaultSelected(final SelectionEvent e) {
+            public void widgetSelected(final SelectionEvent e) {
                 scheduleUpdateJob();
             }
         });
@@ -290,28 +639,31 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
         final KeyListener keyListener = new KeyListener() {
 
             @Override
-            public void keyReleased(final KeyEvent e) {
+            public void keyPressed(final KeyEvent e) {
                 scheduleUpdateJob();
             }
 
             @Override
-            public void keyPressed(final KeyEvent e) {
+            public void keyReleased(final KeyEvent e) {
                 scheduleUpdateJob();
             }
         };
 
         remoteConsole = createCheckButton(group, "Remote console");
 
-        Label l = new Label(group, SWT.NONE);
+        final Composite credentialsBlock = new Composite(group, SWT.NONE);
+        credentialsBlock.setLayout(new GridLayout(2, true));
+
+        Label l = new Label(credentialsBlock, SWT.NONE);
         l.setText("Username");
-        remoteConsoleUsername = new Text(group, SWT.BORDER);
+        remoteConsoleUsername = new Text(credentialsBlock, SWT.BORDER);
         remoteConsoleUsername.setText("karaf");
         remoteConsoleUsername.setLayoutData(new GridData(175, 20));
         remoteConsoleUsername.addKeyListener(keyListener);
 
-        l = new Label(group, SWT.NONE);
+        l = new Label(credentialsBlock, SWT.NONE);
         l.setText("Password");
-        remoteConsolePassword = new Text(group, SWT.BORDER|SWT.PASSWORD);
+        remoteConsolePassword = new Text(credentialsBlock, SWT.BORDER|SWT.PASSWORD);
         remoteConsolePassword.setText("karaf");
         remoteConsolePassword.setLayoutData(new GridData(175, 20));
         remoteConsolePassword.addKeyListener(keyListener);
@@ -319,12 +671,12 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
         remoteConsole.addSelectionListener(new SelectionListener() {
 
             @Override
-            public void widgetSelected(final SelectionEvent e) {
+            public void widgetDefaultSelected(final SelectionEvent e) {
                 updateRemoteConsoleControls();
             }
 
             @Override
-            public void widgetDefaultSelected(final SelectionEvent e) {
+            public void widgetSelected(final SelectionEvent e) {
                 updateRemoteConsoleControls();
             }
 
@@ -346,20 +698,12 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
     private void createFeaturesBlock(final Composite parent) {
 
         final Font font = parent.getFont();
-        final Composite comp = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout(1, true);
-        comp.setLayout(layout);
-        comp.setFont(font);
+        final GridLayout layout = new GridLayout(2, false);
 
-        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-        comp.setLayoutData(gd);
-
-        final Group group = new Group(comp, SWT.NONE);
+        final Group group = new Group(parent, SWT.NONE);
         group.setFont(font);
-        layout = new GridLayout(1, false);
         group.setLayout(layout);
         group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
         group.setText("Features");
 
         enableFeaturesManagement = new Button(group, SWT.CHECK);
@@ -369,62 +713,88 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
             @Override
             public void handleEvent(final Event event) {
                 if (event.widget == enableFeaturesManagement) {
-                    final boolean enabledState = installedFeatures.getControl().getEnabled();
-                    installedFeatures.getControl().setEnabled(!enabledState);
+                    final boolean enabledState = availableFeaturesViewer.getControl().getEnabled();
+                    availableFeaturesViewer.getControl().setEnabled(!enabledState);
+                    bootFeaturesViewer.getControl().setEnabled(!enabledState);
+                    bootFeatureOrderDecreaseButton.setEnabled(!enabledState);
+                    bootFeatureOrderIncreaseButton.setEnabled(!enabledState);
+                    bootFeatureRemoveButton.setEnabled(!enabledState);
+
                     KarafConfigurationTab.this.updateLaunchConfigurationDialog();
                 }
             }
         });
+        enableFeaturesManagement.setLayoutData(new GridData(SWT.BEGINNING));
 
-        installedFeatures = new ContainerCheckedTreeViewer(group, SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
-        final Tree tree = installedFeatures.getTree();
+        final Label bootFeatureRankLabel = new Label(group, SWT.NONE);
+        bootFeatureRankLabel.setText("Boot Feature Rank");
+        bootFeatureRankLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-        final TreeColumn column1 = new TreeColumn(tree, SWT.LEFT);
-        column1.setText("Feature");
-        column1.setWidth(300);
+        createAvailableFeaturesControls(group);
+        createBootFeatureManagementControls(group);
+    }
 
-        final TreeColumn column2 = new TreeColumn(tree, SWT.LEFT);
-        column2.setText("Version");
-        column2.setWidth(175);
+    /**
+     *
+     */
+    private void handleBootFeatureSelectionChange() {
+        final IStructuredSelection selection = (IStructuredSelection) bootFeaturesViewer.getSelection();
 
-        gd = new GridData(GridData.FILL_BOTH);
-        gd.heightHint = 300;
-        tree.setLayoutData(gd);
-        tree.setHeaderVisible(true);
+        final boolean notEmpty = !selection.isEmpty();
 
-        installedFeatures.setContentProvider(new FeaturesContentProvider());
-        installedFeatures.setLabelProvider(new FeaturesLabelProvider());
-        installedFeatures.setInput(null);
-        installedFeatures.addCheckStateListener(new ICheckStateListener() {
+        @SuppressWarnings("unchecked")
+        final Iterator<String> selectionElements = selection.iterator();
 
-            @Override
-            public void checkStateChanged(final CheckStateChangedEvent event) {
-                final Object[] elements = installedFeatures.getCheckedElements();
+        boolean first = false;
+        boolean last = false;
+        final int lastBootFeature = bootFeaturesList.size() - 1;
 
-                for (final Object e : elements) {
-                    if (e instanceof Feature && ((Feature)e).getParent() instanceof Features) {
-                        final Feature f = (Feature) e;
-                        if (!selectedFeatures.contains(f.getName())) {
-                            selectedFeatures.add(f.getName());
-                        }
-                    } else if (e instanceof Bundle) {
-                        final Bundle b = (Bundle) e;
-                        if (b.getParent() instanceof Feature) {
-                            final Feature f = (Feature) b.getParent();
-                            if (!selectedFeatures.contains(f)) {
-                                selectedFeatures.add(f.getName());
-                            }
-                        } else {
-                            // Intentionally empty
-                        }
-                    } else {
-                        // Intentionally empty
-                    }
-                }
-
-                KarafConfigurationTab.this.updateLaunchConfigurationDialog();
+        while (selectionElements.hasNext()) {
+            final Object element = selectionElements.next();
+            if(!first && bootFeaturesList.indexOf(element) == 0) {
+                first = true;
             }
-        });
+
+            if (!last && bootFeaturesList.indexOf(element) == lastBootFeature) {
+                last = true;
+            }
+        }
+
+        bootFeatureOrderIncreaseButton.setEnabled(notEmpty && !first);
+        bootFeatureOrderDecreaseButton.setEnabled(notEmpty && !last);
+    }
+
+    /**
+     *
+     * @param direction
+     */
+    private void handleBootFeatureMove(final int direction) {
+        if (direction != -1 || direction != 1) {
+            throw new IllegalArgumentException("direction must be -1 or 1. Value: " + direction);
+        }
+
+        final IStructuredSelection selection = (IStructuredSelection)bootFeaturesViewer.getSelection();
+
+        @SuppressWarnings("unchecked")
+        final List<String> selectionList = selection.toList();
+        final String[] movedBootFeatures = new String[bootFeaturesList.size()];
+
+        for (final String config : selectionList) {
+            final int i = bootFeaturesList.indexOf(config);
+            movedBootFeatures[i + direction] = config;
+        }
+
+        bootFeaturesList.removeAll(selectionList);
+
+        for (int j = 0; j < movedBootFeatures.length; j++) {
+            final String config = movedBootFeatures[j];
+            if (config != null) {
+                bootFeaturesList.add(j, config);
+            }
+        }
+
+        bootFeaturesViewer.refresh();
+        handleBootFeatureSelectionChange();
     }
 
     /**
@@ -440,5 +810,22 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
         if (karafProject== null) {
             throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to locate Karaf Project in Workspace"));
         }
+    }
+
+    /**
+     *
+     */
+    private void removeSelectedBootFeatures() {
+        final IStructuredSelection selection = (IStructuredSelection) bootFeaturesViewer.getSelection();
+
+        @SuppressWarnings("unchecked")
+        final Iterator<String> iter = selection.iterator();
+        while (iter.hasNext()) {
+            final String config = iter.next();
+            bootFeaturesList.remove(config);
+            availableFeaturesViewer.setChecked(new AvailableFeature(config, ""), false);
+        }
+
+        bootFeaturesViewer.refresh();
     }
 }

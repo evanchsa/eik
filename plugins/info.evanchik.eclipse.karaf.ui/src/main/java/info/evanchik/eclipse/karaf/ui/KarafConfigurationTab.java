@@ -600,17 +600,15 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
      * @param parent
      */
     private void createConsoleBlock(final Composite parent) {
-        final Font font = parent.getFont();
         final Composite comp = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout(1, true);
         comp.setLayout(layout);
-        comp.setFont(font);
+        comp.setFont(parent.getFont());
 
         final GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         comp.setLayoutData(gd);
 
         final Group group = new Group(comp, SWT.NONE);
-        group.setFont(font);
         layout = new GridLayout(1, false);
         group.setLayout(layout);
         group.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -646,16 +644,19 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
         remoteConsole = createCheckButton(group, "Remote console");
 
-        Label l = new Label(group, SWT.NONE);
+        final Composite credentialsBlock = new Composite(group, SWT.NONE);
+        credentialsBlock.setLayout(new GridLayout(2, true));
+
+        Label l = new Label(credentialsBlock, SWT.NONE);
         l.setText("Username");
-        remoteConsoleUsername = new Text(group, SWT.BORDER);
+        remoteConsoleUsername = new Text(credentialsBlock, SWT.BORDER);
         remoteConsoleUsername.setText("karaf");
         remoteConsoleUsername.setLayoutData(new GridData(175, 20));
         remoteConsoleUsername.addKeyListener(keyListener);
 
-        l = new Label(group, SWT.NONE);
+        l = new Label(credentialsBlock, SWT.NONE);
         l.setText("Password");
-        remoteConsolePassword = new Text(group, SWT.BORDER|SWT.PASSWORD);
+        remoteConsolePassword = new Text(credentialsBlock, SWT.BORDER|SWT.PASSWORD);
         remoteConsolePassword.setText("karaf");
         remoteConsolePassword.setLayoutData(new GridData(175, 20));
         remoteConsolePassword.addKeyListener(keyListener);

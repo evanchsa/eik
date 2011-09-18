@@ -15,19 +15,13 @@ import info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 import org.apache.commons.collections.Predicate;
 import org.eclipse.core.runtime.CoreException;
@@ -44,43 +38,6 @@ import org.osgi.framework.Bundle;
 public final class KarafCorePluginUtils {
 
     private static final String INCLUDES_PROPERTY = "${includes}"; //$NON-NLS-1$
-
-    /**
-     * Copies the source file to the destination file
-     *
-     * @param src
-     *            the source file
-     * @param dst
-     *            the destination file
-     * @throws IOException
-     *             if there is a problem during the file copy
-     */
-    public static void copyFile(final File src, final File dst) throws IOException {
-        if (!src.exists()) {
-            throw new FileNotFoundException("File does not exist: " + src.getAbsolutePath());
-        }
-
-        if (!dst.exists()) {
-            dst.createNewFile();
-        }
-
-        FileChannel source = null;
-        FileChannel destination = null;
-        try {
-            source = new FileInputStream(src).getChannel();
-            destination = new FileOutputStream(dst).getChannel();
-
-            destination.transferFrom(source, 0, source.size());
-        } finally {
-            if (source != null) {
-                source.close();
-            }
-
-            if (destination != null) {
-                destination.close();
-            }
-        }
-    }
 
     /**
      * Create a JVM system property argument (e.g -DpropertyName=propertyValue).
@@ -220,25 +177,6 @@ public final class KarafCorePluginUtils {
     }
 
     /**
-     * Reads a specified MANIFEST.MF entry from the JAR
-     *
-     * @param src
-     *            the JAR file
-     * @param manifestHeader
-     *            the name of the header to read
-     * @return the header as read from the MANIFEST.MF or null if it does not
-     *         exist or there was a problem reading the JAR
-     * @throws IOException
-     *             if there is a problem reading the JAR
-     */
-    public static String getJarManifestHeader(final File src, final String manifestHeader) throws IOException {
-        final JarFile jar = new JarFile(src);
-        final Manifest mf = jar.getManifest();
-
-        return (String) mf.getMainAttributes().get(manifestHeader);
-    }
-
-    /**
      * Searches a directory to the specified depth for library files.<br>
      * <br>
      * This method is recursive so be careful with the maximum depth
@@ -288,23 +226,6 @@ public final class KarafCorePluginUtils {
     }
 
     /**
-     * Extracts the last path component from a URL or filename such as an Maven2
-     * URL:<br> {@code
-     * mvn:org/apache/servicemix/group/artifactId/version/filename-version.jar}
-     *
-     * @param pathString
-     *            An URL or File path such as an Apache ServiceMix Maven2 URL of
-     *            the form: {@code
-     *            mvn:org/apache/servicemix/group/artifactId/version/filename-version
-     *            .jar}
-     * @return The filename component of the URL, e.g. {@code
-     *         filename-version.jar}
-     */
-    public static String getLastPathComponent(final String pathString) {
-        return pathString.substring(pathString.lastIndexOf('/') + 1);
-    }
-
-    /**
      * Implementation of join using a {@link StringBuffer}
      *
      * @param items
@@ -327,40 +248,6 @@ public final class KarafCorePluginUtils {
     }
 
     /**
-     * Loads a properties file as a resource from the specified {@link Bundle}
-     *
-     * @param theBundle
-     *            the {@link Bundle} to use as the source of the properties file
-     * @param propertiesFile
-     *            the path, relative to the root of the bundle, to the
-     *            properties file
-     * @return a {@link Properties} object or null if there was an error
-     */
-    public static Properties loadProperties(final Bundle theBundle, final String propertiesFile) {
-        final Properties properties = new Properties();
-
-        final URL entryUrl = theBundle.getEntry(propertiesFile);
-
-        if (entryUrl == null) {
-            return null;
-        }
-
-        try {
-            final InputStream in = entryUrl.openStream();
-
-            properties.load(in);
-
-            in.close();
-
-            return properties;
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    /**
      * Loads a configuration file relative to the specified base
      * directory
      *
@@ -374,18 +261,7 @@ public final class KarafCorePluginUtils {
      *             if there is a problem loading the file
      */
     public static Properties loadProperties(final File base, final String filename) throws CoreException {
-        final File f = new File(base, filename);
-
-        try {
-            final Properties p = new Properties();
-            p.load(new FileInputStream(f));
-
-            return p;
-        } catch (final IOException e) {
-            final String message = "Unable to load configuration file from configuration directory: " + f.getAbsolutePath();
-            throw new CoreException(new Status(IStatus.ERROR, KarafCorePluginActivator.PLUGIN_ID, IStatus.OK, message, e));
-        }
-
+       return loadProperties(base, filename, false);
     }
 
     /**
@@ -412,20 +288,22 @@ public final class KarafCorePluginUtils {
             final Properties p = new Properties();
             p.load(new FileInputStream(f));
 
-            final String includes = p.getProperty(INCLUDES_PROPERTY);
-            if (includes != null) {
-                final StringTokenizer st = new StringTokenizer(includes, "\" ", true);
-                if (st.countTokens() > 0) {
-                    String location;
-                    do {
-                        location = nextLocation(st);
-                        if (location != null) {
-                            final Properties includeProps = loadProperties(base, location);
-                            p.putAll(includeProps);
-                        }
-                    } while (location != null);
+            if (processIncludes) {
+                final String includes = p.getProperty(INCLUDES_PROPERTY);
+                if (includes != null) {
+                    final StringTokenizer st = new StringTokenizer(includes, "\" ", true);
+                    if (st.countTokens() > 0) {
+                        String location;
+                        do {
+                            location = nextLocation(st);
+                            if (location != null) {
+                                final Properties includeProps = loadProperties(base, location);
+                                p.putAll(includeProps);
+                            }
+                        } while (location != null);
+                    }
+                    p.remove(INCLUDES_PROPERTY);
                 }
-                p.remove(INCLUDES_PROPERTY);
             }
 
             return p;

@@ -10,8 +10,6 @@
  */
 package info.evanchik.eclipse.karaf.core;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,35 +30,6 @@ public final class PropertyUtils {
      */
 
     /**
-     * Retrieves the canonicalized directory from the specified path.
-     *
-     * @param path
-     *            the path to test
-     * @param errPrefix
-     *            a String to use to provide a specific error message
-     * @return the canonicalized {@link File}
-     *
-     * @throws IllegalArgumentException
-     *             if there is an {@link IOException} accessing the directory or
-     *             if the path does not exist or if the path is not a directory
-     */
-    public static File getCanonicalDirectory(String path, String errPrefix) {
-        File rc;
-        try {
-            rc = new File(path).getCanonicalFile();
-        } catch (IOException e) {
-            throw new IllegalArgumentException(errPrefix + " '" + path + "' : " + e.getMessage()); //$NON-NLS-1$ $NON-NLS-2$
-        }
-        if (!rc.exists()) {
-            throw new IllegalArgumentException(errPrefix + " '" + path + "' : does not exist"); //$NON-NLS-1$ $NON-NLS-2$
-        }
-        if (!rc.isDirectory()) {
-            throw new IllegalArgumentException(errPrefix + " '" + path + "' : is not a directory"); //$NON-NLS-1$ $NON-NLS-2$
-        }
-        return rc;
-    }
-
-    /**
      * Interpolates variables found in the property string values. A variable is
      * {@code $ name} and can be nested {@code $ outer-$ inner} .
      *
@@ -72,7 +41,7 @@ public final class PropertyUtils {
      */
     public static void interpolateVariables(final Properties configProperties, final Properties initialProperties) {
 
-        for (Enumeration<?> e = configProperties.propertyNames(); e.hasMoreElements();) {
+        for (final Enumeration<?> e = configProperties.propertyNames(); e.hasMoreElements();) {
             final String name = (String) e.nextElement();
             final String value = (String) configProperties.get(name);
 
@@ -107,7 +76,7 @@ public final class PropertyUtils {
      *             If there was a syntax error in the property placeholder
      *             syntax or a recursive variable reference.
      */
-    public static String substVars(String val, String currentKey, Map<String, String> cycleMap, Properties configProps)
+    public static String substVars(String val, final String currentKey, Map<String, String> cycleMap, final Properties configProps)
             throws IllegalArgumentException {
         // If there is currently no cycle map, then create
         // one for detecting cycles for this invocation.
@@ -124,15 +93,15 @@ public final class PropertyUtils {
         // Find the first ending '}' variable delimiter, which
         // will correspond to the first deepest nested variable
         // placeholder.
-        int stopDelim = val.indexOf(DELIM_STOP);
+        final int stopDelim = val.indexOf(DELIM_STOP);
 
         // Find the matching starting "${" variable delimiter
         // by looping until we find a start delimiter that is
         // greater than the stop delimiter we have found.
         int startDelim = val.indexOf(DELIM_START);
         while (stopDelim >= 0) {
-            int idx = val.indexOf(DELIM_START, startDelim + DELIM_START.length());
-            if ((idx < 0) || (idx > stopDelim)) {
+            final int idx = val.indexOf(DELIM_START, startDelim + DELIM_START.length());
+            if (idx < 0 || idx > stopDelim) {
                 break;
             } else if (idx < stopDelim) {
                 startDelim = idx;
@@ -141,12 +110,12 @@ public final class PropertyUtils {
 
         // If we do not have a start or stop delimiter, then just
         // return the existing value.
-        if ((startDelim < 0) && (stopDelim < 0)) {
+        if (startDelim < 0 && stopDelim < 0) {
             return val;
         }
         // At this point, we found a stop delimiter without a start,
         // so throw an exception.
-        else if (((startDelim < 0) || (startDelim > stopDelim)) && (stopDelim >= 0)) {
+        else if ((startDelim < 0 || startDelim > stopDelim) && stopDelim >= 0) {
             throw new IllegalArgumentException("stop delimiter with no start delimiter: " + val);
         }
 
@@ -154,7 +123,7 @@ public final class PropertyUtils {
         // we must perform a variable substitution on it.
         // Using the start and stop delimiter indices, extract
         // the first, deepest nested variable placeholder.
-        String variable = val.substring(startDelim + DELIM_START.length(), stopDelim);
+        final String variable = val.substring(startDelim + DELIM_START.length(), stopDelim);
 
         // Verify that this is not a recursive variable reference.
         if (cycleMap.get(variable) != null) {
@@ -163,7 +132,7 @@ public final class PropertyUtils {
 
         // Get the value of the deepest nested variable placeholder.
         // Try to configuration properties first.
-        String substValue = (configProps != null) ? configProps.getProperty(variable, null) : null;
+        String substValue = configProps != null ? configProps.getProperty(variable, null) : null;
         if (substValue == null) {
             // Ignore unknown property values.
             substValue = System.getProperty(variable, "");

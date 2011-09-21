@@ -21,18 +21,18 @@
       id="info.evanchik.smk.feature"
       label="Eclipse Integration for Apache ServiceMix Kernel Feature"
       version="0.5.1.qualifier"
-      provider-name="evanchik.info">
+      provider-name="%providerName">
 
    <description>
-      Eclipse Integration for Apache ServiceMix Kernel (and compatible) runtimes.
+      %description
    </description>
 
    <copyright>
-      Copyright (c) 2010 Stephen Evanchik
+      %copyright
    </copyright>
 
-   <license url="http\://www.eclipse.org/legal/epl-v10.html">
-      Eclipse Public License - v1.0
+   <license url="%licenseURL">
+      %license
    </license>
 
    <requires>

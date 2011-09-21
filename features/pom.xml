@@ -18,22 +18,22 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>info.evanchik.eclipse.karaf</groupId>
+    <groupId>org.apache.karaf.eclipse</groupId>
     <artifactId>eik-parent</artifactId>
     <version>1.0.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>info.evanchik.eclipse.karaf</groupId>
+  <groupId>org.apache.karaf.eclipse</groupId>
   <artifactId>eik-features-parent</artifactId>
   <packaging>pom</packaging>
   <name>Eclipse Integration for Karaf :: Features</name>
   <version>1.0.0</version>
   <description>Eclipse Features for EIK</description>
   <modules>
-    <module>info.evanchik.eclipse.karaf.feature</module>
-    <module>info.evanchik.eclipse.karaf.jmx.feature</module>
-    <module>info.evanchik.eclipse.karaf.wtp.feature</module>
-    <module>info.evanchik.smk.feature</module>
-    <module>info.evanchik.eclipse.karaf.update</module>
+    <module>org.apache.karaf.eclipse.feature</module>
+    <module>org.apache.karaf.eclipse.jmx.feature</module>
+    <module>org.apache.karaf.eclipse.wtp.feature</module>
+    <module>org.apache.karaf.eclipse.smk.feature</module>
+    <module>org.apache.karaf.eclipse.update</module>
   </modules>
 </project>

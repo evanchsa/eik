@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Eclipse Platform Model for Apache ServiceMix Kernel
+Bundle-SymbolicName: org.apache.karaf.eclipse.smk;singleton:=true
+Bundle-Version: 0.5.0.qualifier
+Bundle-Activator: org.apache.karaf.eclipse.smk.internal.ServiceMixKernelActivator
+Bundle-Vendor: evanchik.info
+Require-Bundle: org.eclipse.ui;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
+ org.eclipse.debug.ui;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.pde.core;bundle-version="[3.2.0,4.0.0)",
+ org.apache.servicemix.kernel.main;bundle-version="1.1.0",
+ org.apache.karaf.eclipse.core;bundle-version="0.5.0",
+ org.apache.karaf.eclipse.ui;bundle-version="0.5.0",
+ org.apache.karaf.eclipse.workbench;bundle-version="0.5.0",
+ org.apache.karaf.eclipse.app.smk;bundle-version="0.5.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy

@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Eclipse Integration for Apache Karaf Release Engineering
+Bundle-SymbolicName: org.apache.karaf.eclipse.releng
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: evanchik.info
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

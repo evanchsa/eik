@@ -19,7 +19,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <groupId>info.evanchik.eclipse.karaf</groupId>
+        <groupId>org.apache.karaf.eclipse</groupId>
         <artifactId>eik-parent</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -36,15 +36,15 @@
         <module>org.ops4j.pax.url.mvn</module>
         <module>org.apache.aries.jmx.core</module>
         <module>org.apache.servicemix.kernel.main</module>
-        <module>info.evanchik.eclipse.karaf.core</module>
-        <module>info.evanchik.eclipse.karaf.jmx</module>
-        <module>info.evanchik.eclipse.karaf.ui</module>
-        <module>info.evanchik.eclipse.karaf.workbench</module>
-        <module>info.evanchik.eclipse.karaf.wtp.core</module>
-        <module>info.evanchik.eclipse.karaf.wtp.ui</module>
-        <module>info.evanchik.karaf.app</module>
-        <module>info.evanchik.eclipse.smk</module>
-        <module>info.evanchik.smk.app</module>
-        <module>info.evanchik.eclipse.felix</module>
+        <module>org.apache.karaf.eclipse.core</module>
+        <module>org.apache.karaf.eclipse.jmx</module>
+        <module>org.apache.karaf.eclipse.ui</module>
+        <module>org.apache.karaf.eclipse.workbench</module>
+        <module>org.apache.karaf.eclipse.wtp.core</module>
+        <module>org.apache.karaf.eclipse.wtp.ui</module>
+        <module>org.apache.karaf.eclipse.app</module>
+        <module>org.apache.karaf.eclipse.smk</module>
+        <module>org.apache.karaf.eclipse.app.smk</module>
+        <module>org.apache.felix.eclipse</module>
     </modules>
 </project>

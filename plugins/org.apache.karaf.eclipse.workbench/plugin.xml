@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.
+-->
+<plugin>
+   <extension-point id="jmxConnectorProvider" name="JMX Connector Provider" schema="schema/jmxConnectorProvider.exsd"/>
+   <extension
+         id="runtimeData"
+         name="OSGi C&amp;C Runtime Data provider"
+         point="org.apache.karaf.eclipse.ui.service">
+      <launchCustomizer
+            class="org.apache.karaf.eclipse.workbench.factory.MBeanProviderWorkbenchServiceFactory">
+      </launchCustomizer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.apache.karaf.eclipse.workbench.karaf"
+            name="Apache Karaf">
+      </category>
+      <view
+            allowMultiple="false"
+            category="org.apache.karaf.eclipse.workbench.karaf"
+            class="org.apache.karaf.eclipse.workbench.ui.views.bundle.BundlesView"
+            icon="icons/obj16/bundle_obj.gif"
+            id="org.apache.karaf.eclipse.workbench.karafBundles"
+            name="Bundles"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="org.apache.karaf.eclipse.workbench.karaf"
+            class="org.apache.karaf.eclipse.workbench.ui.views.services.ServicesView"
+            icon="icons/obj16/generic_elements.gif"
+            id="org.apache.karaf.eclipse.workbench.karafServices"
+            name="Services">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.apache.karaf.eclipse.workbench.ui.KarafWorkbenchPerspectiveFactory"
+            icon="icons/obj16/karaf-logo-16x16.png"
+            id="org.apache.karaf.eclipse.workbench.karafPerspective"
+            name="Apache Karaf">
+         <description>
+            Apache Karaf
+         </description>
+      </perspective>
+   </extension>
+   <extension
+         point="org.apache.karaf.eclipse.workbench.jmxConnectorProvider">
+      <transport
+            class="org.apache.karaf.eclipse.workbench.jmx.internal.RMIConnectionProvider"
+            protocol="rmi">
+      </transport>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.apache.karaf.eclipse.workbench.ui.editor.KarafPlatformEditorPart"
+            default="false"
+            icon="icons/obj16/karaf-logo-16x16.png"
+            id="org.apache.karaf.eclipse.ui.editors.KarafPlatformEditor"
+            name="Karaf Platform">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <actionProvider
+            class="org.apache.karaf.eclipse.workbench.internal.WorkbenchActionProvider"
+            id="org.apache.karaf.eclipse.ui.navigator.workbenchActionProvider">
+         <enablement>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.apache.karaf.eclipse.KarafProjectNature">
+               </test>
+            </adapt>
+         </enablement>
+      </actionProvider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerActionBinding
+            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <actionExtension
+                  pattern="org.apache.karaf.eclipse.ui.navigator.*">
+            </actionExtension>
+         </includes>
+      </viewerActionBinding>
+   </extension>
+
+</plugin>

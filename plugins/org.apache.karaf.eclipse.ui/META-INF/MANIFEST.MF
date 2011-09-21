@@ -25,4 +25,4 @@ Export-Package: org.apache.karaf.eclipse.ui,
  org.apache.karaf.eclipse.ui.workbench
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.apache.karaf.eclipse.ui.KarafUIPluginActivator
-Bundle-Vendor: evanchik.info
+Bundle-Vendor: Apache Software Foundation

@@ -11,4 +11,4 @@ Import-Package: javax.management,
  org.eclipse.osgi.service.resolver;version="1.4.0",
  org.osgi.framework;version="1.4.0"
 Export-Package: org.apache.karaf.eclipse.jmx
-Bundle-Vendor: evanchik.info
+Bundle-Vendor: Apache Software Foundation

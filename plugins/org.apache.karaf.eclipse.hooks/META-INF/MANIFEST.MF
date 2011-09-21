@@ -5,4 +5,4 @@ Bundle-SymbolicName: org.apache.karaf.eclipse.hooks;singleton:=true
 Bundle-Version: 0.5.0.qualifier
 Fragment-Host: org.eclipse.osgi;bundle-version="3.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-Vendor: evanchik.info
+Bundle-Vendor: Apache Software Foundation

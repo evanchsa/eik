@@ -1,20 +1,22 @@
-Eclipse Integration for Karaf is the integration of the Apache Karaf
+Eclipse Integration for  Karaf is the integration of the Apache Karaf
 application platform and the Eclipse IDE.
 
 Notable features include:
 
-    * An Eclipse Run/Debug launcher configuration that configures Karaf to run
-      inside the workbench transparently to the developer
-    * Automatic deployment of workspace plugin projects to running Karaf
-      instances without copying files
-    * A Target Platform Provisioner that automatically constructs a target
-      platform from any Karaf distribution on the user's local disk
-    * JMX instrumentation of the Running/Debugging Karaf instance.
-    * Eclipse views that display the Bundle and Service status of Karaf
-      instances
-
-Experimental features:
-    * Web Tools Platform integration including:
-          o Karaf server runtime with associated classpath maintenance
-          o Karaf runtime locator that scans local disks for compatible Karaf
-            distributions
+    * Custom Eclipse perspective for Apache Karaf development
+        - Places valuable Karaf runtime information in one location
+    * Apache Karaf installation management in your workspace
+        - Karaf installations are managed as workspace projects giving the
+          developer visibility in to the runtime.
+        - Each Karaf installation is automatically synchronized with your
+          workspace, include: additional bundles, configuration files
+    * Run and Debug Karaf installations with a single Eclipse Launcher
+        - The launch configuration allows developers to fine tune how Karaf
+          will launch
+    * Automatic deployment of workspace plugin projects
+        - Create plugin-projects and have them deployed automatically.
+    * Advanced instrumentation of the running Karaf instance
+        - Watch bundles deploy in real time and examine the OSGi service
+          registry from within the Eclipse IDE
+    * Access Eclipse platform IDE plugins from within a running Karaf instance
+        - All Eclipse plugins are presented as an OBR.

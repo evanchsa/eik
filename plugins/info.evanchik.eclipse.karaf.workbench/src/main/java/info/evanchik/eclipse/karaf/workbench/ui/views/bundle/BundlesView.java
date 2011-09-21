@@ -18,7 +18,6 @@
 package info.evanchik.eclipse.karaf.workbench.ui.views.bundle;
 
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
-import info.evanchik.eclipse.karaf.workbench.ui.views.FilteredViewPart;
 
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -35,9 +34,9 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
-import org.osgi.framework.Bundle;
+import org.eclipse.ui.part.ViewPart;
 
-public class BundlesView extends FilteredViewPart {
+public class BundlesView extends ViewPart {
 
     public static final String VIEW_ID = "info.evanchik.eclipse.karaf.workbench.karafBundles";
 
@@ -54,7 +53,7 @@ public class BundlesView extends FilteredViewPart {
     protected final int[] colWidth = new int[] { 185, 40, 100, 250, 250 };
 
     @Override
-    public void createMainControl(final Composite parent) {
+    public void createPartControl(final Composite parent) {
         parent.setLayout(new FillLayout());
 
         treeTable = new Tree(parent, SWT.SINGLE | SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -95,8 +94,6 @@ public class BundlesView extends FilteredViewPart {
 
         getViewSite().setSelectionProvider(treeTableViewer);
 
-        fillMenu();
-
         initContextMenu();
     }
 
@@ -128,25 +125,7 @@ public class BundlesView extends FilteredViewPart {
     }
 
     @Override
-    public void doSetFocus() {
-        if (treeTable != null) {
-            treeTable.setFocus();
-        }
-    }
-
-    @Override
-    protected void updatedFilter(final String filterString) {
-        nameFilter.setFilterString(filterString);
-        treeTableViewer.refresh();
-    }
-
-    protected void fillMenu() {
-        final IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
-        menuManager.add(new ExcludeBundlesFilterAction("Installed", Bundle.INSTALLED, treeTableViewer));
-        menuManager.add(new ExcludeBundlesFilterAction("Resolved", Bundle.RESOLVED, treeTableViewer));
-        menuManager.add(new ExcludeBundlesFilterAction("Starting", Bundle.STARTING, treeTableViewer));
-        menuManager.add(new ExcludeBundlesFilterAction("Active", Bundle.ACTIVE, treeTableViewer));
-        menuManager.add(new ExcludeBundlesFilterAction("Stopping", Bundle.STOPPING, treeTableViewer));
+    public void setFocus() {
     }
 
     protected void initContextMenu() {

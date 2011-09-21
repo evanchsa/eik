@@ -18,7 +18,6 @@
 package info.evanchik.eclipse.karaf.workbench.ui.views.services;
 
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
-import info.evanchik.eclipse.karaf.workbench.ui.views.FilteredViewPart;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -30,6 +29,7 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -37,7 +37,7 @@ import org.osgi.framework.BundleContext;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class ServicesView extends FilteredViewPart {
+public class ServicesView extends ViewPart {
 
     public static final String VIEW_ID = "info.evanchik.eclipse.karaf.workbench.karafServices";
 
@@ -58,7 +58,7 @@ public class ServicesView extends FilteredViewPart {
     protected final int[] colWidth = new int[] { 400, 200 };
 
     @Override
-    public void createMainControl(final Composite parent) {
+    public void createPartControl(final Composite parent) {
         final GridLayout layout = new GridLayout(1, false);
         layout.horizontalSpacing = 0;
         layout.verticalSpacing = 0;
@@ -125,8 +125,6 @@ public class ServicesView extends FilteredViewPart {
     }
 
     @Override
-    protected void updatedFilter(final String filterString) {
-        nameFilter.setServiceName(filterString);
-        viewer.refresh();
+    public void setFocus() {
     }
 }

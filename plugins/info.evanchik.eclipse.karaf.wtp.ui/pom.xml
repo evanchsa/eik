@@ -24,7 +24,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>info.evanchik.eclipse.karaf</groupId>
-  <artifactId>info.evanchik.eclipse.karaf.core</artifactId>
+  <artifactId>info.evanchik.eclipse.karaf.wtp.ui</artifactId>
   <version>0.5.2-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
   <name>Eclipse Integration for Karaf :: WTP UI Integration</name>

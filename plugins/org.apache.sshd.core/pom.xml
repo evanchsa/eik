@@ -24,7 +24,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>info.evanchik.eclipse.karaf</groupId>
-  <artifactId>org.apache.ssh.core</artifactId>
+  <artifactId>sshd-core</artifactId>
   <version>0.5.0</version>
   <packaging>eclipse-plugin</packaging>
   <name>Eclipse Integration for Karaf :: Apache SSH wrapper</name>

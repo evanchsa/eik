@@ -76,6 +76,7 @@ public class KarafPlatformEditorPart extends FormEditor {
         try {
             addPage(new KarafPlatformGeneralFormPage(this));
             addPage(new KarafPlatformRuntimeFormPage(this));
+            addPage(new KarafFeaturesFormPage(this));
         } catch (final PartInitException e) {
             // TODO: Handle PartInitException
         }

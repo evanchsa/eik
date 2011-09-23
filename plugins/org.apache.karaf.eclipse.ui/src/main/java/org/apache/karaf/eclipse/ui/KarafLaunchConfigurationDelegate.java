@@ -17,6 +17,15 @@
  */
 package org.apache.karaf.eclipse.ui;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.karaf.eclipse.core.IKarafConstants;
 import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
@@ -28,16 +37,6 @@ import org.apache.karaf.eclipse.core.equinox.BundleEntry;
 import org.apache.karaf.eclipse.core.model.WorkingKarafPlatformModel;
 import org.apache.karaf.eclipse.ui.internal.WorkbenchServiceExtensions;
 import org.apache.karaf.eclipse.ui.workbench.KarafWorkbenchServiceFactory;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -401,7 +400,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
          * org.osgi.framework.system.packages.extra property
          */
         final String extraSystemPackages = (String) equinoxProperties.get(OSGI_EXTRA_SYSTEM_PACKAGES_KEY);
-        if (extraSystemPackages.trim().isEmpty()) {
+        if (extraSystemPackages != null && extraSystemPackages.trim().isEmpty()) {
             equinoxProperties.remove(OSGI_EXTRA_SYSTEM_PACKAGES_KEY);
         }
 
@@ -452,9 +451,12 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
         if (filteredKarafJar != null) {
             classpath.add(filteredKarafJar.getAbsolutePath());
+        } else if (karafJar != null) {
+    		classpath.add(karafJar.getAbsolutePath());
         } else {
-            classpath.add(karafJar.getAbsolutePath());
+        	// karaf.jar does not need to be fixed
         }
+
         return karafModelClasspath;
     }
 

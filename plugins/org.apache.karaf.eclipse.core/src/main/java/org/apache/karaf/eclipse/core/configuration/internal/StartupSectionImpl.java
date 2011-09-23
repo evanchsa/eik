@@ -49,16 +49,16 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
 
         private final String startLevel;
 
-        BundleStartEntry(BundleDescription desc, String startLevel) {
+        public BundleStartEntry(BundleDescription desc, String startLevel) {
             this.bundleDescription = desc;
             this.startLevel = startLevel;
         }
 
-        BundleDescription getBundleDescription() {
+        public BundleDescription getBundleDescription() {
             return bundleDescription;
         }
 
-        String getStartLevel() {
+        public String getStartLevel() {
             return startLevel;
         }
     }
@@ -81,9 +81,19 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
      *            startup state model
      */
     public StartupSectionImpl(KarafPlatformModel karafModel) {
-        super(STARTUP_SECTION_ID, STARTUP_FILENAME, karafModel);
-
+        this(karafModel, STARTUP_FILENAME);
+    }
+    
+    /**
+     * 
+     * @param karafModel
+     * @param filename
+     */
+    public StartupSectionImpl(KarafPlatformModel karafModel, String filename) {
+    	super(STARTUP_SECTION_ID, filename, karafModel);
+    	
         this.startupStateModel = new LinkedHashMap<String, BundleStartEntry>(64);
+
     }
 
     public boolean containsPlugin(String bundleSymbolicName) {
@@ -132,11 +142,21 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
                                 "Unable to locate bundle description for: "
                                                 + bundleLocation.getAbsolutePath());
             } else {
-                final BundleStartEntry se = new BundleStartEntry(desc, (String) getProperties()
-                                .get(o));
-                startupStateModel.put(desc.getSymbolicName(), se);
-
+                final BundleStartEntry se = new BundleStartEntry(desc, (String) getProperties().get(o));
+                addBundleStartEntry(desc.getSymbolicName(), se);
             }
         }
+    }
+    
+	/**
+	 * Adds a {@link BundleStartEntry} to this {@code StartupSection}
+	 * 
+	 * @param symbolicName
+	 *            the Bundle's Symbolic Name
+	 * @param bundleStartEntry
+	 *            the {@code BundleStartEntry}
+	 */
+    protected final void addBundleStartEntry(String symbolicName, BundleStartEntry bundleStartEntry) {
+        startupStateModel.put(symbolicName, bundleStartEntry);
     }
 }

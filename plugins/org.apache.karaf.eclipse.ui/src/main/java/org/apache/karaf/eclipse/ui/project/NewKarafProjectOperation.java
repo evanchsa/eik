@@ -120,7 +120,9 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         newKarafProject.getProjectHandle().getFolder(".bin").create(true, true, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/platform").create(true, true, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/platform/etc").createLink(workingPlatformModel.getParentKarafModel().getConfigurationDirectory(), 0, monitor);
-        newKarafProject.getProjectHandle().getFolder(".bin/platform/deploy").createLink(workingPlatformModel.getParentKarafModel().getUserDeployedDirectory(), 0, monitor);
+        if (workingPlatformModel.getParentKarafModel().getUserDeployedDirectory().toFile().exists()) {
+        	newKarafProject.getProjectHandle().getFolder(".bin/platform/deploy").createLink(workingPlatformModel.getParentKarafModel().getUserDeployedDirectory(), 0, monitor);
+        }
         newKarafProject.getProjectHandle().getFolder(".bin/platform/lib").createLink(workingPlatformModel.getParentKarafModel().getRootDirectory().append("lib"), 0, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/platform/system").createLink(workingPlatformModel.getParentKarafModel().getPluginRootDirectory(), 0, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/runtime").create(true, true, monitor);

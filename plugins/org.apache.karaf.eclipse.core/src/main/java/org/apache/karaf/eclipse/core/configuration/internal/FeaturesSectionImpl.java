@@ -52,7 +52,7 @@ public class FeaturesSectionImpl extends AbstractPropertiesConfigurationSection
     @Override
     public List<String> getBootFeatureNames() {
         final String rawBootFeatures = getProperties().getProperty(FEATURES_BOOT_KEY);
-        if (rawBootFeatures == null) {
+        if (rawBootFeatures == null || rawBootFeatures.trim().isEmpty()) {
             return Collections.emptyList();
         }
 
@@ -64,7 +64,7 @@ public class FeaturesSectionImpl extends AbstractPropertiesConfigurationSection
     @Override
     public List<String> getRepositoryList() {
         final String rawRepositories = (String) getProperties().get(FEATURES_REPOSITORIES_KEY);
-        if (rawRepositories == null) {
+        if (rawRepositories == null || rawRepositories.trim().isEmpty()) {
             return Collections.emptyList();
         }
 

@@ -77,6 +77,12 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         throws CoreException
     {
         final IProject project = getProject();
+        
+        // Sentry to prevent builders from running
+        if (getKarafProject() == null) {
+        	// TODO: This should issue a warning in the Error Log
+        	return null;
+        }
 
         monitor.beginTask("Building Apache Karaf Project: " + project.getName(), 1);
 
@@ -205,9 +211,12 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         combinedProperties.put("karaf.base", karafHome);
         combinedProperties.put("karaf.data", getKarafPlatformModel().getRootDirectory().append("data").toOSString());
 
-        for (final String filename : new String[] { "config.properties", "system.properties", "users.properties" }) {
-            final Properties fileProperties = KarafCorePluginUtils.loadProperties(getKarafPlatformModel().getConfigurationDirectory().toFile(), filename, true);
-            combinedProperties.putAll(fileProperties);
+        for (final String filename : new String[] { "config.ini", "config.properties", "system.properties", "users.properties" }) {
+        	final File configFile = new File(getKarafPlatformModel().getConfigurationDirectory().toFile(), filename);
+        	if (configFile.exists()) {
+        		final Properties fileProperties = KarafCorePluginUtils.loadProperties(getKarafPlatformModel().getConfigurationDirectory().toFile(), filename, true);
+        		combinedProperties.putAll(fileProperties);
+        	}
         }
 
         PropertyUtils.interpolateVariables(combinedProperties, combinedProperties);

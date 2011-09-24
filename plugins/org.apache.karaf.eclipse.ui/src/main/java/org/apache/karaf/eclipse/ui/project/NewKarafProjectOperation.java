@@ -17,14 +17,13 @@
  */
 package org.apache.karaf.eclipse.ui.project;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.core.KarafWorkingPlatformModel;
 import org.apache.karaf.eclipse.ui.IKarafProject;
 import org.apache.karaf.eclipse.ui.KarafLaunchConfigurationInitializer;
 import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
-
-import java.lang.reflect.InvocationTargetException;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
@@ -36,11 +35,23 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.variables.IDynamicVariable;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 /**
+ * Creates a new Karaf project in the workspace.
+ * <p>
+ * A Karaf project is linked to Karaf installation somewhere in the local file
+ * system. It is augmented by two persistent properties. These are used by Karaf
+ * aware code to interact with the local Karaf installation:
+ * <ul>
+ * <li>karafProject - A simple boolean to indicate this is a Karaf project</li>
+ * <li>karafModel - The absolute path to the Karaf installation this project
+ * represents</li>
+ * </ul
+ *
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
@@ -53,10 +64,16 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
     private final KarafWorkingPlatformModel workingPlatformModel;
 
     /**
+     * Constructor.
      *
      * @param karafPlatformModel
+     *            the {@link KarafPlatformModel} in the local file system
      * @param workingPlatformModel
+     *            the {@link KarafWorkingPlatformModel} which resides in the
+     *            workspace
      * @param newKarafProject
+     *            the new {@link IKarafProject} instance containing the
+     *            workspace project and metadata
      */
     public NewKarafProjectOperation(
             final KarafPlatformModel karafPlatformModel,
@@ -83,6 +100,7 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         monitor.worked(1);
 
         createKarafPlatformResources(monitor);
+        createDefaultKarafLaunchConfiguration(monitor);
 
         monitor.worked(1);
 
@@ -92,10 +110,15 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
     }
 
     /**
+     * Adds the {@link KarafProjectNature.ID} to the {@link IProject} turning it
+     * in to a Karaf project.
      *
      * @param natureId
+     *            the Karaf project nature
      * @param monitor
+     *            the {@link IProgressMonitor}
      * @throws CoreException
+     *             thrown if there is a problem adding the nature
      */
     private void addNatureToProject(final String natureId, final IProgressMonitor monitor) throws CoreException {
         final IProject project = newKarafProject.getProjectHandle();
@@ -112,9 +135,40 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
     }
 
     /**
+     * Creates a default {@link ILaunchConfiguration} that can be used to launch
+     * the Karaf installation this project represents
      *
      * @param monitor
+     *            the {@link IProgressMonitor}
      * @throws CoreException
+     *             thrown if there is a problem creating the
+     *             {@code ILaunchConfiguration}
+     */
+    private void createDefaultKarafLaunchConfiguration(final IProgressMonitor monitor) throws CoreException {
+        final ILaunchConfigurationType launchType =
+            DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType("org.eclipse.pde.ui.EquinoxLauncher");
+
+        final ILaunchConfigurationWorkingCopy launchConfiguration =
+            launchType.newInstance(newKarafProject.getProjectHandle(), newKarafProject.getName());
+
+        KarafLaunchConfigurationInitializer.initializeConfiguration(launchConfiguration);
+
+        launchConfiguration.doSave();
+    }
+
+    /**
+     * Creates the workspace resources that link the Karaf installing in the
+     * local file system to the Eclipse builder.
+     * <p>
+     * The resources created contain data generated during the Karaf builder as
+     * well as workspace links to the Karaf installation. These links are a
+     * shortcut that allow the workspace to monitor changes to the local Karaf
+     * installation.
+     *
+     * @param monitor
+     *            the {@link IProgressMonitor}
+     * @throws CoreException
+     *             thrown if there is a problem creating the workspace resources
      */
     private void createKarafPlatformResources(final IProgressMonitor monitor) throws CoreException {
         newKarafProject.getProjectHandle().getFolder(".bin").create(true, true, monitor);
@@ -133,6 +187,18 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         newKarafProject.getProjectHandle().getFolder(".bin/platform/eclipse").create(true, true, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/platform/eclipse/dropins").createLink(new Path(eclipseHome).append("dropins"), 0, monitor);
         newKarafProject.getProjectHandle().getFolder(".bin/platform/eclipse/plugins").createLink(new Path(eclipseHome).append("plugins"), 0, monitor);
+    }
+
+    /**
+     * Creates the new {@link IProject} in the workspace.
+     *
+     * @param monitor
+     *            the progress monitor
+     * @throws CoreException
+     *             thrown if there is a problem creating the {@code IProject} in
+     *             the workspace
+     */
+    private void createProject(final IProgressMonitor monitor) throws CoreException {
 
         newKarafProject.getProjectHandle().setPersistentProperty(
                 new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafProject"),
@@ -142,23 +208,6 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
                 new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafModel"),
                 karafPlatformModel.getRootDirectory().toString());
 
-        final ILaunchConfigurationType launchType =
-            DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType("org.eclipse.pde.ui.EquinoxLauncher");
-
-        final ILaunchConfigurationWorkingCopy launchConfiguration =
-            launchType.newInstance(newKarafProject.getProjectHandle(), newKarafProject.getName());
-
-        KarafLaunchConfigurationInitializer.initializeConfiguration(launchConfiguration);
-
-        launchConfiguration.doSave();
-    }
-
-    /**
-     *
-     * @param monitor
-     * @throws CoreException
-     */
-    private void createProject(final IProgressMonitor monitor) throws CoreException {
         final IProject project = newKarafProject.getProjectHandle();
         final IPath projectLocation = newKarafProject.getLocation();
 
@@ -170,6 +219,6 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
             project.create(monitor);
         }
 
-        project.open(null);
+        project.open(monitor);
     }
 }

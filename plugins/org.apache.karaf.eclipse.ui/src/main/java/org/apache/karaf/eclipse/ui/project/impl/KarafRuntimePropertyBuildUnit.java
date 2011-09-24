@@ -17,17 +17,17 @@
  */
 package org.apache.karaf.eclipse.ui.project.impl;
 
-import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.PropertyUtils;
-import org.apache.karaf.eclipse.ui.IKarafProject;
-import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
-
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.core.PropertyUtils;
+import org.apache.karaf.eclipse.ui.IKarafProject;
+import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -55,14 +55,13 @@ public class KarafRuntimePropertyBuildUnit extends AbstractKarafBuildUnit {
         combinedProperties.put("karaf.base", karafHome);
         combinedProperties.put("karaf.data", getKarafPlatformModel().getRootDirectory().append("data").toOSString());
 
-        for (final String filename : new String[] { "config.properties", "system.properties", "users.properties" }) {
-            final Properties fileProperties =
-                KarafCorePluginUtils.loadProperties(
-                        getKarafPlatformModel().getConfigurationDirectory().toFile(),
-                        filename,
-                        true);
-
-            combinedProperties.putAll(fileProperties);
+        for (final String filename : new String[] { "config.ini", "config.properties", "system.properties", "users.properties" }) {
+            final File configFile = new File(getKarafPlatformModel().getConfigurationDirectory().toFile(), filename);
+            if (configFile.exists()) {
+                final Properties fileProperties =
+                    KarafCorePluginUtils.loadProperties(getKarafPlatformModel().getConfigurationDirectory().toFile(), filename, true);
+                combinedProperties.putAll(fileProperties);
+            }
         }
 
         PropertyUtils.interpolateVariables(combinedProperties, combinedProperties);

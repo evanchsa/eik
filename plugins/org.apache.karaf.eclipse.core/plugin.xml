@@ -19,7 +19,7 @@
    under the License.
 -->
 <plugin>
-   <extension-point id="platformModel" name="Apache Felix Karaf Platform Models" schema="schema/platformModel.exsd"/>
+   <extension-point id="platformModel" name="Apache Karaf Platform model definition" schema="schema/platformModel.exsd"/>
    <extension
          point="org.eclipse.core.variables.dynamicVariables">
       <variable

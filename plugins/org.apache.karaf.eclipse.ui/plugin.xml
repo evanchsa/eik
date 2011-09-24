@@ -19,7 +19,7 @@
    under the License.
 -->
 <plugin>
-   <extension-point id="service" name="Apache Karaf Workbench Service" schema="schema/service.exsd"/>
+   <extension-point id="service" name="Apache Karaf Workbench service definition" schema="schema/service.exsd"/>
    <extension
          point="org.eclipse.ant.core.extraClasspathEntries">
       <extraClasspathEntry

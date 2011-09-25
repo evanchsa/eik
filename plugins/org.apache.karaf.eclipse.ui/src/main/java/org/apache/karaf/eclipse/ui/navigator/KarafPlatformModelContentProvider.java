@@ -17,10 +17,13 @@
  */
 package org.apache.karaf.eclipse.ui.navigator;
 
+import org.apache.karaf.eclipse.ui.IKarafProject;
 import org.apache.karaf.eclipse.ui.model.AbstractContentModel;
+import org.apache.karaf.eclipse.ui.model.BootClasspath;
 import org.apache.karaf.eclipse.ui.model.ContentModel;
+import org.apache.karaf.eclipse.ui.model.SystemBundles;
+import org.apache.karaf.eclipse.ui.model.UserBundles;
 import org.apache.karaf.eclipse.ui.project.KarafProject;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -38,7 +41,12 @@ public class KarafPlatformModelContentProvider implements ITreeContentProvider {
     @Override
     public Object[] getChildren(final Object parentElement) {
         if (parentElement instanceof IProject && KarafProject.isKarafProject((IProject) parentElement)) {
-            return new Object[0];
+            final IKarafProject karafProject = (IKarafProject) ((IProject) parentElement).getAdapter(IKarafProject.class);
+            return new Object[] {
+                    new BootClasspath(karafProject),
+                    new SystemBundles(karafProject),
+                    new UserBundles(karafProject)
+            };
         } else if (parentElement instanceof ContentModel) {
             final ContentModel model = (ContentModel) parentElement;
             return model.getElements();

@@ -40,6 +40,7 @@ import org.apache.karaf.eclipse.workbench.jmx.mbeans.KarafMBeanProvider;
 import org.apache.karaf.eclipse.workbench.jmx.mbeans.LocalKarafMBeanProvider;
 import org.apache.karaf.eclipse.workbench.jmx.mbeans.MBeanServerConnectionJob;
 import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProvider;
+import org.apache.karaf.eclipse.workbench.provider.karaf.KarafRuntimeDataProvider;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;

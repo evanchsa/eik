@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.workbench.internal;
+package org.apache.karaf.eclipse.workbench.provider.karaf;
 
 import org.apache.karaf.eclipse.workbench.MBeanProvider;
 import org.apache.karaf.eclipse.workbench.provider.BundleItem;

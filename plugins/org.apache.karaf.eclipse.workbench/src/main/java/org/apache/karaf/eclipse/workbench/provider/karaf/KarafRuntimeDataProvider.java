@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.workbench.internal;
+package org.apache.karaf.eclipse.workbench.provider.karaf;
 
 import java.io.IOException;
 import java.util.EnumSet;

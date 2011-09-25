@@ -25,8 +25,8 @@ import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
 import org.apache.karaf.eclipse.workbench.jmx.internal.JMXServiceManager;
 import org.apache.karaf.eclipse.workbench.jmx.internal.JMXTransportRegistry;
 import org.apache.karaf.eclipse.workbench.jmx.mbeans.MBeanProviderManager;
+import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProvider;
 import org.apache.karaf.eclipse.workbench.provider.eclipse.EclipseRuntimeDataProvider;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -39,30 +39,19 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class KarafWorkbenchActivator extends AbstractUIPlugin {
+public final class KarafWorkbenchActivator extends AbstractUIPlugin {
 
-	// The plug-in ID
-	public static final String PLUGIN_ID = "org.apache.karaf.eclipse.workbench";
+	public static final String BUNDLE_OBJ_IMG = "bundle_obj"; //$NON-NLS-1$
 
-	public static final String JMX_CONNECTOR_PROVIDER_EXTENSION_ID = "jmxConnectorProvider";
-
-    public static final String BUNDLE_OBJ_IMG = "bundle_obj"; //$NON-NLS-1$
+	public static final String JMX_CONNECTOR_PROVIDER_EXTENSION_ID = "jmxConnectorProvider"; //$NON-NLS-1$
 
     public static final String LOGO_16X16_IMG = "logo16"; //$NON-NLS-1$
 
-    public static final String SERVICE_IMG = "service";
+	public static final String PLUGIN_ID = "org.apache.karaf.eclipse.workbench"; //$NON-NLS-1$
 
-    private EclipseRuntimeDataProvider eclipseWorkbenchDataProvider;
+    public static final String SERVICE_IMG = "service"; //$NON-NLS-1$
 
-    private JMXServiceManager jmxServiceManager;
-
-    private JMXTransportRegistry jmxTransportRegistry;
-
-    private MBeanProviderManager mbeanProviderManager;
-
-    private RuntimeDataProviderManager runtimeDataProviderManager;
-
-	private static KarafWorkbenchActivator plugin;
+    private static KarafWorkbenchActivator plugin;
 
     /**
      * Returns the shared instance
@@ -83,26 +72,22 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
         return new LogWrapper(getDefault().getLog(), PLUGIN_ID);
     }
 
-	/**
-	 * The constructor
-	 */
-	public KarafWorkbenchActivator() {
-	}
+    private EclipseRuntimeDataProvider eclipseWorkbenchDataProvider;
 
-	/**
-	 *
-	 * @return
-	 */
-	public EclipseRuntimeDataProvider getEclipseWorkbenchDataProvider() {
-        return eclipseWorkbenchDataProvider;
-    }
+    private JMXServiceManager jmxServiceManager;
+
+	private JMXTransportRegistry jmxTransportRegistry;
+
+    private MBeanProviderManager mbeanProviderManager;
+
+    private RuntimeDataProviderManager runtimeDataProviderManager;
 
     /**
-     * Getter for the {@link WorkbenchServiceManager<JMXServiceDescriptor>}
-     * implementation. There is only one per plugin instance.
+     * Getter for the {@link WorkbenchServiceManager} of
+     * {@link JMXServiceDescriptor}s. There is only one per plugin instance.
      *
-     * @return the {@code WorkbenchServiceManager<JMXServiceDescriptor>}
-     *         instance
+     * @return the {@link WorkbenchServiceManager} of
+     *         {@link JMXServiceDescriptor}s
      */
     public WorkbenchServiceManager<JMXServiceDescriptor> getJMXServiceManager() {
         return jmxServiceManager;
@@ -119,14 +104,24 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
     }
 
     /**
+     * Getter for the {@link WorkbenchServiceManager} for the
+     * {@link MBeanProvider}s. There is only one per plugin instance.
      *
-     * @return
+     * @return the {@link WorkbenchServiceManager} for the {@link MBeanProvider}
+     *         s
      */
     public WorkbenchServiceManager<MBeanProvider> getMBeanProviderManager() {
         return mbeanProviderManager;
     }
 
-    public RuntimeDataProviderManager getRuntimeDataProviderManager() {
+    /**
+     * Getter for the {@link WorkbenchServiceManager} for the
+     * {@link RuntimeDataProvider}s. There is only one per plugin instance.
+     *
+     * @return the {@link WorkbenchServiceManager} for the
+     *         {@link RuntimeDataProvider}s
+     */
+    public WorkbenchServiceManager<RuntimeDataProvider> getRuntimeDataProviderManager() {
         return runtimeDataProviderManager;
     }
 
@@ -141,11 +136,14 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
         runtimeDataProviderManager = new RuntimeDataProviderManager();
         eclipseWorkbenchDataProvider = new EclipseRuntimeDataProvider(getBundle().getBundleContext());
 
+        // The EclipseRuntimeDataProvider must be started
+        // asynchronously with plugin activation because
+        // it takes a long time
         final Job eclipseRuntimeDataProviderStarter = new Job("Eclipse Runtime Data Starter") {
 
             @Override
             protected IStatus run(final IProgressMonitor monitor) {
-                registerEclipseRuntimeDataProvider();
+                startEclipseRuntimeDataProvider();
                 return Status.OK_STATUS;
             }
         };
@@ -178,14 +176,18 @@ public class KarafWorkbenchActivator extends AbstractUIPlugin {
      */
     @Override
     protected void initializeImageRegistry(final ImageRegistry imageRegistry) {
-        registerImage(imageRegistry, BUNDLE_OBJ_IMG, "icons/obj16/bundle_obj.gif");
-        registerImage(imageRegistry, LOGO_16X16_IMG, "icons/obj16/felixLogo16x16.gif");
-        registerImage(imageRegistry, "logo32", "icons/obj32/felixLogo32x32.gif");
-        registerImage(imageRegistry, "logo64", "icons/obj64/felixLogo64x64.gif");
-        registerImage(imageRegistry, SERVICE_IMG, "icons/obj16/generic_element.gif");
+        registerImage(imageRegistry, BUNDLE_OBJ_IMG, "icons/obj16/bundle_obj.gif"); //$NON-NLS-1$
+        registerImage(imageRegistry, LOGO_16X16_IMG, "icons/obj16/felixLogo16x16.gif"); //$NON-NLS-1$
+        registerImage(imageRegistry, "logo32", "icons/obj32/felixLogo32x32.gif"); //$NON-NLS-1$ $NON-NLS-2$
+        registerImage(imageRegistry, "logo64", "icons/obj64/felixLogo64x64.gif"); //$NON-NLS-1$ $NON-NLS-2$
+        registerImage(imageRegistry, SERVICE_IMG, "icons/obj16/generic_element.gif"); //$NON-NLS-1$
     }
 
-    private void registerEclipseRuntimeDataProvider() {
+    /**
+     * Starts the {@link EclipseRuntimeDataProvider} for this plugin. The
+     * {@code EclipseRuntimeDataProvider} is a singleton in this plugin.
+     */
+    private void startEclipseRuntimeDataProvider() {
         eclipseWorkbenchDataProvider.start();
 
         runtimeDataProviderManager.add(eclipseWorkbenchDataProvider);

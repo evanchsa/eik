@@ -17,17 +17,6 @@
  */
 package org.apache.karaf.eclipse.workbench.internal;
 
-import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
-import org.apache.karaf.eclipse.core.KarafWorkingPlatformModel;
-import org.apache.karaf.eclipse.core.equinox.BundleEntry;
-import org.apache.karaf.eclipse.ui.workbench.KarafWorkbenchService;
-import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
-import org.apache.karaf.eclipse.workbench.MBeanProvider;
-import org.apache.karaf.eclipse.workbench.WorkbenchServiceManager;
-import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
-import org.apache.karaf.eclipse.workbench.jmx.LocalJMXServiceDescriptor;
-import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProvider;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -38,6 +27,16 @@ import java.util.Map;
 
 import javax.management.remote.JMXServiceURL;
 
+import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
+import org.apache.karaf.eclipse.core.KarafWorkingPlatformModel;
+import org.apache.karaf.eclipse.core.equinox.BundleEntry;
+import org.apache.karaf.eclipse.ui.workbench.KarafWorkbenchService;
+import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
+import org.apache.karaf.eclipse.workbench.MBeanProvider;
+import org.apache.karaf.eclipse.workbench.WorkbenchServiceManager;
+import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
+import org.apache.karaf.eclipse.workbench.jmx.LocalJMXServiceDescriptor;
+import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProvider;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -100,7 +99,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
         private JMXServiceDescriptor jmxServiceDescriptor;
 
-        private MBeanProvider mbeanProvider;
+        private KarafMBeanProvider karafMBeanProvider;
 
         private MBeanServerConnectionJob mbeanServerConnectionJob;
 
@@ -110,8 +109,8 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
             return jmxServiceDescriptor;
         }
 
-        public MBeanProvider getMbeanProvider() {
-            return mbeanProvider;
+        public KarafMBeanProvider getKarafMBeanProvider() {
+            return karafMBeanProvider;
         }
 
         public MBeanServerConnectionJob getMBeanServerConnectionJob() {
@@ -131,8 +130,8 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
             this.mbeanServerConnectionJob = mbeanServerConnectionJob;
         }
 
-        public void setMbeanProvider(final MBeanProvider mbeanProvider) {
-            this.mbeanProvider = mbeanProvider;
+        public void setKarafMBeanProvider(final KarafMBeanProvider karafMBeanProvider) {
+            this.karafMBeanProvider = karafMBeanProvider;
         }
 
         public void setRuntimeDataProvider(final RuntimeDataProvider runtimeDataProvider) {
@@ -261,7 +260,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                     mbeanProvider = new LocalKarafMBeanProvider(jmxServiceDescriptor, mbeanConnectionJob.getJmxClient(), platformModel);
                     mbeanProvider.open(memento);
 
-                    mbeanProviderDataMap.get(memento).setMbeanProvider(mbeanProvider);
+                    mbeanProviderDataMap.get(memento).setKarafMBeanProvider(mbeanProvider);
                     mbeanProviderManager.add(mbeanProvider);
                 } catch (final IOException e) {
                     KarafWorkbenchActivator.getLogger().error("Unable to create MBeanProvider from JMXConnector", e);
@@ -354,7 +353,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                             runtimeDataProvider.stop();
                         }
 
-                        final MBeanProvider mbeanProvider = mbeanProviderDataMap.get(memento).getMbeanProvider();
+                        final KarafMBeanProvider mbeanProvider = mbeanProviderDataMap.get(memento).getKarafMBeanProvider();
                         mbeanProviderManager.remove(mbeanProvider);
 
                         if (mbeanProvider != null) {

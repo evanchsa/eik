@@ -17,11 +17,10 @@
  */
 package org.apache.karaf.eclipse.workbench;
 
-import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
-
 import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
 
+import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
 import org.eclipse.core.runtime.IAdaptable;
 
 /**
@@ -36,18 +35,6 @@ public interface MBeanProvider extends IAdaptable {
      */
     public static final String KARAF_WORKBENCH_SERVICES_ID =
         "org.apache.karaf.eclipse.jmx.workbench.services";
-
-    /**
-     * Closes this {@code MBeanProvider}. This will close any connections to a
-     * remote {@code MBeanServer} and unregister any OSGi Services from the
-     * Service Registry.<br>
-     * <br>
-     * Once an {@code MBeanProvider} is closed it cannot be re-opened and should
-     * be discarded. <br>
-     * <br>
-     * This method is idempotent from the caller's perspective.
-     */
-    public void close();
 
     /**
      * Retrieves the {@link JMXServiceDescriptor} for this {@code MBeanProvider}
@@ -83,20 +70,4 @@ public interface MBeanProvider extends IAdaptable {
      * @return true if this {@code MBeanProvider} is open, false otherwise
      */
     public boolean isOpen();
-
-    /**
-     * Opens the {@code MBeanProvider} constructing the MBeans and registering
-     * them as OSGi services. This {@code MBeanProvider} is also registered as
-     * an OSGi service.<br>
-     * <br>
-     * This method is idempotent from the caller's perspective.
-     *
-     * @param memento
-     *            Must not be null<br>
-     *            This object is used to distinguish the services registered
-     *            here from other {@code MBeanProvider}S. This memento is
-     *            registered under the {@link KARAF_WORKBENCH_SERVICES_ID}
-     *            property in the OSGi service registry.
-     */
-    public void open(Object memento);
 }

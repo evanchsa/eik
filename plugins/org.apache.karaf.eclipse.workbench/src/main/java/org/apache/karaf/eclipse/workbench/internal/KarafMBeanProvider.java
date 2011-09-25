@@ -17,10 +17,6 @@
  */
 package org.apache.karaf.eclipse.workbench.internal;
 
-import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
-import org.apache.karaf.eclipse.workbench.MBeanProvider;
-import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
-
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -35,6 +31,9 @@ import javax.management.NotificationListener;
 import javax.management.ObjectName;
 import javax.management.remote.JMXConnector;
 
+import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
+import org.apache.karaf.eclipse.workbench.MBeanProvider;
+import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
 import org.eclipse.core.runtime.PlatformObject;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -79,7 +78,16 @@ public class KarafMBeanProvider extends PlatformObject implements MBeanProvider,
         this.connector.addConnectionNotificationListener(this, null, null);
     }
 
-    @Override
+    /**
+     * Closes this {@code MBeanProvider}. This will close any connections to a
+     * remote {@code MBeanServer} and unregister any OSGi Services from the
+     * Service Registry.<br>
+     * <br>
+     * Once an {@code MBeanProvider} is closed it cannot be re-opened and should
+     * be discarded. <br>
+     * <br>
+     * This method is idempotent from the caller's perspective.
+     */
     public void close() {
 
         // JMXConnector.close() is a potentially long running operation.
@@ -139,7 +147,20 @@ public class KarafMBeanProvider extends PlatformObject implements MBeanProvider,
         return memento != null;
     }
 
-    @Override
+    /**
+     * Opens the {@code MBeanProvider} constructing the MBeans and registering
+     * them as OSGi services. This {@code MBeanProvider} is also registered as
+     * an OSGi service.<br>
+     * <br>
+     * This method is idempotent from the caller's perspective.
+     *
+     * @param memento
+     *            Must not be null<br>
+     *            This object is used to distinguish the services registered
+     *            here from other {@code MBeanProvider}S. This memento is
+     *            registered under the {@link KARAF_WORKBENCH_SERVICES_ID}
+     *            property in the OSGi service registry.
+     */
     public void open(final Object memento) {
         if (memento == null) {
             throw new NullPointerException("Cannot specify a null memento");

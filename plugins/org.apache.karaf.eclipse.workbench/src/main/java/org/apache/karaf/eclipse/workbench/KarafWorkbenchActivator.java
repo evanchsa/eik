@@ -19,13 +19,13 @@ package org.apache.karaf.eclipse.workbench;
 
 import org.apache.karaf.eclipse.core.LogWrapper;
 import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
-import org.apache.karaf.eclipse.workbench.internal.MBeanProviderManager;
 import org.apache.karaf.eclipse.workbench.internal.RuntimeDataProviderManager;
 import org.apache.karaf.eclipse.workbench.internal.eclipse.EclipseRuntimeDataProvider;
 import org.apache.karaf.eclipse.workbench.jmx.IJMXTransportRegistry;
 import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
 import org.apache.karaf.eclipse.workbench.jmx.internal.JMXServiceManager;
 import org.apache.karaf.eclipse.workbench.jmx.internal.JMXTransportRegistry;
+import org.apache.karaf.eclipse.workbench.jmx.mbeans.MBeanProviderManager;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;

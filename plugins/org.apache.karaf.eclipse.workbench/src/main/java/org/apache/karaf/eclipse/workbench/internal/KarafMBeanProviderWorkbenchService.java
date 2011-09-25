@@ -103,7 +103,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
 
         private MBeanServerConnectionJob mbeanServerConnectionJob;
 
-        private RuntimeDataProvider runtimeDataProvider;
+        private KarafRuntimeDataProvider karafRuntimeDataProvider;
 
         public JMXServiceDescriptor getJmxServiceDescriptor() {
             return jmxServiceDescriptor;
@@ -117,8 +117,8 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
             return mbeanServerConnectionJob;
         }
 
-        public RuntimeDataProvider getRuntimeDataProvider() {
-            return runtimeDataProvider;
+        public KarafRuntimeDataProvider getKarafRuntimeDataProvider() {
+            return karafRuntimeDataProvider;
         }
 
         public void setJmxServiceDescriptor(
@@ -134,8 +134,8 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
             this.karafMBeanProvider = karafMBeanProvider;
         }
 
-        public void setRuntimeDataProvider(final RuntimeDataProvider runtimeDataProvider) {
-            this.runtimeDataProvider = runtimeDataProvider;
+        public void setRuntimeDataProvider(final KarafRuntimeDataProvider karafRuntimeDataProvider) {
+            this.karafRuntimeDataProvider = karafRuntimeDataProvider;
         }
     };
 
@@ -347,7 +347,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                             job.cancel();
                         }
 
-                        final RuntimeDataProvider runtimeDataProvider = mbeanProviderDataMap.get(memento).getRuntimeDataProvider();
+                        final KarafRuntimeDataProvider runtimeDataProvider = mbeanProviderDataMap.get(memento).getKarafRuntimeDataProvider();
                         runtimeDataProviderManager.remove(runtimeDataProvider);
                         if (runtimeDataProvider != null) {
                             runtimeDataProvider.stop();

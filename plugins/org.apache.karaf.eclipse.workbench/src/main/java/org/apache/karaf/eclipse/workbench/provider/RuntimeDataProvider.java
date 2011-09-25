@@ -21,7 +21,6 @@ import java.util.Set;
 
 import org.apache.aries.jmx.codec.BundleData;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -97,21 +96,4 @@ public interface RuntimeDataProvider extends IAdaptable {
      *            the listener to remove
      */
     public void removeListener(RuntimeDataProviderListener listener);
-
-    /**
-     * Starts this data provider. Implementors should return as soon as possible
-     * and defer any significant initialization work to a {@link Job}<br>
-     * <br>
-     * Has no effect if called multiple times. Implementations should take care
-     * to handle this.
-     */
-    public void start();
-
-    /**
-     * Stops this data provider.<br>
-     * <br>
-     * Has no effect if called multiple times. Implementations should take care
-     * to handle this.
-     */
-    public void stop();
 }

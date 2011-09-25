@@ -17,14 +17,6 @@
  */
 package org.apache.karaf.eclipse.workbench.internal;
 
-import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
-import org.apache.karaf.eclipse.workbench.MBeanProvider;
-import org.apache.karaf.eclipse.workbench.provider.AbstractRuntimeDataProvider;
-import org.apache.karaf.eclipse.workbench.provider.BundleItem;
-import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProvider;
-import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProviderListener;
-import org.apache.karaf.eclipse.workbench.provider.ServiceItem;
-
 import java.io.IOException;
 import java.util.EnumSet;
 
@@ -33,6 +25,13 @@ import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
 import org.apache.aries.jmx.codec.ServiceData;
+import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
+import org.apache.karaf.eclipse.workbench.MBeanProvider;
+import org.apache.karaf.eclipse.workbench.provider.AbstractRuntimeDataProvider;
+import org.apache.karaf.eclipse.workbench.provider.BundleItem;
+import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProvider;
+import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProviderListener;
+import org.apache.karaf.eclipse.workbench.provider.ServiceItem;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -179,17 +178,27 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
     }
 
     /**
+     * Starts this data provider. Implementors should return as soon as possible
+     * and defer any significant initialization work to a {@link Job}<br>
+     * <p>
      * Starts the {@link RuntimeDataProvider} which will collect the OSGi
      * runtime information from the running Karaf instance.
+     * <p>
+     * Has no effect if called multiple times. Implementations should take care
+     * to handle this.
      */
-    @Override
     public void start() {
         fireStartEvent();
 
         updateDataJob.schedule();
     }
 
-    @Override
+    /**
+     * Stops this data provider.<br>
+     * <br>
+     * Has no effect if called multiple times. Implementations should take care
+     * to handle this.
+     */
     public void stop() {
         updateDataJob.cancel();
 

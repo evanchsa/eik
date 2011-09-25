@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.workbench.internal.eclipse;
+package org.apache.karaf.eclipse.workbench.provider.eclipse;
 
 import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
 import org.apache.karaf.eclipse.workbench.provider.AbstractRuntimeDataProvider;

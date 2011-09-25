@@ -17,15 +17,14 @@
  */
 package org.apache.karaf.eclipse.workbench.jmx.mbeans;
 
-import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
-import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
-
 import java.io.IOException;
 import java.util.Hashtable;
 
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 
+import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
+import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -100,12 +99,8 @@ public class MBeanServerConnectionJob extends Job {
         }
     }
 
-    public JMXConnector getJmxClient() {
+    public final JMXConnector getJMXConnector() {
         return jmxClient;
-    }
-
-    public JMXServiceDescriptor getMBeanServerConnectionDescriptor() {
-        return connection;
     }
 
     public final long getRescheduleDelay() {

@@ -261,7 +261,7 @@ public class KarafMBeanProviderWorkbenchService implements KarafWorkbenchService
                 final KarafMBeanProvider mbeanProvider;
                 try {
                     final JMXServiceDescriptor jmxServiceDescriptor = mbeanProviderDataMap.get(memento).getJmxServiceDescriptor();
-                    mbeanProvider = new LocalKarafMBeanProvider(jmxServiceDescriptor, mbeanConnectionJob.getJmxClient(), platformModel);
+                    mbeanProvider = new LocalKarafMBeanProvider(jmxServiceDescriptor, mbeanConnectionJob.getJMXConnector(), platformModel);
                     mbeanProvider.open(memento);
 
                     mbeanProviderDataMap.get(memento).setKarafMBeanProvider(mbeanProvider);

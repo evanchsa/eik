@@ -17,7 +17,7 @@
  */
 package org.apache.karaf.eclipse.workbench.jmx.internal;
 
-import org.apache.karaf.eclipse.workbench.internal.AbstractWorkbenchServiceManager;
+import org.apache.karaf.eclipse.workbench.AbstractWorkbenchServiceManager;
 import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
 
 /**

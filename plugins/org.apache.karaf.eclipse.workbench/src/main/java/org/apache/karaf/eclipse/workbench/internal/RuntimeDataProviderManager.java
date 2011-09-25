@@ -17,6 +17,7 @@
  */
 package org.apache.karaf.eclipse.workbench.internal;
 
+import org.apache.karaf.eclipse.workbench.AbstractWorkbenchServiceManager;
 import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProvider;
 
 /**

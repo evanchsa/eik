@@ -17,8 +17,8 @@
  */
 package org.apache.karaf.eclipse.workbench.jmx.mbeans;
 
+import org.apache.karaf.eclipse.workbench.AbstractWorkbenchServiceManager;
 import org.apache.karaf.eclipse.workbench.MBeanProvider;
-import org.apache.karaf.eclipse.workbench.internal.AbstractWorkbenchServiceManager;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)

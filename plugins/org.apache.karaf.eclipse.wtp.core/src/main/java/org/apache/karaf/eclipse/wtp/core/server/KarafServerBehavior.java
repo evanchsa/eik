@@ -17,14 +17,13 @@
  */
 package org.apache.karaf.eclipse.wtp.core.server;
 
-import org.apache.karaf.eclipse.workbench.MBeanProvider;
-import org.apache.karaf.eclipse.wtp.core.KarafServerLaunchConfigurationInitializer;
-import org.apache.karaf.eclipse.wtp.core.KarafWtpPluginActivator;
-
 import java.io.IOException;
 
 import javax.management.ObjectName;
 
+import org.apache.karaf.eclipse.workbench.MBeanProvider;
+import org.apache.karaf.eclipse.wtp.core.KarafServerLaunchConfigurationInitializer;
+import org.apache.karaf.eclipse.wtp.core.KarafWtpPluginActivator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -183,7 +182,6 @@ public class KarafServerBehavior extends ServerBehaviourDelegate {
             try {
                 if (mbeanProvider != null && mbeanProvider.isOpen()) {
                     mbeanProvider.getMBean(FRAMEWORK, FrameworkMBean.class).shutdownFramework();
-                    mbeanProvider.close();
                 }
             } catch (final IOException e) {
             }

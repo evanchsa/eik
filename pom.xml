@@ -103,18 +103,35 @@
               <encoding>ISO-8859-1</encoding>
             </configuration>
           </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+              <source>1.5</source>
+              <target>1.5</target>
+            </configuration>
+          </plugin>
         </plugins>
     </pluginManagement>
     <plugins>
-      <plugin>
+      <!-- 
+         This is actually needed by m2eclipse for eclipse-plugin projects 
+         because otherwise m2eclipse can not determine the jdk version
+         Since the help goal has no phase defined it won't run.
+         https://issues.sonatype.org/browse/MNGECLIPSE-2152
+     -->
+     <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
+        <executions>
+            <execution>
+                <goals>
+                    <goal>help</goal>
+                </goals>
+            </execution>
+        </executions>
+     </plugin>
      <plugin>
         <!-- enable tycho build extension -->
         <groupId>org.eclipse.tycho</groupId>

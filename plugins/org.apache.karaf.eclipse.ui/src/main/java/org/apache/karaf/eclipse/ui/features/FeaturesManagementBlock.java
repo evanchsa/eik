@@ -47,7 +47,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
@@ -579,7 +578,7 @@ public class FeaturesManagementBlock {
     private void createControl() {
         final GridLayout layout = new GridLayout(2, false);
 
-        control = new Group(parent, SWT.NONE);
+        control = new Composite(parent, SWT.NONE);
         control.setLayout(layout);
         control.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 

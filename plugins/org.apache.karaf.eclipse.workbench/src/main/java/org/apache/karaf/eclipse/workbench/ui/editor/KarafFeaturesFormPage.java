@@ -17,8 +17,11 @@
  */
 package org.apache.karaf.eclipse.workbench.ui.editor;
 
+import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.List;
 
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
@@ -31,8 +34,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
  *
@@ -45,9 +50,9 @@ public class KarafFeaturesFormPage extends FormPage {
 
     private static final String TITLE = "Features";
 
-    private FeaturesManagementBlock featuresManagementBlock;
-
     private final KarafPlatformEditorPart editor;
+
+    private FeaturesManagementBlock featuresManagementBlock;
 
     /**
      *
@@ -81,12 +86,37 @@ public class KarafFeaturesFormPage extends FormPage {
         left.setLayoutData(data);
 
         featuresManagementBlock = new FeaturesManagementBlock(left);
+
+        adaptFeaturesManagementBlock(managedForm);
+
         initializeFeaturesManagementBlock();
 
         final Composite right = managedForm.getToolkit().createComposite(managedForm.getForm().getBody());
         data = new GridData(GridData.FILL_BOTH);
         right.setLayout(new GridLayout(1, false));
         right.setLayoutData(data);
+    }
+
+    /**
+     * Adapts all of the {@link Control}s in the {@link FeaturesManagementBlock}
+     * to be styled according to the {@link FormToolkit}
+     *
+     * @param managedForm
+     *            the {@link IManagedForm} that owns the {@code FormToolkit}
+     */
+    private void adaptFeaturesManagementBlock(final IManagedForm managedForm) {
+        final Deque<Control> controls = new ArrayDeque<Control>();
+        controls.add(featuresManagementBlock.getControl());
+
+        while (!controls.isEmpty()) {
+            final Control control = controls.pop();
+            managedForm.getToolkit().adapt(control, true, true);
+
+            if (control instanceof Composite) {
+                final Composite composite = (Composite) control;
+                controls.addAll(Arrays.asList(composite.getChildren()));
+            }
+        }
     }
 
     /**

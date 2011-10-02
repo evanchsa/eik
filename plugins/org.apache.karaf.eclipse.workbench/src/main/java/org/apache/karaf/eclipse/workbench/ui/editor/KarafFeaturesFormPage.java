@@ -17,6 +17,7 @@
  */
 package org.apache.karaf.eclipse.workbench.ui.editor;
 
+import org.apache.karaf.eclipse.ui.features.FeaturesManagementBlock;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -33,6 +34,8 @@ public class KarafFeaturesFormPage extends FormPage {
     public static final String ID = "org.apache.karaf.eclipse.editors.page.Features";
 
     private static final String TITLE = "Features";
+
+    private FeaturesManagementBlock featuresManagementBlock;
 
     /**
      *
@@ -59,8 +62,11 @@ public class KarafFeaturesFormPage extends FormPage {
 
         final Composite left = managedForm.getToolkit().createComposite(managedForm.getForm().getBody());
         data = new GridData(GridData.FILL_BOTH);
+        data.horizontalSpan = 2;
         left.setLayout(new GridLayout(1, true));
         left.setLayoutData(data);
+
+        featuresManagementBlock = new FeaturesManagementBlock(left);
 
         final Composite right = managedForm.getToolkit().createComposite(managedForm.getForm().getBody());
         data = new GridData(GridData.FILL_BOTH);

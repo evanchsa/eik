@@ -21,6 +21,7 @@ Require-Bundle: org.eclipse.ant.core;bundle-version="3.2.201",
  org.apache.karaf.eclipse.core;bundle-version="[0.5.3,1.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.apache.karaf.eclipse.ui,
+ org.apache.karaf.eclipse.ui.features,
  org.apache.karaf.eclipse.ui.wizards,
  org.apache.karaf.eclipse.ui.workbench
 Bundle-ActivationPolicy: lazy

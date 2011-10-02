@@ -19,7 +19,6 @@ package org.apache.karaf.eclipse.ui;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -30,11 +29,9 @@ import org.apache.karaf.eclipse.core.KarafPlatformModelRegistry;
 import org.apache.karaf.eclipse.core.configuration.FeaturesSection;
 import org.apache.karaf.eclipse.core.features.FeatureResolverImpl;
 import org.apache.karaf.eclipse.core.features.FeaturesRepository;
-import org.apache.karaf.eclipse.core.features.XmlFeaturesRepository;
+import org.apache.karaf.eclipse.ui.features.FeatureUtils;
 import org.apache.karaf.eclipse.ui.features.FeaturesManagementBlock;
 import org.apache.karaf.eclipse.ui.features.FeaturesManagementBlock.FeaturesManagementListener;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -123,7 +120,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
     @Override
     public void initializeFrom(final ILaunchConfiguration configuration) {
 
-        FileInputStream fin = null;
+        final FileInputStream fin = null;
         try {
             localConsole.setSelection(
                     configuration.getAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_START_LOCAL_CONSOLE, true));
@@ -143,6 +140,23 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
                 }
             }
 
+            final List<FeaturesRepository> featuresRepositories = FeatureUtils.getDefault().getFeatureRepository(karafPlatformModel);
+            for (final FeaturesRepository featuresRepository : featuresRepositories) {
+                featuresManagementBlock.addFeaturesRepository(featuresRepository);
+            }
+
+            Collections.sort(featuresRepositories, new Comparator<FeaturesRepository>() {
+                @Override
+                public int compare(final FeaturesRepository o1, final FeaturesRepository o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+
+            final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
+
+            featuresManagementBlock.setFeatureResolver(fr);
+            featuresManagementBlock.refresh();
+/*
             // TODO: This should be factored out and it should be easy to get a List of FeaturesRepository
             final IFolder featuresFolder = karafProject.getFolder("features");
             if (featuresFolder.exists()) {
@@ -170,8 +184,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
                 featuresManagementBlock.setFeatureResolver(fr);
                 featuresManagementBlock.refresh();
             }
-        } catch (final IOException e) {
-            KarafUIPluginActivator.getLogger().error("Uable to load file", e);
+*/
         } catch (final CoreException e) {
             KarafUIPluginActivator.getLogger().error("Unable to initialize launch configuration tab", e);
             return;

@@ -17,7 +17,17 @@
  */
 package org.apache.karaf.eclipse.workbench.ui.editor;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.core.configuration.FeaturesSection;
+import org.apache.karaf.eclipse.core.features.FeatureResolverImpl;
+import org.apache.karaf.eclipse.core.features.FeaturesRepository;
+import org.apache.karaf.eclipse.ui.features.FeatureUtils;
 import org.apache.karaf.eclipse.ui.features.FeaturesManagementBlock;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -37,12 +47,16 @@ public class KarafFeaturesFormPage extends FormPage {
 
     private FeaturesManagementBlock featuresManagementBlock;
 
+    private final KarafPlatformEditorPart editor;
+
     /**
      *
      * @param editor
      */
     public KarafFeaturesFormPage(final KarafPlatformEditorPart editor) {
         super(editor, ID, TITLE);
+
+        this.editor = editor;
     }
 
     @Override
@@ -67,10 +81,49 @@ public class KarafFeaturesFormPage extends FormPage {
         left.setLayoutData(data);
 
         featuresManagementBlock = new FeaturesManagementBlock(left);
+        initializeFeaturesManagementBlock();
 
         final Composite right = managedForm.getToolkit().createComposite(managedForm.getForm().getBody());
         data = new GridData(GridData.FILL_BOTH);
         right.setLayout(new GridLayout(1, false));
         right.setLayoutData(data);
+    }
+
+    /**
+     *
+     */
+    private void initializeFeaturesManagementBlock() {
+        try {
+            final KarafPlatformModel karafPlatformModel = editor.getKarafPlatform();
+
+            final FeaturesSection featuresSection = (FeaturesSection) karafPlatformModel.getAdapter(FeaturesSection.class);
+            featuresSection.load();
+
+            final List<String> bootFeaturesList = featuresSection.getBootFeatureNames();
+            for (final String feature : bootFeaturesList) {
+                if (!feature.isEmpty() && !featuresManagementBlock.containsBootFeature(feature)) {
+                    featuresManagementBlock.addBootFeature(feature);
+                }
+            }
+
+            final List<FeaturesRepository> featuresRepositories = FeatureUtils.getDefault().getFeatureRepository(karafPlatformModel);
+            for (final FeaturesRepository featuresRepository : featuresRepositories) {
+                featuresManagementBlock.addFeaturesRepository(featuresRepository);
+            }
+
+            Collections.sort(featuresRepositories, new Comparator<FeaturesRepository>() {
+                @Override
+                public int compare(final FeaturesRepository o1, final FeaturesRepository o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+
+            final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
+
+            featuresManagementBlock.setFeatureResolver(fr);
+            featuresManagementBlock.refresh();
+        } catch (final CoreException e) {
+
+        }
     }
 }

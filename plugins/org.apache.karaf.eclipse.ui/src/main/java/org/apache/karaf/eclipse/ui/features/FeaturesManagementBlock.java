@@ -474,7 +474,9 @@ public class FeaturesManagementBlock {
                     bootFeaturesViewer.refresh();
                 }
 
-                featuresManagementListener.handleEvent(event);
+                if (featuresManagementListener != null) {
+                    featuresManagementListener.handleEvent(event);
+                }
             }
         });
     }
@@ -528,7 +530,10 @@ public class FeaturesManagementBlock {
             public void handleEvent(final Event event) {
                 if (event.widget == bootFeatureOrderIncreaseButton) {
                     handleBootFeatureMove(-1);
-                    featuresManagementListener.handleEvent(event);
+
+                    if (featuresManagementListener != null) {
+                        featuresManagementListener.handleEvent(event);
+                    }
                 }
             }
         });
@@ -542,7 +547,10 @@ public class FeaturesManagementBlock {
             public void handleEvent(final Event event) {
                 if (event.widget == bootFeatureRemoveButton) {
                     removeSelectedBootFeatures();
-                    featuresManagementListener.handleEvent(event);
+
+                    if (featuresManagementListener != null) {
+                        featuresManagementListener.handleEvent(event);
+                    }
                 }
             }
         });
@@ -556,7 +564,10 @@ public class FeaturesManagementBlock {
             public void handleEvent(final Event event) {
                 if (event.widget == bootFeatureOrderDecreaseButton) {
                     handleBootFeatureMove(1);
-                    featuresManagementListener.handleEvent(event);
+
+                    if (featuresManagementListener != null) {
+                        featuresManagementListener.handleEvent(event);
+                    }
                 }
             }
         });

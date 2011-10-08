@@ -156,35 +156,6 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
 
             featuresManagementBlock.setFeatureResolver(fr);
             featuresManagementBlock.refresh();
-/*
-            // TODO: This should be factored out and it should be easy to get a List of FeaturesRepository
-            final IFolder featuresFolder = karafProject.getFolder("features");
-            if (featuresFolder.exists()) {
-                final List<FeaturesRepository> featuresRepositories = new ArrayList<FeaturesRepository>();
-                final IResource[] resources = featuresFolder.members();
-                for (final IResource resource : resources) {
-                    if (resource.getFileExtension().equalsIgnoreCase("xml")) {
-                        fin = new FileInputStream(resource.getRawLocation().toFile());
-                        final XmlFeaturesRepository xmlFeatureRepository = new XmlFeaturesRepository(resource.getName(), fin);
-                        featuresRepositories.add(xmlFeatureRepository);
-                        featuresManagementBlock.addFeaturesRepository(xmlFeatureRepository);
-                        fin.close();
-                    }
-                }
-
-                Collections.sort(featuresRepositories, new Comparator<FeaturesRepository>() {
-                    @Override
-                    public int compare(final FeaturesRepository o1, final FeaturesRepository o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
-
-                final FeatureResolverImpl fr = new FeatureResolverImpl(featuresRepositories);
-
-                featuresManagementBlock.setFeatureResolver(fr);
-                featuresManagementBlock.refresh();
-            }
-*/
         } catch (final CoreException e) {
             KarafUIPluginActivator.getLogger().error("Unable to initialize launch configuration tab", e);
             return;

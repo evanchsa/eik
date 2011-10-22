@@ -17,17 +17,6 @@
  */
 package org.apache.karaf.eclipse.ui.project;
 
-import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.PropertyUtils;
-import org.apache.karaf.eclipse.core.configuration.FeaturesSection;
-import org.apache.karaf.eclipse.core.features.FeaturesRepository;
-import org.apache.karaf.eclipse.ui.IKarafProject;
-import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
-import org.apache.karaf.eclipse.ui.features.FeaturesResolverJob;
-import org.apache.karaf.eclipse.ui.internal.KarafLaunchUtils;
-import org.apache.karaf.eclipse.ui.internal.PopulateObrFileJob;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -43,6 +32,16 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
+import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.core.PropertyUtils;
+import org.apache.karaf.eclipse.core.configuration.FeaturesSection;
+import org.apache.karaf.eclipse.core.features.FeaturesRepository;
+import org.apache.karaf.eclipse.ui.IKarafProject;
+import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
+import org.apache.karaf.eclipse.ui.features.FeaturesResolverJob;
+import org.apache.karaf.eclipse.ui.internal.KarafLaunchUtils;
+import org.apache.karaf.eclipse.ui.internal.PopulateObrFileJob;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -77,7 +76,7 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         throws CoreException
     {
         final IProject project = getProject();
-        
+
         // Sentry to prevent builders from running
         if (getKarafProject() == null) {
         	// TODO: This should issue a warning in the Error Log
@@ -147,9 +146,21 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
                 z = sourceJar.getNextEntry();
             }
         } catch (final FileNotFoundException e) {
-            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Could not filter OSGi Interfaces from JAR", e));
+            throw new CoreException(
+                    new Status(
+                            IStatus.ERROR,
+                            KarafUIPluginActivator.PLUGIN_ID,
+                            "Could not filter OSGi Interfaces from JAR",
+                            e));
+
         } catch (final IOException e) {
-            throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Could not filter OSGi Interfaces from JAR", e));
+            throw new CoreException(
+                    new Status(
+                            IStatus.ERROR,
+                            KarafUIPluginActivator.PLUGIN_ID,
+                            "Could not filter OSGi Interfaces from JAR",
+                            e));
+
         } finally {
             if (sourceJar != null) {
                 try {
@@ -293,9 +304,21 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
 
             monitor.worked(1);
         } catch (final IOException e) {
-            e.printStackTrace();
+            throw new CoreException(
+                    new Status(
+                            Status.ERROR,
+                            KarafUIPluginActivator.PLUGIN_ID,
+                            "Unable to build features repositories",
+                            e));
         } catch (final InterruptedException e) {
-            e.printStackTrace();
+            Thread.interrupted();
+
+            throw new CoreException(
+                    new Status(
+                            Status.ERROR,
+                            KarafUIPluginActivator.PLUGIN_ID,
+                            "Unable to build features repositories",
+                            e));
         }
     }
 
@@ -320,7 +343,14 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         try {
           populateObrJob.join();
         } catch (final InterruptedException e) {
-            e.printStackTrace();
+            Thread.interrupted();
+
+            throw new CoreException(
+                    new Status(
+                            Status.ERROR,
+                            KarafUIPluginActivator.PLUGIN_ID,
+                            "Unable to build features repositories",
+                            e));
         }
     }
 
@@ -404,19 +434,16 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
      * @throws CoreException
      */
     private void incrementalBuild(final IResourceDelta delta, final IProgressMonitor monitor) throws CoreException {
-        try {
-            delta.accept(new IResourceDeltaVisitor() {
-               @Override
-            public boolean visit(final IResourceDelta delta) {
-                  // if is a bundle file then schedule an update to the target platform file
-                  // if something in eclipse home changes then update obr
-                  // if it is a feature file update features repo
-                  return true;
-               }
-            });
-            fullBuild(monitor);
-         } catch (final CoreException e) {
-            e.printStackTrace();
-         }
+        delta.accept(new IResourceDeltaVisitor() {
+           @Override
+           public boolean visit(final IResourceDelta delta) {
+              // if is a bundle file then schedule an update to the target platform file
+              // if something in eclipse home changes then update obr
+              // if it is a feature file update features repo
+              return true;
+           }
+        });
+
+        fullBuild(monitor);
     }
 }

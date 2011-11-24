@@ -199,15 +199,6 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
      *             the workspace
      */
     private void createProject(final IProgressMonitor monitor) throws CoreException {
-
-        newKarafProject.getProjectHandle().setPersistentProperty(
-                new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafProject"),
-                "true");
-
-        newKarafProject.getProjectHandle().setPersistentProperty(
-                new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafModel"),
-                karafPlatformModel.getRootDirectory().toString());
-
         final IProject project = newKarafProject.getProjectHandle();
         final IPath projectLocation = newKarafProject.getLocation();
 
@@ -220,5 +211,13 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         }
 
         project.open(monitor);
+
+        newKarafProject.getProjectHandle().setPersistentProperty(
+                new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafProject"),
+                "true");
+
+        newKarafProject.getProjectHandle().setPersistentProperty(
+                new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafModel"),
+                karafPlatformModel.getRootDirectory().toString());
     }
 }

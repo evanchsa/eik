@@ -224,6 +224,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
                 "org.eclipse.equinox.common", //$NON-NLS-1$
                 "org.eclipse.equinox.registry", //$NON-NLS-1$
                 "org.eclipse.equinox.preferences", //$NON-NLS-1$
+                "org.eclipse.osgi.services", //$NON-NLS-1$
                 "org.eclipse.osgi.util" //$NON-NLS-1$
         };
 

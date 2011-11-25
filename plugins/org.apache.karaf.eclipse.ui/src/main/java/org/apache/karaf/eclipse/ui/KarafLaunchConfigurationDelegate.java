@@ -18,6 +18,7 @@
 package org.apache.karaf.eclipse.ui;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,15 +40,20 @@ import org.apache.karaf.eclipse.ui.internal.WorkbenchServiceExtensions;
 import org.apache.karaf.eclipse.ui.workbench.KarafWorkbenchServiceFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMInstall3;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.pde.launching.EquinoxLaunchConfiguration;
 import org.eclipse.pde.launching.IPDELauncherConstants;
 import org.osgi.framework.Bundle;
@@ -57,6 +63,8 @@ import org.osgi.framework.Bundle;
  *
  */
 public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration {
+
+    private static final String OSGI_FRAMEWORK_KEY = "osgi.framework";
 
     /**
      * Eclipse Equinox configuration file name
@@ -373,15 +381,17 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 	        equinoxProperties.put(OSGI_START_LEVEL_KEY, defaultStartLevel.toString());
         }
 
-        /*
-         * Set the osgi.install.area to the runtime plugins directory or the
-         * directory containing Equinox?
-         *
-         * "/org/eclipse/osgi/3.5.0.v20090429-1630"
-         */
-        final IPath frameworkPath =
-            new Path(karafPlatform.getState().getBundle(SystemBundleNames.EQUINOX.toString(), null).getLocation());
-        equinoxProperties.put(OSGI_INSTALL_AREA_KEY, frameworkPath.removeLastSegments(1).toString());
+        final BundleDescription karafEquinox = karafPlatform.getState().getBundle(SystemBundleNames.EQUINOX.toString(), null);
+
+        // Always use the Karaf Platform's OSGi bundle's path as the install area
+        final IPath karafEquinoxPath = new Path(karafEquinox.getLocation());
+        equinoxProperties.put(OSGI_INSTALL_AREA_KEY, karafEquinoxPath.removeLastSegments(1).toString());
+
+        final Bundle internalWorkbenchEquinox = Platform.getBundle(SystemBundleNames.EQUINOX.toString());
+
+        final IPath frameworkPath = chooseEquinoxBundleLocation(karafEquinox, internalWorkbenchEquinox);
+
+        equinoxProperties.put(OSGI_FRAMEWORK_KEY, frameworkPath.toOSString());
 
         final String javaSpecificationVersion = getJavaRuntimeSpecificationVersion(configuration);
         equinoxProperties.put(JAVA_SPECIFICATION_VERSION, javaSpecificationVersion);
@@ -407,6 +417,41 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         PropertyUtils.interpolateVariables(equinoxProperties, equinoxProperties);
 
         KarafCorePluginUtils.save(new File(getConfigDir(configuration), ECLIPSE_CONFIG_INI_FILE), equinoxProperties);
+    }
+
+    /**
+     * Choose the most recent version of Equinox.
+     *
+     * @param karafEquinox
+     *            the Equinox bundle found in the Karaf installation
+     * @param internalWorkbenchEquinox
+     *            the Eclipse workbench Equinox bundle
+     * @return an {@link IPath} to the most recent version of Equinox
+     * @throws CoreException
+     *             if there is a problem building the {@code IPath}
+     */
+    private IPath chooseEquinoxBundleLocation(final BundleDescription karafEquinox, final Bundle internalWorkbenchEquinox)
+            throws CoreException
+    {
+        final IPath frameworkPath;
+
+        // Use the newest version of Equinox regardless as to where it comes from
+        if (internalWorkbenchEquinox.getVersion().compareTo(karafEquinox.getVersion()) > 0) {
+            // Use the Eclipse workbench's Equinox
+            try {
+                final File f = FileLocator.getBundleFile(internalWorkbenchEquinox);
+
+                frameworkPath = new Path(f.getAbsolutePath());
+            } catch (final IOException e) {
+                // Issue a warning
+                throw new CoreException(new Status(IStatus.WARNING, KarafUIPluginActivator.PLUGIN_ID, "Unable to resolve workbench Equinox", e));
+            }
+        } else {
+            // Use Karaf's Equinox
+            frameworkPath = new Path(karafEquinox.getLocation());
+        }
+
+        return frameworkPath;
     }
 
     /**

@@ -401,6 +401,29 @@ public class FeaturesManagementBlock {
     }
 
     /**
+     * Removes a boot feature from the list
+     *
+     * @param bootFeature
+     *            the boot feature to remove
+     * @return true if the boot feature was removed; false if it was not found
+     */
+    public boolean removeBootFeature(final String bootFeature) {
+        return bootFeaturesList.remove(bootFeature);
+    }
+
+    /**
+     * Removes a {@link FeaturesRepository} from the list
+     *
+     * @param featuresRepository
+     *            the {@code FeaturesRepository} to remove
+     * @return true if the {@code FeaturesRepository} was removed; false if it
+     *         was not found
+     */
+    public boolean removeFeaturesRepository(final FeaturesRepository featuresRepository) {
+        return featuresRepositoryList.remove(featuresRepository);
+    }
+
+    /**
      * Setter to manipulate the control enabled state of the UI controls
      *
      * @param enabled

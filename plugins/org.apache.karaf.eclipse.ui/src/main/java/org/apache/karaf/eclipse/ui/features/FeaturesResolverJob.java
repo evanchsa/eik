@@ -17,15 +17,6 @@
  */
 package org.apache.karaf.eclipse.ui.features;
 
-import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.PropertyUtils;
-import org.apache.karaf.eclipse.core.configuration.FeaturesSection;
-import org.apache.karaf.eclipse.core.features.FeaturesRepository;
-import org.apache.karaf.eclipse.core.features.XmlFeaturesRepository;
-import org.apache.karaf.eclipse.ui.IKarafProject;
-import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -36,6 +27,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.core.PropertyUtils;
+import org.apache.karaf.eclipse.core.configuration.FeaturesSection;
+import org.apache.karaf.eclipse.core.features.FeaturesRepository;
+import org.apache.karaf.eclipse.core.features.XmlFeaturesRepository;
+import org.apache.karaf.eclipse.ui.IKarafProject;
+import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -61,13 +60,25 @@ public final class FeaturesResolverJob extends Job {
 
     private final FeaturesSection featuresSection;
 
+    private final List<String> featureRepositoryList =
+        Collections.synchronizedList(new ArrayList<String>());
+
     private final KarafPlatformModel karafPlatformModel;
 
     public FeaturesResolverJob(final String name, final KarafPlatformModel karafPlatformModel, final FeaturesSection featuresSection) {
+        this(name, karafPlatformModel, featuresSection, Arrays.asList(new String[0]));
+    }
+
+    public FeaturesResolverJob(final String name, final KarafPlatformModel karafPlatformModel, final List<String> featureRepositoryList) {
+        this(name, karafPlatformModel, null, featureRepositoryList);
+    }
+
+    private FeaturesResolverJob(final String name, final KarafPlatformModel karafPlatformModel, final FeaturesSection featuresSection, final List<String> featureRepositoryList) {
         super("Resolving Features for " + name);
 
         this.featuresSection = featuresSection;
         this.karafPlatformModel = karafPlatformModel;
+        this.featureRepositoryList.addAll(featureRepositoryList);
     }
 
     /**
@@ -83,7 +94,11 @@ public final class FeaturesResolverJob extends Job {
 
     @Override
     protected IStatus run(final IProgressMonitor monitor) {
-        featuresSection.load();
+        if (featuresSection != null) {
+            featuresSection.load();
+            featureRepositoryList.addAll(featuresSection.getRepositoryList());
+        }
+
         featuresRepositories.clear();
 
         return resolveFeatures(monitor);
@@ -98,10 +113,10 @@ public final class FeaturesResolverJob extends Job {
      *         resolved
      */
     private IStatus resolveFeatures(final IProgressMonitor monitor) {
-        monitor.beginTask("Loading Karaf Features", featuresSection.getRepositoryList().size());
+        monitor.beginTask("Loading Karaf Features", featureRepositoryList.size());
         try {
 
-            for (final String repository : featuresSection.getRepositoryList()) {
+            for (final String repository : featureRepositoryList) {
 
                 if (monitor.isCanceled()) {
                     return Status.CANCEL_STATUS;

@@ -18,6 +18,7 @@
 package org.apache.karaf.eclipse.workbench.provider.karaf;
 
 import java.io.IOException;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.EnumSet;
 
 import javax.management.ObjectName;
@@ -253,6 +254,8 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
 
         } catch (final IOException e) {
             return new Status(IStatus.ERROR, KarafWorkbenchActivator.PLUGIN_ID, "Unable to connect to MBeanServer", e);
+        } catch (final UndeclaredThrowableException e) {
+            KarafWorkbenchActivator.getLogger().warn("Unable to update OSGi Bundles", e.getUndeclaredThrowable());
         } catch (final Exception e) {
             KarafWorkbenchActivator.getLogger().warn("Unable to update OSGi Bundles", e);
         }
@@ -310,6 +313,8 @@ public class KarafRuntimeDataProvider extends AbstractRuntimeDataProvider {
         	} else {
         		return new Status(IStatus.ERROR, KarafWorkbenchActivator.PLUGIN_ID, "Unable to connect to MBeanServer", e);
         	}
+        } catch (final UndeclaredThrowableException e ) {
+            KarafWorkbenchActivator.getLogger().warn("Unable to update OSGi Services", e.getUndeclaredThrowable());
         } catch (final Exception e) {
             KarafWorkbenchActivator.getLogger().warn("Unable to update OSGi Services", e);
         }

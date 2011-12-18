@@ -20,7 +20,6 @@ package org.apache.karaf.eclipse.workbench.ui.editor;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.ui.IKarafProject;
 import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 
 /**
@@ -68,6 +67,10 @@ public class KarafPlatformEditorInput extends AbstractEditorInput {
 
     public KarafPlatformModel getKarafPlatform() {
         return (KarafPlatformModel) karafProject.getAdapter(KarafPlatformModel.class);
+    }
+
+    public IKarafProject getKarafProject() {
+        return karafProject;
     }
 
     @Override

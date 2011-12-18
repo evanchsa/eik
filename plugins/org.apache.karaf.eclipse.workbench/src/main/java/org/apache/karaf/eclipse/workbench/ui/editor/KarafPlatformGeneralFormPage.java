@@ -17,6 +17,10 @@
  */
 package org.apache.karaf.eclipse.workbench.ui.editor;
 
+import java.lang.management.RuntimeMXBean;
+
+import javax.management.ObjectName;
+
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.core.KarafWorkingPlatformModel;
 import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
@@ -24,11 +28,6 @@ import org.apache.karaf.eclipse.workbench.MBeanProvider;
 import org.apache.karaf.eclipse.workbench.WorkbenchServiceListener;
 import org.apache.karaf.eclipse.workbench.WorkbenchServiceManager;
 import org.apache.karaf.eclipse.workbench.jmx.JMXServiceDescriptor;
-
-import java.lang.management.RuntimeMXBean;
-
-import javax.management.ObjectName;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.SWT;
@@ -74,7 +73,7 @@ public class KarafPlatformGeneralFormPage extends FormPage {
         public void serviceAdded(final MBeanProvider service) {
             final IPath rootDirectory = getKarafPlatformRootPath(service);
 
-            if (editor.getKarafPlatform().getRootDirectory().equals(rootDirectory)) {
+            if (editor.getKarafEditorInput().getKarafPlatform().getRootDirectory().equals(rootDirectory)) {
                 safeUpdateMBeanData(service);
             }
         }
@@ -130,7 +129,7 @@ public class KarafPlatformGeneralFormPage extends FormPage {
 
         for (final MBeanProvider mbeanProvider : mbeanProviderManager.getServices()) {
             final IPath platformPath = getKarafPlatformRootPath(mbeanProvider);
-            if (editor.getKarafPlatform().getRootDirectory().equals(platformPath)) {
+            if (editor.getKarafEditorInput().getKarafPlatform().getRootDirectory().equals(platformPath)) {
                 updateMBeanData(mbeanProvider);
             }
         }

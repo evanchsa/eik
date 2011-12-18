@@ -19,7 +19,6 @@ package org.apache.karaf.eclipse.workbench.ui.editor;
 
 import org.apache.karaf.eclipse.core.KarafPlatformDetails;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -30,7 +29,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class KarafPlatformEditorPart extends FormEditor {
+public class KarafPlatformEditorPart extends FormEditor implements KarafEditor {
 
     public static final String ID = "org.apache.karaf.eclipse.ui.editors.KarafPlatformEditor";
 
@@ -42,20 +41,20 @@ public class KarafPlatformEditorPart extends FormEditor {
 
     @Override
     public void doSave(final IProgressMonitor monitor) {
+        commitPages(true);
+        editorDirtyStateChanged();
     }
 
     @Override
     public void doSaveAs() {
     }
 
+    @Override
     public KarafPlatformEditorInput getKarafEditorInput() {
         return karafEditorInput;
     }
 
-    public KarafPlatformModel getKarafPlatform() {
-        return karafPlatform;
-    }
-
+    @Override
     public KarafPlatformDetails getPlatformDetails() {
         return platformDetails;
     }

@@ -17,6 +17,8 @@
  */
 package org.apache.karaf.eclipse.workbench.ui.editor;
 
+import java.util.EnumSet;
+
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.core.KarafWorkingPlatformModel;
 import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
@@ -28,9 +30,6 @@ import org.apache.karaf.eclipse.workbench.provider.BundleItem;
 import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProvider;
 import org.apache.karaf.eclipse.workbench.provider.RuntimeDataProviderListener;
 import org.apache.karaf.eclipse.workbench.ui.views.bundle.BundleIdSorter;
-
-import java.util.EnumSet;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -155,7 +154,7 @@ public class KarafPlatformRuntimeFormPage extends FormPage {
             }
 
             final IPath rootDirecotry = getKarafPlatformRootPath(mbeanProvider);
-            if (editor.getKarafPlatform().getRootDirectory().equals(rootDirecotry)) {
+            if (editor.getKarafEditorInput().getKarafPlatform().getRootDirectory().equals(rootDirecotry)) {
                 bundlesViewer.setInput(service);
             }
         }
@@ -275,7 +274,7 @@ public class KarafPlatformRuntimeFormPage extends FormPage {
             }
 
             final IPath rootDirecotry = getKarafPlatformRootPath(mbeanProvider);
-            if (editor.getKarafPlatform().getRootDirectory().equals(rootDirecotry)) {
+            if (editor.getKarafEditorInput().getKarafPlatform().getRootDirectory().equals(rootDirecotry)) {
                 bundlesViewer.setInput(runtimeDataProvider);
             }
         }

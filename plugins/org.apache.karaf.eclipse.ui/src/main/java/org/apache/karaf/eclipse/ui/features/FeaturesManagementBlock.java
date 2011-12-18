@@ -196,8 +196,7 @@ public class FeaturesManagementBlock {
         @Override
         public Image getColumnImage(final Object element, final int columnIndex) {
             if (columnIndex == 0) {
-                return KarafUIPluginActivator.getDefault().getImageRegistry()
-                        .get(KarafUIPluginActivator.FEATURE_OBJ_IBM);
+                return KarafUIPluginActivator.getDefault().getImageRegistry().get(KarafUIPluginActivator.FEATURE_OBJ_IBM);
             } else {
                 return null;
             }

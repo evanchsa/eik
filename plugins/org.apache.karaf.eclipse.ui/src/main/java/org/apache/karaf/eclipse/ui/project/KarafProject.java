@@ -39,10 +39,6 @@ import org.eclipse.core.runtime.QualifiedName;
  */
 public class KarafProject extends PlatformObject implements IKarafProject {
 
-    private static final IPath ROOT_PATH = new Path(".bin");
-
-    public static final IPath ROOT_PLATFORM_PATH = ROOT_PATH.append("platform");
-
     /**
      * Determines if the {@link IProject} is actually an {@link IKarafProject}
      *
@@ -92,12 +88,12 @@ public class KarafProject extends PlatformObject implements IKarafProject {
 
     @Override
     public IFile getFile(final String name) {
-        return project.getFile(ROOT_PATH.append(name));
+        return project.getFile(IKarafProject.ROOT_PATH.append(name));
     }
 
     @Override
     public IFolder getFolder(final String name) {
-        return project.getFolder(ROOT_PATH.append(name));
+        return project.getFolder(IKarafProject.ROOT_PATH.append(name));
     }
 
     @Override
@@ -112,7 +108,7 @@ public class KarafProject extends PlatformObject implements IKarafProject {
 
     @Override
     public IFile getPlatformFile(final String name) {
-        return getFile(new Path("platform").append(name).toOSString());
+        return getFile(IKarafProject.ROOT_PLATFORM_PATH.append(name).toOSString());
     }
 
     @Override

@@ -20,6 +20,7 @@ package org.apache.karaf.eclipse.ui.configuration.internal;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.ui.configuration.AbstractPropertiesConfigurationSection;
 import org.apache.karaf.eclipse.ui.configuration.GeneralSection;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -34,8 +35,8 @@ public class GeneralSectionImpl extends AbstractPropertiesConfigurationSection i
     /**
      * @param parent
      */
-    public GeneralSectionImpl(KarafPlatformModel parent) {
-        super(GENERAL_SECTION_ID, GENERAL_FILENAME, parent);
+    public GeneralSectionImpl(final KarafPlatformModel parent) {
+        super(GENERAL_SECTION_ID, new Path("etc").append(GENERAL_FILENAME), parent);
     }
 
 }

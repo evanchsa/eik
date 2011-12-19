@@ -26,6 +26,7 @@ import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
 import org.apache.karaf.eclipse.ui.configuration.AbstractPropertiesConfigurationSection;
 import org.apache.karaf.eclipse.ui.configuration.StartupSection;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 
 /**
@@ -89,7 +90,7 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
      * @param filename
      */
     public StartupSectionImpl(final KarafPlatformModel karafModel, final String filename) {
-    	super(STARTUP_SECTION_ID, filename, karafModel);
+    	super(STARTUP_SECTION_ID, new Path("etc").append(filename), karafModel);
 
         this.startupStateModel = new LinkedHashMap<String, BundleStartEntry>(64);
 

@@ -17,14 +17,15 @@
  */
 package org.apache.karaf.eclipse.ui.configuration.internal;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.ui.configuration.AbstractPropertiesConfigurationSection;
 import org.apache.karaf.eclipse.ui.configuration.FeaturesSection;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -46,7 +47,7 @@ public class FeaturesSectionImpl extends AbstractPropertiesConfigurationSection
      * @param parent
      */
     public FeaturesSectionImpl(final KarafPlatformModel parent) {
-        super(FEATURE_SECTION_ID, FEATURE_FILENAME, parent);
+        super(FEATURE_SECTION_ID, new Path("etc").append(FEATURE_FILENAME), parent);
     }
 
     @Override

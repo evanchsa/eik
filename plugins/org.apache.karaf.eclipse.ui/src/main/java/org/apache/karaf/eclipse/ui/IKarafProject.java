@@ -59,6 +59,13 @@ public interface IKarafProject extends IAdaptable {
 
     /**
      *
+     * @param name
+     * @return
+     */
+    public IFile getPlatformFile(String name);
+
+    /**
+     *
      * @return
      */
     public IPath getPlatformRootDirectory();

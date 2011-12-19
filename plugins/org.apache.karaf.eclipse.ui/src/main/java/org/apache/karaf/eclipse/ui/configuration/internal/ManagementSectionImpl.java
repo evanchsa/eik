@@ -17,12 +17,13 @@
  */
 package org.apache.karaf.eclipse.ui.configuration.internal;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.ui.configuration.AbstractPropertiesConfigurationSection;
 import org.apache.karaf.eclipse.ui.configuration.ManagementSection;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -37,7 +38,7 @@ public class ManagementSectionImpl extends AbstractPropertiesConfigurationSectio
      * @param filename
      */
     public ManagementSectionImpl(final KarafPlatformModel parent, final String filename) {
-        super(MANAGEMENT_SECTION_ID, filename, parent);
+        super(MANAGEMENT_SECTION_ID, new Path("etc").append(filename), parent);
     }
 
     @Override

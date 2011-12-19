@@ -17,11 +17,12 @@
  */
 package org.apache.karaf.eclipse.ui.configuration.internal;
 
+import java.io.File;
+
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.ui.configuration.AbstractPropertiesConfigurationSection;
 import org.apache.karaf.eclipse.ui.configuration.ShellSection;
-
-import java.io.File;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -35,7 +36,7 @@ public class ShellSectionImpl extends AbstractPropertiesConfigurationSection
     public static final String SECTION_ID = "org.apache.karaf.eclipse.configuration.section.Shell"; //$NON-NLS-1$
 
     public ShellSectionImpl(final KarafPlatformModel parent) {
-        super(SECTION_ID, FILENAME, parent);
+        super(SECTION_ID, new Path("etc").append(FILENAME), parent);
     }
 
     @Override

@@ -17,16 +17,17 @@
  */
 package org.apache.karaf.eclipse.ui.configuration;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Properties;
 
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 
 /**
@@ -41,8 +42,7 @@ abstract public class AbstractPropertiesConfigurationSection extends AbstractCon
      * @see AbstractConfigurationSection#AbstractConfigurationSection(String,
      *      String, KarafPlatformModel)
      */
-    public AbstractPropertiesConfigurationSection(final String id, final String filename,
-                    final KarafPlatformModel parent) {
+    public AbstractPropertiesConfigurationSection(final String id, final IPath filename, final KarafPlatformModel parent) {
         super(id, filename, parent);
     }
 
@@ -73,10 +73,12 @@ abstract public class AbstractPropertiesConfigurationSection extends AbstractCon
      * Loads the properties for this configuration section
      */
     protected void loadProperties() {
-        final IPath path = getParent().getConfigurationFile(getFilename());
+        final IFile file = getKarafProject().getPlatformFile(getFilename().toString());
 
         try {
-            final InputStream in = new FileInputStream(path.toFile());
+            file.refreshLocal(1, new NullProgressMonitor());
+
+            final InputStream in = file.getContents();
 
             properties = new Properties();
             properties.load(in);
@@ -84,7 +86,7 @@ abstract public class AbstractPropertiesConfigurationSection extends AbstractCon
             in.close();
         } catch (final Exception e) {
             KarafUIPluginActivator.getLogger().error(
-                            "Unable to load configuration file: " + path.toOSString(), e);
+                            "Unable to load configuration file: " + file.getFullPath().toOSString(), e);
         }
     }
 
@@ -102,17 +104,21 @@ abstract public class AbstractPropertiesConfigurationSection extends AbstractCon
             return;
         }
 
-        final IPath path = getParent().getConfigurationFile(getFilename());
+        final IFile file = getKarafProject().getPlatformFile(getFilename().toString());
 
         try {
-            final OutputStream out = new FileOutputStream(path.toFile());
+            file.refreshLocal(1, new NullProgressMonitor());
+
+            final ByteArrayOutputStream out = new ByteArrayOutputStream();
             properties.store(out, getId());
 
             out.flush();
             out.close();
+
+            file.setContents(new ByteArrayInputStream(out.toByteArray()), false, false, new NullProgressMonitor());
         } catch (final Exception e) {
             KarafUIPluginActivator.getLogger().error(
-                            "Unable to save configuration file: " + path.toOSString(), e);
+                            "Unable to save configuration file: " + file.getFullPath().toOSString(), e);
         }
     }
 

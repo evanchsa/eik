@@ -18,6 +18,8 @@
 package org.apache.karaf.eclipse.ui.configuration;
 
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.ui.IKarafProject;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -27,13 +29,15 @@ public abstract class AbstractConfigurationSection implements ConfigurationSecti
 
     private final String configSectionId;
 
-    private final String configFilename;
+    private final IPath configFilename;
 
     /**
      * The parent of this configuration section is used to get implementation
      * specific items such as the path to a configuration file.
      */
     private final KarafPlatformModel parent;
+
+    private final IKarafProject karafProject;
 
     /**
      * Constructor that forces the use of configuration section identifiers and
@@ -48,21 +52,29 @@ public abstract class AbstractConfigurationSection implements ConfigurationSecti
      * @param parent
      *            the parent model of this configuration section
      */
-    public AbstractConfigurationSection(String id, String filename, KarafPlatformModel parent) {
+    public AbstractConfigurationSection(final String id, final IPath filename, final KarafPlatformModel parent) {
         this.configSectionId = id;
         this.configFilename = filename;
         this.parent = parent;
+        this.karafProject = (IKarafProject) parent.getAdapter(IKarafProject.class);
     }
 
-    public String getFilename() {
+    @Override
+    public IPath getFilename() {
         return configFilename;
     }
 
+    @Override
     public String getId() {
         return configSectionId;
     }
 
+    @Override
     public KarafPlatformModel getParent() {
         return parent;
+    }
+
+    public IKarafProject getKarafProject() {
+        return karafProject;
     }
 }

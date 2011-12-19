@@ -17,14 +17,13 @@
  */
 package org.apache.karaf.eclipse.ui.project;
 
+import java.util.Properties;
+
 import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.core.KarafPlatformModelRegistry;
 import org.apache.karaf.eclipse.ui.IKarafProject;
 import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
-
-import java.util.Properties;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -109,6 +108,11 @@ public class KarafProject extends PlatformObject implements IKarafProject {
     @Override
     public String getName() {
         return project.getName();
+    }
+
+    @Override
+    public IFile getPlatformFile(final String name) {
+        return getFile(new Path("platform").append(name).toOSString());
     }
 
     @Override

@@ -20,6 +20,7 @@ package org.apache.karaf.eclipse.ui.configuration.internal;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.ui.configuration.AbstractPropertiesConfigurationSection;
 import org.apache.karaf.eclipse.ui.configuration.SystemSection;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -35,15 +36,17 @@ public class SystemSectionImpl extends AbstractPropertiesConfigurationSection im
     /**
      * @param parent
      */
-    public SystemSectionImpl(KarafPlatformModel parent) {
-        super(SYSTEM_SECTION_ID, SYSTEM_FILENAME, parent);
+    public SystemSectionImpl(final KarafPlatformModel parent) {
+        super(SYSTEM_SECTION_ID, new Path("etc").append(SYSTEM_FILENAME), parent);
     }
 
-    public String getProperty(String key) {
+    @Override
+    public String getProperty(final String key) {
         return getProperties().getProperty(key);
     }
 
-    public void setProperty(String key, String value) {
+    @Override
+    public void setProperty(final String key, final String value) {
         getProperties().setProperty(key, value);
     }
 }

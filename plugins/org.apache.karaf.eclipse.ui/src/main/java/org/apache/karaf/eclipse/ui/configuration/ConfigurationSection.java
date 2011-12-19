@@ -18,7 +18,7 @@
 package org.apache.karaf.eclipse.ui.configuration;
 
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
-
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 
 /**
@@ -28,11 +28,13 @@ import org.eclipse.core.runtime.IStatus;
 public interface ConfigurationSection {
 
     /**
-     * The name of the file where these configuration items are typically stored
+     * The relative path from the root of the {@link KarafPlatformModel} of the
+     * file where these configuration items are typically stored
      *
-     * @return the name of the file that backs this configuration section
+     * @return the relative path of the file that backs this configuration
+     *         section
      */
-    public String getFilename();
+    public IPath getFilename();
 
     /**
      * Getter for the identifier of this configuration section.

@@ -19,10 +19,10 @@ import java.util.Deque;
 import java.util.List;
 
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.configuration.FeaturesSection;
 import org.apache.karaf.eclipse.core.features.FeatureResolverImpl;
 import org.apache.karaf.eclipse.core.features.FeaturesRepository;
 import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
+import org.apache.karaf.eclipse.ui.configuration.FeaturesSection;
 import org.apache.karaf.eclipse.ui.features.FeatureUtils;
 import org.apache.karaf.eclipse.ui.features.FeaturesManagementBlock;
 import org.apache.karaf.eclipse.ui.features.FeaturesManagementBlock.FeaturesManagementListener;

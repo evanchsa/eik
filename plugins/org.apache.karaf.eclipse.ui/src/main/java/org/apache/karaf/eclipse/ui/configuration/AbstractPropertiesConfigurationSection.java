@@ -15,10 +15,7 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.core.configuration;
-
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.internal.KarafCorePluginActivator;
+package org.apache.karaf.eclipse.ui.configuration;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,6 +23,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -42,17 +41,19 @@ abstract public class AbstractPropertiesConfigurationSection extends AbstractCon
      * @see AbstractConfigurationSection#AbstractConfigurationSection(String,
      *      String, KarafPlatformModel)
      */
-    public AbstractPropertiesConfigurationSection(String id, String filename,
-                    KarafPlatformModel parent) {
+    public AbstractPropertiesConfigurationSection(final String id, final String filename,
+                    final KarafPlatformModel parent) {
         super(id, filename, parent);
     }
 
+    @Override
     public IStatus load() {
         loadProperties();
 
         return Status.OK_STATUS;
     }
 
+    @Override
     public IStatus save() {
         saveProperties();
 
@@ -81,8 +82,8 @@ abstract public class AbstractPropertiesConfigurationSection extends AbstractCon
             properties.load(in);
 
             in.close();
-        } catch (Exception e) {
-            KarafCorePluginActivator.getLogger().error(
+        } catch (final Exception e) {
+            KarafUIPluginActivator.getLogger().error(
                             "Unable to load configuration file: " + path.toOSString(), e);
         }
     }
@@ -95,7 +96,7 @@ abstract public class AbstractPropertiesConfigurationSection extends AbstractCon
      */
     protected void saveProperties() {
         if (getParent().isReadOnly()) {
-            KarafCorePluginActivator.getLogger().info(
+            KarafUIPluginActivator.getLogger().info(
                             "Attempting to write to read-only target platform: "
                                             + getParent().getConfigurationDirectory().toOSString());
             return;
@@ -109,8 +110,8 @@ abstract public class AbstractPropertiesConfigurationSection extends AbstractCon
 
             out.flush();
             out.close();
-        } catch (Exception e) {
-            KarafCorePluginActivator.getLogger().error(
+        } catch (final Exception e) {
+            KarafUIPluginActivator.getLogger().error(
                             "Unable to save configuration file: " + path.toOSString(), e);
         }
     }
@@ -121,7 +122,7 @@ abstract public class AbstractPropertiesConfigurationSection extends AbstractCon
      * @param p
      *            the {@link Properties} that will back this object
      */
-    protected void setProperties(Properties p) {
+    protected void setProperties(final Properties p) {
         this.properties = p;
     }
 }

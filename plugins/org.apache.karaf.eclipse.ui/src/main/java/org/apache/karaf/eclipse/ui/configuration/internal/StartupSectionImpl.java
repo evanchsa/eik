@@ -15,17 +15,16 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.core.configuration.internal;
-
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.configuration.AbstractPropertiesConfigurationSection;
-import org.apache.karaf.eclipse.core.configuration.StartupSection;
-import org.apache.karaf.eclipse.core.internal.KarafCorePluginActivator;
+package org.apache.karaf.eclipse.ui.configuration.internal;
 
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
+import org.apache.karaf.eclipse.ui.configuration.AbstractPropertiesConfigurationSection;
+import org.apache.karaf.eclipse.ui.configuration.StartupSection;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 
@@ -49,7 +48,7 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
 
         private final String startLevel;
 
-        public BundleStartEntry(BundleDescription desc, String startLevel) {
+        public BundleStartEntry(final BundleDescription desc, final String startLevel) {
             this.bundleDescription = desc;
             this.startLevel = startLevel;
         }
@@ -80,27 +79,29 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
      *            the {@link KarafPlatformModel} that will be used to build the
      *            startup state model
      */
-    public StartupSectionImpl(KarafPlatformModel karafModel) {
+    public StartupSectionImpl(final KarafPlatformModel karafModel) {
         this(karafModel, STARTUP_FILENAME);
     }
-    
+
     /**
-     * 
+     *
      * @param karafModel
      * @param filename
      */
-    public StartupSectionImpl(KarafPlatformModel karafModel, String filename) {
+    public StartupSectionImpl(final KarafPlatformModel karafModel, final String filename) {
     	super(STARTUP_SECTION_ID, filename, karafModel);
-    	
+
         this.startupStateModel = new LinkedHashMap<String, BundleStartEntry>(64);
 
     }
 
-    public boolean containsPlugin(String bundleSymbolicName) {
+    @Override
+    public boolean containsPlugin(final String bundleSymbolicName) {
         return startupStateModel.containsKey(bundleSymbolicName);
     }
 
-    public String getStartLevel(String bundleSymbolicName) {
+    @Override
+    public String getStartLevel(final String bundleSymbolicName) {
         final BundleStartEntry se = startupStateModel.get(bundleSymbolicName);
 
         if (se == null) {
@@ -131,14 +132,14 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
      */
     protected void populateStartupStateModel() {
         final File rootBundleDir = getParent().getPluginRootDirectory().toFile();
-        for (Object o : getProperties().keySet()) {
+        for (final Object o : getProperties().keySet()) {
             final File bundleLocation = new File(rootBundleDir, (String) o);
 
             final BundleDescription desc = getParent().getState().getBundleByLocation(
                             bundleLocation.getAbsolutePath());
 
             if (desc == null) {
-                KarafCorePluginActivator.getLogger().error(
+                KarafUIPluginActivator.getLogger().error(
                                 "Unable to locate bundle description for: "
                                                 + bundleLocation.getAbsolutePath());
             } else {
@@ -147,16 +148,16 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
             }
         }
     }
-    
+
 	/**
 	 * Adds a {@link BundleStartEntry} to this {@code StartupSection}
-	 * 
+	 *
 	 * @param symbolicName
 	 *            the Bundle's Symbolic Name
 	 * @param bundleStartEntry
 	 *            the {@code BundleStartEntry}
 	 */
-    protected final void addBundleStartEntry(String symbolicName, BundleStartEntry bundleStartEntry) {
+    protected final void addBundleStartEntry(final String symbolicName, final BundleStartEntry bundleStartEntry) {
         startupStateModel.put(symbolicName, bundleStartEntry);
     }
 }

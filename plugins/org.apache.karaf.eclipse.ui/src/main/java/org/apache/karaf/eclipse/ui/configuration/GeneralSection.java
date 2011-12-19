@@ -15,37 +15,12 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.core.configuration;
+package org.apache.karaf.eclipse.ui.configuration;
 
-import java.util.List;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface FeaturesSection  extends ConfigurationSection {
-
-    /**
-     *
-     * @return
-     */
-    public List<String> getBootFeatureNames();
-
-    /**
-     *
-     * @return
-     */
-    public List<String> getRepositoryList();
-
-    /**
-     *
-     * @param bootFeatureNames
-     */
-    public void setBootFeatureNames(List<String> bootFeatureNames);
-
-    /**
-     *
-     * @param repositoryList
-     */
-    public void setRepositoryList(List<String> repositoryList);
+public interface GeneralSection extends ConfigurationSection {
 }

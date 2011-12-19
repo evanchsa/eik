@@ -18,8 +18,8 @@
 package org.apache.karaf.eclipse.wtp.core;
 
 import org.apache.karaf.eclipse.core.KarafPlatformModelRegistry;
-import org.apache.karaf.eclipse.core.configuration.StartupSection;
 import org.apache.karaf.eclipse.ui.KarafLaunchConfigurationInitializer;
+import org.apache.karaf.eclipse.ui.configuration.StartupSection;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;

@@ -23,9 +23,9 @@ import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.core.KarafPlatformModelFactory;
 import org.apache.karaf.eclipse.core.KarafPlatformModelRegistry;
 import org.apache.karaf.eclipse.core.SystemBundleNames;
-import org.apache.karaf.eclipse.core.configuration.StartupSection;
 import org.apache.karaf.eclipse.core.equinox.BundleEntry;
 import org.apache.karaf.eclipse.core.model.WorkingKarafPlatformModel;
+import org.apache.karaf.eclipse.ui.configuration.StartupSection;
 import org.apache.karaf.eclipse.ui.internal.WorkbenchServiceExtensions;
 import org.apache.karaf.eclipse.ui.workbench.KarafWorkbenchServiceFactory;
 

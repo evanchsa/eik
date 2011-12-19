@@ -15,47 +15,42 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.core.configuration;
+package org.apache.karaf.eclipse.ui.configuration;
 
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-
-import org.eclipse.core.runtime.IStatus;
+import java.net.URL;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface ConfigurationSection {
+public interface ManagementSection extends ConfigurationSection {
 
     /**
-     * The name of the file where these configuration items are typically stored
+     * Getter for the JMX MBeanServer port
      *
-     * @return the name of the file that backs this configuration section
+     * @return the JXM MBeanServer port
      */
-    public String getFilename();
+    public int getPort();
 
     /**
-     * Getter for the identifier of this configuration section.
+     * The JMX Realm
      *
-     * @return the identifier, in reverse domain notation, of this configuration
-     *         section.
+     * @return the JMX realm
      */
-    public String getId();
+    public String getRealm();
 
     /**
-     * Getter for the parent {@link KarafTargetPlatform}
+     * The complete {@link URL} to the JMX MBeanServer
      *
-     * @return a {@link KarafTargetPlatform}
+     * @return the {@link URL} to the JMX MBeanServer
      */
-    public KarafPlatformModel getParent();
+    public URL getUrl();
 
     /**
-     * Loads the configuration data for this section
+     * Setter for the port that the JMX MBeanServer will listen on
+     *
+     * @param port
+     *            the JMX MBeanServer port
      */
-    public IStatus load();
-
-    /**
-     * Saves the configuration data for this section
-     */
-    public IStatus save();
+    public void setPort(int port);
 }

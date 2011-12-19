@@ -15,12 +15,32 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.core.configuration;
-
+package org.apache.karaf.eclipse.ui.configuration;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface GeneralSection extends ConfigurationSection {
+public interface StartupSection extends ConfigurationSection {
+
+    /**
+     * Determines if the specified bundle will be started by Karaf during its
+     * initialization.
+     *
+     * @param bundleSymbolicName
+     *            the symbolic name of the bundle
+     * @return true if the plugin is listed in the startup configuration for
+     *         Karaf, false otherwise
+     */
+    public boolean containsPlugin(String bundleSymbolicName);
+
+    /**
+     * Getter for the start level of the bundle specified by the symbolic name.
+     *
+     * @param bundleSymbolicName
+     *            the symbolic name of the bundle
+     * @return the start level of the bundle, null if the bundle does not exist
+     *         in the system startup configuration.
+     */
+    public String getStartLevel(String bundleSymbolicName);
 }

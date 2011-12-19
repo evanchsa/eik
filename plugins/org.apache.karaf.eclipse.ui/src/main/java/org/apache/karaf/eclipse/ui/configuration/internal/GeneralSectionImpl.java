@@ -15,30 +15,27 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.core.configuration;
+package org.apache.karaf.eclipse.ui.configuration.internal;
+
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.ui.configuration.AbstractPropertiesConfigurationSection;
+import org.apache.karaf.eclipse.ui.configuration.GeneralSection;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface SystemSection extends ConfigurationSection {
+public class GeneralSectionImpl extends AbstractPropertiesConfigurationSection implements GeneralSection {
+
+    public static final String GENERAL_SECTION_ID = "org.apache.karaf.eclipse.configuration.section.General";
+
+    public static final String GENERAL_FILENAME = "config.properties";
 
     /**
-     * Getter for a System property that is set during Karaf execution
-     *
-     * @param key
-     *            the key of the System property
-     * @return the value of the System property
+     * @param parent
      */
-    public String getProperty(String key);
+    public GeneralSectionImpl(KarafPlatformModel parent) {
+        super(GENERAL_SECTION_ID, GENERAL_FILENAME, parent);
+    }
 
-    /**
-     * Setter for a System property that is set during Karaf execution
-     *
-     * @param key
-     *            the key of the System property
-     * @param value
-     *            the value of the System property
-     */
-    public void setProperty(String key, String value);
 }

@@ -17,24 +17,6 @@
  */
 package org.apache.karaf.eclipse.core.model;
 
-import org.apache.karaf.eclipse.core.IKarafConstants;
-import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
-import org.apache.karaf.eclipse.core.KarafPlatformDetails;
-import org.apache.karaf.eclipse.core.configuration.FeaturesSection;
-import org.apache.karaf.eclipse.core.configuration.GeneralSection;
-import org.apache.karaf.eclipse.core.configuration.ManagementSection;
-import org.apache.karaf.eclipse.core.configuration.ShellSection;
-import org.apache.karaf.eclipse.core.configuration.StartupSection;
-import org.apache.karaf.eclipse.core.configuration.SystemSection;
-import org.apache.karaf.eclipse.core.configuration.internal.FeaturesSectionImpl;
-import org.apache.karaf.eclipse.core.configuration.internal.GeneralSectionImpl;
-import org.apache.karaf.eclipse.core.configuration.internal.ManagementSectionImpl;
-import org.apache.karaf.eclipse.core.configuration.internal.ShellSectionImpl;
-import org.apache.karaf.eclipse.core.configuration.internal.StartupSectionImpl;
-import org.apache.karaf.eclipse.core.configuration.internal.SystemSectionImpl;
-import org.apache.karaf.eclipse.core.internal.KarafCorePluginActivator;
-import org.apache.karaf.eclipse.core.shell.KarafSshConnectionUrl;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -42,6 +24,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
+import org.apache.karaf.eclipse.core.KarafPlatformDetails;
+import org.apache.karaf.eclipse.core.internal.KarafCorePluginActivator;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
@@ -73,22 +58,8 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
     @Override
     public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapterType) {
         final Object adaptedObject;
-        if (adapterType == FeaturesSection.class) {
-            adaptedObject = new FeaturesSectionImpl(this);
-        } else if (adapterType == ShellSection.class) {
-            adaptedObject = new ShellSectionImpl(this);
-        }else if (adapterType == GeneralSection.class) {
-            adaptedObject = new GeneralSectionImpl(this);
-        } else if (adapterType == ManagementSection.class) {
-            adaptedObject = adaptManagementSection();
-        } else if (adapterType == StartupSection.class) {
-            adaptedObject = new StartupSectionImpl(this);
-        } else if (adapterType == SystemSection.class) {
-            return new SystemSectionImpl(this);
-        } else if (adapterType == KarafPlatformDetails.class) {
+        if (adapterType == KarafPlatformDetails.class) {
             adaptedObject = adaptKarafPlatformDetails();
-        } else if (adapterType == KarafSshConnectionUrl.class) {
-            adaptedObject = adaptKarafSshConnectionUrl();
         } else {
             adaptedObject = Platform.getAdapterManager().getAdapter(this, adapterType);
         }
@@ -174,17 +145,6 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
     }
 
     /**
-     *
-     * @return
-     */
-    private Object adaptKarafSshConnectionUrl() {
-        final ShellSection shellSection = (ShellSection) getAdapter(ShellSection.class);
-        shellSection.load();
-
-        return new KarafSshConnectionUrl(shellSection.getSshHost(), shellSection.getSshPort());
-    }
-
-    /**
      * @return
      */
     private Object adaptKarafPlatformDetails() {
@@ -202,25 +162,6 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
         } catch (final IOException e) {
             return null;
         }
-        return adaptedObject;
-    }
-
-    /**
-     * @param karafModel
-     * @return
-     */
-    private Object adaptManagementSection() {
-        final Object adaptedObject;
-        if(KarafCorePluginUtils.isServiceMix(this)) {
-            adaptedObject = new ManagementSectionImpl(this, IKarafConstants.ORG_APACHE_SERVICEMIX_MANAGEMENT_CFG_FILENAME);
-        } else if (KarafCorePluginUtils.isFelixKaraf(this)) {
-            adaptedObject = new ManagementSectionImpl(this, IKarafConstants.ORG_APACHE_FELIX_KARAF_MANAGEMENT_CFG_FILENAME);
-        } else if (KarafCorePluginUtils.isKaraf(this)) {
-            adaptedObject = new ManagementSectionImpl(this, IKarafConstants.ORG_APACHE_KARAF_MANAGEMENT_CFG_FILENAME);
-        } else {
-            adaptedObject = null;
-        }
-
         return adaptedObject;
     }
 }

@@ -15,32 +15,30 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.core.configuration;
+package org.apache.karaf.eclipse.ui.configuration;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface StartupSection extends ConfigurationSection {
+public interface SystemSection extends ConfigurationSection {
 
     /**
-     * Determines if the specified bundle will be started by Karaf during its
-     * initialization.
+     * Getter for a System property that is set during Karaf execution
      *
-     * @param bundleSymbolicName
-     *            the symbolic name of the bundle
-     * @return true if the plugin is listed in the startup configuration for
-     *         Karaf, false otherwise
+     * @param key
+     *            the key of the System property
+     * @return the value of the System property
      */
-    public boolean containsPlugin(String bundleSymbolicName);
+    public String getProperty(String key);
 
     /**
-     * Getter for the start level of the bundle specified by the symbolic name.
+     * Setter for a System property that is set during Karaf execution
      *
-     * @param bundleSymbolicName
-     *            the symbolic name of the bundle
-     * @return the start level of the bundle, null if the bundle does not exist
-     *         in the system startup configuration.
+     * @param key
+     *            the key of the System property
+     * @param value
+     *            the value of the System property
      */
-    public String getStartLevel(String bundleSymbolicName);
+    public void setProperty(String key, String value);
 }

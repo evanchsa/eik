@@ -15,8 +15,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
  org.fusesource.jansi;bundle-version="1.5.0",
  sshd-core;bundle-version="0.5.0"
 Export-Package: org.apache.karaf.eclipse.core,
- org.apache.karaf.eclipse.core.configuration,
- org.apache.karaf.eclipse.core.configuration.internal,
  org.apache.karaf.eclipse.core.equinox,
  org.apache.karaf.eclipse.core.features,
  org.apache.karaf.eclipse.core.model,

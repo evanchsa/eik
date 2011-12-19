@@ -15,42 +15,37 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.core.configuration;
+package org.apache.karaf.eclipse.ui.configuration;
 
-import java.net.URL;
+import java.util.List;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public interface ManagementSection extends ConfigurationSection {
+public interface FeaturesSection  extends ConfigurationSection {
 
     /**
-     * Getter for the JMX MBeanServer port
      *
-     * @return the JXM MBeanServer port
+     * @return
      */
-    public int getPort();
+    public List<String> getBootFeatureNames();
 
     /**
-     * The JMX Realm
      *
-     * @return the JMX realm
+     * @return
      */
-    public String getRealm();
+    public List<String> getRepositoryList();
 
     /**
-     * The complete {@link URL} to the JMX MBeanServer
      *
-     * @return the {@link URL} to the JMX MBeanServer
+     * @param bootFeatureNames
      */
-    public URL getUrl();
+    public void setBootFeatureNames(List<String> bootFeatureNames);
 
     /**
-     * Setter for the port that the JMX MBeanServer will listen on
      *
-     * @param port
-     *            the JMX MBeanServer port
+     * @param repositoryList
      */
-    public void setPort(int port);
+    public void setRepositoryList(List<String> repositoryList);
 }

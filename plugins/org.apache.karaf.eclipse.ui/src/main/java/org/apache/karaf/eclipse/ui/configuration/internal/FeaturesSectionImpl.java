@@ -15,12 +15,12 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.core.configuration.internal;
+package org.apache.karaf.eclipse.ui.configuration.internal;
 
 import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.configuration.AbstractPropertiesConfigurationSection;
-import org.apache.karaf.eclipse.core.configuration.FeaturesSection;
+import org.apache.karaf.eclipse.ui.configuration.AbstractPropertiesConfigurationSection;
+import org.apache.karaf.eclipse.ui.configuration.FeaturesSection;
 
 import java.util.Arrays;
 import java.util.Collections;

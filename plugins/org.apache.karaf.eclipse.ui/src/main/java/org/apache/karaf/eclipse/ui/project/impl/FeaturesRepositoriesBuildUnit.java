@@ -18,10 +18,10 @@
 package org.apache.karaf.eclipse.ui.project.impl;
 
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.configuration.FeaturesSection;
 import org.apache.karaf.eclipse.core.features.FeaturesRepository;
 import org.apache.karaf.eclipse.ui.IKarafProject;
 import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
+import org.apache.karaf.eclipse.ui.configuration.FeaturesSection;
 import org.apache.karaf.eclipse.ui.features.FeaturesResolverJob;
 
 import java.io.File;

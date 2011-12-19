@@ -95,6 +95,34 @@
                type="org.apache.karaf.eclipse.ui.IKarafProject">
          </adapter>
       </factory>
+      <factory
+            adaptableType="org.apache.karaf.eclipse.core.KarafPlatformModel"
+            class="org.apache.karaf.eclipse.ui.internal.KarafConfigurationAdapterFactory">
+         <adapter
+               type="org.apache.karaf.eclipse.ui.configuration.FeaturesSection">
+         </adapter>
+         <adapter
+               type="org.apache.karaf.eclipse.ui.configuration.ShellSection">
+         </adapter>
+         <adapter
+               type="org.apache.karaf.eclipse.ui.configuration.GeneralSection">
+         </adapter>
+         <adapter
+               type="org.apache.karaf.eclipse.ui.configuration.ManagementSection">
+         </adapter>
+         <adapter
+               type="org.apache.karaf.eclipse.ui.configuration.StartupSection">
+         </adapter>
+         <adapter
+               type="org.apache.karaf.eclipse.ui.configuration.SystemSection">
+         </adapter>
+         <adapter
+               type="org.apache.karaf.eclipse.ui.configuration.ShellSection">
+         </adapter>
+         <adapter
+               type="org.apache.karaf.eclipse.core.shell.KarafSshConnectionUrl">
+         </adapter>
+      </factory>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">

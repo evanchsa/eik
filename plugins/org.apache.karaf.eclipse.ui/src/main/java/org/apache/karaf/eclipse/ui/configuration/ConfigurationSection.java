@@ -15,27 +15,47 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.core.configuration.internal;
+package org.apache.karaf.eclipse.ui.configuration;
 
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.configuration.AbstractPropertiesConfigurationSection;
-import org.apache.karaf.eclipse.core.configuration.GeneralSection;
+
+import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class GeneralSectionImpl extends AbstractPropertiesConfigurationSection implements GeneralSection {
-
-    public static final String GENERAL_SECTION_ID = "org.apache.karaf.eclipse.configuration.section.General";
-
-    public static final String GENERAL_FILENAME = "config.properties";
+public interface ConfigurationSection {
 
     /**
-     * @param parent
+     * The name of the file where these configuration items are typically stored
+     *
+     * @return the name of the file that backs this configuration section
      */
-    public GeneralSectionImpl(KarafPlatformModel parent) {
-        super(GENERAL_SECTION_ID, GENERAL_FILENAME, parent);
-    }
+    public String getFilename();
 
+    /**
+     * Getter for the identifier of this configuration section.
+     *
+     * @return the identifier, in reverse domain notation, of this configuration
+     *         section.
+     */
+    public String getId();
+
+    /**
+     * Getter for the parent {@link KarafTargetPlatform}
+     *
+     * @return a {@link KarafTargetPlatform}
+     */
+    public KarafPlatformModel getParent();
+
+    /**
+     * Loads the configuration data for this section
+     */
+    public IStatus load();
+
+    /**
+     * Saves the configuration data for this section
+     */
+    public IStatus save();
 }

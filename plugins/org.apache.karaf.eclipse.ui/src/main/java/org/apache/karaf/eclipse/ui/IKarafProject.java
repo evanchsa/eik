@@ -115,8 +115,11 @@ public interface IKarafProject extends IAdaptable {
     public IProject getProjectHandle();
 
     /**
+     * Returns the {@link Properties} that are normally expressed while the
+     * Karaf platform is running
      *
-     * @return
+     * @return the {@code Properties} that are normally expressed while the
+     *         Karaf platform is running
      */
     public Properties getRuntimeProperties();
 }

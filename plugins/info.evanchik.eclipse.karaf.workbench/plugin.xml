@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="jmxConnectorProvider" name="JMX Connector Provider" schema="schema/jmxConnectorProvider.exsd"/>
+   <extension
+         id="runtimeData"
+         name="OSGi C&amp;C Runtime Data provider"
+         point="info.evanchik.eclipse.karaf.ui.service">
+      <launchCustomizer
+            class="info.evanchik.eclipse.karaf.workbench.factory.MBeanProviderWorkbenchServiceFactory">
+      </launchCustomizer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="info.evanchik.eclipse.karaf.workbench.karaf"
+            name="Apache Karaf">
+      </category>
+      <view
+            allowMultiple="false"
+            category="info.evanchik.eclipse.karaf.workbench.karaf"
+            class="info.evanchik.eclipse.karaf.workbench.ui.views.bundle.BundlesView"
+            icon="icons/obj16/bundle_obj.gif"
+            id="info.evanchik.eclipse.karaf.workbench.karafBundles"
+            name="Bundles"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="info.evanchik.eclipse.karaf.workbench.karaf"
+            class="info.evanchik.eclipse.karaf.workbench.ui.views.services.ServicesView"
+            icon="icons/obj16/generic_elements.gif"
+            id="info.evanchik.eclipse.karaf.workbench.karafServices"
+            name="Services">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="info.evanchik.eclipse.karaf.workbench.ui.KarafWorkbenchPerspectiveFactory"
+            icon="icons/obj16/karaf-logo-16x16.png"
+            id="info.evanchik.eclipse.karaf.workbench.karafPerspective"
+            name="Apache Karaf">
+         <description>
+            Apache Karaf
+         </description>
+      </perspective>
+   </extension>
+   <extension
+         point="info.evanchik.eclipse.karaf.workbench.jmxConnectorProvider">
+      <transport
+            class="info.evanchik.eclipse.karaf.workbench.jmx.internal.RMIConnectionProvider"
+            protocol="rmi">
+      </transport>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="info.evanchik.eclipse.karaf.workbench.ui.editor.KarafPlatformEditorPart"
+            default="false"
+            icon="icons/obj16/karaf-logo-16x16.png"
+            id="info.evanchik.eclipse.karaf.ui.editors.KarafPlatformEditor"
+            name="Karaf Platform">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <actionProvider
+            class="info.evanchik.eclipse.karaf.workbench.internal.WorkbenchActionProvider"
+            id="info.evanchik.eclipse.karaf.ui.navigator.workbenchActionProvider">
+         <enablement>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="info.evanchik.eclipse.karaf.KarafProjectNature">
+               </test>
+            </adapt>
+         </enablement>
+      </actionProvider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerActionBinding
+            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <actionExtension
+                  pattern="info.evanchik.eclipse.karaf.ui.navigator.*">
+            </actionExtension>
+         </includes>
+      </viewerActionBinding>
+   </extension>
+
+</plugin>

@@ -1,0 +1,36 @@
+Bnd-LastModified: 1302269290941
+Build-Jdk: 1.6.0_24
+Built-By:  tonit
+Bundle-Activator: org.ops4j.pax.url.mvn.internal.Activator
+Bundle-Description: OPS4J Pax Url - aether: protocol handler.        Detailed information to be found at http://wiki.ops4j.org/confluence/x/CoA6.
+Bundle-DocURL: http://www.ops4j.org/
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.html
+Bundle-ManifestVersion: 2
+Bundle-Name: OPS4J Pax Url - aether
+Bundle-SymbolicName: org.ops4j.pax.url.mvn;singleton:=true
+Bundle-Vendor: OPS4J - Open Participation Software for Java
+Bundle-Version: 1.3.2.qualifier
+Created-By: Apache Maven Bundle Plugin
+Export-Package: org.ops4j.pax.url.mvn;version="1.3.2"
+Export-Service: org.osgi.service.url.URLStreamHandlerService; url.handler.protocol=aether
+Ignore-Package: junit.framework,org.cyberneko.html,org.cyberneko.html.filters,com.sun.jdmk.comm,javax.jms,javax.mail,javax.mail.internet,javax.swing,javax.swing.border,javax.swing.event,javax.swing.table,javax.swing.text,javax.swing.tree,javax.management,javax.crypto,javax.crypto.spec,org.apache.avalon.framework.logger,org.apache.log,org.apache.xerces.xni,org.apache.xerces.xni.parser,org.objectweb.asm,org.objectweb.asm.commons
+Import-Package: javax.annotation,
+ javax.naming,
+ javax.net,
+ javax.net.ssl,
+ javax.xml.parsers,
+ org.apache.commons.logging;version="1.0.4";resolution:=optional,
+ org.apache.log4j,
+ org.ops4j.pax.url.mvn;version="1.3.2",
+ org.osgi.framework;version="[1.0.0,2.0.0)",
+ org.osgi.service.cm;version="[1.0.0,2.0.0)";resolution:=optional,
+ org.osgi.service.url;version="[1.0.0,2.0.0)",
+ org.slf4j,
+ org.w3c.dom,
+ org.xml.sax,
+ org.xml.sax.helpers
+Manifest-Version: 1.0
+Tool: Bnd-0.0.357
+Bundle-ClassPath: .,
+ lib/pax-url-aether-1.3.2.jar
+Bundle-ActivationPolicy: lazy

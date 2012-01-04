@@ -1,0 +1,7 @@
+<project name="EIK OBR" xmlns:ivy="antlib:org.apache.ivy.ant">   
+    <ivy:buildobr
+       baseDir="${eclipse.home}/"
+        basePath="${eclipse.home}/"
+        out="${obr.filename}"
+        indent="true" />
+</project>

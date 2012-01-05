@@ -18,27 +18,47 @@
         See the License for the specific language governing permissions and
         limitations under the License.
     -->
-
+    
     <modelVersion>4.0.0</modelVersion>
-
+    
     <parent>
-        <groupId>org.apache.karaf</groupId>
-        <artifactId>eik</artifactId>
+        <groupId>org.apache.karaf.eik</groupId>
+        <artifactId>plugins</artifactId>
         <version>3.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.karaf.eik</groupId>
-    <artifactId>features</artifactId>
-    <packaging>pom</packaging>
-    <name>Apache Karaf :: EIK :: Features</name>
+    <groupId>org.apache.karaf.eik.plugins</groupId>
+    <artifactId>org.apache.karaf.eik.ui</artifactId>
+    <packaging>eclipse-plugin</packaging>
+    <name>Apache Karaf :: EIK :: Plugins :: Base UI</name>
 
-    <modules>
-        <module>org.apache.karaf.eik.feature</module>
-        <module>org.apache.karaf.eik.jmx.feature</module>
-        <module>org.apache.karaf.eik.wtp.feature</module>
-        <module>org.apache.karaf.eik.smk.feature</module>
-        <module>org.apache.karaf.eik.update</module>
-    </modules>
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${pom.basedir}/src/main/filtered-resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- enable source bundle generation -->
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-source-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <executions>
+                    <execution>
+                        <id>plugin-source</id>
+                        <goals>
+                            <goal>plugin-source</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -29,34 +29,35 @@
     </parent>
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
-    <artifactId>org.apache.servicemix.kernel.main</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <artifactId>org.apache.karaf.eik.jmx</artifactId>
     <packaging>eclipse-plugin</packaging>
-    <name>Apache Karaf :: EIK :: Plugins :: Apache ServiceMix Kernel Main Interface Wrapper</name>
+    <name>Apache Karaf :: EIK :: Plugins :: JMX-Eclipse Bridge</name>
+    <description>Bridge between JMX and Eclipse</description>
 
     <build>
         <resources>
             <resource>
-                <directory>${pom.basedir}</directory>
-                <includes>
-                    <include>lib/**/*.jar</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>${pom.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+                <directory>${pom.basedir}/src/main/filtered-resources</directory>
                 <includes>
                     <include>**/*</include>
                 </includes>
             </resource>
         </resources>
         <plugins>
+            <!-- enable source bundle generation -->
             <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
-                    </archive>
-                </configuration>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-source-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <executions>
+                    <execution>
+                        <id>plugin-source</id>
+                        <goals>
+                            <goal>plugin-source</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

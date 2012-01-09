@@ -7,18 +7,18 @@
       <variable
             description="A variable resolver for filesystem locations of Eclipse plugins"
             name="plugin_loc"
-            resolver="info.evanchik.eclipse.karaf.core.internal.PluginLocVariableResolver"
+            resolver="org.apache.karaf.eik.core.internal.PluginLocVariableResolver"
             supportsArgument="true">
       </variable>
    </extension>
    <extension
          id="directoryModel"
          name="Directory based platform for Apache Felix Karaf"
-         point="info.evanchik.eclipse.karaf.core.platformModel">
+         point="org.apache.karaf.eik.core.platformModel">
       <model
-            class="info.evanchik.eclipse.karaf.core.internal.GenericKarafPlatformModelFactory">
+            class="org.apache.karaf.eik.core.internal.GenericKarafPlatformModelFactory">
          <triggerBundle
-               symbolicName="org.apache.felix.karaf.main"></triggerBundle>
+               symbolicName="org.apache.karaf.main"></triggerBundle>
          <triggerBundle
                symbolicName="org.apache.felix.karaf.jaas.boot">
          </triggerBundle>

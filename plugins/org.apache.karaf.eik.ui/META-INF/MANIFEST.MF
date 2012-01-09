@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.ant.core;bundle-version="3.2.201",
  org.eclipse.pde.ui;bundle-version="[3.6.0,4.0.0)",
  org.apache.commons.collections;bundle-version="[3.2.0,3.2.1]",
  org.ops4j.pax.url.mvn;bundle-version="1.3.0",
- info.evanchik.eclipse.karaf.core;bundle-version="[0.5.3,1.0.0)"
+ org.apache.karaf.eik.core;bundle-version="[0.5.3,1.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: info.evanchik.eclipse.karaf.ui,
  info.evanchik.eclipse.karaf.ui.wizards,

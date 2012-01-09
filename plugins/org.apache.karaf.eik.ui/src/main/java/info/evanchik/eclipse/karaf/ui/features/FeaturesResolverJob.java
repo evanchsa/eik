@@ -1,11 +1,11 @@
 package info.evanchik.eclipse.karaf.ui.features;
 
-import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.PropertyUtils;
-import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
-import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
-import info.evanchik.eclipse.karaf.core.features.XmlFeaturesRepository;
+import org.apache.karaf.eik.core.KarafCorePluginUtils;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.PropertyUtils;
+import org.apache.karaf.eik.core.configuration.FeaturesSection;
+import org.apache.karaf.eik.core.features.FeaturesRepository;
+import org.apache.karaf.eik.core.features.XmlFeaturesRepository;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 

@@ -47,7 +47,7 @@
         <property name='download.size' value='1693579'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='info.evanchik.karaf.app' version='0.5.0.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.app' version='0.5.0.201109050850'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='35987'/>
@@ -71,7 +71,7 @@
         <property name='download.size' value='7217'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='info.evanchik.eclipse.karaf.core' version='0.5.3.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.core' version='0.5.3.201109050850'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='74064'/>

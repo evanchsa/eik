@@ -1,9 +1,9 @@
 package info.evanchik.eclipse.karaf.ui.features;
 
-import info.evanchik.eclipse.karaf.core.features.Bundle;
-import info.evanchik.eclipse.karaf.core.features.Feature;
-import info.evanchik.eclipse.karaf.core.features.Features;
-import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
+import org.apache.karaf.eik.core.features.Bundle;
+import org.apache.karaf.eik.core.features.Feature;
+import org.apache.karaf.eik.core.features.Features;
+import org.apache.karaf.eik.core.features.FeaturesRepository;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.model.AbstractContentModel;
 import info.evanchik.eclipse.karaf.ui.model.ContentModel;

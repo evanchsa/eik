@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.smk.internal;
 
-import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
+import org.apache.karaf.eik.core.model.GenericKarafPlatformModel;
 
 import java.io.File;
 import java.io.IOException;

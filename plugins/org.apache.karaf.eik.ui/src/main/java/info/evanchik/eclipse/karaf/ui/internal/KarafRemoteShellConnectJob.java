@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.ui.internal;
 
-import info.evanchik.eclipse.karaf.core.shell.KarafRemoteShellConnection;
+import org.apache.karaf.eik.core.shell.KarafRemoteShellConnection;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 
 import org.eclipse.core.runtime.IProgressMonitor;

@@ -4,7 +4,7 @@
    <extension
          id="servicemixKernel"
          name="Eclipse Platform model for Apache ServiceMix Kernel"
-         point="info.evanchik.eclipse.karaf.core.platformModel">
+         point="org.apache.karaf.eik.core.platformModel">
       <model
             class="info.evanchik.eclipse.smk.ServiceMixKernelPlatformModelFactory">
          <triggerBundle

@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.wtp.core.runtime;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.wtp.core.KarafWtpPluginActivator;
 
 import org.eclipse.core.runtime.CoreException;

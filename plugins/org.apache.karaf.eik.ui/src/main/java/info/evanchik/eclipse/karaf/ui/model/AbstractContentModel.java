@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.ui.model;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafPlatformModel;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
 
 import org.eclipse.core.runtime.PlatformObject;

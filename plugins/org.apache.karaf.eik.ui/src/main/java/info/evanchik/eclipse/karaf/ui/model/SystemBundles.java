@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.ui.model;
 
-import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
+import org.apache.karaf.eik.core.KarafCorePluginUtils;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 

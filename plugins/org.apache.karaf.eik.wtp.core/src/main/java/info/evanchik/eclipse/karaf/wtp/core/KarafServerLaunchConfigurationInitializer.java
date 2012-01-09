@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.wtp.core;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
-import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
+import org.apache.karaf.eik.core.KarafPlatformModelRegistry;
+import org.apache.karaf.eik.core.configuration.StartupSection;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationInitializer;
 
 import org.eclipse.core.runtime.CoreException;

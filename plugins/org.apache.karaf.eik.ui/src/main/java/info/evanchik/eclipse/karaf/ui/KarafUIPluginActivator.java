@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
-import info.evanchik.eclipse.karaf.core.LogWrapper;
+import org.apache.karaf.eik.core.LogWrapper;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;

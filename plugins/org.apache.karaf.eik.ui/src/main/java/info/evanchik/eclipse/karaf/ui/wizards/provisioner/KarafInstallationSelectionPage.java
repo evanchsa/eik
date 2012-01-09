@@ -10,9 +10,9 @@
  */
 package info.evanchik.eclipse.karaf.ui.wizards.provisioner;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformDetails;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
+import org.apache.karaf.eik.core.KarafPlatformDetails;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 
 import org.eclipse.core.runtime.CoreException;

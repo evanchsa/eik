@@ -48,8 +48,6 @@
         <module>org.apache.karaf.eik.wtp.core</module>
         <module>org.apache.karaf.eik.wtp.ui</module>
         <module>org.apache.karaf.eik.app</module>
-        <module>org.apache.karaf.eik.smk</module>
-        <module>org.apache.karaf.eik.smk.app</module>
         <module>org.apache.karaf.eik.felix</module>
     </modules>
 

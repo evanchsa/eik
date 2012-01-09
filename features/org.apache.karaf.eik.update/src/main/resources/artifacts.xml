@@ -125,7 +125,7 @@
         <property name='download.size' value='18515'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='info.evanchik.eclipse.karaf.workbench' version='0.5.3.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.workbench' version='0.5.3.201109050850'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='130643'/>

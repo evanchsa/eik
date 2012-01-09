@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.wtp.core.server;
 
-import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
+import org.apache.karaf.eik.workbench.MBeanProvider;
 import info.evanchik.eclipse.karaf.wtp.core.KarafServerLaunchConfigurationInitializer;
 import info.evanchik.eclipse.karaf.wtp.core.KarafWtpPluginActivator;
 

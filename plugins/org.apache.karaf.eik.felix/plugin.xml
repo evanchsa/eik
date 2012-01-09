@@ -4,9 +4,9 @@
    <extension
          point="org.eclipse.pde.ui.osgiFrameworks">
       <framework
-            id="info.evanchik.eclipse.felix.framework"
-            initializer="info.evanchik.eclipse.felix.FelixInitializer"
-            launcherDelegate="info.evanchik.eclipse.felix.FelixLaunchConfiguration"
+            id="org.apache.karaf.eik.felix.framework"
+            initializer="org.apache.karaf.eik.felix.FelixInitializer"
+            launcherDelegate="org.apache.karaf.eik.felix.FelixLaunchConfiguration"
             name="Apache Felix">
       </framework>
    </extension>

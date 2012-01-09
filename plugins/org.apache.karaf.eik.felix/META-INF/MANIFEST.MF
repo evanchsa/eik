@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Apache Karaf :: EIK :: Plugins :: Felix OSGi Framework for Eclipse PDE
 Bundle-SymbolicName: org.apache.karaf.eik.felix;singleton:=true
 Bundle-Version: 3.0.0.qualifier
-Bundle-Activator: info.evanchik.eclipse.felix.Activator
+Bundle-Activator: org.apache.karaf.eik.felix.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.debug.ui;bundle-version="[3.2.0,4.0.0)",

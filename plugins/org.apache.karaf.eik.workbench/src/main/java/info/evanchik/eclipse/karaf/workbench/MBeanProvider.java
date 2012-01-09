@@ -28,7 +28,7 @@ public interface MBeanProvider extends IAdaptable {
      * of Karaf workbench services in the OSGi service registry
      */
     public static final String KARAF_WORKBENCH_SERVICES_ID =
-        "info.evanchik.eclipse.karaf.jmx.workbench.services";
+        "org.apache.karaf.eik.jmx.workbench.services";
 
     /**
      * Closes this {@code MBeanProvider}. This will close any connections to a

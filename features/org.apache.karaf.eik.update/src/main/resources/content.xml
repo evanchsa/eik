@@ -386,22 +386,22 @@
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='info.evanchik.eclipse.karaf.jmx.feature.feature.jar' version='0.5.3.201109050850'>
+    <unit id='org.apache.karaf.eik.jmx.feature.feature.jar' version='0.5.3.201109050850'>
       <properties size='3'>
         <property name='org.eclipse.equinox.p2.name' value='Eclipse JMX Integration Feature for Apache Felix Karaf'/>
         <property name='org.eclipse.equinox.p2.description' value='JMX Integration for Apache Karaf runtimes'/>
         <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
       </properties>
       <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.jmx.feature.feature.jar' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.jar' version='0.5.3.201109050850'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
-        <provided namespace='org.eclipse.update.feature' name='info.evanchik.eclipse.karaf.jmx.feature' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.update.feature' name='org.apache.karaf.eik.jmx.feature' version='0.5.3.201109050850'/>
       </provides>
       <filter>
         (org.eclipse.update.install.features=true)
       </filter>
       <artifacts size='1'>
-        <artifact classifier='org.eclipse.update.feature' id='info.evanchik.eclipse.karaf.jmx.feature' version='0.5.3.201109050850'/>
+        <artifact classifier='org.eclipse.update.feature' id='org.apache.karaf.eik.jmx.feature' version='0.5.3.201109050850'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
@@ -430,7 +430,7 @@
       </provides>
       <requires size='2'>
         <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.feature.feature.group' range='[0.5.3.201109050850,0.5.3.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.jmx.feature.feature.group' range='[0.5.3.201109050850,0.5.3.201109050850]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.group' range='[0.5.3.201109050850,0.5.3.201109050850]'/>
       </requires>
       <touchpoint id='null' version='0.0.0'/>
     </unit>
@@ -497,16 +497,16 @@
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='info.evanchik.eclipse.karaf.jmx' version='0.5.0.201109050850' singleton='false'>
-      <update id='info.evanchik.eclipse.karaf.jmx' range='[0.0.0,0.5.0.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.jmx' version='0.5.0.201109050850' singleton='false'>
+      <update id='org.apache.karaf.eik.jmx' range='[0.0.0,0.5.0.201109050850)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='JMX Data Exporter for Eclipse Integration for Apache Karaf'/>
         <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
       </properties>
       <provides size='4'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.jmx' version='0.5.0.201109050850'/>
-        <provided namespace='osgi.bundle' name='info.evanchik.eclipse.karaf.jmx' version='0.5.0.201109050850'/>
-        <provided namespace='java.package' name='info.evanchik.eclipse.karaf.jmx' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx' version='0.5.0.201109050850'/>
+        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.jmx' version='0.5.0.201109050850'/>
+        <provided namespace='java.package' name='org.apache.karaf.eik.jmx' version='0.0.0'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
       <requires size='3'>
@@ -515,14 +515,14 @@
         <required namespace='java.package' name='org.osgi.framework' range='1.4.0'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='info.evanchik.eclipse.karaf.jmx' version='0.5.0.201109050850'/>
+        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.jmx' version='0.5.0.201109050850'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='1'>
-          <instruction key='manifest'>
-            Bundle-Vendor: evanchik.info&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: info.evanchik.eclipse.karaf.jmx.KarafJMXPlugin&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6,J2SE-1.5&#xA;Import-Package: javax.management,org.eclipse.osgi.service.resolver;version=&quot;1.4.0&quot;,org.osgi.framework;version=&quot;1.4.0&quot;&#xA;Bundle-Name: JMX Data Exporter for Eclipse Integration for Apache Karaf&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.jmx&#xA;Bundle-Version: 0.5.0.201109050850&#xA;Export-Package: info.evanchik.eclipse.karaf.jmx
-          </instruction>
+          <instruction key='manifest'><![CDATA[<![CDATA[
+            Bundle-Vendor: evanchik.info&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Acorg.apache.karaf.eik.jmxkaraf.jmx.KarafJMXPlugin&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6,J2SE-1.5&#xA;Import-Package: javax.management,org.eclipse.osgi.service.resolver;version=&quot;1.4.0&quot;,org.osgi.framework;version=&quot;1.4.0&quot;&#xA;Bundle-Name: JMX Data Exporter for Eclipse Integration for Apache Karaf&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.jmx&#xA;Bundle-Version: 0.5.0.201109050850&#xA;Export-Package: org.apache.karaf.eik.jmx
+          ]]>]]></instruction>
         </instructions>
       </touchpointData>
     </unit>
@@ -636,7 +636,7 @@
         <required namespace='osgi.bundle' name='org.eclipse.ui.navigator' range='3.5.0'/>
         <required namespace='osgi.bundle' name='org.eclipse.ui.navigator.resources' range='3.4.202'/>
         <required namespace='osgi.bundle' name='org.apache.karaf.eik.core' range='0.5.3'/>
-        <required namespace='osgi.bundle' name='info.evanchik.eclipse.karaf.jmx' range='0.5.0'/>
+        <required namespace='osgi.bundle' name='org.apache.karaf.eik.jmx' range='0.5.0'/>
         <required namespace='osgi.bundle' name='info.evanchik.eclipse.karaf.ui' range='0.5.3'/>
         <required namespace='java.package' name='javax.management' range='0.0.0'/>
         <required namespace='java.package' name='org.apache.aries.jmx.codec' range='0.2.0.incubating'/>
@@ -649,7 +649,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Export-Package: info.evanchik.eclipse.karaf.workbench,info.evanchik.eclipse.karaf.workbench.factory,info.evanchik.eclipse.karaf.workbench.provider&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.core.runtime;bundle-version=&quot;[3.1.0,4.0.0)&quot;,org.eclipse.debug.core;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.jdt.launching;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.jface.databinding;bundle-version=&quot;1.4.0&quot;,org.eclipse.jface.text;bundle-version=&quot;3.6.1&quot;,org.eclipse.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.ui.editors;bundle-version=&quot;3.6.1&quot;,org.eclipse.ui.forms;bundle-version=&quot;3.5.2&quot;,org.eclipse.ui.navigator;bundle-version=&quot;3.5.0&quot;,org.eclipse.ui.navigator.resources;bundle-version=&quot;3.4.202&quot;,org.apache.karaf.eik.core;bundle-version=&quot;0.5.3&quot;,info.evanchik.eclipse.karaf.jmx;bundle-version=&quot;0.5.0&quot;,info.evanchik.eclipse.karaf.ui;bundle-version=&quot;0.5.3&quot;&#xA;Bundle-Activator: info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator&#xA;Bundle-Name: Eclipse Workbench Service Registry for Apache Karaf&#xA;Bundle-Version: 0.5.3.201109050850&#xA;Bundle-Vendor: evanchik.info&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.workbench;singleton:=true&#xA;Import-Package: javax.management,org.apache.aries.jmx.codec;version=&quot;0.2.0.incubating&quot;,org.osgi.jmx.framework;version=&quot;1.5.0&quot;&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0
+            Bundle-ManifestVersion: 2&#xA;Export-Package: info.evanchik.eclipse.karaf.workbench,info.evanchik.eclipse.karaf.workbench.factory,info.evanchik.eclipse.karaf.workbench.provider&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.core.runtime;bundle-version=&quot;[3.1.0,4.0.0)&quot;,org.eclipse.debug.core;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.jdt.launching;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.jface.databinding;bundle-version=&quot;1.4.0&quot;,org.eclipse.jface.text;bundle-version=&quot;3.6.1&quot;,org.eclipse.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.ui.editors;bundle-version=&quot;3.6.1&quot;,org.eclipse.ui.forms;bundle-version=&quot;3.5.2&quot;,org.eclipse.ui.navigator;bundle-version=&quot;3.5.0&quot;,org.eclipse.ui.navigator.resources;bundle-version=&quot;3.4.202&quot;,org.apache.karaf.eik.core;bundle-version=&quot;0.5.3&quot;,org.apache.karaf.eik.jmx;bundle-version=&quot;0.5.0&quot;,info.evanchik.eclipse.karaf.ui;bundle-version=&quot;0.5.3&quot;&#xA;Bundle-Activator: info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator&#xA;Bundle-Name: Eclipse Workbench Service Registry for Apache Karaf&#xA;Bundle-Version: 0.5.3.201109050850&#xA;Bundle-Vendor: evanchik.info&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.workbench;singleton:=true&#xA;Import-Package: javax.management,org.apache.aries.jmx.codec;version=&quot;0.2.0.incubating&quot;,org.osgi.jmx.framework;version=&quot;1.5.0&quot;&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0
           </instruction>
         </instructions>
       </touchpointData>
@@ -906,8 +906,8 @@
         %copyright
       </copyright>
     </unit>
-    <unit id='info.evanchik.eclipse.karaf.jmx.feature.feature.group' version='0.5.3.201109050850' singleton='false'>
-      <update id='info.evanchik.eclipse.karaf.jmx.feature.feature.group' range='[0.0.0,0.5.3.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.jmx.feature.feature.group' version='0.5.3.201109050850' singleton='false'>
+      <update id='org.apache.karaf.eik.jmx.feature.feature.group' range='[0.0.0,0.5.3.201109050850)' severity='0'/>
       <properties size='4'>
         <property name='org.eclipse.equinox.p2.name' value='Eclipse JMX Integration Feature for Apache Felix Karaf'/>
         <property name='org.eclipse.equinox.p2.description' value='JMX Integration for Apache Karaf runtimes'/>
@@ -915,7 +915,7 @@
         <property name='org.eclipse.equinox.p2.type.group' value='true'/>
       </properties>
       <provides size='1'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.jmx.feature.feature.group' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.group' version='0.5.3.201109050850'/>
       </provides>
       <requires size='18'>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.osgi' range='0.0.0'/>
@@ -923,7 +923,7 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.debug.core' range='[3.2.0,4.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jdt.launching' range='[3.2.0,4.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui' range='[3.2.0,4.0.0)'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.jmx' range='0.5.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx' range='0.5.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.osgi.services' range='0.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jface.databinding' range='1.4.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jface.text' range='3.6.1'/>
@@ -931,11 +931,11 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui.forms' range='3.5.2'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.core' range='0.5.2'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.ui' range='0.5.2'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.jmx' range='[0.5.0.201109050850,0.5.0.201109050850]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx' range='[0.5.0.201109050850,0.5.0.201109050850]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.workbench' range='[0.5.3.201109050850,0.5.3.201109050850]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.osgi.jmx' range='[1.0.0.201109050850,1.0.0.201109050850]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.aries.jmx.core' range='[1.0.0.201109050850,1.0.0.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.jmx.feature.feature.jar' range='[0.5.3.201109050850,0.5.3.201109050850]'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.jar' range='[0.5.3.201109050850,0.5.3.201109050850]'>
           <filter>
             (org.eclipse.update.install.features=true)
           </filter>

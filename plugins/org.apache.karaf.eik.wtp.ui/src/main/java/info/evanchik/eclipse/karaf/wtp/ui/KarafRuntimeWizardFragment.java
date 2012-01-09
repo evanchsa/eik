@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.wtp.ui;
 
-import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
+import org.apache.karaf.eik.ui.KarafUIPluginActivator;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;

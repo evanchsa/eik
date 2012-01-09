@@ -5,7 +5,7 @@
    <extension
          id="runtimeData"
          name="OSGi C&amp;C Runtime Data provider"
-         point="info.evanchik.eclipse.karaf.ui.service">
+         point="org.apache.karaf.eik.ui.service">
       <launchCustomizer
             class="info.evanchik.eclipse.karaf.workbench.factory.MBeanProviderWorkbenchServiceFactory">
       </launchCustomizer>
@@ -59,7 +59,7 @@
             class="info.evanchik.eclipse.karaf.workbench.ui.editor.KarafPlatformEditorPart"
             default="false"
             icon="icons/obj16/karaf-logo-16x16.png"
-            id="info.evanchik.eclipse.karaf.ui.editors.KarafPlatformEditor"
+            id="org.apache.karaf.eik.ui.editors.KarafPlatformEditor"
             name="Karaf Platform">
       </editor>
    </extension>
@@ -67,7 +67,7 @@
          point="org.eclipse.ui.navigator.navigatorContent">
       <actionProvider
             class="info.evanchik.eclipse.karaf.workbench.internal.WorkbenchActionProvider"
-            id="info.evanchik.eclipse.karaf.ui.navigator.workbenchActionProvider">
+            id="org.apache.karaf.eik.ui.navigator.workbenchActionProvider">
          <enablement>
             <adapt
                   type="org.eclipse.core.resources.IProject">
@@ -85,7 +85,7 @@
             viewerId="org.eclipse.ui.navigator.ProjectExplorer">
          <includes>
             <actionExtension
-                  pattern="info.evanchik.eclipse.karaf.ui.navigator.*">
+                  pattern="org.apache.karaf.eik.ui.navigator.*">
             </actionExtension>
          </includes>
       </viewerActionBinding>

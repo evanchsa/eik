@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.wtp.ui.launcher;
 
-import info.evanchik.eclipse.karaf.ui.KarafConfigurationTab;
-import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationInitializer;
+import org.apache.karaf.eik.ui.KarafConfigurationTab;
+import org.apache.karaf.eik.ui.KarafLaunchConfigurationInitializer;
 
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;

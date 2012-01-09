@@ -93,7 +93,7 @@
          point="org.eclipse.wst.server.core.publishTasks">
       <publishTask
             class="info.evanchik.eclipse.karaf.wtp.core.tasks.KarafPublishTask"
-            id="info.evanchik.eclipse.karaf.ui.publishTask"
+            id="org.apache.karaf.eik.ui.publishTask"
             typeIds="info.evanchik.eclipse.server.karaf.*">
       </publishTask>
    </extension>

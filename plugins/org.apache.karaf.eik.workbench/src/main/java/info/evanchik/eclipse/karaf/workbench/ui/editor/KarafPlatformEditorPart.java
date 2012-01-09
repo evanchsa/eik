@@ -25,7 +25,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
  */
 public class KarafPlatformEditorPart extends FormEditor {
 
-    public static final String ID = "info.evanchik.eclipse.karaf.ui.editors.KarafPlatformEditor";
+    public static final String ID = "org.apache.karaf.eik.ui.editors.KarafPlatformEditor";
 
     private KarafPlatformEditorInput karafEditorInput;
 

@@ -11,7 +11,7 @@
 package info.evanchik.eclipse.karaf.workbench.ui.editor;
 
 import org.apache.karaf.eik.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.ui.IKarafProject;
+import org.apache.karaf.eik.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 
 import org.eclipse.jface.resource.ImageDescriptor;

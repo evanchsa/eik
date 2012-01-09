@@ -13,13 +13,13 @@
    <extension
          point="org.eclipse.pde.ui.launchShortcuts">
       <shortcut
-            id="info.evanchik.eclipse.karaf.ui.KarafLaunchShortcut"
+            id="org.apache.karaf.eik.ui.KarafLaunchShortcut"
             label="Launch an Apache Karaf application"
             mode="run"
             osgi="true">
       </shortcut>
       <shortcut
-            id="info.evanchik.eclipse.karaf.ui.KarafLaunchShortcut"
+            id="org.apache.karaf.eik.ui.KarafLaunchShortcut"
             label="Launch an Apache Karaf application in Debug mode"
             mode="debug"
             osgi="true">
@@ -29,17 +29,17 @@
          point="org.eclipse.pde.ui.osgiFrameworks">
       <framework
             id="info.evanchik.eclipse.karaf.Framework"
-            initializer="info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationInitializer"
-            launcherDelegate="info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationDelegate"
+            initializer="org.apache.karaf.eik.ui.KarafLaunchConfigurationInitializer"
+            launcherDelegate="org.apache.karaf.eik.ui.KarafLaunchConfigurationDelegate"
             name="Apache Karaf on Equinox">
       </framework>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabs">
       <tab
-            class="info.evanchik.eclipse.karaf.ui.KarafConfigurationTab"
+            class="org.apache.karaf.eik.ui.KarafConfigurationTab"
             group="org.eclipse.pde.ui.launcher.EquinoxLauncherTabGroup"
-            id="info.evanchik.eclipse.karaf.ui.karafGeneralLaunchConfigurationTab"
+            id="org.apache.karaf.eik.ui.karafGeneralLaunchConfigurationTab"
             name="Apache Karaf">
          <placement
                after="org.eclipse.pde.ui.launch.tab.tracing">
@@ -49,47 +49,47 @@
    <extension
          id="karaf"
          name="Default Apache Felix Karaf Workbench Services"
-         point="info.evanchik.eclipse.karaf.ui.service">
+         point="org.apache.karaf.eik.ui.service">
       <launchCustomizer
-            class="info.evanchik.eclipse.karaf.ui.workbench.internal.GenericKarafWorkbenchServiceFactory">
+            class="org.apache.karaf.eik.ui.workbench.internal.GenericKarafWorkbenchServiceFactory">
       </launchCustomizer>
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
       <factory
             adaptableType="org.eclipse.debug.core.ILaunchConfiguration"
-            class="info.evanchik.eclipse.karaf.ui.internal.KarafLaunchConfigurationAdapterFactory">
+            class="org.apache.karaf.eik.ui.internal.KarafLaunchConfigurationAdapterFactory">
          <adapter
                type="org.apache.karaf.eik.core.KarafPlatformModel">
          </adapter>
       </factory>
       <factory
             adaptableType="org.eclipse.core.resources.IProject"
-            class="info.evanchik.eclipse.karaf.ui.internal.KarafLaunchConfigurationAdapterFactory">
+            class="org.apache.karaf.eik.ui.internal.KarafLaunchConfigurationAdapterFactory">
          <adapter
-               type="info.evanchik.eclipse.karaf.ui.IKarafProject">
+               type="org.apache.karaf.eik.ui.IKarafProject">
          </adapter>
       </factory>
       <factory
             adaptableType="org.apache.karaf.eik.core.KarafPlatformModel"
-            class="info.evanchik.eclipse.karaf.ui.internal.KarafLaunchConfigurationAdapterFactory">
+            class="org.apache.karaf.eik.ui.internal.KarafLaunchConfigurationAdapterFactory">
          <adapter
-               type="info.evanchik.eclipse.karaf.ui.IKarafProject">
+               type="org.apache.karaf.eik.ui.IKarafProject">
          </adapter>
       </factory>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            id="info.evanchik.eclipse.karaf.ui.karafWizardsCategory"
+            id="org.apache.karaf.eik.ui.karafWizardsCategory"
             name="Apache Karaf">
       </category>
       <wizard
-            category="info.evanchik.eclipse.karaf.ui.karafWizardsCategory"
-            class="info.evanchik.eclipse.karaf.ui.wizards.NewKarafProjectWizard"
+            category="org.apache.karaf.eik.ui.karafWizardsCategory"
+            class="org.apache.karaf.eik.ui.wizards.NewKarafProjectWizard"
             finalPerspective="org.eclipse.pde.ui.PDEPerspective"
             icon="icons/obj16/karaf-logo-16x16.png"
-            id="info.evanchik.eclipse.karaf.ui.karafPlatformProject"
+            id="org.apache.karaf.eik.ui.karafPlatformProject"
             name="Apache Karaf Installation"
             project="true">
          <description>
@@ -103,7 +103,7 @@
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="info.evanchik.eclipse.karaf.ui.project.KarafProjectNature">
+               class="org.apache.karaf.eik.ui.project.KarafProjectNature">
          </run>
       </runtime>
    </extension>
@@ -111,7 +111,7 @@
          point="org.eclipse.ui.ide.projectNatureImages">
       <image
             icon="icons/obj16/karaf-logo-nature-16x16.png"
-            id="info.evanchik.eclipse.karaf.ui.KarafProjectNatureImage"
+            id="org.apache.karaf.eik.ui.KarafProjectNatureImage"
             natureId="info.evanchik.eclipse.karaf.KarafProjectNature">
       </image>
    </extension>
@@ -119,10 +119,10 @@
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent
             appearsBefore="org.eclipse.ui.navigator.resourceContent"
-            contentProvider="info.evanchik.eclipse.karaf.ui.navigator.KarafPlatformModelContentProvider"
+            contentProvider="org.apache.karaf.eik.ui.navigator.KarafPlatformModelContentProvider"
             icon="icons/obj16/karaf-logo-16x16.png"
-            id="info.evanchik.eclipse.karaf.ui.navigator.KarafResources"
-            labelProvider="info.evanchik.eclipse.karaf.ui.navigator.KarafPlatformModelLabelProvider"
+            id="org.apache.karaf.eik.ui.navigator.KarafResources"
+            labelProvider="org.apache.karaf.eik.ui.navigator.KarafPlatformModelLabelProvider"
             name="Apache Karaf">
          <triggerPoints>
             <adapt
@@ -135,11 +135,11 @@
          </triggerPoints>
       </navigatorContent>
       <navigatorContent
-            appearsBefore="info.evanchik.eclipse.karaf.ui.navigator.KarafResources"
-            contentProvider="info.evanchik.eclipse.karaf.ui.features.FeaturesContentProvider"
+            appearsBefore="org.apache.karaf.eik.ui.navigator.KarafResources"
+            contentProvider="org.apache.karaf.eik.ui.features.FeaturesContentProvider"
             icon="icons/obj16/feature_obj.gif"
-            id="info.evanchik.eclipse.karaf.ui.navigator.KarafFeaturesContent"
-            labelProvider="info.evanchik.eclipse.karaf.ui.features.FeaturesLabelProvider"
+            id="org.apache.karaf.eik.ui.navigator.KarafFeaturesContent"
+            labelProvider="org.apache.karaf.eik.ui.features.FeaturesLabelProvider"
             name="Apache Karaf Features">
          <triggerPoints>
             <adapt
@@ -158,7 +158,7 @@
             viewerId="org.eclipse.ui.navigator.ProjectExplorer">
          <includes>
             <contentExtension
-                  pattern="info.evanchik.eclipse.karaf.ui.navigator.*">
+                  pattern="org.apache.karaf.eik.ui.navigator.*">
             </contentExtension>
          </includes>
       </viewerContentBinding>
@@ -166,9 +166,9 @@
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
-            class="info.evanchik.eclipse.karaf.ui.internal.JavaFilePropertyTester"
-            id="info.evanchik.eclipse.karaf.ui.javaFilePropertyTester"
-            namespace="info.evanchik.eclipse.karaf.ui"
+            class="org.apache.karaf.eik.ui.internal.JavaFilePropertyTester"
+            id="org.apache.karaf.eik.ui.javaFilePropertyTester"
+            namespace="org.apache.karaf.eik.ui"
             properties="name,directory,extension"
             type="java.io.File">
       </propertyTester>
@@ -179,7 +179,7 @@
          point="org.eclipse.core.resources.builders">
       <builder>
          <run
-               class="info.evanchik.eclipse.karaf.ui.project.KarafProjectBuilder">
+               class="org.apache.karaf.eik.ui.project.KarafProjectBuilder">
          </run>
       </builder>
    </extension>

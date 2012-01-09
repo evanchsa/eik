@@ -34,7 +34,7 @@ public class KarafWorkbenchPerspectiveFactory implements IPerspectiveFactory {
         layout.addActionSet("org.eclipse.debug.ui.launchActionSet");
         layout.addActionSet("org.eclipse.debug.ui.profileActionSet");
 
-        layout.addNewWizardShortcut("info.evanchik.eclipse.karaf.ui.karafPlatformProject");
+        layout.addNewWizardShortcut("org.apache.karaf.eik.ui.karafPlatformProject");
 
         final IFolderLayout leftFolder =
             layout.createFolder(

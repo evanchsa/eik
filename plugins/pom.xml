@@ -40,7 +40,6 @@
         <module>org.osgi.jmx</module>
         <module>org.ops4j.pax.url.mvn</module>
         <module>org.apache.aries.jmx.core</module>
-        <module>org.apache.servicemix.kernel.main</module>
         <module>org.apache.karaf.eik.core</module>
         <module>org.apache.karaf.eik.jmx</module>
         <module>org.apache.karaf.eik.ui</module>

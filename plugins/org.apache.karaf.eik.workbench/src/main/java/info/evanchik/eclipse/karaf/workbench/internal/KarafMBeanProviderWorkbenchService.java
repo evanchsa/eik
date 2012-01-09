@@ -13,7 +13,7 @@ package info.evanchik.eclipse.karaf.workbench.internal;
 import org.apache.karaf.eik.core.KarafCorePluginUtils;
 import org.apache.karaf.eik.core.KarafWorkingPlatformModel;
 import org.apache.karaf.eik.core.equinox.BundleEntry;
-import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
+import org.apache.karaf.eik.ui.workbench.KarafWorkbenchService;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 import info.evanchik.eclipse.karaf.workbench.WorkbenchServiceManager;

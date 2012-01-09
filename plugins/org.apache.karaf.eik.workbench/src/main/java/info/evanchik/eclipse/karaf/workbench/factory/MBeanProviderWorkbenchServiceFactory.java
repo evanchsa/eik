@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.workbench.factory;
 
-import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
-import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
+import org.apache.karaf.eik.ui.workbench.KarafWorkbenchService;
+import org.apache.karaf.eik.ui.workbench.KarafWorkbenchServiceFactory;
 import info.evanchik.eclipse.karaf.workbench.internal.KarafMBeanProviderWorkbenchService;
 
 /**

@@ -12,7 +12,7 @@ package info.evanchik.eclipse.karaf.wtp.core;
 
 import org.apache.karaf.eik.core.KarafPlatformModelRegistry;
 import org.apache.karaf.eik.core.model.WorkingKarafPlatformModel;
-import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationDelegate;
+import org.apache.karaf.eik.ui.KarafLaunchConfigurationDelegate;
 import info.evanchik.eclipse.karaf.wtp.core.server.KarafServerBehavior;
 
 import org.eclipse.core.runtime.CoreException;

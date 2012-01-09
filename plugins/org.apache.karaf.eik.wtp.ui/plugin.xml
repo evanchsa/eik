@@ -21,11 +21,11 @@
             runtime-component-type="info.evanchik.eclipse.server.karaf">
       </image>
       <image
-            category="info.evanchik.eclipse.karaf.wtp.core.category"
+            category="org.apache.karaf.eik.wtp.core.category"
             path="icons/obj16/felixLogo16x16.gif">
       </image>
       <image
-            facet="info.evanchik.eclipse.karaf.wtp.core.facets.bundle"
+            facet="org.apache.karaf.eik.wtp.core.facets.bundle"
             path="icons/obj16/felixLogo16x16.gif">
       </image>
    </extension>
@@ -56,7 +56,7 @@
       <launchConfigurationTabGroup
             class="info.evanchik.eclipse.karaf.wtp.ui.launcher.KarafLauncherTabGroup"
             id="info.evanchik.eclipse.karaf.wtp.ui.KarafLauncherTabGroup"
-            type="info.evanchik.eclipse.karaf.wtp.core.KarafServerLauncher">
+            type="org.apache.karaf.eik.wtp.core.KarafServerLauncher">
       </launchConfigurationTabGroup>
    </extension>
 

@@ -10,9 +10,9 @@
  */
 package info.evanchik.eclipse.smk;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelFactory;
-import info.evanchik.eclipse.karaf.core.KarafPlatformValidator;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafPlatformModelFactory;
+import org.apache.karaf.eik.core.KarafPlatformValidator;
 import info.evanchik.eclipse.smk.internal.ServiceMixKernelPlatformModel;
 import info.evanchik.eclipse.smk.internal.ServiceMixKernelPlatformValidator;
 

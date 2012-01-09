@@ -10,17 +10,17 @@
  */
 package info.evanchik.eclipse.karaf.ui.workbench.internal;
 
-import info.evanchik.eclipse.karaf.core.IKarafConstants;
-import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
-import info.evanchik.eclipse.karaf.core.PropertyUtils;
-import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
-import info.evanchik.eclipse.karaf.core.configuration.ManagementSection;
-import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
-import info.evanchik.eclipse.karaf.core.model.GenericKarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.shell.KarafSshConnectionUrl;
-import info.evanchik.eclipse.karaf.core.shell.KarafSshShellConnection;
+import org.apache.karaf.eik.core.IKarafConstants;
+import org.apache.karaf.eik.core.KarafCorePluginUtils;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafWorkingPlatformModel;
+import org.apache.karaf.eik.core.PropertyUtils;
+import org.apache.karaf.eik.core.configuration.FeaturesSection;
+import org.apache.karaf.eik.core.configuration.ManagementSection;
+import org.apache.karaf.eik.core.equinox.BundleEntry;
+import org.apache.karaf.eik.core.model.GenericKarafPlatformModel;
+import org.apache.karaf.eik.core.shell.KarafSshConnectionUrl;
+import org.apache.karaf.eik.core.shell.KarafSshShellConnection;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationConstants;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
@@ -208,7 +208,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         }
 
         final String[] bundles = {
-                "info.evanchik.karaf.app", //$NON-NLS-1$
+                "org.apache.karaf.eik.app", //$NON-NLS-1$
                 "org.eclipse.core.contenttype", //$NON-NLS-1$
                 "org.eclipse.core.jobs", //$NON-NLS-1$
                 "org.eclipse.core.runtime", //$NON-NLS-1$
@@ -328,7 +328,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
             if (vmArgs.length() > 0) {
                 vmArgs.append(" "); //$NON-NLS-1$
             }
-            vmArgs.append(" -Declipse.application=info.evanchik.karaf.app.KarafMain"); //$NON-NLS-1$
+            vmArgs.append(" -Declipse.application=org.apache.karaf.eik.app.KarafMain"); //$NON-NLS-1$
         }
 
         try {

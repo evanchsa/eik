@@ -10,15 +10,15 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
-import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
-import info.evanchik.eclipse.karaf.core.configuration.FeaturesSection;
-import info.evanchik.eclipse.karaf.core.features.Feature;
-import info.evanchik.eclipse.karaf.core.features.FeatureResolverImpl;
-import info.evanchik.eclipse.karaf.core.features.Features;
-import info.evanchik.eclipse.karaf.core.features.FeaturesRepository;
-import info.evanchik.eclipse.karaf.core.features.XmlFeaturesRepository;
+import org.apache.karaf.eik.core.KarafCorePluginUtils;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafPlatformModelRegistry;
+import org.apache.karaf.eik.core.configuration.FeaturesSection;
+import org.apache.karaf.eik.core.features.Feature;
+import org.apache.karaf.eik.core.features.FeatureResolverImpl;
+import org.apache.karaf.eik.core.features.Features;
+import org.apache.karaf.eik.core.features.FeaturesRepository;
+import org.apache.karaf.eik.core.features.XmlFeaturesRepository;
 
 import java.io.FileInputStream;
 import java.io.IOException;

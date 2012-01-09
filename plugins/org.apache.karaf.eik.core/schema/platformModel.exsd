@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="info.evanchik.eclipse.karaf.core" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.apache.karaf.eik.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="info.evanchik.eclipse.karaf.core" id="platformModel" name="Apache Felix Karaf Platform Models"/>
+         <meta.schema plugin="org.apache.karaf.eik.core" id="platformModel" name="Apache Karaf Platform Models"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+
       </documentation>
    </annotation>
 
@@ -58,7 +58,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":info.evanchik.eclipse.karaf.core.KarafPlatformModelFactory"/>
+                  <meta.attribute kind="java" basedOn=":org.apache.karaf.eik.core.KarafPlatformModelFactory"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -82,7 +82,7 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+
       </documentation>
    </annotation>
 
@@ -91,7 +91,7 @@
          <meta.section type="examples"/>
       </appinfo>
       <documentation>
-         [Enter extension point usage example here.]
+
       </documentation>
    </annotation>
 
@@ -100,7 +100,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         [Enter API information here.]
+
       </documentation>
    </annotation>
 
@@ -109,9 +109,8 @@
          <meta.section type="implementation"/>
       </appinfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+
       </documentation>
    </annotation>
-
 
 </schema>

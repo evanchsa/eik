@@ -1,6 +1,6 @@
 package info.evanchik.eclipse.karaf.workbench;
 
-import info.evanchik.eclipse.karaf.core.LogWrapper;
+import org.apache.karaf.eik.core.LogWrapper;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 import info.evanchik.eclipse.karaf.workbench.internal.MBeanProviderManager;
 import info.evanchik.eclipse.karaf.workbench.internal.RuntimeDataProviderManager;

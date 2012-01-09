@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.ui.internal;
 
-import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafCorePluginUtils;
+import org.apache.karaf.eik.core.KarafPlatformModel;
 
 import java.io.File;
 import java.util.ArrayList;

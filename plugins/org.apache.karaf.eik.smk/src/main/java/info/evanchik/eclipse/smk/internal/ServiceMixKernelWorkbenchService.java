@@ -10,10 +10,10 @@
  */
 package info.evanchik.eclipse.smk.internal;
 
-import info.evanchik.eclipse.karaf.core.IKarafConstants;
-import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
-import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
+import org.apache.karaf.eik.core.IKarafConstants;
+import org.apache.karaf.eik.core.KarafCorePluginUtils;
+import org.apache.karaf.eik.core.KarafWorkingPlatformModel;
+import org.apache.karaf.eik.core.equinox.BundleEntry;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchService;
 
 import java.util.ArrayList;

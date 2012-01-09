@@ -10,7 +10,7 @@
             thread="main"
             visible="true">
          <run
-               class="info.evanchik.karaf.app.MainApplication">
+               class="org.apache.karaf.eik.app.MainApplication">
          </run>
       </application>
    </extension>

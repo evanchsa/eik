@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.ui.workbench;
 
-import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
-import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
+import org.apache.karaf.eik.core.KarafWorkingPlatformModel;
+import org.apache.karaf.eik.core.equinox.BundleEntry;
 
 import java.util.List;
 import java.util.Map;

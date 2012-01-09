@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.ui.internal;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafPlatformModelRegistry;
 import info.evanchik.eclipse.karaf.ui.IKarafProject;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationConstants;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;

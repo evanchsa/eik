@@ -10,8 +10,8 @@
  */
 package info.evanchik.eclipse.karaf.workbench.ui.editor;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.KarafWorkingPlatformModel;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafWorkingPlatformModel;
 import info.evanchik.eclipse.karaf.workbench.KarafWorkbenchActivator;
 import info.evanchik.eclipse.karaf.workbench.MBeanProvider;
 import info.evanchik.eclipse.karaf.workbench.WorkbenchServiceListener;

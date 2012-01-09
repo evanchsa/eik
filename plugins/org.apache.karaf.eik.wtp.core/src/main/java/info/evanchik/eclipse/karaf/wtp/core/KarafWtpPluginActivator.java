@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.karaf.wtp.core;
 
-import info.evanchik.eclipse.karaf.core.LogWrapper;
+import org.apache.karaf.eik.core.LogWrapper;
 
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;

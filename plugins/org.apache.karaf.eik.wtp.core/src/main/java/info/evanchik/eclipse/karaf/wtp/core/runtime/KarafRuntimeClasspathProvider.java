@@ -10,9 +10,9 @@
  */
 package info.evanchik.eclipse.karaf.wtp.core.runtime;
 
-import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
+import org.apache.karaf.eik.core.KarafCorePluginUtils;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafPlatformModelRegistry;
 
 import java.io.File;
 import java.util.ArrayList;

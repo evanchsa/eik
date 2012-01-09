@@ -10,7 +10,7 @@
  */
 package info.evanchik.eclipse.smk.internal;
 
-import info.evanchik.eclipse.karaf.core.KarafPlatformValidator;
+import org.apache.karaf.eik.core.KarafPlatformValidator;
 
 import org.eclipse.core.runtime.IPath;
 

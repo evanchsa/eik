@@ -14,14 +14,14 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
  org.apache.mina.core;bundle-version="2.0.0",
  org.fusesource.jansi;bundle-version="1.5.0",
  sshd-core;bundle-version="0.5.0"
-Export-Package: info.evanchik.eclipse.karaf.core,
- info.evanchik.eclipse.karaf.core.configuration,
- info.evanchik.eclipse.karaf.core.configuration.internal,
- info.evanchik.eclipse.karaf.core.equinox,
- info.evanchik.eclipse.karaf.core.features,
- info.evanchik.eclipse.karaf.core.model,
- info.evanchik.eclipse.karaf.core.shell
+Export-Package: org.apache.karaf.eik.core,
+ org.apache.karaf.eik.core.configuration,
+ org.apache.karaf.eik.core.configuration.internal,
+ org.apache.karaf.eik.core.equinox,
+ org.apache.karaf.eik.core.features,
+ org.apache.karaf.eik.core.model,
+ org.apache.karaf.eik.core.shell
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: info.evanchik.eclipse.karaf.core.internal.KarafCorePluginActivator
+Bundle-Activator: org.apache.karaf.eik.core.internal.KarafCorePluginActivator
 Bundle-Vendor: Apache Software Foundation
 

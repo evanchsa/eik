@@ -10,9 +10,9 @@
  */
 package info.evanchik.eclipse.karaf.ui.console;
 
-import info.evanchik.eclipse.karaf.core.shell.KarafRemoteShellConnection;
-import info.evanchik.eclipse.karaf.core.shell.KarafSshConnectionUrl;
-import info.evanchik.eclipse.karaf.core.shell.KarafSshShellConnection;
+import org.apache.karaf.eik.core.shell.KarafRemoteShellConnection;
+import org.apache.karaf.eik.core.shell.KarafSshConnectionUrl;
+import org.apache.karaf.eik.core.shell.KarafSshShellConnection;
 import info.evanchik.eclipse.karaf.ui.KarafLaunchConfigurationConstants;
 import info.evanchik.eclipse.karaf.ui.KarafUIPluginActivator;
 import info.evanchik.eclipse.karaf.ui.internal.KarafRemoteShellConnectJob;

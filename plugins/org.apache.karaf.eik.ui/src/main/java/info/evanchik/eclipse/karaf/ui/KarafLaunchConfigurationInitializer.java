@@ -10,15 +10,15 @@
  */
 package info.evanchik.eclipse.karaf.ui;
 
-import info.evanchik.eclipse.karaf.core.IKarafConstants;
-import info.evanchik.eclipse.karaf.core.KarafCorePluginUtils;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModel;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelFactory;
-import info.evanchik.eclipse.karaf.core.KarafPlatformModelRegistry;
-import info.evanchik.eclipse.karaf.core.SystemBundleNames;
-import info.evanchik.eclipse.karaf.core.configuration.StartupSection;
-import info.evanchik.eclipse.karaf.core.equinox.BundleEntry;
-import info.evanchik.eclipse.karaf.core.model.WorkingKarafPlatformModel;
+import org.apache.karaf.eik.core.IKarafConstants;
+import org.apache.karaf.eik.core.KarafCorePluginUtils;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.apache.karaf.eik.core.KarafPlatformModelFactory;
+import org.apache.karaf.eik.core.KarafPlatformModelRegistry;
+import org.apache.karaf.eik.core.SystemBundleNames;
+import org.apache.karaf.eik.core.configuration.StartupSection;
+import org.apache.karaf.eik.core.equinox.BundleEntry;
+import org.apache.karaf.eik.core.model.WorkingKarafPlatformModel;
 import info.evanchik.eclipse.karaf.ui.internal.WorkbenchServiceExtensions;
 import info.evanchik.eclipse.karaf.ui.workbench.KarafWorkbenchServiceFactory;
 

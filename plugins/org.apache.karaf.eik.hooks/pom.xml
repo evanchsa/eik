@@ -34,10 +34,10 @@
     <name>Apache Karaf :: EIK :: Plugins :: Equinox Hooks for Eclipse PDE Integration</name>
 
     <build>
-        <finalName>${artifactId}_${version}</finalName>
+        <finalName>${project.artifactId}_${project.version}</finalName>
         <resources>
             <resource>
-                <directory>${pom.basedir}</directory>
+                <directory>${project.basedir}</directory>
                 <includes>
                     <include>plugin.xml</include>
                     <include>plugin.properties</include>
@@ -46,7 +46,7 @@
                 </includes>
             </resource>
             <resource>
-                <directory>${pom.basedir}/src/main/resources</directory>
+                <directory>${project.basedir}/src/main/resources</directory>
                 <includes>
                     <include>**/*</include>
                 </includes>
@@ -57,7 +57,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>
-                        <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
+                        <manifestFile>${project.basedir}/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
             </plugin>

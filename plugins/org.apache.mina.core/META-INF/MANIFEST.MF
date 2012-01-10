@@ -1,21 +1,21 @@
 Manifest-Version: 1.0
-Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core.future,org.apache.mina.core.session,org.apache.mina.core.buffer",
- org.apache.mina.core.buffer;version="2.0.0",
- org.apache.mina.core.file;version="2.0.0",
- org.apache.mina.core.filterchain;version="2.0.0";
+Export-Package: org.apache.mina.core;version="2.0.1";uses:="org.apache.mina.core.future,org.apache.mina.core.session,org.apache.mina.core.buffer",
+ org.apache.mina.core.buffer;version="2.0.1",
+ org.apache.mina.core.file;version="2.0.1",
+ org.apache.mina.core.filterchain;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core.session,
    org.apache.mina.core.buffer,
    org.apache.mina.core.service,
    org.slf4j,
    org.apache.mina.core.write",
- org.apache.mina.core.future;version="2.0.0";
+ org.apache.mina.core.future;version="2.0.1";
   uses:="org.apache.mina.core.polling,
    org.apache.mina.core.session,
    org.apache.mina.core.service,
    org.apache.mina.util,
    org.apache.mina.core",
- org.apache.mina.core.polling;version="2.0.0";
+ org.apache.mina.core.polling;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core.buffer,
    org.apache.mina.core,
@@ -27,7 +27,7 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.core.service,
    org.apache.mina.util,
    org.apache.mina.transport.socket",
- org.apache.mina.core.service;version="2.0.0";
+ org.apache.mina.core.service;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core,
    org.slf4j,
@@ -35,7 +35,7 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.core.session,
    org.apache.mina.core.filterchain,
    org.apache.mina.util",
- org.apache.mina.core.session;version="2.0.0";
+ org.apache.mina.core.session;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core.buffer,
    org.apache.mina.core.write,
@@ -43,15 +43,15 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.core.filterchain,
    org.apache.mina.core.service,
    org.apache.mina.util",
- org.apache.mina.core.write;version="2.0.0";uses:="org.apache.mina.core.future,org.apache.mina.core.session,org.apache.mina.util",
- org.apache.mina.filter.buffer;version="2.0.0";
+ org.apache.mina.core.write;version="2.0.1";uses:="org.apache.mina.core.future,org.apache.mina.core.session,org.apache.mina.util",
+ org.apache.mina.filter.buffer;version="2.0.1";
   uses:="org.apache.mina.core.session,
    org.apache.mina.core.buffer,
    org.apache.mina.core.filterchain,
    org.apache.mina.util,
    org.apache.mina.core.write,
    org.slf4j",
- org.apache.mina.filter.codec;version="2.0.0";
+ org.apache.mina.filter.codec;version="2.0.1";
   uses:="org.apache.mina.core.file,
    org.apache.mina.core.future,
    org.apache.mina.core.session,
@@ -60,60 +60,60 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.core.service,
    org.slf4j,
    org.apache.mina.core.write",
- org.apache.mina.filter.codec.demux;version="2.0.0";
+ org.apache.mina.filter.codec.demux;version="2.0.1";
   uses:="org.apache.mina.core.session,
    org.apache.mina.core.buffer,
    org.apache.mina.util,
    org.apache.mina.filter.codec",
- org.apache.mina.filter.codec.prefixedstring;version="2.0.0";uses:="org.apache.mina.core.session,org.apache.mina.core.buffer,org.apache.mina.filter.codec",
- org.apache.mina.filter.codec.serialization;version="2.0.0";uses:="org.apache.mina.core.session,org.apache.mina.core.buffer,org.apache.mina.filter.codec",
- org.apache.mina.filter.codec.statemachine;version="2.0.0";
+ org.apache.mina.filter.codec.prefixedstring;version="2.0.1";uses:="org.apache.mina.core.session,org.apache.mina.core.buffer,org.apache.mina.filter.codec",
+ org.apache.mina.filter.codec.serialization;version="2.0.1";uses:="org.apache.mina.core.session,org.apache.mina.core.buffer,org.apache.mina.filter.codec",
+ org.apache.mina.filter.codec.statemachine;version="2.0.1";
   uses:="org.apache.mina.core.session,
    org.apache.mina.core.buffer,
    org.apache.mina.core.filterchain,
    org.slf4j,
    org.apache.mina.filter.codec",
- org.apache.mina.filter.codec.textline;version="2.0.0";uses:="org.apache.mina.core.session,org.apache.mina.core.buffer,org.apache.mina.filter.codec",
- org.apache.mina.filter.errorgenerating;version="2.0.0";
+ org.apache.mina.filter.codec.textline;version="2.0.1";uses:="org.apache.mina.core.session,org.apache.mina.core.buffer,org.apache.mina.filter.codec",
+ org.apache.mina.filter.errorgenerating;version="2.0.1";
   uses:="org.apache.mina.core.session,
    org.apache.mina.core.future,
    org.apache.mina.core.buffer,
    org.apache.mina.core.filterchain,
    org.apache.mina.core.write,
    org.slf4j",
- org.apache.mina.filter.executor;version="2.0.0";
+ org.apache.mina.filter.executor;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core.session,
    org.apache.mina.core.buffer,
    org.apache.mina.core.filterchain,
    org.slf4j,
    org.apache.mina.core.write",
- org.apache.mina.filter.firewall;version="2.0.0";
+ org.apache.mina.filter.firewall;version="2.0.1";
   uses:="org.apache.mina.core.session,
    org.apache.mina.core.future,
    org.apache.mina.core.filterchain,
    org.slf4j,
    org.apache.mina.core.write",
- org.apache.mina.filter.keepalive;version="2.0.0";
+ org.apache.mina.filter.keepalive;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core.session,
    org.apache.mina.core.filterchain,
    org.slf4j,
    org.apache.mina.core.write",
- org.apache.mina.filter.logging;version="2.0.0";
+ org.apache.mina.filter.logging;version="2.0.1";
   uses:="org.apache.mina.filter.util,
    org.apache.mina.core.session,
    org.apache.mina.core.filterchain,
    org.apache.mina.core.service,
    org.apache.mina.core.write,
    org.slf4j",
- org.apache.mina.filter.reqres;version="2.0.0";
+ org.apache.mina.filter.reqres;version="2.0.1";
   uses:="org.apache.mina.filter.util,
    org.apache.mina.core.session,
    org.apache.mina.core.filterchain,
    org.slf4j,
    org.apache.mina.core.write",
- org.apache.mina.filter.ssl;version="2.0.0";
+ org.apache.mina.filter.ssl;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core.buffer,
    org.slf4j,
@@ -122,29 +122,29 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.core.filterchain,
    org.apache.mina.core.service,
    javax.net.ssl",
- org.apache.mina.filter.statistic;version="2.0.0";uses:="org.apache.mina.core.session,org.apache.mina.core.filterchain,org.apache.mina.core.write",
- org.apache.mina.filter.stream;version="2.0.0";
+ org.apache.mina.filter.statistic;version="2.0.1";uses:="org.apache.mina.core.session,org.apache.mina.core.filterchain,org.apache.mina.core.write",
+ org.apache.mina.filter.stream;version="2.0.1";
   uses:="org.apache.mina.core.file,
    org.apache.mina.core.future,
    org.apache.mina.core.session,
    org.apache.mina.core.buffer,
    org.apache.mina.core.filterchain,
    org.apache.mina.core.write",
- org.apache.mina.filter.util;version="2.0.0";uses:="org.apache.mina.core.session,org.apache.mina.core.filterchain,org.apache.mina.core.write",
- org.apache.mina.handler.chain;version="2.0.0";uses:="org.apache.mina.core.session,org.apache.mina.core.service",
- org.apache.mina.handler.demux;version="2.0.0";
+ org.apache.mina.filter.util;version="2.0.1";uses:="org.apache.mina.core.session,org.apache.mina.core.filterchain,org.apache.mina.core.write",
+ org.apache.mina.handler.chain;version="2.0.1";uses:="org.apache.mina.core.session,org.apache.mina.core.service",
+ org.apache.mina.handler.demux;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core.session,
    org.apache.mina.core.service,
    org.apache.mina.util",
- org.apache.mina.handler.multiton;version="2.0.0";uses:="org.apache.mina.core.session,org.apache.mina.core.service",
- org.apache.mina.handler.stream;version="2.0.0";
+ org.apache.mina.handler.multiton;version="2.0.1";uses:="org.apache.mina.core.session,org.apache.mina.core.service",
+ org.apache.mina.handler.stream;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core.session,
    org.apache.mina.core.buffer,
    org.apache.mina.core.service,
    org.slf4j",
- org.apache.mina.proxy;version="2.0.0";
+ org.apache.mina.proxy;version="2.0.1";
   uses:="javax.security.sasl,
    org.apache.mina.core.future,
    org.apache.mina.proxy.filter,
@@ -160,7 +160,7 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.core.service,
    org.apache.mina.proxy.event,
    org.apache.mina.transport.socket",
- org.apache.mina.proxy.event;version="2.0.0";
+ org.apache.mina.proxy.event;version="2.0.1";
   uses:="org.apache.mina.core.session,
    org.apache.mina.proxy.handlers,
    org.apache.mina.proxy.handlers.socks,
@@ -168,7 +168,7 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.proxy.session,
    org.slf4j,
    org.apache.mina.proxy",
- org.apache.mina.proxy.filter;version="2.0.0";
+ org.apache.mina.proxy.filter;version="2.0.1";
   uses:="org.apache.mina.core.buffer,
    org.apache.mina.proxy.session,
    org.apache.mina.core.write,
@@ -180,8 +180,8 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.core.filterchain,
    org.apache.mina.proxy.handlers.http,
    org.apache.mina.proxy.event",
- org.apache.mina.proxy.handlers;version="2.0.0",
- org.apache.mina.proxy.handlers.http;version="2.0.0";
+ org.apache.mina.proxy.handlers;version="2.0.1",
+ org.apache.mina.proxy.handlers.http;version="2.0.1";
   uses:="org.apache.mina.proxy.handlers.http.ntlm,
    org.apache.mina.core.future,
    org.apache.mina.core.buffer,
@@ -194,7 +194,7 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.core.filterchain,
    org.apache.mina.proxy.handlers.http.basic,
    org.apache.mina.proxy.utils",
- org.apache.mina.proxy.handlers.http.basic;version="2.0.0";
+ org.apache.mina.proxy.handlers.http.basic;version="2.0.1";
   uses:="org.apache.mina.proxy.handlers,
    org.apache.mina.core.filterchain,
    org.apache.mina.proxy.handlers.http,
@@ -203,7 +203,7 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.proxy.session,
    org.slf4j,
    org.apache.mina.proxy",
- org.apache.mina.proxy.handlers.http.digest;version="2.0.0";
+ org.apache.mina.proxy.handlers.http.digest;version="2.0.1";
   uses:="javax.security.sasl,
    org.apache.mina.proxy.session,
    org.slf4j,
@@ -214,7 +214,7 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.proxy.handlers.http,
    org.apache.mina.util,
    org.apache.mina.proxy.utils",
- org.apache.mina.proxy.handlers.http.ntlm;version="2.0.0";
+ org.apache.mina.proxy.handlers.http.ntlm;version="2.0.1";
   uses:="org.apache.mina.proxy.session,
    javax.crypto,
    org.slf4j,
@@ -225,7 +225,7 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.proxy.handlers.http,
    org.apache.mina.util,
    org.apache.mina.proxy.utils",
- org.apache.mina.proxy.handlers.socks;version="2.0.0";
+ org.apache.mina.proxy.handlers.socks;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core.buffer,
    org.apache.mina.proxy.session,
@@ -236,16 +236,16 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.proxy.handlers,
    org.apache.mina.core.filterchain,
    org.apache.mina.proxy.utils",
- org.apache.mina.proxy.session;version="2.0.0";
+ org.apache.mina.proxy.session;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.proxy.filter,
    org.apache.mina.core.session,
    org.apache.mina.proxy.handlers,
    org.apache.mina.proxy.event,
    org.apache.mina.proxy",
- org.apache.mina.proxy.utils;version="2.0.0";uses:="javax.security.sasl,org.apache.mina.core.buffer",
- org.apache.mina.transport.socket;version="2.0.0";uses:="org.apache.mina.core.session,org.apache.mina.core.service",
- org.apache.mina.transport.socket.nio;version="2.0.0";
+ org.apache.mina.proxy.utils;version="2.0.1";uses:="javax.security.sasl,org.apache.mina.core.buffer",
+ org.apache.mina.transport.socket;version="2.0.1";uses:="org.apache.mina.core.session,org.apache.mina.core.service",
+ org.apache.mina.transport.socket.nio;version="2.0.1";
   uses:="org.apache.mina.core.buffer,
    org.apache.mina.core,
    org.apache.mina.core.session,
@@ -254,7 +254,7 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.core.filterchain,
    org.apache.mina.core.service,
    org.apache.mina.transport.socket",
- org.apache.mina.transport.vmpipe;version="2.0.0";
+ org.apache.mina.transport.vmpipe;version="2.0.1";
   uses:="org.apache.mina.core.future,
    org.apache.mina.core.buffer,
    org.apache.mina.core.write,
@@ -262,16 +262,12 @@ Export-Package: org.apache.mina.core;version="2.0.0";uses:="org.apache.mina.core
    org.apache.mina.core.filterchain,
    org.apache.mina.core.service,
    org.apache.mina.util",
- org.apache.mina.util;version="2.0.0";uses:="org.slf4j",
- org.apache.mina.util.byteaccess;version="2.0.0";uses:="org.apache.mina.core.buffer"
-Built-By: elecharny
-Tool: Bnd-0.0.255
+ org.apache.mina.util;version="2.0.1";uses:="org.slf4j",
+ org.apache.mina.util.byteaccess;version="2.0.1";uses:="org.apache.mina.core.buffer"
 Bundle-Name: Apache MINA Core
 Created-By: Apache Maven Bundle Plugin
 Bundle-Vendor: Apache MINA Project
-Build-Jdk: 1.6.0_20
-Bundle-Version: 2.0.0
-Bnd-LastModified: 1285108341152
+Bundle-Version: 2.0.1
 Bundle-ManifestVersion: 2
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0
 Bundle-Description: Apache MINA is a network application framework whi
@@ -284,54 +280,54 @@ Import-Package: javax.crypto,
  javax.crypto.spec,
  javax.net.ssl,
  javax.security.sasl,
- org.apache.mina.core;version="2.0.0",
- org.apache.mina.core.buffer;version="2.0.0",
- org.apache.mina.core.file;version="2.0.0",
- org.apache.mina.core.filterchain;version="2.0.0",
- org.apache.mina.core.future;version="2.0.0",
- org.apache.mina.core.polling;version="2.0.0",
- org.apache.mina.core.service;version="2.0.0",
- org.apache.mina.core.session;version="2.0.0",
- org.apache.mina.core.write;version="2.0.0",
- org.apache.mina.filter.buffer;version="2.0.0",
- org.apache.mina.filter.codec;version="2.0.0",
- org.apache.mina.filter.codec.demux;version="2.0.0",
- org.apache.mina.filter.codec.prefixedstring;version="2.0.0",
- org.apache.mina.filter.codec.serialization;version="2.0.0",
- org.apache.mina.filter.codec.statemachine;version="2.0.0",
- org.apache.mina.filter.codec.textline;version="2.0.0",
- org.apache.mina.filter.errorgenerating;version="2.0.0",
- org.apache.mina.filter.executor;version="2.0.0",
- org.apache.mina.filter.firewall;version="2.0.0",
- org.apache.mina.filter.keepalive;version="2.0.0",
- org.apache.mina.filter.logging;version="2.0.0",
- org.apache.mina.filter.reqres;version="2.0.0",
- org.apache.mina.filter.ssl;version="2.0.0",
- org.apache.mina.filter.statistic;version="2.0.0",
- org.apache.mina.filter.stream;version="2.0.0",
- org.apache.mina.filter.util;version="2.0.0",
- org.apache.mina.handler.chain;version="2.0.0",
- org.apache.mina.handler.demux;version="2.0.0",
- org.apache.mina.handler.multiton;version="2.0.0",
- org.apache.mina.handler.stream;version="2.0.0",
- org.apache.mina.proxy;version="2.0.0",
- org.apache.mina.proxy.event;version="2.0.0",
- org.apache.mina.proxy.filter;version="2.0.0",
- org.apache.mina.proxy.handlers;version="2.0.0",
- org.apache.mina.proxy.handlers.http;version="2.0.0",
- org.apache.mina.proxy.handlers.http.basic;version="2.0.0",
- org.apache.mina.proxy.handlers.http.digest;version="2.0.0",
- org.apache.mina.proxy.handlers.http.ntlm;version="2.0.0",
- org.apache.mina.proxy.handlers.socks;version="2.0.0",
- org.apache.mina.proxy.session;version="2.0.0",
- org.apache.mina.proxy.utils;version="2.0.0",
- org.apache.mina.transport.socket;version="2.0.0",
- org.apache.mina.transport.socket.nio;version="2.0.0",
- org.apache.mina.transport.vmpipe;version="2.0.0",
- org.apache.mina.util;version="2.0.0",
- org.apache.mina.util.byteaccess;version="2.0.0",
+ org.apache.mina.core;version="2.0.1",
+ org.apache.mina.core.buffer;version="2.0.1",
+ org.apache.mina.core.file;version="2.0.1",
+ org.apache.mina.core.filterchain;version="2.0.1",
+ org.apache.mina.core.future;version="2.0.1",
+ org.apache.mina.core.polling;version="2.0.1",
+ org.apache.mina.core.service;version="2.0.1",
+ org.apache.mina.core.session;version="2.0.1",
+ org.apache.mina.core.write;version="2.0.1",
+ org.apache.mina.filter.buffer;version="2.0.1",
+ org.apache.mina.filter.codec;version="2.0.1",
+ org.apache.mina.filter.codec.demux;version="2.0.1",
+ org.apache.mina.filter.codec.prefixedstring;version="2.0.1",
+ org.apache.mina.filter.codec.serialization;version="2.0.1",
+ org.apache.mina.filter.codec.statemachine;version="2.0.1",
+ org.apache.mina.filter.codec.textline;version="2.0.1",
+ org.apache.mina.filter.errorgenerating;version="2.0.1",
+ org.apache.mina.filter.executor;version="2.0.1",
+ org.apache.mina.filter.firewall;version="2.0.1",
+ org.apache.mina.filter.keepalive;version="2.0.1",
+ org.apache.mina.filter.logging;version="2.0.1",
+ org.apache.mina.filter.reqres;version="2.0.1",
+ org.apache.mina.filter.ssl;version="2.0.1",
+ org.apache.mina.filter.statistic;version="2.0.1",
+ org.apache.mina.filter.stream;version="2.0.1",
+ org.apache.mina.filter.util;version="2.0.1",
+ org.apache.mina.handler.chain;version="2.0.1",
+ org.apache.mina.handler.demux;version="2.0.1",
+ org.apache.mina.handler.multiton;version="2.0.1",
+ org.apache.mina.handler.stream;version="2.0.1",
+ org.apache.mina.proxy;version="2.0.1",
+ org.apache.mina.proxy.event;version="2.0.1",
+ org.apache.mina.proxy.filter;version="2.0.1",
+ org.apache.mina.proxy.handlers;version="2.0.1",
+ org.apache.mina.proxy.handlers.http;version="2.0.1",
+ org.apache.mina.proxy.handlers.http.basic;version="2.0.1",
+ org.apache.mina.proxy.handlers.http.digest;version="2.0.1",
+ org.apache.mina.proxy.handlers.http.ntlm;version="2.0.1",
+ org.apache.mina.proxy.handlers.socks;version="2.0.1",
+ org.apache.mina.proxy.session;version="2.0.1",
+ org.apache.mina.proxy.utils;version="2.0.1",
+ org.apache.mina.transport.socket;version="2.0.1",
+ org.apache.mina.transport.socket.nio;version="2.0.1",
+ org.apache.mina.transport.vmpipe;version="2.0.1",
+ org.apache.mina.util;version="2.0.1",
+ org.apache.mina.util.byteaccess;version="2.0.1",
  org.ietf.jgss,
- org.slf4j;version="1.5"
+ org.slf4j
 Bundle-ClassPath: lib/mina-core-2.0.0.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 

@@ -30,34 +30,98 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.apache.aries.jmx.core</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.3</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Apache Aries JMX Integration Wrapper</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.aries.jmx</groupId>
+            <artifactId>org.apache.aries.jmx.core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.aries.jmx</groupId>
+            <artifactId>org.apache.aries.jmx.core</artifactId>
+            <version>${project.version}</version>
+            <classifier>javadoc</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.aries.jmx</groupId>
+            <artifactId>org.apache.aries.jmx.core</artifactId>
+            <version>${project.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+    </dependencies>
 
     <build>
         <resources>
             <resource>
-                <directory>${pom.basedir}</directory>
+                <directory>lib</directory>
                 <includes>
-                    <include>lib/**/*.jar</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-                <includes>
-                    <include>**/*</include>
+                    <include>**/*.jar</include>
                 </includes>
             </resource>
         </resources>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.aries.jmx</groupId>
+                                    <artifactId>org.apache.aries.jmx.core</artifactId>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>lib</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.aries.jmx</groupId>
+                                    <artifactId>org.apache.aries.jmx.core</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>sources</classifier>
+                                    <outputDirectory>lib</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.aries.jmx</groupId>
+                                    <artifactId>org.apache.aries.jmx.core</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>javadoc</classifier>
+                                    <outputDirectory>lib</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>
-                        <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
+                        <manifestFile>${project.basedir}/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>lib</directory>
+                        </fileset>
+                    </filesets>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 </project>

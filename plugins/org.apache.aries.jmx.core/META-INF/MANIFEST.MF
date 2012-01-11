@@ -4,7 +4,7 @@ Bundle-Name: org.apache.aries.jmx.core
 Bundle-SymbolicName: org.apache.aries.jmx.core
 Bundle-Version: 0.3
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: lib/org.apache.aries.jmx.core-0.2-incubating.jar,
+Bundle-ClassPath: lib/org.apache.aries.jmx.core-0.3.jar,
  .
 Export-Package: org.apache.aries.jmx.codec;version="0.3"
 Import-Package: javax.management,

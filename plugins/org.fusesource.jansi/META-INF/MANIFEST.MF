@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Export-Package: org.fusesource.jansi;version="1.5"
+Export-Package: org.fusesource.jansi;version="1.7"
 Ignore-Package: org.fusesource.jansi,org.fusesource.jansi.internal
 Implementation-Title: jansi
 Built-By: chirino
@@ -24,6 +24,6 @@ Specification-Version: 1.5
 Import-Package: sun.reflect;resolution:=optional
 Bundle-DocURL: http://fusesource.com/
 Archiver-Version: Plexus Archiver
-Bundle-ClassPath: lib/jansi-1.5.jar
+Bundle-ClassPath: lib/jansi-1.7.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 

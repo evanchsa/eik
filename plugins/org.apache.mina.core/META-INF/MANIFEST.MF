@@ -328,6 +328,6 @@ Import-Package: javax.crypto,
  org.apache.mina.util.byteaccess;version="2.0.1",
  org.ietf.jgss,
  org.slf4j
-Bundle-ClassPath: lib/mina-core-2.0.0.jar
+Bundle-ClassPath: lib/mina-core-2.0.1.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 

@@ -80,18 +80,21 @@
                                     <groupId>org.fusesource.jansi</groupId>
                                     <artifactId>jansi</artifactId>
                                     <version>${project.version}</version>
+                                    <outputDirectory>lib</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.fusesource.jansi</groupId>
                                     <artifactId>jansi</artifactId>
                                     <version>${project.version}</version>
                                     <classifier>sources</classifier>
+                                    <outputDirectory>lib</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.fusesource.jansi</groupId>
                                     <artifactId>jansi</artifactId>
                                     <version>${project.version}</version>
                                     <classifier>javadoc</classifier>
+                                    <outputDirectory>lib</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>

@@ -15,12 +15,12 @@ Bundle-Name: jansi
 Created-By: 1.6.0_22 (Apple Inc.)
 Bundle-Vendor: FuseSource, Corp.
 Build-Jdk: 1.6.0_22
-Bundle-Version: 1.5
+Bundle-Version: 1.7
 Bnd-LastModified: 1288884946825
 Bundle-ManifestVersion: 2
 Bundle-Description: Jansi is a java library for generating and interpr
  eting ANSI escape sequences.
-Specification-Version: 1.5
+Specification-Version: 1.7
 Import-Package: sun.reflect;resolution:=optional
 Bundle-DocURL: http://fusesource.com/
 Archiver-Version: Plexus Archiver

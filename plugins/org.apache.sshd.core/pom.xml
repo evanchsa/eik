@@ -29,7 +29,7 @@
     </parent>
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
-    <artifactId>org.apache.ssh.core</artifactId>
+    <artifactId>sshd-core</artifactId>
     <version>0.5.0</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Apache SSH Wrapper</name>

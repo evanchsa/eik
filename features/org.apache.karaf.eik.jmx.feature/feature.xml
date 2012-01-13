@@ -48,7 +48,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.osgi.jmx"
+         id="org.apache.aries.jmx.api"
          download-size="0"
          install-size="0"
          version="0.0.0"

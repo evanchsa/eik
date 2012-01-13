@@ -6,15 +6,15 @@
     <property name='p2.compressed' value='true'/>
   </properties>
   <units size='28'>
-    <unit id='org.apache.aries.jmx.core' version='1.0.0.201109050850' singleton='false'>
-      <update id='org.apache.aries.jmx.core' range='[0.0.0,1.0.0.201109050850)' severity='0'/>
+    <unit id='org.apache.aries.jmx.core' version='0.3' singleton='false'>
+      <update id='org.apache.aries.jmx.core' range='[0.0,0.3)' severity='0'/>
       <properties size='1'>
         <property name='org.eclipse.equinox.p2.name' value='org.apache.aries.jmx.core'/>
       </properties>
       <provides size='4'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.aries.jmx.core' version='1.0.0.201109050850'/>
-        <provided namespace='osgi.bundle' name='org.apache.aries.jmx.core' version='1.0.0.201109050850'/>
-        <provided namespace='java.package' name='org.apache.aries.jmx.codec' version='0.2.0.incubating'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.aries.jmx.core' version='0.3'/>
+        <provided namespace='osgi.bundle' name='org.apache.aries.jmx.core' version='0.3'/>
+        <provided namespace='java.package' name='org.apache.aries.jmx.codec' version='0.3'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
       <requires size='17'>
@@ -48,55 +48,15 @@
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='info.evanchik.smk.feature.feature.group' version='0.5.1.201109050850' singleton='false'>
-      <update id='info.evanchik.smk.feature.feature.group' range='[0.0.0,0.5.1.201109050850)' severity='0'/>
-      <properties size='4'>
-        <property name='org.eclipse.equinox.p2.name' value='Eclipse Integration for Apache ServiceMix Kernel Feature'/>
-        <property name='org.eclipse.equinox.p2.description' value='Eclipse Integration for Apache ServiceMix Kernel (and compatible) runtimes.'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
-        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
-      </properties>
-      <provides size='1'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.smk.feature.feature.group' version='0.5.1.201109050850'/>
-      </provides>
-      <requires size='13'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.core.runtime' range='[3.1.0,4.0.0)'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui' range='[3.2.0,4.0.0)'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.debug.ui' range='[3.2.0,4.0.0)'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.pde.core' range='[3.2.0,4.0.0)'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.servicemix.kernel.main' range='1.1.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.core' range='0.5.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.ui' range='0.5.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.workbench' range='0.5.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.smk.app' range='0.5.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.smk.app' range='[0.5.0.201109050850,0.5.0.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.smk' range='[0.5.0.201109050850,0.5.0.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.servicemix.kernel.main' range='[1.1.0.201109050850,1.1.0.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.smk.feature.feature.jar' range='[0.5.1.201109050850,0.5.1.201109050850]'>
-          <filter>
-            (org.eclipse.update.install.features=true)
-          </filter>
-        </required>
-      </requires>
-      <touchpoint id='null' version='0.0.0'/>
-      <licenses size='1'>
-        <license>
-          Eclipse Public License - v1.0
-        </license>
-      </licenses>
-      <copyright>
-        Copyright (c) 2010 Stephen Evanchik
-      </copyright>
-    </unit>
-    <unit id='org.apache.karaf.eik.core' version='0.5.3.201109050850'>
-      <update id='org.apache.karaf.eik.core' range='[0.0.0,0.5.3.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.core' version='3.0.0.SNAPSHOT'>
+      <update id='org.apache.karaf.eik.core' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Eclipse Integration for Apache Karaf'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Apache Software Foundation'/>
       </properties>
       <provides size='10'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.core' version='0.5.3.201109050850'/>
-        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.core' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.core' version='3.0.0.SNAPSHOT'/>
+        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.core' version='3.0.0.SNAPSHOT'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.core' version='0.0.0'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.core.configuration' version='0.0.0'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.core.configuration.internal' version='0.0.0'/>
@@ -114,24 +74,24 @@
         <required namespace='osgi.bundle' name='org.eclipse.pde.ui' range='[3.2.0,4.0.0)'/>
         <required namespace='osgi.bundle' name='org.apache.commons.collections' range='3.2.0'/>
         <required namespace='osgi.bundle' name='org.jdom' range='1.0.0'/>
-        <required namespace='osgi.bundle' name='org.apache.mina.core' range='2.0.0'/>
-        <required namespace='osgi.bundle' name='org.fusesource.jansi' range='1.5.0'/>
+        <required namespace='osgi.bundle' name='org.apache.mina.core' range='2.0.1'/>
+        <required namespace='osgi.bundle' name='org.fusesource.jansi' range='1.7.0'/>
         <required namespace='osgi.bundle' name='sshd-core' range='0.5.0'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.core' version='0.5.3.201109050850'/>
+        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.core' version='3.0.0.SNAPSHOT'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='1'>
-          <instruction key='manifest'><![CDATA[<![CDATA[<![CDATA[<![CDATA[<![CDATA[<![CDATA[<![CDATA[<![CDATA[
-            Bundle-Vendor: evanchik.info&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.apache.karaf.eik.core.internal.KarafCorePluginActivator&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.core.runtime;bundle-version=&quot;[3.1.0,4.0.0)&quot;,org.eclipse.core.resources;bundle-version=&quot;[3.0.0,4.0.0)&quot;,org.eclipse.osgi.services;bundle-version=&quot;3.2.0&quot;,org.eclipse.core.variables;bundle-version=&quot;[3.1.0,4.0.0)&quot;,org.eclipse.pde.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.apache.commons.collections;bundle-version=&quot;3.2.0&quot;,org.jdom;bundle-version=&quot;1.0.0&quot;,org.apache.mina.core;bundle-version=&quot;2.0.0&quot;,org.fusesource.jansi;bundle-version=&quot;1.5.0&quot;,sshd-core;bundle-version=&quot;0.5.0&quot;&#xA;Bundle-Name: Eclipse Integration for Apache Karaf&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.core;singleton:=true&#xA;Bundle-Version: 0.5.3.2011org.aporg.apache.karaf.eik.corelipse.karaf.core,info.evanchik.ecorg.apache.karaf.eik.corenfo.evanchik.eclipse.korg.apache.karaf.eik.core,info.evanchik.eclipse.karaf.core.equinoorg.apache.karaf.eik.cororg.apache.karaf.eik.corese.karaf.core.moorg.apache.karaf.eik.corecore.shell
-          ]]>]]>]]>]]>]]>]]>]]>]]></instruction>
+          <instruction key='manifest'><![CDATA[
+            Bundle-Vendor: Apache Software Foundation&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.apache.karaf.eik.core.internal.KarafCorePluginActivator&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.core.runtime;bundle-version=&quot;[3.1.0,4.0.0)&quot;,org.eclipse.core.resources;bundle-version=&quot;[3.0.0,4.0.0)&quot;,org.eclipse.osgi.services;bundle-version=&quot;3.2.0&quot;,org.eclipse.core.variables;bundle-version=&quot;[3.1.0,4.0.0)&quot;,org.eclipse.pde.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.apache.commons.collections;bundle-version=&quot;3.2.0&quot;,org.jdom;bundle-version=&quot;1.0.0&quot;,org.apache.mina.core;bundle-version=&quot;2.0.0&quot;,org.fusesource.jansi;bundle-version=&quot;1.5.0&quot;,sshd-core;bundle-version=&quot;0.5.0&quot;&#xA;Bundle-Name: Eclipse Integration for Apache Karaf&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.core;singleton:=true&#xA;Bundle-Version: 0.5.3.2011org.aporg.apache.karaf.eik.corelipse.karaf.core,info.evanchik.ecorg.apache.karaf.eik.corenfo.evanchik.eclipse.korg.apache.karaf.eik.core,info.evanchik.eclipse.karaf.core.equinoorg.apache.karaf.eik.cororg.apache.karaf.eik.corese.karaf.core.moorg.apache.karaf.eik.corecore.shell
+          ]]></instruction>
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='org.ops4j.pax.url.mvn' version='1.3.2'>
-      <update id='org.ops4j.pax.url.mvn' range='[0.0.0,1.3.2)' severity='0'/>
+    <unit id='org.ops4j.pax.url.mvn' version='1.2.8'>
+      <update id='org.ops4j.pax.url.mvn' range='[0.0.0,1.2.8)' severity='0'/>
       <properties size='4'>
         <property name='org.eclipse.equinox.p2.name' value='OPS4J Pax Url - aether'/>
         <property name='org.eclipse.equinox.p2.description' value='OPS4J Pax Url - aether: protocol handler.        Detailed information to be found at http://wiki.ops4j.org/confluence/x/CoA6.'/>
@@ -139,9 +99,9 @@
         <property name='org.eclipse.equinox.p2.doc.url' value='http://www.ops4j.org/'/>
       </properties>
       <provides size='4'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.ops4j.pax.url.mvn' version='1.3.2'/>
-        <provided namespace='osgi.bundle' name='org.ops4j.pax.url.mvn' version='1.3.2'/>
-        <provided namespace='java.package' name='org.ops4j.pax.url.mvn' version='1.3.2'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.ops4j.pax.url.mvn' version='1.2.8'/>
+        <provided namespace='osgi.bundle' name='org.ops4j.pax.url.mvn' version='1.2.8'/>
+        <provided namespace='java.package' name='org.ops4j.pax.url.mvn' version='1.2.8'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
       <requires size='15'>
@@ -152,7 +112,7 @@
         <required namespace='java.package' name='javax.xml.parsers' range='0.0.0'/>
         <required namespace='java.package' name='org.apache.commons.logging' range='1.0.4' optional='true'/>
         <required namespace='java.package' name='org.apache.log4j' range='0.0.0'/>
-        <required namespace='java.package' name='org.ops4j.pax.url.mvn' range='1.3.2'/>
+        <required namespace='java.package' name='org.ops4j.pax.url.mvn' range='1.2.8'/>
         <required namespace='java.package' name='org.osgi.framework' range='[1.0.0,2.0.0)'/>
         <required namespace='java.package' name='org.osgi.service.cm' range='[1.0.0,2.0.0)' optional='true'/>
         <required namespace='java.package' name='org.osgi.service.url' range='[1.0.0,2.0.0)'/>
@@ -162,7 +122,7 @@
         <required namespace='java.package' name='org.xml.sax.helpers' range='0.0.0'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.ops4j.pax.url.mvn' version='1.3.2'/>
+        <artifact classifier='osgi.bundle' id='org.ops4j.pax.url.mvn' version='1.2.8'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
@@ -176,21 +136,21 @@
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='info.evanchik.eclipse.karaf.feature.feature.group' version='0.5.3.201109050850' singleton='false'>
-      <update id='info.evanchik.eclipse.karaf.feature.feature.group' range='[0.0.0,0.5.3.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.feature.group' version='3.0.0.SNAPSHOT' singleton='false'>
+      <update id='org.apache.karaf.eik.feature.group' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='9'>
         <property name='org.eclipse.equinox.p2.name' value='%featureName'/>
         <property name='org.eclipse.equinox.p2.description' value='%description'/>
         <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
         <property name='org.eclipse.equinox.p2.type.group' value='true'/>
         <property name='df_LT.featureName' value='Eclipse Integration for Apache Karaf'/>
-        <property name='df_LT.providerName' value='Stephen Evanchik'/>
+        <property name='df_LT.providerName' value='Apache Software Foundation'/>
         <property name='df_LT.description' value='Eclipse Integration for Apache Karaf'/>
-        <property name='df_LT.copyright' value='Copyright Stephen Evanchik http://stephen.evanchik.com'/>
-        <property name='df_LT.license' value='Eclipse Public License - v1.0'/>
+        <property name='df_LT.copyright' value='Copyright Apache Software Foundation - http://www.apache.org'/>
+        <property name='df_LT.license' value='Apache License - v2.0'/>
       </properties>
       <provides size='2'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.feature.feature.group' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.feature.group' version='3.0.0.SNAPSHOT'/>
         <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
       </provides>
       <requires size='30'>
@@ -207,7 +167,7 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.pde.ui' range='[3.6.0,4.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.ops4j.pax.url.mvn' range='1.3.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.mina.core' range='2.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.fusesource.jansi' range='1.5.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.fusesource.jansi' range='1.7.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='sshd-core' range='0.5.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jface.text' range='3.6.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui.console' range='3.5.0'/>
@@ -216,14 +176,14 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.log4j' range='0.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.slf4j.api' range='0.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.logging' range='0.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.core' range='[0.5.3.201109050850,0.5.3.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.ui' range='[0.5.3.201109050850,0.5.3.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.app' range='[0.5.0.201109050850,0.5.0.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.ops4j.pax.url.mvn' range='[1.3.2,1.3.2]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.core' range='[3.0.0.SNAPSHOT,3.0.0.SNAPSHOT]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.ui' range='[3.0.0.SNAPSHOT,3.0.0.SNAPSHOT]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.app' range='[3.0.0.SNAPSHOT,3.0.0.SNAPSHOT]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.ops4j.pax.url.mvn' range='[1.2.8,1.2.8]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='sshd-core' range='[0.5.0,0.5.0]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.fusesource.jansi' range='[1.5.0,1.5.0]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.mina.core' range='[2.0.0,2.0.0]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.feature.feature.jar' range='[0.5.3.201109050850,0.5.3.201109050850]'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.fusesource.jansi' range='[1.7.0,1.7.0]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.mina.core' range='[2.0.1,2.0.1]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.feature.jar' range='[3.0.0.SNAPSHOT,3.0.0.SNAPSHOT]'>
           <filter>
             (org.eclipse.update.install.features=true)
           </filter>
@@ -324,84 +284,22 @@
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='info.evanchik.smk.feature.feature.jar' version='0.5.1.201109050850'>
-      <properties size='3'>
-        <property name='org.eclipse.equinox.p2.name' value='Eclipse Integration for Apache ServiceMix Kernel Feature'/>
-        <property name='org.eclipse.equinox.p2.description' value='Eclipse Integration for Apache ServiceMix Kernel (and compatible) runtimes.'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
-      </properties>
-      <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.smk.feature.feature.jar' version='0.5.1.201109050850'/>
-        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
-        <provided namespace='org.eclipse.update.feature' name='info.evanchik.smk.feature' version='0.5.1.201109050850'/>
-      </provides>
-      <filter>
-        (org.eclipse.update.install.features=true)
-      </filter>
-      <artifacts size='1'>
-        <artifact classifier='org.eclipse.update.feature' id='info.evanchik.smk.feature' version='0.5.1.201109050850'/>
-      </artifacts>
-      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
-      <touchpointData size='1'>
-        <instructions size='1'>
-          <instruction key='zipped'>
-            true
-          </instruction>
-        </instructions>
-      </touchpointData>
-      <licenses size='1'>
-        <license>
-          Eclipse Public License - v1.0
-        </license>
-      </licenses>
-      <copyright>
-        Copyright (c) 2010 Stephen Evanchik
-      </copyright>
-    </unit>
-    <unit id='info.evanchik.smk.app' version='0.5.0.201109050850'>
-      <update id='info.evanchik.smk.app' range='[0.0.0,0.5.0.201109050850)' severity='0'/>
-      <properties size='2'>
-        <property name='org.eclipse.equinox.p2.name' value='Application Definition for Apache ServiceMix Kernel'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
-      </properties>
-      <provides size='4'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.smk.app' version='0.5.0.201109050850'/>
-        <provided namespace='osgi.bundle' name='info.evanchik.smk.app' version='0.5.0.201109050850'/>
-        <provided namespace='java.package' name='info.evanchik.smk.app' version='0.0.0'/>
-        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
-      </provides>
-      <requires size='2'>
-        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='[3.1.0,4.0.0)'/>
-        <required namespace='java.package' name='org.apache.servicemix.kernel.main.spi' range='0.0.0'/>
-      </requires>
-      <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='info.evanchik.smk.app' version='0.5.0.201109050850'/>
-      </artifacts>
-      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
-      <touchpointData size='1'>
-        <instructions size='1'>
-          <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Export-Package: info.evanchik.smk.app&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6,J2SE-1.5&#xA;Require-Bundle: org.eclipse.core.runtime;bundle-version=&quot;[3.1.0,4.0.0)&quot;&#xA;Bundle-Activator: info.evanchik.smk.app.Activator&#xA;Bundle-Name: Application Definition for Apache ServiceMix Kernel&#xA;Bundle-Version: 0.5.0.201109050850&#xA;Bundle-Vendor: evanchik.info&#xA;Bundle-SymbolicName: info.evanchik.smk.app;singleton:=true&#xA;Import-Package: org.apache.servicemix.kernel.main.spi&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0
-          </instruction>
-        </instructions>
-      </touchpointData>
-    </unit>
-    <unit id='org.apache.karaf.eik.jmx.feature.feature.jar' version='0.5.3.201109050850'>
+    <unit id='org.apache.karaf.eik.jmx.feature.feature.jar' version='3.0.0.SNAPSHOT'>
       <properties size='3'>
         <property name='org.eclipse.equinox.p2.name' value='Eclipse JMX Integration Feature for Apache Felix Karaf'/>
         <property name='org.eclipse.equinox.p2.description' value='JMX Integration for Apache Karaf runtimes'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Apache Software Foundation'/>
       </properties>
       <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.jar' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.jar' version='3.0.0.SNAPSHOT'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
-        <provided namespace='org.eclipse.update.feature' name='org.apache.karaf.eik.jmx.feature' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.update.feature' name='org.apache.karaf.eik.jmx.feature' version='3.0.0.SNAPSHOT'/>
       </provides>
       <filter>
         (org.eclipse.update.install.features=true)
       </filter>
       <artifacts size='1'>
-        <artifact classifier='org.eclipse.update.feature' id='org.apache.karaf.eik.jmx.feature' version='0.5.3.201109050850'/>
+        <artifact classifier='org.eclipse.update.feature' id='org.apache.karaf.eik.jmx.feature' version='3.0.0.SNAPSHOT'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
@@ -413,11 +311,11 @@
       </touchpointData>
       <licenses size='1'>
         <license>
-          Eclipse Public License - v1.0
+          Apache License - v2.0
         </license>
       </licenses>
       <copyright>
-        Copyright (c) 2010 Stephen Evanchik
+        Copyright (c) 2011 - Apache Software Foundation
       </copyright>
     </unit>
     <unit id='Eclipse Integration for Apache Karaf' version='1.0.0.07I7AcSCL8F7E7AA7g7Q7cQ7'>
@@ -429,13 +327,13 @@
         <provided namespace='org.eclipse.equinox.p2.iu' name='Eclipse Integration for Apache Karaf' version='1.0.0.07I7AcSCL8F7E7AA7g7Q7cQ7'/>
       </provides>
       <requires size='2'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.feature.feature.group' range='[0.5.3.201109050850,0.5.3.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.group' range='[0.5.3.201109050850,0.5.3.201109050850]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.feature.feature.group' range='[3.0.0.SNAPSHOT,3.0.0.SNAPSHOT]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.group' range='[3.0.0.SNAPSHOT,3.0.0.SNAPSHOT]'/>
       </requires>
       <touchpoint id='null' version='0.0.0'/>
     </unit>
-    <unit id='org.fusesource.jansi' version='1.5.0' singleton='false'>
-      <update id='org.fusesource.jansi' range='[0.0.0,1.5.0)' severity='0'/>
+    <unit id='org.fusesource.jansi' version='1.7.0' singleton='false'>
+      <update id='org.fusesource.jansi' range='[0.0.0,1.7.0)' severity='0'/>
       <properties size='4'>
         <property name='org.eclipse.equinox.p2.name' value='jansi'/>
         <property name='org.eclipse.equinox.p2.description' value='Jansi is a java library for generating and interpreting ANSI escape sequences.'/>
@@ -443,22 +341,22 @@
         <property name='org.eclipse.equinox.p2.doc.url' value='http://fusesource.com/'/>
       </properties>
       <provides size='4'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.fusesource.jansi' version='1.5.0'/>
-        <provided namespace='osgi.bundle' name='org.fusesource.jansi' version='1.5.0'/>
-        <provided namespace='java.package' name='org.fusesource.jansi' version='1.5.0'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.fusesource.jansi' version='1.7.0'/>
+        <provided namespace='osgi.bundle' name='org.fusesource.jansi' version='1.7.0'/>
+        <provided namespace='java.package' name='org.fusesource.jansi' version='1.7.0'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
       <requires size='1'>
         <required namespace='java.package' name='sun.reflect' range='0.0.0' optional='true'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.fusesource.jansi' version='1.5.0'/>
+        <artifact classifier='osgi.bundle' id='org.fusesource.jansi' version='1.7.0'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='2'>
           <instruction key='manifest'>
-            Bundle-Description: Jansi is a java library for generating and interpreting ANSI escape sequences.&#xA;Build-Jdk: 1.6.0_22&#xA;Specification-Version: 1.5&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Export-Package: org.fusesource.jansi;version=&quot;1.5&quot;&#xA;Implementation-Title: jansi&#xA;Ignore-Package: org.fusesource.jansi,org.fusesource.jansi.internal&#xA;Tool: Bnd-0.0.357&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt&#xA;Implementation-Vendor: FuseSource, Corp.&#xA;Bundle-Name: jansi&#xA;Specification-Vendor: FuseSource, Corp.&#xA;Bundle-Version: 1.5&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/jansi-1.5.jar&#xA;Bnd-LastModified: 1288884946825&#xA;Bundle-DocURL: http://fusesource.com/&#xA;Built-By: chirino&#xA;Implementation-Vendor-Id: org.fusesource.jansi&#xA;Created-By: 1.6.0_22 (Apple Inc.)&#xA;Bundle-SymbolicName: org.fusesource.jansi&#xA;Bundle-Vendor: FuseSource, Corp.&#xA;Specification-Title: jansi&#xA;Archiver-Version: Plexus Archiver&#xA;Implementation-Version: 1.5&#xA;Import-Package: sun.reflect;resolution:=optional
+
           </instruction>
           <instruction key='zipped'>
             true
@@ -466,14 +364,14 @@
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='org.osgi.jmx' version='1.0.0.201109050850' singleton='false'>
-      <update id='org.osgi.jmx' range='[0.0.0,1.0.0.201109050850)' severity='0'/>
+    <unit id='org.apache.aries.jmx.api' version='0.3' singleton='false'>
+      <update id='org.apache.aries.jmx.api' range='[0.0,0.3)' severity='0'/>
       <properties size='1'>
         <property name='org.eclipse.equinox.p2.name' value='org.osgi.jmx'/>
       </properties>
       <provides size='9'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.osgi.jmx' version='1.0.0.201109050850'/>
-        <provided namespace='osgi.bundle' name='org.osgi.jmx' version='1.0.0.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.aries.jmx.api' version='0.3'/>
+        <provided namespace='osgi.bundle' name='org.apache.aries.jmx.api' version='0.3'/>
         <provided namespace='java.package' name='org.osgi.jmx' version='1.0.0'/>
         <provided namespace='java.package' name='org.osgi.jmx.framework' version='1.5.0'/>
         <provided namespace='java.package' name='org.osgi.jmx.service.cm' version='1.3.0'/>
@@ -486,26 +384,26 @@
         <required namespace='java.package' name='javax.management.openmbean' range='0.0.0'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.osgi.jmx' version='1.0.0.201109050850'/>
+        <artifact classifier='osgi.bundle' id='org.apache.aries.jmx.api' version='0.3'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-Name: org.osgi.jmx&#xA;Bundle-Version: 1.0.0.201109050850&#xA;Export-Package: org.osgi.jmx;version=&quot;1.0.0&quot;,org.osgi.jmx.framework;version=&quot;1.5.0&quot;,org.osgi.jmx.service.cm;version=&quot;1.3.0&quot;,org.osgi.jmx.service.permissionadmin;version=&quot;1.2.0&quot;,org.osgi.jmx.service.provisioning;version=&quot;1.2.0&quot;,org.osgi.jmx.service.useradmin;version=&quot;1.1.0&quot;&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Bundle-ClassPath: lib/org.apache.aries.jmx.api-0.2-incubating.jar,.&#xA;Bundle-SymbolicName: org.osgi.jmx&#xA;Manifest-Version: 1.0&#xA;Import-Package: javax.management.openmbean
+
           </instruction>
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='org.apache.karaf.eik.jmx' version='0.5.0.201109050850' singleton='false'>
-      <update id='org.apache.karaf.eik.jmx' range='[0.0.0,0.5.0.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.jmx' version='3.0.0.SNAPSHOT' singleton='false'>
+      <update id='org.apache.karaf.eik.jmx' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='JMX Data Exporter for Eclipse Integration for Apache Karaf'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Apache Software Foundation'/>
       </properties>
       <provides size='4'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx' version='0.5.0.201109050850'/>
-        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.jmx' version='0.5.0.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx' version='3.0.0.SNAPSHOT'/>
+        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.jmx' version='3.0.0.SNAPSHOT'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.jmx' version='0.0.0'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
@@ -515,49 +413,25 @@
         <required namespace='java.package' name='org.osgi.framework' range='1.4.0'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.jmx' version='0.5.0.201109050850'/>
-      </artifacts>
-      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
-      <touchpointData size='1'>
-        <instructions size='1'>
-          <instruction key='manifest'><![CDATA[<![CDATA[
-            Bundle-Vendor: evanchik.info&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Acorg.apache.karaf.eik.jmxkaraf.jmx.KarafJMXPlugin&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6,J2SE-1.5&#xA;Import-Package: javax.management,org.eclipse.osgi.service.resolver;version=&quot;1.4.0&quot;,org.osgi.framework;version=&quot;1.4.0&quot;&#xA;Bundle-Name: JMX Data Exporter for Eclipse Integration for Apache Karaf&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.jmx&#xA;Bundle-Version: 0.5.0.201109050850&#xA;Export-Package: org.apache.karaf.eik.jmx
-          ]]>]]></instruction>
-        </instructions>
-      </touchpointData>
-    </unit>
-    <unit id='org.apache.servicemix.kernel.main' version='1.1.0.201109050850' singleton='false'>
-      <update id='org.apache.servicemix.kernel.main' range='[0.0.0,1.1.0.201109050850)' severity='0'/>
-      <properties size='2'>
-        <property name='org.eclipse.equinox.p2.name' value='Apache ServiceMix Kernel Main Classes'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
-      </properties>
-      <provides size='4'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.servicemix.kernel.main' version='1.1.0.201109050850'/>
-        <provided namespace='osgi.bundle' name='org.apache.servicemix.kernel.main' version='1.1.0.201109050850'/>
-        <provided namespace='java.package' name='org.apache.servicemix.kernel.main.spi' version='0.0.0'/>
-        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
-      </provides>
-      <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.apache.servicemix.kernel.main' version='1.1.0.201109050850'/>
+        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.jmx' version='3.0.0.SNAPSHOT'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-Version: 1.1.0.201109050850&#xA;Export-Package: org.apache.servicemix.kernel.main.spi&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.apache.servicemix.kernel.main&#xA;Bundle-Name: Apache ServiceMix Kernel Main Classes&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Vendor: evanchik.info
+
           </instruction>
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='org.apache.karaf.eik.wtp.ui' version='0.5.2.201109050850'>
-      <update id='org.apache.karaf.eik.wtp.ui' range='[0.0.0,0.5.2.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.wtp.ui' version='3.0.0.SNAPSHOT'>
+      <update id='org.apache.karaf.eik.wtp.ui' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='1'>
         <property name='org.eclipse.equinox.p2.name' value='Eclipse WTP UI Integration'/>
       </properties>
       <provides size='4'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.ui' version='0.5.2.201109050850'/>
-        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.wtp.ui' version='0.5.2.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.ui' version='3.0.0.SNAPSHOT'/>
+        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.wtp.ui' version='3.0.0.SNAPSHOT'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.wtp.ui' version='0.0.0'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
@@ -568,30 +442,30 @@
         <required namespace='osgi.bundle' name='org.eclipse.wst.server.ui' range='[1.0.204,2.0.0)'/>
         <required namespace='osgi.bundle' name='org.eclipse.wst.server.core' range='[1.0.204,2.0.0)'/>
         <required namespace='osgi.bundle' name='org.eclipse.jdt.debug.ui' range='[3.2.0,4.0.0)'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.core' range='0.5.2'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.ui' range='0.5.2'/>
+        <required namespace='osgi.bundle' name='org.apache.karaf.eik.core' range='3.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.karaf.eik.ui' range='3.0.0'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.wtp.ui' version='0.5.2.201109050850'/>
+        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.wtp.ui' version='3.0.0.SNAPSHOT'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='1'>
-          <instruction key='manifest'><![CDATA[
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.debug.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.pde.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.wst.common.project.facet.ui;bundle-version=&quot;[1.1.0,2.0.0)&quot;,org.eclipse.wst.server.ui;bundle-version=&quot;[1.0.204,2.0.0)&quot;,org.eclipse.wst.server.core;bundle-version=&quot;[1.0.204,2.0.0)&quot;,org.eclipse.jdt.debug.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.apache.karaf.eik.core;bundle-version=&quot;0.5.2&quot;,org.apache.karaf.eik.ui;bundle-version=&quot;0.5.2&quot;&#xA;Bundle-Activator: org.apache.karaf.eik.wtp.ui.KarafWtpUIPluginActivator&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.5.2.201109050850&#xA;Export-Package: info.evanchik.eclipse.karaf.wtp.ui&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.wtp.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Eclipse WTP UI Integration
-          ]]></instruction>
+          <instruction key='manifest'>
+
+          </instruction>
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='org.apache.karaf.eik.app' version='0.5.0.201109050850'>
-      <update id='org.apache.karaf.eik.app' range='[0.0.0,0.5.0.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.app' version='3.0.0.SNAPSHOT'>
+      <update id='org.apache.karaf.eik.app' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Aplication definition for Apache Karaf'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Apache Software Foundation'/>
       </properties>
       <provides size='4'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.app' version='0.5.0.201109050850'/>
-        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.app' version='0.5.0.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.app' version='3.0.0.SNAPSHOT'/>
+        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.app' version='3.0.0.SNAPSHOT'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.app' version='0.0.0'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
@@ -604,21 +478,21 @@
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='1'>
-          <instruction key='manifest'><![CDATA[<![CDATA[
-            Bundle-Vendor: evanchik.info&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.apache.karaf.eik.app.Activator&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6,J2SE-1.5&#xA;Require-Bundle: org.eclipse.core.runtime;bundle-version=&quot;[3.1.0,4.0.0)&quot;&#xA;Bundle-Name: Aplication definition for Apache Karaf&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: info.evanchik.karaf.app;singleton:=true&#xA;Bundle-Version: 0.5.0.201109050850&#xA;Exportorg.apache.karaf.eik.app.karaf.app
-          ]]>]]></instruction>
+          <instruction key='manifest'>
+
+          </instruction>
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='org.apache.karaf.eik.workbench' version='0.5.3.201109050850'>
-      <update id='org.apache.karaf.eik.workbench' range='[0.0.0,0.5.3.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.workbench' version='3.0.0.SNAPSHOT'>
+      <update id='org.apache.karaf.eik.workbench' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Eclipse Workbench Service Registry for Apache Karaf'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Apache Software Foundation'/>
       </properties>
       <provides size='6'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.workbench' version='0.5.3.201109050850'/>
-        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.workbench' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.workbench' version='3.0.0.SNAPSHOT'/>
+        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.workbench' version='3.0.0.SNAPSHOT'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.workbench' version='0.0.0'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.workbench.factory' version='0.0.0'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.workbench.provider' version='0.0.0'/>
@@ -635,27 +509,27 @@
         <required namespace='osgi.bundle' name='org.eclipse.ui.forms' range='3.5.2'/>
         <required namespace='osgi.bundle' name='org.eclipse.ui.navigator' range='3.5.0'/>
         <required namespace='osgi.bundle' name='org.eclipse.ui.navigator.resources' range='3.4.202'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.core' range='0.5.3'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.jmx' range='0.5.0'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.ui' range='0.5.3'/>
+        <required namespace='osgi.bundle' name='org.apache.karaf.eik.core' range='3.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.karaf.eik.jmx' range='3.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.karaf.eik.ui' range='3.0.0'/>
         <required namespace='java.package' name='javax.management' range='0.0.0'/>
-        <required namespace='java.package' name='org.apache.aries.jmx.codec' range='0.2.0.incubating'/>
+        <required namespace='java.package' name='org.apache.aries.jmx.codec' range='0.3.0'/>
         <required namespace='java.package' name='org.osgi.jmx.framework' range='1.5.0'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.workbench' version='0.5.3.201109050850'/>
+        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.workbench' version='3.0.0.SNAPSHOT'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='1'>
-          <instruction key='manifest'><![CDATA[<![CDATA[<![CDATA[<![CDATA[
-            Bundle-ManifestVersion: 2&#xA;Export-Package: org.apache.karaf.eik.workbencorg.apache.karaf.eik.workbenchch.factorg.apache.karaf.eik.workbenchench.provider&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.core.runtime;bundle-version=&quot;[3.1.0,4.0.0)&quot;,org.eclipse.debug.core;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.jdt.launching;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.jface.databinding;bundle-version=&quot;1.4.0&quot;,org.eclipse.jface.text;bundle-version=&quot;3.6.1&quot;,org.eclipse.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.ui.editors;bundle-version=&quot;3.6.1&quot;,org.eclipse.ui.forms;bundle-version=&quot;3.5.2&quot;,org.eclipse.ui.navigator;bundle-version=&quot;3.5.0&quot;,org.eclipse.ui.navigator.resources;bundle-version=&quot;3.4.202&quot;,org.apache.karaf.eik.core;bundle-version=&quot;0.5.3&quot;,org.apache.karaf.eik.jmx;bundle-version=&quot;0.5.0&quot;,org.apache.karaf.eik.ui;bundle-version=&quot;0.5.3&quot;&#xA;Bundle-Activorg.apache.karaf.eik.workbenchkbench.KarafWorkbenchActivator&#xA;Bundle-Name: Eclipse Workbench Service Registry for Apache Karaf&#xA;Bundle-Version: 0.5.3.201109050850&#xA;Bundle-Vendor: evanchik.info&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.workbench;singleton:=true&#xA;Import-Package: javax.management,org.apache.aries.jmx.codec;version=&quot;0.2.0.incubating&quot;,org.osgi.jmx.framework;version=&quot;1.5.0&quot;&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0
-          ]]>]]>]]>]]></instruction>
+          <instruction key='manifest'>
+
+          </instruction>
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='org.apache.mina.core' version='2.0.0' singleton='false'>
-      <update id='org.apache.mina.core' range='[0.0.0,2.0.0)' severity='0'/>
+    <unit id='org.apache.mina.core' version='2.0.1' singleton='false'>
+      <update id='org.apache.mina.core' range='[0.0.0,2.0.1)' severity='0'/>
       <properties size='4'>
         <property name='org.eclipse.equinox.p2.name' value='Apache MINA Core'/>
         <property name='org.eclipse.equinox.p2.description' value='Apache MINA is a network application framework which helps users develop high performance and highly scalable network applications easily.  It provides an abstract event-driven asynchronous API over various transports such as TCP/IP and UDP/IP via Java NIO.'/>
@@ -663,54 +537,54 @@
         <property name='org.eclipse.equinox.p2.doc.url' value='http://mina.apache.org/'/>
       </properties>
       <provides size='49'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.mina.core' version='2.0.0'/>
-        <provided namespace='osgi.bundle' name='org.apache.mina.core' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.core' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.core.buffer' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.core.file' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.core.filterchain' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.core.future' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.core.polling' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.core.service' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.core.session' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.core.write' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.buffer' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.codec' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.codec.demux' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.codec.prefixedstring' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.codec.serialization' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.codec.statemachine' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.codec.textline' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.errorgenerating' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.executor' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.firewall' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.keepalive' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.logging' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.reqres' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.ssl' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.statistic' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.stream' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.filter.util' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.handler.chain' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.handler.demux' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.handler.multiton' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.handler.stream' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy.event' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy.filter' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy.handlers' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy.handlers.http' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy.handlers.http.basic' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy.handlers.http.digest' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy.handlers.http.ntlm' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy.handlers.socks' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy.session' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.proxy.utils' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.transport.socket' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.transport.socket.nio' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.transport.vmpipe' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.util' version='2.0.0'/>
-        <provided namespace='java.package' name='org.apache.mina.util.byteaccess' version='2.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.mina.core' version='2.0.1'/>
+        <provided namespace='osgi.bundle' name='org.apache.mina.core' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.core' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.core.buffer' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.core.file' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.core.filterchain' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.core.future' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.core.polling' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.core.service' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.core.session' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.core.write' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.buffer' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.codec' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.codec.demux' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.codec.prefixedstring' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.codec.serialization' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.codec.statemachine' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.codec.textline' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.errorgenerating' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.executor' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.firewall' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.keepalive' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.logging' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.reqres' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.ssl' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.statistic' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.stream' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.filter.util' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.handler.chain' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.handler.demux' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.handler.multiton' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.handler.stream' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy.event' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy.filter' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy.handlers' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy.handlers.http' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy.handlers.http.basic' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy.handlers.http.digest' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy.handlers.http.ntlm' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy.handlers.socks' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy.session' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.proxy.utils' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.transport.socket' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.transport.socket.nio' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.transport.vmpipe' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.util' version='2.0.1'/>
+        <provided namespace='java.package' name='org.apache.mina.util.byteaccess' version='2.0.1'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
       <requires size='52'>
@@ -718,63 +592,63 @@
         <required namespace='java.package' name='javax.crypto.spec' range='0.0.0'/>
         <required namespace='java.package' name='javax.net.ssl' range='0.0.0'/>
         <required namespace='java.package' name='javax.security.sasl' range='0.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.core' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.core.buffer' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.core.file' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.core.filterchain' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.core.future' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.core.polling' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.core.service' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.core.session' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.core.write' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.buffer' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.codec' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.codec.demux' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.codec.prefixedstring' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.codec.serialization' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.codec.statemachine' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.codec.textline' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.errorgenerating' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.executor' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.firewall' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.keepalive' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.logging' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.reqres' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.ssl' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.statistic' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.stream' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.filter.util' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.handler.chain' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.handler.demux' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.handler.multiton' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.handler.stream' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy.event' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy.filter' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy.handlers' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy.handlers.http' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy.handlers.http.basic' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy.handlers.http.digest' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy.handlers.http.ntlm' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy.handlers.socks' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy.session' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.proxy.utils' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.transport.socket' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.transport.socket.nio' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.transport.vmpipe' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.util' range='2.0.0'/>
-        <required namespace='java.package' name='org.apache.mina.util.byteaccess' range='2.0.0'/>
+        <required namespace='java.package' name='org.apache.mina.core' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.core.buffer' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.core.file' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.core.filterchain' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.core.future' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.core.polling' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.core.service' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.core.session' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.core.write' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.buffer' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.codec' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.codec.demux' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.codec.prefixedstring' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.codec.serialization' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.codec.statemachine' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.codec.textline' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.errorgenerating' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.executor' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.firewall' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.keepalive' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.logging' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.reqres' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.ssl' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.statistic' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.stream' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.filter.util' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.handler.chain' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.handler.demux' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.handler.multiton' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.handler.stream' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy.event' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy.filter' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy.handlers' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy.handlers.http' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy.handlers.http.basic' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy.handlers.http.digest' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy.handlers.http.ntlm' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy.handlers.socks' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy.session' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.proxy.utils' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.transport.socket' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.transport.socket.nio' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.transport.vmpipe' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.util' range='2.0.1'/>
+        <required namespace='java.package' name='org.apache.mina.util.byteaccess' range='2.0.1'/>
         <required namespace='java.package' name='org.ietf.jgss' range='0.0.0'/>
-        <required namespace='java.package' name='org.slf4j' range='1.5.0'/>
+        <required namespace='java.package' name='org.slf4j' range='1.6.0'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.apache.mina.core' version='2.0.0'/>
+        <artifact classifier='osgi.bundle' id='org.apache.mina.core' version='2.0.1'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='2'>
           <instruction key='manifest'>
-            Built-By: elecharny&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-License: http://www.apache.org/licenses/LICENSE-2.0&#xA;Bundle-Description: Apache MINA is a network application framework which helps users develop high performance and highly scalable network applications easily.  It provides an abstract event-driven asynchronous API over various transports such as TCP/IP and UDP/IP via Java NIO.&#xA;Build-Jdk: 1.6.0_20&#xA;Created-By: Apache Maven Bundle Plugin&#xA;Manifest-Version: 1.0&#xA;Bundle-ClassPath: lib/mina-core-2.0.0.jar&#xA;Bundle-Vendor: Apache MINA Project&#xA;Import-Package: javax.crypto,javax.crypto.spec,javax.net.ssl,javax.security.sasl,org.apache.mina.core;version=&quot;2.0.0&quot;,org.apache.mina.core.buffer;version=&quot;2.0.0&quot;,org.apache.mina.core.file;version=&quot;2.0.0&quot;,org.apache.mina.core.filterchain;version=&quot;2.0.0&quot;,org.apache.mina.core.future;version=&quot;2.0.0&quot;,org.apache.mina.core.polling;version=&quot;2.0.0&quot;,org.apache.mina.core.service;version=&quot;2.0.0&quot;,org.apache.mina.core.session;version=&quot;2.0.0&quot;,org.apache.mina.core.write;version=&quot;2.0.0&quot;,org.apache.mina.filter.buffer;version=&quot;2.0.0&quot;,org.apache.mina.filter.codec;version=&quot;2.0.0&quot;,org.apache.mina.filter.codec.demux;version=&quot;2.0.0&quot;,org.apache.mina.filter.codec.prefixedstring;version=&quot;2.0.0&quot;,org.apache.mina.filter.codec.serialization;version=&quot;2.0.0&quot;,org.apache.mina.filter.codec.statemachine;version=&quot;2.0.0&quot;,org.apache.mina.filter.codec.textline;version=&quot;2.0.0&quot;,org.apache.mina.filter.errorgenerating;version=&quot;2.0.0&quot;,org.apache.mina.filter.executor;version=&quot;2.0.0&quot;,org.apache.mina.filter.firewall;version=&quot;2.0.0&quot;,org.apache.mina.filter.keepalive;version=&quot;2.0.0&quot;,org.apache.mina.filter.logging;version=&quot;2.0.0&quot;,org.apache.mina.filter.reqres;version=&quot;2.0.0&quot;,org.apache.mina.filter.ssl;version=&quot;2.0.0&quot;,org.apache.mina.filter.statistic;version=&quot;2.0.0&quot;,org.apache.mina.filter.stream;version=&quot;2.0.0&quot;,org.apache.mina.filter.util;version=&quot;2.0.0&quot;,org.apache.mina.handler.chain;version=&quot;2.0.0&quot;,org.apache.mina.handler.demux;version=&quot;2.0.0&quot;,org.apache.mina.handler.multiton;version=&quot;2.0.0&quot;,org.apache.mina.handler.stream;version=&quot;2.0.0&quot;,org.apache.mina.proxy;version=&quot;2.0.0&quot;,org.apache.mina.proxy.event;version=&quot;2.0.0&quot;,org.apache.mina.proxy.filter;version=&quot;2.0.0&quot;,org.apache.mina.proxy.handlers;version=&quot;2.0.0&quot;,org.apache.mina.proxy.handlers.http;version=&quot;2.0.0&quot;,org.apache.mina.proxy.handlers.http.basic;version=&quot;2.0.0&quot;,org.apache.mina.proxy.handlers.http.digest;version=&quot;2.0.0&quot;,org.apache.mina.proxy.handlers.http.ntlm;version=&quot;2.0.0&quot;,org.apache.mina.proxy.handlers.socks;version=&quot;2.0.0&quot;,org.apache.mina.proxy.session;version=&quot;2.0.0&quot;,org.apache.mina.proxy.utils;version=&quot;2.0.0&quot;,org.apache.mina.transport.socket;version=&quot;2.0.0&quot;,org.apache.mina.transport.socket.nio;version=&quot;2.0.0&quot;,org.apache.mina.transport.vmpipe;version=&quot;2.0.0&quot;,org.apache.mina.util;version=&quot;2.0.0&quot;,org.apache.mina.util.byteaccess;version=&quot;2.0.0&quot;,org.ietf.jgss,org.slf4j;version=&quot;1.5&quot;&#xA;Bundle-DocURL: http://mina.apache.org/&#xA;Bundle-Name: Apache MINA Core&#xA;Bundle-Version: 2.0.0&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Export-Package: org.apache.mina.core;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.future,org.apache.mina.core.session,org.apache.mina.core.buffer&quot;,org.apache.mina.core.buffer;version=&quot;2.0.0&quot;,org.apache.mina.core.file;version=&quot;2.0.0&quot;,org.apache.mina.core.filterchain;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core.session,  org.apache.mina.core.buffer,  org.apache.mina.core.service,  org.slf4j,  org.apache.mina.core.write&quot;,org.apache.mina.core.future;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.polling,  org.apache.mina.core.session,  org.apache.mina.core.service,  org.apache.mina.util,  org.apache.mina.core&quot;,org.apache.mina.core.polling;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core.buffer,  org.apache.mina.core,  org.slf4j,  org.apache.mina.core.write,  org.apache.mina.core.file,  org.apache.mina.core.session,  org.apache.mina.core.filterchain,  org.apache.mina.core.service,  org.apache.mina.util,  org.apache.mina.transport.socket&quot;,org.apache.mina.core.service;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core,  org.slf4j,  org.apache.mina.core.write,  org.apache.mina.core.session,  org.apache.mina.core.filterchain,  org.apache.mina.util&quot;,org.apache.mina.core.session;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core.buffer,  org.apache.mina.core.write,  org.apache.mina.core.file,  org.apache.mina.core.filterchain,  org.apache.mina.core.service,  org.apache.mina.util&quot;,org.apache.mina.core.write;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.future,org.apache.mina.core.session,org.apache.mina.util&quot;,org.apache.mina.filter.buffer;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.session,  org.apache.mina.core.buffer,  org.apache.mina.core.filterchain,  org.apache.mina.util,  org.apache.mina.core.write,  org.slf4j&quot;,org.apache.mina.filter.codec;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.file,  org.apache.mina.core.future,  org.apache.mina.core.session,  org.apache.mina.core.buffer,  org.apache.mina.core.filterchain,  org.apache.mina.core.service,  org.slf4j,  org.apache.mina.core.write&quot;,org.apache.mina.filter.codec.demux;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.session,  org.apache.mina.core.buffer,  org.apache.mina.util,  org.apache.mina.filter.codec&quot;,org.apache.mina.filter.codec.prefixedstring;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.session,org.apache.mina.core.buffer,org.apache.mina.filter.codec&quot;,org.apache.mina.filter.codec.serialization;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.session,org.apache.mina.core.buffer,org.apache.mina.filter.codec&quot;,org.apache.mina.filter.codec.statemachine;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.session,  org.apache.mina.core.buffer,  org.apache.mina.core.filterchain,  org.slf4j,  org.apache.mina.filter.codec&quot;,org.apache.mina.filter.codec.textline;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.session,org.apache.mina.core.buffer,org.apache.mina.filter.codec&quot;,org.apache.mina.filter.errorgenerating;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.session,  org.apache.mina.core.future,  org.apache.mina.core.buffer,  org.apache.mina.core.filterchain,  org.apache.mina.core.write,  org.slf4j&quot;,org.apache.mina.filter.executor;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core.session,  org.apache.mina.core.buffer,  org.apache.mina.core.filterchain,  org.slf4j,  org.apache.mina.core.write&quot;,org.apache.mina.filter.firewall;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.session,  org.apache.mina.core.future,  org.apache.mina.core.filterchain,  org.slf4j,  org.apache.mina.core.write&quot;,org.apache.mina.filter.keepalive;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core.session,  org.apache.mina.core.filterchain,  org.slf4j,  org.apache.mina.core.write&quot;,org.apache.mina.filter.logging;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.filter.util,  org.apache.mina.core.session,  org.apache.mina.core.filterchain,  org.apache.mina.core.service,  org.apache.mina.core.write,  org.slf4j&quot;,org.apache.mina.filter.reqres;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.filter.util,  org.apache.mina.core.session,  org.apache.mina.core.filterchain,  org.slf4j,  org.apache.mina.core.write&quot;,org.apache.mina.filter.ssl;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core.buffer,  org.slf4j,  org.apache.mina.core.write,  org.apache.mina.core.session,  org.apache.mina.core.filterchain,  org.apache.mina.core.service,  javax.net.ssl&quot;,org.apache.mina.filter.statistic;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.session,org.apache.mina.core.filterchain,org.apache.mina.core.write&quot;,org.apache.mina.filter.stream;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.file,  org.apache.mina.core.future,  org.apache.mina.core.session,  org.apache.mina.core.buffer,  org.apache.mina.core.filterchain,  org.apache.mina.core.write&quot;,org.apache.mina.filter.util;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.session,org.apache.mina.core.filterchain,org.apache.mina.core.write&quot;,org.apache.mina.handler.chain;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.session,org.apache.mina.core.service&quot;,org.apache.mina.handler.demux;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core.session,  org.apache.mina.core.service,  org.apache.mina.util&quot;,org.apache.mina.handler.multiton;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.session,org.apache.mina.core.service&quot;,org.apache.mina.handler.stream;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core.session,  org.apache.mina.core.buffer,  org.apache.mina.core.service,  org.slf4j&quot;,org.apache.mina.proxy;version=&quot;2.0.0&quot;; uses:=&quot;javax.security.sasl,  org.apache.mina.core.future,  org.apache.mina.proxy.filter,  org.apache.mina.core.buffer,  org.apache.mina.proxy.session,  org.apache.mina.core.write,  org.slf4j,  org.apache.mina.core.file,  org.apache.mina.core.session,  org.apache.mina.proxy.handlers,  org.apache.mina.proxy.handlers.socks,  org.apache.mina.core.filterchain,  org.apache.mina.core.service,  org.apache.mina.proxy.event,  org.apache.mina.transport.socket&quot;,org.apache.mina.proxy.event;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.session,  org.apache.mina.proxy.handlers,  org.apache.mina.proxy.handlers.socks,  org.apache.mina.core.filterchain,  org.apache.mina.proxy.session,  org.slf4j,  org.apache.mina.proxy&quot;,org.apache.mina.proxy.filter;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.buffer,  org.apache.mina.proxy.session,  org.apache.mina.core.write,  org.slf4j,  org.apache.mina.proxy,  org.apache.mina.core.session,  org.apache.mina.proxy.handlers,  org.apache.mina.proxy.handlers.socks,  org.apache.mina.core.filterchain,  org.apache.mina.proxy.handlers.http,  org.apache.mina.proxy.event&quot;,org.apache.mina.proxy.handlers;version=&quot;2.0.0&quot;,org.apache.mina.proxy.handlers.http;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.proxy.handlers.http.ntlm,  org.apache.mina.core.future,  org.apache.mina.core.buffer,  org.apache.mina.proxy.session,  org.apache.mina.proxy.handlers.http.digest,  org.slf4j,  org.apache.mina.proxy,  org.apache.mina.core.session,  org.apache.mina.proxy.handlers,  org.apache.mina.core.filterchain,  org.apache.mina.proxy.handlers.http.basic,  org.apache.mina.proxy.utils&quot;,org.apache.mina.proxy.handlers.http.basic;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.proxy.handlers,  org.apache.mina.core.filterchain,  org.apache.mina.proxy.handlers.http,  org.apache.mina.util,  org.apache.mina.proxy.utils,  org.apache.mina.proxy.session,  org.slf4j,  org.apache.mina.proxy&quot;,org.apache.mina.proxy.handlers.http.digest;version=&quot;2.0.0&quot;; uses:=&quot;javax.security.sasl,  org.apache.mina.proxy.session,  org.slf4j,  org.apache.mina.proxy,  org.apache.mina.core.session,  org.apache.mina.proxy.handlers,  org.apache.mina.core.filterchain,  org.apache.mina.proxy.handlers.http,  org.apache.mina.util,  org.apache.mina.proxy.utils&quot;,org.apache.mina.proxy.handlers.http.ntlm;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.proxy.session,  javax.crypto,  org.slf4j,  org.apache.mina.proxy,  javax.crypto.spec,  org.apache.mina.proxy.handlers,  org.apache.mina.core.filterchain,  org.apache.mina.proxy.handlers.http,  org.apache.mina.util,  org.apache.mina.proxy.utils&quot;,org.apache.mina.proxy.handlers.socks;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core.buffer,  org.apache.mina.proxy.session,  org.ietf.jgss,  org.slf4j,  org.apache.mina.proxy,  org.apache.mina.core.session,  org.apache.mina.proxy.handlers,  org.apache.mina.core.filterchain,  org.apache.mina.proxy.utils&quot;,org.apache.mina.proxy.session;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.proxy.filter,  org.apache.mina.core.session,  org.apache.mina.proxy.handlers,  org.apache.mina.proxy.event,  org.apache.mina.proxy&quot;,org.apache.mina.proxy.utils;version=&quot;2.0.0&quot;;uses:=&quot;javax.security.sasl,org.apache.mina.core.buffer&quot;,org.apache.mina.transport.socket;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.session,org.apache.mina.core.service&quot;,org.apache.mina.transport.socket.nio;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.buffer,  org.apache.mina.core,  org.apache.mina.core.session,  org.apache.mina.core.polling,  org.apache.mina.core.file,  org.apache.mina.core.filterchain,  org.apache.mina.core.service,  org.apache.mina.transport.socket&quot;,org.apache.mina.transport.vmpipe;version=&quot;2.0.0&quot;; uses:=&quot;org.apache.mina.core.future,  org.apache.mina.core.buffer,  org.apache.mina.core.write,  org.apache.mina.core.session,  org.apache.mina.core.filterchain,  org.apache.mina.core.service,  org.apache.mina.util&quot;,org.apache.mina.util;version=&quot;2.0.0&quot;;uses:=&quot;org.slf4j&quot;,org.apache.mina.util.byteaccess;version=&quot;2.0.0&quot;;uses:=&quot;org.apache.mina.core.buffer&quot;&#xA;Bundle-SymbolicName: org.apache.mina.core&#xA;Bnd-LastModified: 1285108341152&#xA;Tool: Bnd-0.0.255
+
           </instruction>
           <instruction key='zipped'>
             true
@@ -782,14 +656,14 @@
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='org.apache.karaf.eik.wtp.core' version='0.5.2.201109050850'>
-      <update id='org.apache.karaf.eik.wtp.core' range='[0.0.0,0.5.2.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.wtp.core' version='3.0.0.SNAPSHOT'>
+      <update id='org.apache.karaf.eik.wtp.core' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='1'>
         <property name='org.eclipse.equinox.p2.name' value='Eclipse WTP Core Integration'/>
       </properties>
       <provides size='4'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.core' version='0.5.2.201109050850'/>
-        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.wtp.core' version='0.5.2.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.core' version='3.0.0.SNAPSHOT'/>
+        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.wtp.core' version='3.0.0.SNAPSHOT'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.wtp.core' version='0.0.0'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
       </provides>
@@ -804,31 +678,31 @@
         <required namespace='osgi.bundle' name='org.eclipse.debug.core' range='[3.2.0,4.0.0)'/>
         <required namespace='osgi.bundle' name='org.eclipse.jst.common.project.facet.core' range='1.4.0'/>
         <required namespace='osgi.bundle' name='org.osgi.jmx' range='1.0.0'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.core' range='0.5.2'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.ui' range='0.5.2'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.workbench' range='0.5.2'/>
+        <required namespace='osgi.bundle' name='org.apache.karaf.eik.core' range='3.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.karaf.eik.ui' range='3.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.karaf.eik.workbench' range='3.0.0'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.wtp.core' version='0.5.2.201109050850'/>
+        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.wtp.core' version='3.0.0.SNAPSHOT'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='1'>
-          <instruction key='manifest'><![CDATA[
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.jst.server.core;bundle-version=&quot;[1.1.3,2.0.0)&quot;,org.eclipse.pde.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.wst.common.project.facet.core;bundle-version=&quot;[1.1.0,2.0.0)&quot;,org.eclipse.wst.server.core;bundle-version=&quot;[1.0.204,2.0.0)&quot;,org.eclipse.jdt.core;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.jdt.launching;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.core.runtime,org.eclipse.debug.core;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.jst.common.project.facet.core;bundle-version=&quot;1.4.0&quot;,org.osgi.jmx;bundle-version=&quot;1.0.0&quot;,org.apache.karaf.eik.core;bundle-version=&quot;0.5.2&quot;,org.apache.karaf.eik.ui;bundle-version=&quot;0.5.2&quot;,org.apache.karaf.eik.workbench;bundle-version=&quot;0.5.2&quot;&#xA;Bundle-Activator: org.apache.karaf.eik.wtp.core.KarafWtpPluginActivator&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.5.2.201109050850&#xA;Export-Package: info.evanchik.eclipse.karaf.wtp.core&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.wtp.core;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Eclipse WTP Core Integration
-          ]]></instruction>
+          <instruction key='manifest'>
+
+          </instruction>
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='org.apache.karaf.eik.ui' version='0.5.3.201109050850'>
-      <update id='org.apache.karaf.eik.ui' range='[0.0.0,0.5.3.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.ui' version='3.0.0.SNAPSHOT'>
+      <update id='org.apache.karaf.eik.ui' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='UI for Eclipse Integration for Apache Karaf'/>
         <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
       </properties>
       <provides size='6'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.ui' version='0.5.3.201109050850'/>
-        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.ui' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.ui' version='3.0.0.SNAPSHOT'/>
+        <provided namespace='osgi.bundle' name='org.apache.karaf.eik.ui' version='3.0.0.SNAPSHOT'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.ui' version='0.0.0'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.ui.wizards' version='0.0.0'/>
         <provided namespace='java.package' name='org.apache.karaf.eik.ui.workbench' version='0.0.0'/>
@@ -849,45 +723,45 @@
         <required namespace='osgi.bundle' name='org.eclipse.jface.text' range='[3.6.0,4.0.0)'/>
         <required namespace='osgi.bundle' name='org.eclipse.pde.ui' range='[3.6.0,4.0.0)'/>
         <required namespace='osgi.bundle' name='org.apache.commons.collections' range='[3.2.0,3.2.1]'/>
-        <required namespace='osgi.bundle' name='org.ops4j.pax.url.mvn' range='1.3.0'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.core' range='[0.5.3,1.0.0)'/>
+        <required namespace='osgi.bundle' name='org.ops4j.pax.url.mvn' range='1.2.8'/>
+        <required namespace='osgi.bundle' name='org.apache.karaf.eik.core' range='[3.0.0,4.0.0)'/>
       </requires>
       <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.ui' version='0.5.3.201109050850'/>
+        <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.ui' version='3.0.0.SNAPSHOT'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
         <instructions size='2'>
-          <instruction key='manifest'><![CDATA[<![CDATA[<![CDATA[<![CDATA[
-            Bundle-Vendor: evanchik.info&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Acorg.apache.karaf.eik.ui.karaf.ui.KarafUIPluginActivator&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.ant.core;bundle-version=&quot;3.2.201&quot;,org.eclipse.core.variables;bundle-version=&quot;3.2.400&quot;,org.eclipse.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.ui.console;bundle-version=&quot;[3.5.0,4.0.0)&quot;,org.eclipse.ui.ide;bundle-version=&quot;[3.6.0,4.0.0)&quot;,org.eclipse.ui.navigator;bundle-version=&quot;3.5.0&quot;,org.eclipse.ui.navigator.resources;bundle-version=&quot;3.4.202&quot;,org.eclipse.core.runtime;bundle-version=&quot;[3.1.0,4.0.0)&quot;,org.eclipse.core.expressions;bundle-version=&quot;[3.4.200,4.0.0)&quot;,org.eclipse.debug.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.jdt.launching;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.jface.text;bundle-version=&quot;[3.6.0,4.0.0)&quot;,org.eclipse.pde.ui;bundle-version=&quot;[3.6.0,4.0.0)&quot;,org.apache.commons.collections;bundle-version=&quot;[3.2.0,3.2.1]&quot;,org.ops4j.pax.url.mvn;bundle-version=&quot;1.3.0&quot;,org.apache.karaf.eik.core;bundle-version=&quot;[0.5.3,1.0.0)&quot;&#xA;Bundle-Name: UI for Eclipse Integration for Apache Karaf&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: info.evanchik.eclipse.karaf.ui;singleton:=true&#xA;Bundle-Version: 0.5.3.201109050850&org.apache.karaf.eik.uihik.eclipse.karaf.ui,org.apache.karaf.eik.ui.wizaorg.apache.karaf.eik.uif.ui.workbench
-          ]]>]]>]]>]]></instruction>
+          <instruction key='manifest'>
+
+          </instruction>
           <instruction key='zipped'>
             true
           </instruction>
         </instructions>
       </touchpointData>
     </unit>
-    <unit id='info.evanchik.eclipse.karaf.feature.feature.jar' version='0.5.3.201109050850'>
+    <unit id='org.apache.karaf.eik.feature.feature.jar' version='3.0.0.SNAPSHOT'>
       <properties size='8'>
         <property name='org.eclipse.equinox.p2.name' value='%featureName'/>
         <property name='org.eclipse.equinox.p2.description' value='%description'/>
         <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
         <property name='df_LT.featureName' value='Eclipse Integration for Apache Karaf'/>
-        <property name='df_LT.providerName' value='Stephen Evanchik'/>
+        <property name='df_LT.providerName' value='Apache Software Foundation'/>
         <property name='df_LT.description' value='Eclipse Integration for Apache Karaf'/>
-        <property name='df_LT.copyright' value='Copyright Stephen Evanchik http://stephen.evanchik.com'/>
-        <property name='df_LT.license' value='Eclipse Public License - v1.0'/>
+        <property name='df_LT.copyright' value='Copyright Apache Software Foundation - http://www.apache.org'/>
+        <property name='df_LT.license' value='Apache License - v2.0'/>
       </properties>
       <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.feature.feature.jar' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.feature.feature.jar' version='3.0.0.SNAPSHOT'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
-        <provided namespace='org.eclipse.update.feature' name='info.evanchik.eclipse.karaf.feature' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.update.feature' name='org.apache.karaf.eik.feature' version='3.0.0.SNAPSHOT'/>
       </provides>
       <filter>
         (org.eclipse.update.install.features=true)
       </filter>
       <artifacts size='1'>
-        <artifact classifier='org.eclipse.update.feature' id='info.evanchik.eclipse.karaf.feature' version='0.5.3.201109050850'/>
+        <artifact classifier='org.eclipse.update.feature' id='org.apache.karaf.eik.feature' version='3.0.0.SNAPSHOT'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
@@ -906,16 +780,16 @@
         %copyright
       </copyright>
     </unit>
-    <unit id='org.apache.karaf.eik.jmx.feature.feature.group' version='0.5.3.201109050850' singleton='false'>
-      <update id='org.apache.karaf.eik.jmx.feature.feature.group' range='[0.0.0,0.5.3.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.jmx.feature.feature.group' version='3.0.0.SNAPSHOT' singleton='false'>
+      <update id='org.apache.karaf.eik.jmx.feature.feature.group' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='4'>
         <property name='org.eclipse.equinox.p2.name' value='Eclipse JMX Integration Feature for Apache Felix Karaf'/>
         <property name='org.eclipse.equinox.p2.description' value='JMX Integration for Apache Karaf runtimes'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Apache Software Foundation'/>
         <property name='org.eclipse.equinox.p2.type.group' value='true'/>
       </properties>
       <provides size='1'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.group' version='0.5.3.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.group' version='3.0.0.SNAPSHOT'/>
       </provides>
       <requires size='18'>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.osgi' range='0.0.0'/>
@@ -923,19 +797,19 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.debug.core' range='[3.2.0,4.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jdt.launching' range='[3.2.0,4.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui' range='[3.2.0,4.0.0)'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx' range='0.5.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx' range='3.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.osgi.services' range='0.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jface.databinding' range='1.4.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jface.text' range='3.6.1'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui.editors' range='3.6.1'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.ui.forms' range='3.5.2'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.core' range='0.5.2'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.ui' range='0.5.2'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx' range='[0.5.0.201109050850,0.5.0.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.workbench' range='[0.5.3.201109050850,0.5.3.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.osgi.jmx' range='[1.0.0.201109050850,1.0.0.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.aries.jmx.core' range='[1.0.0.201109050850,1.0.0.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.jar' range='[0.5.3.201109050850,0.5.3.201109050850]'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.core' range='3.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.ui' range='3.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx' range='3.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.workbench' range='3.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.aries.jmx.api' range='0.3'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.aries.jmx.core' range='0.3'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.jar' range='3.0.0.SNAPSHOT'>
           <filter>
             (org.eclipse.update.install.features=true)
           </filter>
@@ -944,34 +818,34 @@
       <touchpoint id='null' version='0.0.0'/>
       <licenses size='1'>
         <license>
-          Eclipse Public License - v1.0
+          Apache License - 2.0
         </license>
       </licenses>
       <copyright>
-        Copyright (c) 2010 Stephen Evanchik
+        Copyright (c) 2011 - Apache Software Foundation
       </copyright>
     </unit>
-    <unit id='info.evanchik.eclipse.karaf.wtp.feature.feature.jar' version='0.5.2.201109050850'>
+    <unit id='org.apache.karaf.eik.wtp.feature.feature.jar' version='3.0.0.SNAPSHOT'>
       <properties size='8'>
         <property name='org.eclipse.equinox.p2.name' value='%featureName'/>
         <property name='org.eclipse.equinox.p2.description' value='%description'/>
         <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
         <property name='df_LT.featureName' value='Eclipse Web Tools Platform Integration for Apache Karaf'/>
-        <property name='df_LT.providerName' value='Stephen Evanchik'/>
+        <property name='df_LT.providerName' value='Apache Software Foundation'/>
         <property name='df_LT.description' value='Eclipse Web Tools Platform Integration for Apache Karaf'/>
-        <property name='df_LT.copyright' value='Copyright Stephen Evanchik http://stephen.evanchik.com'/>
-        <property name='df_LT.license' value='Eclipse Public License - v1.0'/>
+        <property name='df_LT.copyright' value='Copyright Apache Software Foundation - http://www.apache.org'/>
+        <property name='df_LT.license' value='Apache License - v2.0'/>
       </properties>
       <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.wtp.feature.feature.jar' version='0.5.2.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.feature.feature.jar' version='3.0.0.SNAPSHOT'/>
         <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
-        <provided namespace='org.eclipse.update.feature' name='info.evanchik.eclipse.karaf.wtp.feature' version='0.5.2.201109050850'/>
+        <provided namespace='org.eclipse.update.feature' name='org.apache.karaf.eik.wtp.feature' version='3.0.0.SNAPSHOT'/>
       </provides>
       <filter>
         (org.eclipse.update.install.features=true)
       </filter>
       <artifacts size='1'>
-        <artifact classifier='org.eclipse.update.feature' id='info.evanchik.eclipse.karaf.wtp.feature' version='0.5.2.201109050850'/>
+        <artifact classifier='org.eclipse.update.feature' id='org.apache.karaf.eik.wtp.feature' version='3.0.0.SNAPSHOT'/>
       </artifacts>
       <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
       <touchpointData size='1'>
@@ -990,21 +864,21 @@
         %copyright
       </copyright>
     </unit>
-    <unit id='info.evanchik.eclipse.karaf.wtp.feature.feature.group' version='0.5.2.201109050850' singleton='false'>
-      <update id='info.evanchik.eclipse.karaf.wtp.feature.feature.group' range='[0.0.0,0.5.2.201109050850)' severity='0'/>
+    <unit id='org.apache.karaf.eik.wtp.feature.feature.group' version='3.0.0.SNAPSHOT' singleton='false'>
+      <update id='org.apache.karaf.eik.wtp.feature.feature.group' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='9'>
         <property name='org.eclipse.equinox.p2.name' value='%featureName'/>
         <property name='org.eclipse.equinox.p2.description' value='%description'/>
         <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
         <property name='org.eclipse.equinox.p2.type.group' value='true'/>
         <property name='df_LT.featureName' value='Eclipse Web Tools Platform Integration for Apache Karaf'/>
-        <property name='df_LT.providerName' value='Stephen Evanchik'/>
+        <property name='df_LT.providerName' value='Apache Software Foundation'/>
         <property name='df_LT.description' value='Eclipse Web Tools Platform Integration for Apache Karaf'/>
-        <property name='df_LT.copyright' value='Copyright Stephen Evanchik http://stephen.evanchik.com'/>
-        <property name='df_LT.license' value='Eclipse Public License - v1.0'/>
+        <property name='df_LT.copyright' value='Copyright Apache Software Foundation - http://www.apache.org'/>
+        <property name='df_LT.license' value='Apache License - v2.0'/>
       </properties>
       <provides size='2'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.wtp.feature.feature.group' version='0.5.2.201109050850'/>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.feature.feature.group' version='3.0.0.SNAPSHOT'/>
         <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
       </provides>
       <requires size='20'>
@@ -1017,17 +891,17 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.core.runtime' range='0.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.debug.core' range='[3.2.0,4.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jst.common.project.facet.core' range='1.4.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.osgi.jmx' range='1.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.aries.jmx.api' range='0.3'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.debug.ui' range='[3.2.0,4.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.wst.common.project.facet.ui' range='[1.1.0,2.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.wst.server.ui' range='[1.0.204,2.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jdt.debug.ui' range='[3.2.0,4.0.0)'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.core' range='0.5.2'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.ui' range='0.5.2'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.workbench' range='0.5.2'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.core' range='[0.5.2.201109050850,0.5.2.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.ui' range='[0.5.2.201109050850,0.5.2.201109050850]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.wtp.feature.feature.jar' range='[0.5.2.201109050850,0.5.2.201109050850]'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.core' range='3.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.ui' range='3.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.workbench' range='3.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.core' range='3.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.ui' range='3.0.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.wtp.feature.feature.jar' range='3.0.0'>
           <filter>
             (org.eclipse.update.install.features=true)
           </filter>
@@ -1065,56 +939,9 @@
         <provided namespace='org.eclipse.equinox.p2.iu' name='Eclipse Integration for Apache Karaf' version='1.0.0.0795cSCMY6773553K3C3IC3'/>
       </provides>
       <requires size='1'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.feature.feature.group' range='[0.5.3.201109050850,0.5.3.201109050850]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.feature.feature.group' range='3.0.0.SNAPSHOT'/>
       </requires>
       <touchpoint id='null' version='0.0.0'/>
-    </unit>
-    <unit id='Eclipse Integration for Apache ServiceMix Kernel' version='1.0.0.0791cS7Anh773553K3C3IC3'>
-      <properties size='2'>
-        <property name='org.eclipse.equinox.p2.name' value='Eclipse Integration for Apache ServiceMix Kernel'/>
-        <property name='org.eclipse.equinox.p2.type.category' value='true'/>
-      </properties>
-      <provides size='1'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='Eclipse Integration for Apache ServiceMix Kernel' version='1.0.0.0791cS7Anh773553K3C3IC3'/>
-      </provides>
-      <requires size='1'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.smk.feature.feature.group' range='[0.5.1.201109050850,0.5.1.201109050850]'/>
-      </requires>
-      <touchpoint id='null' version='0.0.0'/>
-    </unit>
-    <unit id='info.evanchik.eclipse.smk' version='0.5.0.201109050850'>
-      <update id='info.evanchik.eclipse.smk' range='[0.0.0,0.5.0.201109050850)' severity='0'/>
-      <properties size='2'>
-        <property name='org.eclipse.equinox.p2.name' value='Eclipse Platform Model for Apache ServiceMix Kernel'/>
-        <property name='org.eclipse.equinox.p2.provider' value='evanchik.info'/>
-      </properties>
-      <provides size='3'>
-        <provided namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.smk' version='0.5.0.201109050850'/>
-        <provided namespace='osgi.bundle' name='info.evanchik.eclipse.smk' version='0.5.0.201109050850'/>
-        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
-      </provides>
-      <requires size='9'>
-        <required namespace='osgi.bundle' name='org.eclipse.ui' range='[3.2.0,4.0.0)'/>
-        <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='[3.1.0,4.0.0)'/>
-        <required namespace='osgi.bundle' name='org.eclipse.debug.ui' range='[3.2.0,4.0.0)'/>
-        <required namespace='osgi.bundle' name='org.eclipse.pde.core' range='[3.2.0,4.0.0)'/>
-        <required namespace='osgi.bundle' name='org.apache.servicemix.kernel.main' range='1.1.0'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.core' range='0.5.0'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.ui' range='0.5.0'/>
-        <required namespace='osgi.bundle' name='org.apache.karaf.eik.workbench' range='0.5.0'/>
-        <required namespace='osgi.bundle' name='info.evanchik.smk.app' range='0.5.0'/>
-      </requires>
-      <artifacts size='1'>
-        <artifact classifier='osgi.bundle' id='info.evanchik.eclipse.smk' version='0.5.0.201109050850'/>
-      </artifacts>
-      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
-      <touchpointData size='1'>
-        <instructions size='1'>
-          <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.core.runtime;bundle-version=&quot;[3.1.0,4.0.0)&quot;,org.eclipse.debug.ui;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.eclipse.pde.core;bundle-version=&quot;[3.2.0,4.0.0)&quot;,org.apache.servicemix.kernel.main;bundle-version=&quot;1.1.0&quot;,org.apache.karaf.eik.core;bundle-version=&quot;0.5.0&quot;,org.apache.karaf.eik.ui;bundle-version=&quot;0.5.0&quot;,org.apache.karaf.eik.workbench;bundle-version=&quot;0.5.0&quot;,info.evanchik.smk.app;bundle-version=&quot;0.5.0&quot;&#xA;Bundle-Activator: info.evanchik.eclipse.smk.internal.ServiceMixKernelActivator&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.5.0.201109050850&#xA;Bundle-SymbolicName: info.evanchik.eclipse.smk;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Eclipse Platform Model for Apache ServiceMix Kernel&#xA;Bundle-Vendor: evanchik.info
-          </instruction>
-        </instructions>
-      </touchpointData>
     </unit>
   </units>
 </repository>

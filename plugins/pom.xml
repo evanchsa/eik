@@ -37,8 +37,8 @@
         <module>org.apache.sshd.core</module>
         <module>org.fusesource.jansi</module>
         <module>org.apache.mina.core</module>
-        <module>org.osgi.jmx</module>
         <module>org.ops4j.pax.url.mvn</module>
+        <module>org.apache.aries.jmx.api</module>
         <module>org.apache.aries.jmx.core</module>
         <module>org.apache.karaf.eik.core</module>
         <module>org.apache.karaf.eik.jmx</module>

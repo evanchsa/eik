@@ -10,32 +10,20 @@
     <rule filter='(&amp; (classifier=binary))' output='${repoUrl}/binary/${id}_${version}'/>
     <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
   </mappings>
-  <artifacts size='20'>
-    <artifact classifier='osgi.bundle' id='org.apache.servicemix.kernel.main' version='1.1.0.201109050850'>
-      <properties size='2'>
-        <property name='artifact.size' value='4096'/>
-        <property name='download.size' value='1696'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.ui' version='0.5.3.201109050850'>
+  <artifacts>
+    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.ui' version='3.0.0.SNAPSHOT'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='1312466'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.wtp.core' version='0.5.2.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.wtp.core' version='3.0.0.SNAPSHOT'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='52863'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='info.evanchik.eclipse.smk' version='0.5.0.201109050850'>
-      <properties size='2'>
-        <property name='artifact.size' value='4096'/>
-        <property name='download.size' value='10698'/>
-      </properties>
-    </artifact>
-    <artifact classifier='org.eclipse.update.feature' id='info.evanchik.eclipse.karaf.wtp.feature' version='0.5.2.201109050850'>
+    <artifact classifier='org.eclipse.update.feature' id='org.apache.karaf.eik.wtp.feature' version='3.0.0.SNAPSHOT'>
       <properties size='2'>
         <property name='download.contentType' value='application/zip'/>
         <property name='download.size' value='967'/>
@@ -47,85 +35,73 @@
         <property name='download.size' value='1693579'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.app' version='0.5.0.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.app' version='3.0.0.SNAPSHOT'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='35987'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.osgi.jmx' version='1.0.0.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.aries.jmx.api' version='0.3'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='20981'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.apache.mina.core' version='2.0.0'>
+    <artifact classifier='osgi.bundle' id='org.apache.mina.core' version='2.0.1'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='3110440'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.jmx' version='0.5.0.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.jmx' version='3.0.0.SNAPSHOT'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='7217'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.core' version='0.5.3.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.core' version='3.0.0.SNAPSHOT'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='74064'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.fusesource.jansi' version='1.5.0'>
+    <artifact classifier='osgi.bundle' id='org.fusesource.jansi' version='1.7.0'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='226302'/>
       </properties>
     </artifact>
-    <artifact classifier='org.eclipse.update.feature' id='info.evanchik.smk.feature' version='0.5.1.201109050850'>
-      <properties size='2'>
-        <property name='download.contentType' value='application/zip'/>
-        <property name='download.size' value='659'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.wtp.ui' version='0.5.2.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.wtp.ui' version='3.0.0.SNAPSHOT'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='37506'/>
       </properties>
     </artifact>
-    <artifact classifier='org.eclipse.update.feature' id='org.apache.karaf.eik.jmx.feature' version='0.5.3.201109050850'>
+    <artifact classifier='org.eclipse.update.feature' id='org.apache.karaf.eik.jmx.feature' version='3.0.0.SNAPSHOT'>
       <properties size='2'>
         <property name='download.contentType' value='application/zip'/>
         <property name='download.size' value='724'/>
       </properties>
     </artifact>
-    <artifact classifier='org.eclipse.update.feature' id='info.evanchik.eclipse.karaf.feature' version='0.5.3.201109050850'>
+    <artifact classifier='org.eclipse.update.feature' id='org.apache.karaf.eik.feature' version='3.0.0.SNAPSHOT'>
       <properties size='2'>
         <property name='download.contentType' value='application/zip'/>
         <property name='download.size' value='1066'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.apache.aries.jmx.core' version='1.0.0.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.aries.jmx.core' version='0.3'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='94607'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.ops4j.pax.url.mvn' version='1.3.2'>
+    <artifact classifier='osgi.bundle' id='org.ops4j.pax.url.mvn' version='1.2.8'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='2331713'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='info.evanchik.smk.app' version='0.5.0.201109050850'>
-      <properties size='2'>
-        <property name='artifact.size' value='4096'/>
-        <property name='download.size' value='18515'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.workbench' version='0.5.3.201109050850'>
+    <artifact classifier='osgi.bundle' id='org.apache.karaf.eik.workbench' version='3.0.0.SNAPSHOT'>
       <properties size='2'>
         <property name='artifact.size' value='4096'/>
         <property name='download.size' value='130643'/>

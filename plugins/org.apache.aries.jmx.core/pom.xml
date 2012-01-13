@@ -34,26 +34,6 @@
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Apache Aries JMX Integration Wrapper</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.aries.jmx</groupId>
-            <artifactId>org.apache.aries.jmx.core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.aries.jmx</groupId>
-            <artifactId>org.apache.aries.jmx.core</artifactId>
-            <version>${project.version}</version>
-            <classifier>javadoc</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.aries.jmx</groupId>
-            <artifactId>org.apache.aries.jmx.core</artifactId>
-            <version>${project.version}</version>
-            <classifier>sources</classifier>
-        </dependency>
-    </dependencies>
-
     <build>
         <resources>
             <resource>

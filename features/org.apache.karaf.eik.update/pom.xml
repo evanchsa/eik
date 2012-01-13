@@ -36,6 +36,71 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.apache.aries.jmx.api</artifactId>
+                                    <version>${aries.jmx.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.apache.aries.jmx.core</artifactId>
+                                    <version>${aries.jmx.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.fusesource.jansi</artifactId>
+                                    <version>${jansi.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.ops4j.pax.url.mvn</artifactId>
+                                    <version>${pax.url.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>sshd-core</artifactId>
+                                    <version>${sshd.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.features</groupId>
+                                    <artifactId>org.apache.karaf.eik.feature</artifactId>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>features</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.features</groupId>
+                                    <artifactId>org.apache.karaf.eik.jmx.feature</artifactId>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>features</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.features</groupId>
+                                    <artifactId>org.apache.karaf.eik.wtp.feature</artifactId>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>features</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>target-platform-configuration</artifactId>
                 <version>${tycho-version}</version>
@@ -66,6 +131,20 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>plugins</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>features</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
         </plugins>
     </build>

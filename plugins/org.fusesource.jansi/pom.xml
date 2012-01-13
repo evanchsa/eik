@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.fusesource.jansi</artifactId>
-    <version>1.7</version>
+    <version>${jansi.version}</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Jansi Wrapper</name>
 
@@ -59,20 +59,20 @@
                                 <artifactItem>
                                     <groupId>org.fusesource.jansi</groupId>
                                     <artifactId>jansi</artifactId>
-                                    <version>${project.version}</version>
+                                    <version>${jansi.version}</version>
                                     <outputDirectory>lib</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.fusesource.jansi</groupId>
                                     <artifactId>jansi</artifactId>
-                                    <version>${project.version}</version>
+                                    <version>${jansi.version}</version>
                                     <classifier>sources</classifier>
                                     <outputDirectory>lib</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.fusesource.jansi</groupId>
                                     <artifactId>jansi</artifactId>
-                                    <version>${project.version}</version>
+                                    <version>${jansi.version}</version>
                                     <classifier>javadoc</classifier>
                                     <outputDirectory>lib</outputDirectory>
                                 </artifactItem>

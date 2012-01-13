@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.apache.aries.jmx.core</artifactId>
-    <version>0.3</version>
+    <version>${aries.jmx.version}</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Apache Aries JMX Integration Wrapper</name>
 
@@ -59,20 +59,20 @@
                                 <artifactItem>
                                     <groupId>org.apache.aries.jmx</groupId>
                                     <artifactId>org.apache.aries.jmx.core</artifactId>
-                                    <version>${project.version}</version>
+                                    <version>${aries.jmx.version}</version>
                                     <outputDirectory>lib</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.aries.jmx</groupId>
                                     <artifactId>org.apache.aries.jmx.core</artifactId>
-                                    <version>${project.version}</version>
+                                    <version>${aries.jmx.version}</version>
                                     <classifier>sources</classifier>
                                     <outputDirectory>lib</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.aries.jmx</groupId>
                                     <artifactId>org.apache.aries.jmx.core</artifactId>
-                                    <version>${project.version}</version>
+                                    <version>${aries.jmx.version}</version>
                                     <classifier>javadoc</classifier>
                                     <outputDirectory>lib</outputDirectory>
                                 </artifactItem>

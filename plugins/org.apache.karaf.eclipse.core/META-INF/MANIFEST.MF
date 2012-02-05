@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
  org.jdom;bundle-version="1.0.0",
  org.apache.mina.core;bundle-version="2.0.0",
  org.fusesource.jansi;bundle-version="1.5.0",
- sshd-core;bundle-version="0.5.0"
+ sshd-core;bundle-version="0.5.0",
+ org.junit4;bundle-version="4.8.0";resolution:=optional
 Export-Package: org.apache.karaf.eclipse.core,
  org.apache.karaf.eclipse.core.equinox,
  org.apache.karaf.eclipse.core.features,

@@ -17,13 +17,13 @@
  */
 package org.apache.karaf.eclipse.core.model;
 
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.KarafWorkingPlatformModel;
-
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.karaf.eclipse.core.KarafPlatformDetails;
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.core.KarafWorkingPlatformModel;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.osgi.service.resolver.State;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
@@ -91,6 +91,11 @@ public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel implem
     @Override
     public IPath getPluginRootDirectory() {
         return parentKarafModel.getPluginRootDirectory();
+    }
+
+    @Override
+    public KarafPlatformDetails getPlatformDetails() {
+        return parentKarafModel.getPlatformDetails();
     }
 
     @Override

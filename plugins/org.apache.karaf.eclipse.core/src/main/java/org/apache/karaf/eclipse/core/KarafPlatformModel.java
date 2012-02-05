@@ -57,6 +57,14 @@ public interface KarafPlatformModel extends IAdaptable {
     public IPath getConfigurationDirectory();
 
     /**
+     * Getter for the {@link KarafPlatformDetails} that describes general
+     * properties of this Karaf platform
+     *
+     * @return the {@code KarafPlatformDetails}
+     */
+    public KarafPlatformDetails getPlatformDetails();
+
+    /**
      * Getter for the root directory of Karaf platform
      *
      * @return the {@link IPath} to the root directory of the Karaf platform

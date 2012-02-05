@@ -17,13 +17,12 @@
  */
 package org.apache.karaf.eclipse.core.model;
 
-import org.apache.karaf.eclipse.core.KarafPlatformDetails;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import org.apache.karaf.eclipse.core.KarafPlatformDetails;
+import org.eclipse.core.runtime.IPath;
 import org.osgi.framework.Constants;
 
 /**
@@ -32,82 +31,108 @@ import org.osgi.framework.Constants;
  */
 public class GenericKarafPlatformDetails implements KarafPlatformDetails {
 
-    private static final String UNKNOWN_VERSION = "Unknown version";
+    static final String UNKNOWN_VERSION = "Unknown version";
 
-    private static final String UNKNOWN_PLATFORM = "Unknown platform";
+    static final String UNKNOWN_PLATFORM = "Unknown platform";
 
-    private final JarFile platformDetailsBundle;
+    private final String description;
+
+    private final String name;
+
+    private final String version;
 
     /**
      *
-     * @param file
+     *
+     * @param jarFilePath
+     * @return
+     * @throws IOException
      */
-    public GenericKarafPlatformDetails(final File file) throws IOException {
-        this.platformDetailsBundle = new JarFile(file);
+    static GenericKarafPlatformDetails create(final IPath jarFilePath) throws IOException {
+        final JarFile platformDetailsBundle = new JarFile(jarFilePath.toFile());
+        try {
+            final Manifest manifest = platformDetailsBundle.getManifest();
+            if (manifest == null) {
+                return new GenericKarafPlatformDetails(UNKNOWN_PLATFORM, UNKNOWN_PLATFORM, UNKNOWN_VERSION);
+            } else {
+                final String bundleName = safeGetString(manifest.getMainAttributes().getValue(Constants.BUNDLE_NAME), UNKNOWN_PLATFORM);
+                final String bundleDescription = safeGetString(manifest.getMainAttributes().getValue(Constants.BUNDLE_DESCRIPTION), UNKNOWN_PLATFORM);
+                final String bundleVersion = safeGetString(manifest.getMainAttributes().getValue(Constants.BUNDLE_VERSION), UNKNOWN_VERSION);
+
+                return new GenericKarafPlatformDetails(bundleName, bundleDescription, bundleVersion);
+            }
+        } finally {
+            try {
+                if (platformDetailsBundle != null) {
+                    platformDetailsBundle.close();
+                }
+            } catch (final IOException ex) {
+                // Intentionally left blank
+            }
+        }
+    }
+
+    /**
+     * Constructor
+     *
+     * @param name
+     *            the name of the Karaf platform
+     * @param description
+     *            the description of the Karaf platform
+     * @param version
+     *            the version of the Karaf platform
+     */
+    GenericKarafPlatformDetails(final String name, final String description, final String version) {
+        if (name == null) {
+            throw new NullPointerException("name");
+        }
+
+        if (description == null) {
+            throw new NullPointerException("description");
+        }
+
+        if (version == null) {
+            throw new NullPointerException("version");
+        }
+
+        this.name = name;
+        this.description = description;
+        this.version = version;
     }
 
     @Override
     public String getDescription() {
-        final String description;
-        try {
-            final Manifest manifest = platformDetailsBundle.getManifest();
-            if (manifest == null) {
-                description = "";
-            } else {
-                final String bundleDescription = manifest.getMainAttributes().getValue(Constants.BUNDLE_DESCRIPTION);
-                if (bundleDescription == null) {
-                    description = "";
-                } else {
-                    description = bundleDescription;
-                }
-            }
-        } catch (final IOException e) {
-            return "";
-        }
-
         return description;
     }
 
     @Override
     public String getName() {
-        final String name;
-        try {
-            final Manifest manifest = platformDetailsBundle.getManifest();
-            if (manifest == null) {
-                name = UNKNOWN_PLATFORM;
-            } else {
-                final String bundleName = manifest.getMainAttributes().getValue(Constants.BUNDLE_NAME);
-                if (bundleName == null) {
-                    name = UNKNOWN_PLATFORM;
-                } else {
-                    name = bundleName;
-                }
-            }
-        } catch (final IOException e) {
-            return UNKNOWN_PLATFORM;
-        }
-
         return name;
     }
 
     @Override
     public String getVersion() {
-        final String version;
-        try {
-            final Manifest manifest = platformDetailsBundle.getManifest();
-            if (manifest == null) {
-                version = UNKNOWN_VERSION;
-            } else {
-                final String bundleVersion = manifest.getMainAttributes().getValue(Constants.BUNDLE_VERSION);
-                if (bundleVersion == null) {
-                    version = UNKNOWN_VERSION;
-                } else {
-                    version = bundleVersion;
-                }
-            }
-        } catch (final IOException e) {
-            return UNKNOWN_VERSION;
-        }
         return version;
+    }
+
+    /**
+     * Examines the requested {@code String} input for {@code null} values and
+     * returns the non-{@code null} fallback value
+     *
+     * @param requestedValue
+     *            a potentially {@code null} {@code String}
+     * @param fallbackValue
+     *            the non-{@code null} alternative if the requested
+     *            {@code String} is {@code null}
+     * @return a {@code String} and never {@code null}
+     */
+    private static String safeGetString(final String requestedValue, final String fallbackValue) {
+        assert fallbackValue != null;
+
+        if (requestedValue == null) {
+            return fallbackValue;
+        } else {
+            return requestedValue;
+        }
     }
 }

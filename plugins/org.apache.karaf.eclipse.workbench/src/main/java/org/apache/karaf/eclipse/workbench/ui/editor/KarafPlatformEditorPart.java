@@ -69,7 +69,7 @@ public class KarafPlatformEditorPart extends FormEditor implements KarafEditor {
 
         setPartName(karafEditorInput.getName());
 
-        platformDetails = (KarafPlatformDetails) karafPlatform.getAdapter(KarafPlatformDetails.class);
+        platformDetails = karafPlatform.getPlatformDetails();
     }
 
     @Override

@@ -57,13 +57,7 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
 
     @Override
     public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapterType) {
-        final Object adaptedObject;
-        if (adapterType == KarafPlatformDetails.class) {
-            adaptedObject = adaptKarafPlatformDetails();
-        } else {
-            adaptedObject = Platform.getAdapterManager().getAdapter(this, adapterType);
-        }
-
+        final Object adaptedObject = Platform.getAdapterManager().getAdapter(this, adapterType);
         return adaptedObject;
     }
 
@@ -92,6 +86,22 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
     @Override
     public IPath getPluginRootDirectory() {
         return rootPlatformPath.append("system"); //$NON-NLS-1$
+    }
+
+    @Override
+    public KarafPlatformDetails getPlatformDetails() {
+        try {
+            if(KarafCorePluginUtils.isServiceMix(this)) {
+                return GenericKarafPlatformDetails.create(getRootDirectory().append("lib").append("servicemix.jar")); // $NON-NLS-1$ $NON-NLS-2$
+            } else if (KarafCorePluginUtils.isFelixKaraf(this) || KarafCorePluginUtils.isKaraf(this)) {
+                return GenericKarafPlatformDetails.create(getRootDirectory().append("lib").append("karaf.jar")); // $NON-NLS-1$ $NON-NLS-2$
+            } else {
+                throw new AssertionError("Unknown Karaf platform");
+            }
+        } catch (final IOException e) {
+            // throw something
+            return null;
+        }
     }
 
     @Override
@@ -142,26 +152,5 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
                         MAX_SEARCH_DEPTH);
 
         return filesToUrls(jarFiles);
-    }
-
-    /**
-     * @return
-     */
-    private Object adaptKarafPlatformDetails() {
-        final Object adaptedObject;
-        try {
-            if(KarafCorePluginUtils.isServiceMix(this)) {
-                final File file = getRootDirectory().append("lib").append("servicemix.jar").toFile();
-                adaptedObject = new GenericKarafPlatformDetails(file); // $NON-NLS-2$
-            } else if (KarafCorePluginUtils.isFelixKaraf(this) || KarafCorePluginUtils.isKaraf(this)) {
-                final File file = getRootDirectory().append("lib").append("karaf.jar").toFile();
-                adaptedObject = new GenericKarafPlatformDetails(file); // $NON-NLS-2$
-            } else {
-                adaptedObject = null;
-            }
-        } catch (final IOException e) {
-            return null;
-        }
-        return adaptedObject;
     }
 }

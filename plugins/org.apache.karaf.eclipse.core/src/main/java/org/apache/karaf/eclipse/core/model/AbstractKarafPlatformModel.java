@@ -17,13 +17,12 @@
  */
 package org.apache.karaf.eclipse.core.model;
 
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.SystemBundleNames;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.core.SystemBundleNames;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.osgi.service.resolver.BundleDescription;
@@ -45,13 +44,15 @@ abstract public class AbstractKarafPlatformModel implements KarafPlatformModel {
     private PDEState pdeState;
 
     /**
-     * The list of bundles that are contained withing this platform
+     * The list of bundles that are contained within this platform
      */
     private final List<URL> bundleList = new ArrayList<URL>();
 
     private final Object monitor = new Object();
 
-    public boolean containsPlugin(IPluginModelBase plugin) {
+
+    @Override
+    public boolean containsPlugin(final IPluginModelBase plugin) {
         final String symbolicName = plugin.getBundleDescription().getSymbolicName();
 
         final BundleDescription desc = getState().getBundle(symbolicName, null);
@@ -59,14 +60,17 @@ abstract public class AbstractKarafPlatformModel implements KarafPlatformModel {
         return desc != null;
     }
 
+    @Override
     public IPath getConfigurationDirectory() {
         return getRootDirectory().append("etc"); //$NON-NLS-1$
     }
 
+    @Override
     public IPath getUserDeployedDirectory() {
         return getRootDirectory().append("deploy"); //$NON-NLS-1$
     }
 
+    @Override
     public State getState() {
         synchronized (monitor) {
             if (pdeState == null) {
@@ -79,7 +83,8 @@ abstract public class AbstractKarafPlatformModel implements KarafPlatformModel {
         return pdeState.getState();
     }
 
-    public boolean isFrameworkPlugin(IPluginModelBase model) {
+    @Override
+    public boolean isFrameworkPlugin(final IPluginModelBase model) {
         final String symbolicName = model.getBundleDescription().getSymbolicName();
 
         return SystemBundleNames.EQUINOX.toString().equals(symbolicName) || SystemBundleNames.FELIX.toString().equals(symbolicName);

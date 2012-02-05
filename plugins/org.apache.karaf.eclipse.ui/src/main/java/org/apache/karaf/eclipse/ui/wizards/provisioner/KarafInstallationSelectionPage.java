@@ -21,7 +21,6 @@ import org.apache.karaf.eclipse.core.KarafPlatformDetails;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.core.KarafPlatformModelRegistry;
 import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
@@ -181,8 +180,7 @@ public class KarafInstallationSelectionPage extends WizardPage {
                 setErrorMessage(null);
                 setPageComplete(true);
 
-                final KarafPlatformDetails platformDetails =
-                    (KarafPlatformDetails) karafPlatform.getAdapter(KarafPlatformDetails.class);
+                final KarafPlatformDetails platformDetails = karafPlatform.getPlatformDetails();
 
                 platformName.setText(platformDetails.getName());
                 platformVersion.setText(platformDetails.getVersion());

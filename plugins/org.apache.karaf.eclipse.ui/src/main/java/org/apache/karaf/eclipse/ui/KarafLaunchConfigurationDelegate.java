@@ -30,7 +30,6 @@ import java.util.Properties;
 import org.apache.karaf.eclipse.core.IKarafConstants;
 import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.KarafPlatformModelRegistry;
 import org.apache.karaf.eclipse.core.KarafWorkingPlatformModel;
 import org.apache.karaf.eclipse.core.PropertyUtils;
 import org.apache.karaf.eclipse.core.SystemBundleNames;
@@ -267,7 +266,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
     protected void preLaunchCheck(final ILaunchConfiguration configuration, final ILaunch launch, final IProgressMonitor monitor) throws CoreException {
         super.preLaunchCheck(configuration, launch, monitor);
 
-        this.karafPlatform = KarafPlatformModelRegistry.findActivePlatformModel();
+        this.karafPlatform = KarafUIPluginActivator.findActivePlatformModel();
 
         monitor.worked(10);
 

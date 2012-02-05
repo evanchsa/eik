@@ -17,21 +17,17 @@
  */
 package org.apache.karaf.eclipse.core;
 
-import org.apache.karaf.eclipse.core.internal.KarafCorePluginActivator;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.karaf.eclipse.core.internal.KarafCorePluginActivator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
-import org.eclipse.pde.core.plugin.PluginRegistry;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -39,7 +35,7 @@ import org.eclipse.pde.core.plugin.PluginRegistry;
  */
 public final class KarafPlatformModelRegistry {
 
-    private static final String ATT_CLASS = "class";
+    public static final String ATT_CLASS = "class";
 
     private static final String TAG_PLATFORM_MODEL_ITEMTYPE = "model";
 
@@ -49,48 +45,11 @@ public final class KarafPlatformModelRegistry {
 
     /**
      *
-     * @return
-     * @throws CoreException
-     */
-    public static KarafPlatformModel findActivePlatformModel() throws CoreException {
-        final Map<String, IConfigurationElement> triggerBundleMap =
-            getTriggerBundlePlatformFactoryMap();
-
-        for (Map.Entry<String, IConfigurationElement> e : triggerBundleMap.entrySet()) {
-            final String symbolicName = e.getKey();
-
-            IPluginModelBase karafPlatformPlugin = PluginRegistry.findModel(symbolicName);
-
-            if (karafPlatformPlugin == null) {
-                continue;
-            }
-
-            final IConfigurationElement c = e.getValue();
-            final KarafPlatformModelFactory f =
-                (KarafPlatformModelFactory)c.createExecutableExtension(ATT_CLASS);
-
-            final KarafPlatformValidator validator = f.getPlatformValidator();
-
-            IPath modelPath = new Path(karafPlatformPlugin.getInstallLocation()).removeLastSegments(1);
-            while(!modelPath.isEmpty() && !modelPath.isRoot()) {
-                modelPath = modelPath.removeLastSegments(1);
-
-                if (validator.isValid(modelPath)) {
-                    return f.getPlatformModel(modelPath);
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     *
      * @param path
      * @return
      * @throws CoreException
      */
-    public static KarafPlatformModel findPlatformModel(IPath path) throws CoreException {
+    public static KarafPlatformModel findPlatformModel(final IPath path) throws CoreException {
         final KarafPlatformModelFactory factory = findPlatformModelFactory(path);
 
         if (factory == null) {
@@ -105,10 +64,10 @@ public final class KarafPlatformModelRegistry {
      * @param path
      * @return
      */
-    public static KarafPlatformModelFactory findPlatformModelFactory(IPath path) throws CoreException {
+    public static KarafPlatformModelFactory findPlatformModelFactory(final IPath path) throws CoreException {
         final List<KarafPlatformModelFactory> factories = getPlatformModelFactories();
 
-        for (KarafPlatformModelFactory f : factories) {
+        for (final KarafPlatformModelFactory f : factories) {
             if (f.getPlatformValidator().isValid(path)) {
                 return f;
             }
@@ -134,14 +93,14 @@ public final class KarafPlatformModelRegistry {
                                     .getExtensionPoint(KarafCorePluginActivator.PLUGIN_ID, "platformModel")
                                     .getExtensions();
 
-        for (IExtension e : extensions) {
-            for (IConfigurationElement c : e.getConfigurationElements()) {
+        for (final IExtension e : extensions) {
+            for (final IConfigurationElement c : e.getConfigurationElements()) {
 
                 if (!c.getName().equals(TAG_PLATFORM_MODEL_ITEMTYPE)) {
                     continue;
                 }
 
-                KarafPlatformModelFactory f =
+                final KarafPlatformModelFactory f =
                     (KarafPlatformModelFactory)c.createExecutableExtension(ATT_CLASS);
 
 
@@ -180,15 +139,15 @@ public final class KarafPlatformModelRegistry {
                 .getExtensionPoint(KarafCorePluginActivator.PLUGIN_ID, "platformModel")
                 .getExtensions();
 
-        for (IExtension e : extensions) {
-            for (IConfigurationElement c : e.getConfigurationElements()) {
+        for (final IExtension e : extensions) {
+            for (final IConfigurationElement c : e.getConfigurationElements()) {
 
                 if (!c.getName().equals(TAG_PLATFORM_MODEL_ITEMTYPE)) {
                     continue;
                 }
 
-                IConfigurationElement[] children = c.getChildren(TAG_TRIGGER_BUNDLE_ITEMTYPE);
-                for (IConfigurationElement tb : children) {
+                final IConfigurationElement[] children = c.getChildren(TAG_TRIGGER_BUNDLE_ITEMTYPE);
+                for (final IConfigurationElement tb : children) {
                     triggerBundleMap.put(tb.getAttribute(ATT_SYMBOLIC_NAME), c);
                 }
 

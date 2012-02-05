@@ -22,23 +22,12 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.osgi.service.resolver.State;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
 public interface KarafPlatformModel extends IAdaptable {
-
-    /**
-     * Determines if a plugin is in the Karaf Target Platform.
-     *
-     * @param plugin
-     *            the plugin's descriptor
-     * @return true if the plugin is in the Karaf Target Platform, false
-     *         otherwise
-     */
-    public boolean containsPlugin(IPluginModelBase plugin);
 
     /**
      * Gets the list of boot classpath jars for Karaf
@@ -108,16 +97,6 @@ public interface KarafPlatformModel extends IAdaptable {
      *         bundles
      */
     public IPath getUserDeployedDirectory();
-
-    /**
-     * Determines if the specified {@link IPluginModelBase} is a OSGi Framework
-     * provider
-     *
-     * @param model
-     *            the {@link IPluginModelBase} to evaluate
-     * @return true if the plugin model is an OSGi Framework provider
-     */
-    public boolean isFrameworkPlugin(IPluginModelBase model);
 
     /**
      * Determines if the the Karaf platform model is read only.<br>

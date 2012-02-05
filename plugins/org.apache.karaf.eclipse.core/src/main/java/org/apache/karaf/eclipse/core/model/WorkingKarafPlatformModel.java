@@ -26,7 +26,6 @@ import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.core.KarafWorkingPlatformModel;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.osgi.service.resolver.State;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -53,11 +52,6 @@ public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel implem
     public WorkingKarafPlatformModel(final IPath thisModelLocation, final KarafPlatformModel source) {
         this.location = thisModelLocation;
         this.parentKarafModel = source;
-    }
-
-    @Override
-    public boolean containsPlugin(final IPluginModelBase plugin) {
-        return parentKarafModel.containsPlugin(plugin);
     }
 
     @Override
@@ -106,11 +100,6 @@ public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel implem
     @Override
     public State getState() {
         return parentKarafModel.getState();
-    }
-
-    @Override
-    public boolean isFrameworkPlugin(final IPluginModelBase model) {
-        return parentKarafModel.isFrameworkPlugin(model);
     }
 
     /**

@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.KarafPlatformModelRegistry;
 import org.apache.karaf.eclipse.core.features.FeatureResolverImpl;
 import org.apache.karaf.eclipse.core.features.FeaturesRepository;
 import org.apache.karaf.eclipse.ui.configuration.FeaturesSection;
@@ -340,7 +339,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
      * @throws CoreException
      */
     private void initializeKarafPlatformModel() throws CoreException {
-        karafPlatformModel = KarafPlatformModelRegistry.findActivePlatformModel();
+        karafPlatformModel = KarafUIPluginActivator.findActivePlatformModel();
         if (karafPlatformModel == null) {
             throw new CoreException(new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to locate active Karaf Platform Model"));
         }

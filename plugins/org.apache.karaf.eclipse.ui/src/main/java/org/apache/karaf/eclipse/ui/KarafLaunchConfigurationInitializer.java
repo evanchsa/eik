@@ -17,6 +17,10 @@
  */
 package org.apache.karaf.eclipse.ui;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.karaf.eclipse.core.IKarafConstants;
 import org.apache.karaf.eclipse.core.KarafCorePluginUtils;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
@@ -28,11 +32,6 @@ import org.apache.karaf.eclipse.core.model.WorkingKarafPlatformModel;
 import org.apache.karaf.eclipse.ui.configuration.StartupSection;
 import org.apache.karaf.eclipse.ui.internal.WorkbenchServiceExtensions;
 import org.apache.karaf.eclipse.ui.workbench.KarafWorkbenchServiceFactory;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -216,7 +215,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      */
     protected void loadKarafPlatform(final ILaunchConfigurationWorkingCopy configuration) {
         try {
-            this.karafPlatform = KarafPlatformModelRegistry.findActivePlatformModel();
+            this.karafPlatform = KarafUIPluginActivator.findActivePlatformModel();
             this.karafPlatformFactory = KarafPlatformModelRegistry.findPlatformModelFactory(karafPlatform.getRootDirectory());
 
             this.startupSection = (StartupSection) this.karafPlatform.getAdapter(StartupSection.class);

@@ -17,10 +17,21 @@
  */
 package org.apache.karaf.eclipse.ui;
 
-import org.apache.karaf.eclipse.core.LogWrapper;
+import java.util.Map;
 
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.core.KarafPlatformModelFactory;
+import org.apache.karaf.eclipse.core.KarafPlatformModelRegistry;
+import org.apache.karaf.eclipse.core.KarafPlatformValidator;
+import org.apache.karaf.eclipse.core.LogWrapper;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -66,6 +77,43 @@ public class KarafUIPluginActivator extends AbstractUIPlugin {
     public static LogWrapper getLogger() {
         return new LogWrapper(getDefault().getLog(), PLUGIN_ID);
     }
+
+    /**
+    *
+    * @return
+    * @throws CoreException
+    */
+   public static KarafPlatformModel findActivePlatformModel() throws CoreException {
+       final Map<String, IConfigurationElement> triggerBundleMap =
+           KarafPlatformModelRegistry.getTriggerBundlePlatformFactoryMap();
+
+       for (final Map.Entry<String, IConfigurationElement> e : triggerBundleMap.entrySet()) {
+           final String symbolicName = e.getKey();
+
+           final IPluginModelBase karafPlatformPlugin = PluginRegistry.findModel(symbolicName);
+
+           if (karafPlatformPlugin == null) {
+               continue;
+           }
+
+           final IConfigurationElement c = e.getValue();
+           final KarafPlatformModelFactory f =
+               (KarafPlatformModelFactory)c.createExecutableExtension(KarafPlatformModelRegistry.ATT_CLASS);
+
+           final KarafPlatformValidator validator = f.getPlatformValidator();
+
+           IPath modelPath = new Path(karafPlatformPlugin.getInstallLocation()).removeLastSegments(1);
+           while(!modelPath.isEmpty() && !modelPath.isRoot()) {
+               modelPath = modelPath.removeLastSegments(1);
+
+               if (validator.isValid(modelPath)) {
+                   return f.getPlatformModel(modelPath);
+               }
+           }
+       }
+
+       return null;
+   }
 
     /**
      * The constructor

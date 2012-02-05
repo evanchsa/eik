@@ -24,12 +24,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.SystemBundleNames;
 import org.apache.karaf.eclipse.core.internal.StateBuilder;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.State;
-import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.osgi.framework.Bundle;
 
 /**
@@ -46,15 +43,6 @@ public abstract class AbstractKarafPlatformModel implements KarafPlatformModel {
     private final StateBuilder stateBuilder = new StateBuilder();
 
     private final AtomicBoolean stateInitialized = new AtomicBoolean(false);
-
-    @Override
-    public boolean containsPlugin(final IPluginModelBase plugin) {
-        final String symbolicName = plugin.getBundleDescription().getSymbolicName();
-
-        final BundleDescription desc = getState().getBundle(symbolicName, null);
-
-        return desc != null;
-    }
 
     @Override
     public IPath getConfigurationDirectory() {
@@ -77,13 +65,6 @@ public abstract class AbstractKarafPlatformModel implements KarafPlatformModel {
         }
 
         return stateBuilder.getState();
-    }
-
-    @Override
-    public boolean isFrameworkPlugin(final IPluginModelBase model) {
-        final String symbolicName = model.getBundleDescription().getSymbolicName();
-
-        return SystemBundleNames.EQUINOX.toString().equals(symbolicName) || SystemBundleNames.FELIX.toString().equals(symbolicName);
     }
 
     /**

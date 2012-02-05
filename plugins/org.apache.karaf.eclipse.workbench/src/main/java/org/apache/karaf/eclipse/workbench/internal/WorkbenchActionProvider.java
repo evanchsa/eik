@@ -21,7 +21,6 @@ import org.apache.karaf.eclipse.ui.IKarafProject;
 import org.apache.karaf.eclipse.workbench.KarafWorkbenchActivator;
 import org.apache.karaf.eclipse.workbench.ui.editor.KarafPlatformEditorInput;
 import org.apache.karaf.eclipse.workbench.ui.editor.KarafPlatformEditorPart;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -64,6 +63,10 @@ public class WorkbenchActionProvider extends CommonActionProvider {
 
                 final IProject project = (IProject) element;
                 final IKarafProject karafProject = (IKarafProject) project.getAdapter(IKarafProject.class);
+                if (karafProject == null) {
+                    return;
+                }
+
                 final IEditorInput editorInput = new KarafPlatformEditorInput(karafProject);
 
                 try {

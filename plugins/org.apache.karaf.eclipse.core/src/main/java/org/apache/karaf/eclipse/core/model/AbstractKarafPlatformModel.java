@@ -40,7 +40,7 @@ public abstract class AbstractKarafPlatformModel implements KarafPlatformModel {
      */
     private final List<URL> bundleList = new ArrayList<URL>();
 
-    private final StateBuilder stateBuilder = new StateBuilder();
+    private StateBuilder stateBuilder;
 
     private final AtomicBoolean stateInitialized = new AtomicBoolean(false);
 
@@ -57,6 +57,7 @@ public abstract class AbstractKarafPlatformModel implements KarafPlatformModel {
     @Override
     public State getState() {
         if (stateInitialized.compareAndSet(false, true)) {
+            stateBuilder = new StateBuilder();
             final List<URL> platformBundles = getPlatformBundles();
             for (final URL bundle : platformBundles) {
                 bundleList.add(bundle);

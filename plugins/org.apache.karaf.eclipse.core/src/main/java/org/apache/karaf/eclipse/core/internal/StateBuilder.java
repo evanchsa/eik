@@ -47,11 +47,7 @@ public class StateBuilder {
 
     private static final long ADD_NEW_BUNDLE_ID = -1;
 
-    private static final StateObjectFactory stateObjectFactory;
-
-    static {
-        stateObjectFactory = Platform.getPlatformAdmin().getFactory();
-    }
+    private final StateObjectFactory stateObjectFactory;
 
     private final AtomicLong nextBundleId = new AtomicLong();
 
@@ -61,7 +57,7 @@ public class StateBuilder {
      *
      */
     public StateBuilder() {
-        state = stateObjectFactory.createState(false);
+        this(false);
     }
 
     /**
@@ -69,6 +65,7 @@ public class StateBuilder {
      * @param resolve
      */
     public StateBuilder(final boolean resolve) {
+        stateObjectFactory = Platform.getPlatformAdmin().getFactory();
         state = stateObjectFactory.createState(resolve);
     }
 

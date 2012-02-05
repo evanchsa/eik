@@ -17,39 +17,35 @@
  */
 package org.apache.karaf.eclipse.core.model;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.core.SystemBundleNames;
+import org.apache.karaf.eclipse.core.internal.StateBuilder;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.State;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
-import org.eclipse.pde.internal.core.PDEState;
 import org.osgi.framework.Bundle;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-@SuppressWarnings("restriction")
-abstract public class AbstractKarafPlatformModel implements KarafPlatformModel {
-
-    /**
-     * The detailed OSGi metadata regarding the state of this model
-     */
-    private PDEState pdeState;
+public abstract class AbstractKarafPlatformModel implements KarafPlatformModel {
 
     /**
      * The list of bundles that are contained within this platform
      */
     private final List<URL> bundleList = new ArrayList<URL>();
 
-    private final Object monitor = new Object();
+    private final StateBuilder stateBuilder = new StateBuilder();
 
+    private final AtomicBoolean stateInitialized = new AtomicBoolean(false);
 
     @Override
     public boolean containsPlugin(final IPluginModelBase plugin) {
@@ -72,15 +68,15 @@ abstract public class AbstractKarafPlatformModel implements KarafPlatformModel {
 
     @Override
     public State getState() {
-        synchronized (monitor) {
-            if (pdeState == null) {
-                bundleList.addAll(getPlatformBundles());
-
-                pdeState = new PDEState(bundleList.toArray(new URL[0]), false, new NullProgressMonitor());
+        if (stateInitialized.compareAndSet(false, true)) {
+            final List<URL> platformBundles = getPlatformBundles();
+            for (final URL bundle : platformBundles) {
+                bundleList.add(bundle);
+                stateBuilder.add(new File(bundle.getFile()));
             }
         }
 
-        return pdeState.getState();
+        return stateBuilder.getState();
     }
 
     @Override

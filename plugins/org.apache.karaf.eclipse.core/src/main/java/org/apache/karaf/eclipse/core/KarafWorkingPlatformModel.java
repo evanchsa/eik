@@ -17,11 +17,21 @@
  */
 package org.apache.karaf.eclipse.core;
 
+import org.eclipse.core.runtime.IPath;
+
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
 public interface KarafWorkingPlatformModel extends KarafPlatformModel {
+
+    /**
+     * Getter for the working {@link IPath} of this
+     * {@code KarafWorkingPlatformModel}
+     *
+     * @return the working {@code IPath}
+     */
+    public IPath getWorkingPath();
 
     /**
      * Retrieves the parent {@link KarafPlatformModel} that this working model

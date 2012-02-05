@@ -102,6 +102,11 @@ public class WorkingKarafPlatformModel extends AbstractKarafPlatformModel implem
         return parentKarafModel.getState();
     }
 
+    @Override
+    public IPath getWorkingPath() {
+        return location;
+    }
+
     /**
      * While the source {@link KarafPlatformModel} may be read-only this working
      * copy is not.

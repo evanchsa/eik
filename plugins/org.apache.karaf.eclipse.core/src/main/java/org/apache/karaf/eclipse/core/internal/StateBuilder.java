@@ -57,10 +57,17 @@ public class StateBuilder {
 
     private final State state;
 
+    /**
+     *
+     */
     public StateBuilder() {
         state = stateObjectFactory.createState(false);
     }
 
+    /**
+     *
+     * @param resolve
+     */
     public StateBuilder(final boolean resolve) {
         state = stateObjectFactory.createState(resolve);
     }
@@ -88,16 +95,31 @@ public class StateBuilder {
         return false;
     }
 
+    /**
+     *
+     * @param bundles
+     */
     public void addAll(final Collection<File> bundles) {
         for (final File f : bundles) {
             add(f);
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public State getState() {
         return state;
     }
 
+    /**
+     *
+     * @param manifest
+     * @param bundleLocation
+     * @param requestedBundleId
+     * @return
+     */
     private BundleDescription addBundle(final Map<Object, Object> manifest, final File bundleLocation, final long requestedBundleId) {
         try {
             final Hashtable<Object, Object> dictionary = new Hashtable<Object, Object>();
@@ -124,7 +146,6 @@ public class StateBuilder {
             }
 
             return descriptor;
-
         } catch (final BundleException e) {
             // Intentionally left blank
         } catch (final NumberFormatException e) {
@@ -136,10 +157,29 @@ public class StateBuilder {
         return null;
     }
 
-    private boolean isBundle(final Map<?, ?> manifest) {
-        return manifest != null && manifest.get(Constants.BUNDLE_SYMBOLICNAME) != null;
+    /**
+     *
+     * @param manifest
+     * @return
+     */
+    private String getBundleSymbolicName(final Map<?, ?> manifest) {
+        return (String) manifest.get(Constants.BUNDLE_SYMBOLICNAME);
     }
 
+    /**
+     *
+     * @param manifest
+     * @return
+     */
+    private boolean isBundle(final Map<?, ?> manifest) {
+        return manifest != null && getBundleSymbolicName(manifest) != null;
+    }
+
+    /**
+     *
+     * @param bundleLocation
+     * @return
+     */
     private boolean isSupportedArchive(final File bundleLocation) {
         if (!bundleLocation.isFile()) {
             return false;
@@ -149,24 +189,12 @@ public class StateBuilder {
         }
     }
 
-    /*
-    protected void saveState(File dir) {
-        saveState(fState, dir);
-    }
-
-    protected void saveState(State state, File dir) {
-        try {
-            if (!dir.exists())
-                dir.mkdirs();
-            stateObjectFactory.writeState(state, dir);
-        } catch (FileNotFoundException e) {
-            PDECore.log(e);
-        } catch (IOException e) {
-            PDECore.log(e);
-        } finally {
-        }
-    }
-*/
+    /**
+     *
+     * @param bundleLocation
+     * @return
+     * @throws IOException
+     */
     private Map<Object, Object> loadManifest(final File bundleLocation) throws IOException {
         ZipFile jarFile = null;
 

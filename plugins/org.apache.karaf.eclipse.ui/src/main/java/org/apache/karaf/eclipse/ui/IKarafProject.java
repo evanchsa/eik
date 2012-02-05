@@ -47,7 +47,7 @@ public interface IKarafProject extends IAdaptable {
      * {@code KarafPlatformModel} to which this {@code IKarafProject} is
      * attached
      */
-    public static final IPath ROOT_PLATFORM_PATH = ROOT_PATH.append("platform");
+    public static final IPath ROOT_PLATFORM_PATH = new Path("platform");
 
     /**
      * Returns a handle to the named file within this {@code IKarafProject}

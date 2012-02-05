@@ -489,7 +489,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
 
             // TODO: This should be factored out somehow
             final IKarafProject karafProject = (IKarafProject) karafPlatform.getAdapter(IKarafProject.class);
-            final IFile file = karafProject.getFile(".bin/runtime/generatedKaraf.jar");
+            final IFile file = karafProject.getFile("runtime/generatedKaraf.jar");
             final IPath path = file.getRawLocation();
             filteredKarafJar = path.toFile();
         }

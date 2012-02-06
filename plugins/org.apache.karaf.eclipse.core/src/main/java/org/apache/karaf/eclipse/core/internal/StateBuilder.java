@@ -18,32 +18,24 @@
 package org.apache.karaf.eclipse.core.internal;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-import org.eclipse.core.runtime.Path;
+import org.apache.karaf.eclipse.core.AbstractStateBuilder;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.State;
 import org.eclipse.osgi.service.resolver.StateObjectFactory;
-import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
  *
  */
-public class StateBuilder {
+public class StateBuilder extends AbstractStateBuilder {
 
     private static final long ADD_NEW_BUNDLE_ID = -1;
 
@@ -74,6 +66,7 @@ public class StateBuilder {
      * @param bundleLocation
      * @return
      */
+    @Override
     public boolean add(final File bundleLocation) {
         try {
             final Map<Object, Object> manifest = loadManifest(bundleLocation);
@@ -96,6 +89,7 @@ public class StateBuilder {
      *
      * @param bundles
      */
+    @Override
     public void addAll(final Collection<File> bundles) {
         for (final File f : bundles) {
             add(f);
@@ -106,7 +100,9 @@ public class StateBuilder {
      *
      * @return
      */
-    public State getState() {
+
+    @Override
+    public State build() {
         return state;
     }
 
@@ -149,88 +145,6 @@ public class StateBuilder {
             // Intentionally left blank
         } catch (final IllegalArgumentException e) {
             // Intentionally left blank
-        }
-
-        return null;
-    }
-
-    /**
-     *
-     * @param manifest
-     * @return
-     */
-    private String getBundleSymbolicName(final Map<?, ?> manifest) {
-        return (String) manifest.get(Constants.BUNDLE_SYMBOLICNAME);
-    }
-
-    /**
-     *
-     * @param manifest
-     * @return
-     */
-    private boolean isBundle(final Map<?, ?> manifest) {
-        return manifest != null && getBundleSymbolicName(manifest) != null;
-    }
-
-    /**
-     *
-     * @param bundleLocation
-     * @return
-     */
-    private boolean isSupportedArchive(final File bundleLocation) {
-        if (!bundleLocation.isFile()) {
-            return false;
-        } else {
-            final String extension = new Path(bundleLocation.getName()).getFileExtension();
-            return "jar".equals(extension) || "war".equals(extension); //$NON-NLS-1$ $NON-NLS-2$
-        }
-    }
-
-    /**
-     *
-     * @param bundleLocation
-     * @return
-     * @throws IOException
-     */
-    private Map<Object, Object> loadManifest(final File bundleLocation) throws IOException {
-        ZipFile jarFile = null;
-
-        InputStream manifestStream = null;
-
-        try {
-            if (isSupportedArchive(bundleLocation)) {
-                jarFile = new ZipFile(bundleLocation, ZipFile.OPEN_READ);
-                final ZipEntry manifestEntry = jarFile.getEntry(JarFile.MANIFEST_NAME);
-                if (manifestEntry != null) {
-                    manifestStream = jarFile.getInputStream(manifestEntry);
-                }
-            } else {
-                final File file = new File(bundleLocation, JarFile.MANIFEST_NAME);
-                if (file.exists()) {
-                    manifestStream = new FileInputStream(file);
-                }
-            }
-        } catch (final IOException e) {
-            // Intentionally left blank
-        }
-
-        if (manifestStream == null) {
-            return null;
-        }
-
-        try {
-            @SuppressWarnings("unchecked")
-            final Map<Object, Object> theMap = ManifestElement.parseBundleManifest(manifestStream, new HashMap<Object, Object>());
-            return theMap;
-        } catch (final BundleException e) {
-            // Intentionally left blank
-        } finally {
-            try {
-                if (jarFile != null) {
-                    jarFile.close();
-                }
-            } catch (final IOException e) {
-            }
         }
 
         return null;

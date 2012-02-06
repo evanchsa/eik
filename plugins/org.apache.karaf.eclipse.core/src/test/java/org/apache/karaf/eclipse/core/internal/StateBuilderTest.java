@@ -46,8 +46,8 @@ public class StateBuilderTest extends KarafTestCase {
         final StateBuilder stateBuilder = new StateBuilder();
         stateBuilder.addAll(jars);
 
-        final BundleDescription systemBundle = stateBuilder.getState().getBundle(SystemBundleNames.EQUINOX.toString(), null);
-        final BundleDescription karafFeaturesCoreBundle = stateBuilder.getState().getBundle("org.apache.karaf.features.core", null);
+        final BundleDescription systemBundle = stateBuilder.build().getBundle(SystemBundleNames.EQUINOX.toString(), null);
+        final BundleDescription karafFeaturesCoreBundle = stateBuilder.build().getBundle("org.apache.karaf.features.core", null);
 
         Assert.assertEquals(SystemBundleNames.EQUINOX.toString(), systemBundle.getSymbolicName());
         Assert.assertEquals("org.apache.karaf.features.core", karafFeaturesCoreBundle.getSymbolicName());

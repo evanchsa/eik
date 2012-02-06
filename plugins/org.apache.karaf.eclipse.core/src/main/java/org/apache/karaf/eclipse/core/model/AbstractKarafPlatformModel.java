@@ -65,7 +65,7 @@ public abstract class AbstractKarafPlatformModel implements KarafPlatformModel {
             }
         }
 
-        return stateBuilder.getState();
+        return stateBuilder.build();
     }
 
     /**

@@ -17,10 +17,6 @@
  */
 package org.apache.karaf.eclipse.ui.project.impl;
 
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.ui.IKarafProject;
-import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,7 +31,11 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.ui.IKarafProject;
+import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -51,9 +51,10 @@ public class FilteredOsgiFrameworkJarBuildUnit extends AbstractKarafBuildUnit {
     /**
      * @param karafPlatformModel
      * @param karafProject
+     * @param projectBuilder
      */
-    public FilteredOsgiFrameworkJarBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject) {
-        super(karafPlatformModel, karafProject);
+    public FilteredOsgiFrameworkJarBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject, final IncrementalProjectBuilder projectBuilder) {
+        super(karafPlatformModel, karafProject, projectBuilder);
     }
 
     @Override

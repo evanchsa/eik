@@ -20,6 +20,7 @@ package org.apache.karaf.eclipse.ui.project.impl;
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.ui.IKarafProject;
 import org.apache.karaf.eclipse.ui.project.KarafBuildUnit;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 
 /**
  * @author Stephen Evanchik (evanchsa@gmail.com)
@@ -31,14 +32,18 @@ public abstract class AbstractKarafBuildUnit implements KarafBuildUnit {
 
     private final IKarafProject karafProject;
 
+    private final IncrementalProjectBuilder incrementalProjectBuilder;
+
     /**
      *
      * @param karafPlatformModel
      * @param karafProject
+     * @param projectBuilder
      */
-    public AbstractKarafBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject) {
+    public AbstractKarafBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject, final IncrementalProjectBuilder projectBuilder) {
         this.karafPlatformModel = karafPlatformModel;
         this.karafProject = karafProject;
+        this.incrementalProjectBuilder = projectBuilder;
     }
 
     protected final KarafPlatformModel getKarafPlatformModel() {
@@ -47,5 +52,9 @@ public abstract class AbstractKarafBuildUnit implements KarafBuildUnit {
 
     protected final IKarafProject getKarafProject() {
         return karafProject;
+    }
+
+    protected final IncrementalProjectBuilder getProjectBuilder() {
+        return incrementalProjectBuilder;
     }
 }

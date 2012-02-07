@@ -35,5 +35,6 @@ public interface KarafBuildUnit {
      * @param monitor
      * @throws CoreException
      */
-    public void build(final int kind, @SuppressWarnings("rawtypes") final Map args, final IProgressMonitor monitor) throws CoreException;
+    public void build(int kind, @SuppressWarnings("rawtypes") Map args, IProgressMonitor monitor) throws CoreException;
+
 }

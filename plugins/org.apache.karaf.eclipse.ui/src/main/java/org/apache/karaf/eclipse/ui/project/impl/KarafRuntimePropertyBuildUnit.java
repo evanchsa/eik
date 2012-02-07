@@ -29,6 +29,7 @@ import org.apache.karaf.eclipse.core.PropertyUtils;
 import org.apache.karaf.eclipse.ui.IKarafProject;
 import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -42,8 +43,14 @@ import org.eclipse.core.runtime.Status;
  */
 public class KarafRuntimePropertyBuildUnit extends AbstractKarafBuildUnit {
 
-    public KarafRuntimePropertyBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject) {
-        super(karafPlatformModel, karafProject);
+    /**
+     *
+     * @param karafPlatformModel
+     * @param karafProject
+     * @param projectBuilder
+     */
+    public KarafRuntimePropertyBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject, final IncrementalProjectBuilder projectBuilder) {
+        super(karafPlatformModel, karafProject, projectBuilder);
     }
 
     @Override

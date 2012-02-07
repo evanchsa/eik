@@ -17,14 +17,14 @@
  */
 package org.apache.karaf.eclipse.ui.project.impl;
 
+import java.util.Map;
+
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.ui.IKarafProject;
 import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
 import org.apache.karaf.eclipse.ui.internal.PopulateObrFileJob;
-
-import java.util.Map;
-
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -40,9 +40,10 @@ public class PopulateObrFileBuildUnit extends AbstractKarafBuildUnit {
     /**
      * @param karafPlatformModel
      * @param karafProject
+     * @param projectBuilder
      */
-    public PopulateObrFileBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject) {
-        super(karafPlatformModel, karafProject);
+    public PopulateObrFileBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject, final IncrementalProjectBuilder projectBuilder) {
+        super(karafPlatformModel, karafProject, projectBuilder);
     }
 
     @Override

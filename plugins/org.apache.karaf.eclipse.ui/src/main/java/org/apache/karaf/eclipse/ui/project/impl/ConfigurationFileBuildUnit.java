@@ -17,9 +17,6 @@
  */
 package org.apache.karaf.eclipse.ui.project.impl;
 
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.ui.IKarafProject;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,7 +24,10 @@ import java.io.FilenameFilter;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.ui.IKarafProject;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -41,9 +41,10 @@ public class ConfigurationFileBuildUnit extends AbstractKarafBuildUnit {
      *
      * @param karafPlatformModel
      * @param karafProject
+     * @param projectBuilder
      */
-    public ConfigurationFileBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject) {
-        super(karafPlatformModel, karafProject);
+    public ConfigurationFileBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject, final IncrementalProjectBuilder projectBuilder) {
+        super(karafPlatformModel, karafProject, projectBuilder);
     }
 
     /**

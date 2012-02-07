@@ -17,21 +17,21 @@
  */
 package org.apache.karaf.eclipse.ui.project.impl;
 
-import org.apache.karaf.eclipse.core.KarafPlatformModel;
-import org.apache.karaf.eclipse.core.features.FeaturesRepository;
-import org.apache.karaf.eclipse.ui.IKarafProject;
-import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
-import org.apache.karaf.eclipse.ui.configuration.FeaturesSection;
-import org.apache.karaf.eclipse.ui.features.FeaturesResolverJob;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.karaf.eclipse.core.KarafPlatformModel;
+import org.apache.karaf.eclipse.core.features.FeaturesRepository;
+import org.apache.karaf.eclipse.ui.IKarafProject;
+import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
+import org.apache.karaf.eclipse.ui.configuration.FeaturesSection;
+import org.apache.karaf.eclipse.ui.features.FeaturesResolverJob;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,9 +48,10 @@ public class FeaturesRepositoriesBuildUnit extends AbstractKarafBuildUnit {
     /**
      * @param karafPlatformModel
      * @param karafProject
+     * @param projectBuilder
      */
-    public FeaturesRepositoriesBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject) {
-        super(karafPlatformModel, karafProject);
+    public FeaturesRepositoriesBuildUnit(final KarafPlatformModel karafPlatformModel, final IKarafProject karafProject, final IncrementalProjectBuilder projectBuilder) {
+        super(karafPlatformModel, karafProject, projectBuilder);
     }
 
     @Override

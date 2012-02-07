@@ -17,9 +17,8 @@
  */
 package org.apache.karaf.eclipse.core.features;
 
-import org.apache.karaf.eclipse.core.features.internal.ElementTransformer;
-
 import org.apache.commons.collections.Transformer;
+import org.apache.karaf.eclipse.core.features.internal.ElementTransformer;
 import org.jdom.Element;
 
 /**
@@ -31,7 +30,11 @@ public final class Bundle implements ParentAwareObject<Object> {
 
     private final String bundleUrl;
 
+    private final Boolean dependency;
+
     private final Element element;
+
+    private final String startLevel;
 
     /**
      *
@@ -43,6 +46,9 @@ public final class Bundle implements ParentAwareObject<Object> {
             throw new IllegalArgumentException("bundle element is invalid: " + element.toString());
         }
 
+        this.dependency = Boolean.parseBoolean(element.getAttributeValue("dependency"));
+        this.startLevel = element.getAttributeValue("start-level");
+
         this.element = element;
     }
 
@@ -50,10 +56,18 @@ public final class Bundle implements ParentAwareObject<Object> {
         return bundleUrl;
     }
 
+    public Boolean isDependency() {
+        return dependency;
+    }
+
     @Override
     public Object getParent() {
         final Transformer transformer = new ElementTransformer();
         return transformer.transform(element.getParentElement());
+    }
+
+    public String getStartLevel() {
+        return startLevel;
     }
 
     @Override

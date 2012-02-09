@@ -67,6 +67,8 @@ public class FeaturesManagementBlock {
 
         private final String feature;
 
+        private final String featureVersion;
+
         private final String featuresRepository;
 
         /**
@@ -80,6 +82,7 @@ public class FeaturesManagementBlock {
             }
 
             this.feature = feature.getName();
+            this.featureVersion = feature.getVersion();
 
             if (featuresRepository != null) {
                 this.featuresRepository = featuresRepository.getName();
@@ -95,6 +98,7 @@ public class FeaturesManagementBlock {
          */
         public AvailableFeature(final String feature, final String featuresRepository) {
             this.feature = feature;
+            this.featureVersion = "";
             this.featuresRepository = featuresRepository;
         }
 
@@ -129,7 +133,7 @@ public class FeaturesManagementBlock {
         }
 
         public String getFeatureVersion() {
-            return feature;
+            return featureVersion;
         }
 
         public String getRepositoryName() {

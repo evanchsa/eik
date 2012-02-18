@@ -48,5 +48,15 @@
          </triggerBundle>
       </model>
    </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.apache.karaf.eclipse.core.internal.JavaFilePropertyTester"
+            id="org.apache.karaf.eclipse.core.javaFilePropertyTester"
+            namespace="org.apache.karaf.eclipse.core"
+            properties="name,directory,extension"
+            type="java.io.File">
+      </propertyTester>
+   </extension>
 
 </plugin>

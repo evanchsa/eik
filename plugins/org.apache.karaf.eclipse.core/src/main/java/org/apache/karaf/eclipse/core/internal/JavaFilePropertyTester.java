@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  */
-package org.apache.karaf.eclipse.ui.internal;
+package org.apache.karaf.eclipse.core.internal;
 
 import java.io.File;
 

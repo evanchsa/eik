@@ -210,16 +210,6 @@
       </viewerContentBinding>
    </extension>
    <extension
-         point="org.eclipse.core.expressions.propertyTesters">
-      <propertyTester
-            class="org.apache.karaf.eclipse.ui.internal.JavaFilePropertyTester"
-            id="org.apache.karaf.eclipse.ui.javaFilePropertyTester"
-            namespace="org.apache.karaf.eclipse.ui"
-            properties="name,directory,extension"
-            type="java.io.File">
-      </propertyTester>
-   </extension>
-   <extension
          id="karafProjectBuilder"
          name="Apache Karaf Builder"
          point="org.eclipse.core.resources.builders">
@@ -228,6 +218,21 @@
                class="org.apache.karaf.eclipse.ui.project.KarafProjectBuilder">
          </run>
       </builder>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+            class="org.apache.karaf.eclipse.ui.KarafClasspathContainerInitializer"
+            id="org.apache.karaf.eclipse.ui.karafPlugins">
+      </classpathContainerInitializer>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.ui.classpathContainerPage">
+      <classpathContainerPage
+            class="org.apache.karaf.eclipse.ui.internal.KarafClasspathContainerPage"
+            id="org.apache.karaf.eclipse.ui.karafPluginsContainerPage"
+            name="Apache Karaf">
+      </classpathContainerPage>
    </extension>
 
 </plugin>

@@ -73,6 +73,7 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
 
         return bootClasspath;
     }
+
     @Override
     public IPath getConfigurationDirectory() {
         return rootPlatformPath.append("etc"); //$NON-NLS-1$

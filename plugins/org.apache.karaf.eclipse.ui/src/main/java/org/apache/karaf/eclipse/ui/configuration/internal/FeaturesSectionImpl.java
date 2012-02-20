@@ -51,7 +51,7 @@ public class FeaturesSectionImpl extends AbstractPropertiesConfigurationSection
     }
 
     @Override
-    public List<String> getBootFeatureNames() {
+    public List<String> getFeaturesBoot() {
         final String rawBootFeatures = getProperties().getProperty(FEATURES_BOOT_KEY);
         if (rawBootFeatures == null || rawBootFeatures.trim().isEmpty()) {
             return Collections.emptyList();
@@ -63,7 +63,7 @@ public class FeaturesSectionImpl extends AbstractPropertiesConfigurationSection
     }
 
     @Override
-    public List<String> getRepositoryList() {
+    public List<String> getFeaturesRepositories() {
         final String rawRepositories = (String) getProperties().get(FEATURES_REPOSITORIES_KEY);
         if (rawRepositories == null || rawRepositories.trim().isEmpty()) {
             return Collections.emptyList();
@@ -75,14 +75,14 @@ public class FeaturesSectionImpl extends AbstractPropertiesConfigurationSection
     }
 
     @Override
-    public void setBootFeatureNames(final List<String> bootFeatures) {
+    public void setFeaturesBoot(final List<String> bootFeatures) {
         final String property = KarafCorePluginUtils.join(bootFeatures, ","); // $NON-NLS-1$
 
         getProperties().setProperty(FEATURES_BOOT_KEY, property);
     }
 
     @Override
-    public void setRepositoryList(final List<String> featuresRepositories) {
+    public void setFeaturesRepositories(final List<String> featuresRepositories) {
         final String property = KarafCorePluginUtils.join(featuresRepositories, ","); // $NON-NLS-1$
 
         getProperties().setProperty(FEATURES_REPOSITORIES_KEY, property);

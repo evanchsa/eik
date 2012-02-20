@@ -131,7 +131,7 @@ public class FeaturesManagementForm extends SectionPart {
         super.commit(onSave);
 
         if (onSave) {
-            featuresSection.setBootFeatureNames(featuresManagementBlock.getBootFeatures());
+            featuresSection.setFeaturesBoot(featuresManagementBlock.getBootFeatures());
             featuresSection.save();
         }
     }
@@ -230,7 +230,7 @@ public class FeaturesManagementForm extends SectionPart {
 
         featureRepositoriesViewer.setContentProvider(new FeatureRepositoryContentProvider());
         featureRepositoriesViewer.setLabelProvider(new LabelProvider());
-        featureRepositoriesViewer.setInput(featuresSection.getRepositoryList());
+        featureRepositoriesViewer.setInput(featuresSection.getFeaturesRepositories());
 
         final RowLayout rowLayout = new RowLayout(SWT.HORIZONTAL);
         rowLayout.spacing = 8;
@@ -308,9 +308,9 @@ public class FeaturesManagementForm extends SectionPart {
                 KarafUIPluginActivator.getLogger().warn("Unable to load Feature Section for Karaf model: " + karafPlatformModel);
             }
 
-            featureRepositories.addAll(featuresSection.getRepositoryList());
+            featureRepositories.addAll(featuresSection.getFeaturesRepositories());
 
-            final List<String> bootFeaturesList = featuresSection.getBootFeatureNames();
+            final List<String> bootFeaturesList = featuresSection.getFeaturesBoot();
             for (final String feature : bootFeaturesList) {
                 if (!feature.isEmpty() && !featuresManagementBlock.containsBootFeature(feature)) {
                     featuresManagementBlock.addBootFeature(feature);

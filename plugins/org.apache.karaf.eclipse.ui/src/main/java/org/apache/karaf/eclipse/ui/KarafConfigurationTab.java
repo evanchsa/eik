@@ -200,7 +200,7 @@ public class KarafConfigurationTab extends AbstractLaunchConfigurationTab {
         final FeaturesSection featuresSection = (FeaturesSection) karafPlatformModel.getAdapter(FeaturesSection.class);
         featuresSection.load();
 
-        final List<String> featuresList = featuresSection.getBootFeatureNames();
+        final List<String> featuresList = featuresSection.getFeaturesBoot();
 
         final String features = KarafCorePluginUtils.join(featuresList, ",");
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_BOOT_FEATURES, features);

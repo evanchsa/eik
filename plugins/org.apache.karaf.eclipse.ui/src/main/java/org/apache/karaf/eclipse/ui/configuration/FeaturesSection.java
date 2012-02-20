@@ -29,23 +29,23 @@ public interface FeaturesSection  extends ConfigurationSection {
      *
      * @return
      */
-    public List<String> getBootFeatureNames();
+    public List<String> getFeaturesBoot();
 
     /**
      *
      * @return
      */
-    public List<String> getRepositoryList();
+    public List<String> getFeaturesRepositories();
 
     /**
      *
      * @param bootFeatureNames
      */
-    public void setBootFeatureNames(List<String> bootFeatureNames);
+    public void setFeaturesBoot(List<String> bootFeatureNames);
 
     /**
      *
-     * @param repositoryList
+     * @param featuresRepositoryList
      */
-    public void setRepositoryList(List<String> repositoryList);
+    public void setFeaturesRepositories(List<String> featuresRepositoryList);
 }

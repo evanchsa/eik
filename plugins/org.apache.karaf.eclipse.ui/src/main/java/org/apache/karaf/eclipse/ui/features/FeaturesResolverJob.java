@@ -96,7 +96,7 @@ public final class FeaturesResolverJob extends Job {
     protected IStatus run(final IProgressMonitor monitor) {
         if (featuresSection != null) {
             featuresSection.load();
-            featureRepositoryList.addAll(featuresSection.getRepositoryList());
+            featureRepositoryList.addAll(featuresSection.getFeaturesRepositories());
         }
 
         featuresRepositories.clear();

@@ -451,7 +451,7 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         final List<String> features = new ArrayList<String>();
         Collections.addAll(features, bootFeaturesArray);
 
-        featuresSection.setBootFeatureNames(features);
+        featuresSection.setFeaturesBoot(features);
         featuresSection.save();
     }
 

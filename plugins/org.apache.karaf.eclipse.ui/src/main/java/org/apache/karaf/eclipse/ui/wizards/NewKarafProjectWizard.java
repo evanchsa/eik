@@ -17,6 +17,8 @@
  */
 package org.apache.karaf.eclipse.ui.wizards;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.karaf.eclipse.core.KarafPlatformModel;
 import org.apache.karaf.eclipse.core.KarafWorkingPlatformModel;
 import org.apache.karaf.eclipse.core.model.WorkingKarafPlatformModel;
@@ -25,9 +27,6 @@ import org.apache.karaf.eclipse.ui.KarafUIPluginActivator;
 import org.apache.karaf.eclipse.ui.project.KarafProject;
 import org.apache.karaf.eclipse.ui.project.NewKarafProjectOperation;
 import org.apache.karaf.eclipse.ui.wizards.provisioner.KarafInstallationSelectionPage;
-
-import java.lang.reflect.InvocationTargetException;
-
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -94,8 +93,10 @@ public class NewKarafProjectWizard extends Wizard implements INewWizard {
 
                 return true;
             } catch (final InvocationTargetException e) {
+                KarafUIPluginActivator.getLogger().error("Unable to create Apache Karaf project", e);
                 return false;
             } catch (final InterruptedException e) {
+                KarafUIPluginActivator.getLogger().warn("Interrupted while creating Apache Karaf project", e);
                 return false;
             }
         } else {

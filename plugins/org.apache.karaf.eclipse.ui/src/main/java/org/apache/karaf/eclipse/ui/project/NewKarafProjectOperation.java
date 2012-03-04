@@ -100,7 +100,9 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         monitor.worked(1);
 
         createKarafPlatformResources(monitor);
-        createDefaultKarafLaunchConfiguration(monitor);
+
+        // Disabled because the Karaf Target Platform is not set at this point
+        // createDefaultKarafLaunchConfiguration(monitor);
 
         monitor.worked(1);
 
@@ -144,6 +146,7 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
      *             thrown if there is a problem creating the
      *             {@code ILaunchConfiguration}
      */
+    @SuppressWarnings("unused") // Temporarily located in this file
     private void createDefaultKarafLaunchConfiguration(final IProgressMonitor monitor) throws CoreException {
         final ILaunchConfigurationType launchType =
             DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType("org.eclipse.pde.ui.EquinoxLauncher");

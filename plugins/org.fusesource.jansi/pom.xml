@@ -25,7 +25,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.karaf.eclipse</groupId>
   <artifactId>org.fusesource.jansi</artifactId>
-  <version>1.5</version>
+  <version>1.5.0</version>
   <packaging>eclipse-plugin</packaging>
   <name>Eclipse Integration for Karaf :: jansi wrapper</name>
   <description>jansi Wrapper bundle</description>

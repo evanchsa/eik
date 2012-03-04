@@ -28,7 +28,7 @@
   <version>0.5.3-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
   <name>Eclipse Integration for Karaf :: Core Eclipse Integration</name>
-  <description>Provides core functionalty for Eclipse Integration</description>
+  <description>Provides core functionality for Eclipse Integration</description>
   <build>
     <resources>
       <resource>

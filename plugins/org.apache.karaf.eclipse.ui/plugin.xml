@@ -219,20 +219,4 @@
          </run>
       </builder>
    </extension>
-   <extension
-         point="org.eclipse.jdt.core.classpathContainerInitializer">
-      <classpathContainerInitializer
-            class="org.apache.karaf.eclipse.ui.KarafClasspathContainerInitializer"
-            id="org.apache.karaf.eclipse.ui.karafPlugins">
-      </classpathContainerInitializer>
-   </extension>
-   <extension
-         point="org.eclipse.jdt.ui.classpathContainerPage">
-      <classpathContainerPage
-            class="org.apache.karaf.eclipse.ui.internal.KarafClasspathContainerPage"
-            id="org.apache.karaf.eclipse.ui.karafPluginsContainerPage"
-            name="Apache Karaf">
-      </classpathContainerPage>
-   </extension>
-
 </plugin>

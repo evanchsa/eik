@@ -327,9 +327,11 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      * @param classpath
      *            the boot classpath
      */
-    private void augmentClasspathWithEquinox(final List<String> classpath) {
-        final IPath frameworkPath =
-            new Path(karafPlatform.getState().getBundle(SystemBundleNames.EQUINOX.toString(), null).getLocation());
+    private void augmentClasspathWithEquinox(final List<String> classpath) throws CoreException {
+        final BundleDescription karafEquinox = karafPlatform.getState().getBundle(SystemBundleNames.EQUINOX.toString(), null);
+        final Bundle internalWorkbenchEquinox = Platform.getBundle(SystemBundleNames.EQUINOX.toString());
+
+        final IPath frameworkPath = chooseEquinoxBundleLocation(karafEquinox, internalWorkbenchEquinox);
 
         classpath.add(frameworkPath.toFile().getAbsolutePath());
     }
@@ -422,7 +424,9 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
      * Choose the most recent version of Equinox.
      *
      * @param karafEquinox
-     *            the Equinox bundle found in the Karaf installation
+     *            the Equinox bundle found in the Karaf installation; this can
+     *            be null in which case the Eclipse workbench Equinox bundle
+     *            will be used
      * @param internalWorkbenchEquinox
      *            the Eclipse workbench Equinox bundle
      * @return an {@link IPath} to the most recent version of Equinox
@@ -435,7 +439,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
         final IPath frameworkPath;
 
         // Use the newest version of Equinox regardless as to where it comes from
-        if (internalWorkbenchEquinox.getVersion().compareTo(karafEquinox.getVersion()) > 0) {
+        if (karafEquinox == null || internalWorkbenchEquinox.getVersion().compareTo(karafEquinox.getVersion()) > 0) {
             // Use the Eclipse workbench's Equinox
             try {
                 final File f = FileLocator.getBundleFile(internalWorkbenchEquinox);

@@ -108,5 +108,31 @@
          </includes>
       </viewerActionBinding>
    </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.apache.karaf.eclipse.workbench.properties.KarafPlatformPropertyPage"
+            icon="icons/obj16/karaf-logo-16x16.png"
+            id="org.apache.karaf.eclipse.workbench.properties.karafPlatform"
+            name="Apache Karaf"
+            nameFilter="*.*">
+         <enabledWhen>
+            <adapt
+                  type="org.apache.karaf.eclipse.ui.IKarafProject">
+            </adapt>
+         </enabledWhen>
+      </page>
+      <page
+            category="org.apache.karaf.eclipse.workbench.properties.karafPlatform"
+            class="org.apache.karaf.eclipse.workbench.properties.RuntimePropertiesPage"
+            id="org.apache.karaf.eclipse.workbench.properties.karafRuntimeProperties"
+            name="Runtime Properties">
+         <enabledWhen>
+            <adapt
+                  type="org.apache.karaf.eclipse.ui.IKarafProject">
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
 
 </plugin>

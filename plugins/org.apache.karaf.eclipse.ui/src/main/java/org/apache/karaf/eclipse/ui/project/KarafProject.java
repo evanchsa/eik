@@ -63,8 +63,10 @@ public class KarafProject extends PlatformObject implements IKarafProject {
     private final IProject project;
 
     /**
+     * Constructs a {@link KarafProject} from {@code IKarafProject}
      *
      * @param project
+     *            the workbench {@code IProject}
      */
     public KarafProject(final IProject project) {
         this.project = project;
@@ -134,9 +136,10 @@ public class KarafProject extends PlatformObject implements IKarafProject {
     public Properties getRuntimeProperties() {
         try {
             return KarafCorePluginUtils.loadProperties(
-                    project.getFolder("runtime").getRawLocation().toFile(),
+                    getFolder("runtime").getRawLocation().toFile(),
                     "runtime.properties");
         } catch (final CoreException e) {
+            KarafUIPluginActivator.getLogger().warn("Unable to retrieve runtime properties", e);
             return new Properties();
         }
     }

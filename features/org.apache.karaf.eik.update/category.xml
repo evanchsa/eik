@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.apache.karaf.eik.smk.feature_3.0.0.qualifier.jar" id="org.apache.karaf.eik.smk.feature" version="3.0.0.qualifier">
-      <category name="Eclipse Integration for Apache ServiceMix Kernel"/>
-   </feature>
    <feature url="features/org.apache.karaf.eik.wtp.feature_3.0.0.qualifier.jar" id="org.apache.karaf.eik.wtp.feature" version="3.0.0.qualifier">
       <category name="Eclipse Web Tools Platform Integration for Apache Karaf"/>
    </feature>

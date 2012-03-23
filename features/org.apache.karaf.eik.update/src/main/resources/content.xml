@@ -327,8 +327,8 @@
         <provided namespace='org.eclipse.equinox.p2.iu' name='Eclipse Integration for Apache Karaf' version='1.0.0.07I7AcSCL8F7E7AA7g7Q7cQ7'/>
       </provides>
       <requires size='2'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.feature.feature.group' range='[3.0.0.SNAPSHOT,3.0.0.SNAPSHOT]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.group' range='[3.0.0.SNAPSHOT,3.0.0.SNAPSHOT]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.feature.feature.group' version='3.0.0.SNAPSHOT'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.jmx.feature.feature.group' version='3.0.0.SNAPSHOT'/>
       </requires>
       <touchpoint id='null' version='0.0.0'/>
     </unit>
@@ -865,7 +865,6 @@
       </copyright>
     </unit>
     <unit id='org.apache.karaf.eik.wtp.feature.feature.group' version='3.0.0.SNAPSHOT' singleton='false'>
-      <update id='org.apache.karaf.eik.wtp.feature.feature.group' range='[0.0.0,3.0.0.SNAPSHOT)' severity='0'/>
       <properties size='9'>
         <property name='org.eclipse.equinox.p2.name' value='%featureName'/>
         <property name='org.eclipse.equinox.p2.description' value='%description'/>
@@ -926,7 +925,7 @@
         <provided namespace='org.eclipse.equinox.p2.iu' name='Eclipse Web Tools Platform Integration for Apache Karaf' version='1.0.0.0793cSCLAF773553K3C3IC3'/>
       </provides>
       <requires size='1'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.wtp.feature.feature.group' range='[0.5.2.201109050850,0.5.2.201109050850]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.feature.feature.group' version='3.0.0-SNAPSHOT'/>
       </requires>
       <touchpoint id='null' version='0.0.0'/>
     </unit>
@@ -939,7 +938,7 @@
         <provided namespace='org.eclipse.equinox.p2.iu' name='Eclipse Integration for Apache Karaf' version='1.0.0.0795cSCMY6773553K3C3IC3'/>
       </provides>
       <requires size='1'>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.feature.feature.group' range='3.0.0.SNAPSHOT'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.feature.feature.group' version='3.0.0.SNAPSHOT'/>
       </requires>
       <touchpoint id='null' version='0.0.0'/>
     </unit>

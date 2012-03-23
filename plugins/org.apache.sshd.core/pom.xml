@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>sshd-core</artifactId>
-    <version>${sshd.version}</version>
+    <version>0.5.0</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Apache SSH Wrapper</name>
 

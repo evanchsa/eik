@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.apache.aries.jmx.core</artifactId>
-    <version>${aries.jmx.version}</version>
+    <version>0.3</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Apache Aries JMX Integration Wrapper</name>
 

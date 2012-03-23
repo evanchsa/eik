@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.ops4j.pax.url.mvn</artifactId>
-    <version>${pax.url.version}</version>
+    <version>1.2.8</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: PAX URL MVN Wrapper</name>
 

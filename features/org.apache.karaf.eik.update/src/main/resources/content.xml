@@ -165,7 +165,7 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.debug.ui' range='[3.2.0,4.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.jdt.launching' range='[3.2.0,4.0.0)'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.pde.ui' range='[3.6.0,4.0.0)'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.ops4j.pax.url.mvn' range='1.3.0'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.ops4j.pax.url.mvn' range='1.2.8'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.mina.core' range='2.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.fusesource.jansi' range='1.7.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='sshd-core' range='0.5.0'/>

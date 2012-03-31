@@ -46,8 +46,6 @@ public class NewKarafProjectWizard extends Wizard implements INewWizard {
 
     private IStructuredSelection selection;
 
-    private IWorkbench workbench;;
-
     /**
      *
      */
@@ -72,7 +70,6 @@ public class NewKarafProjectWizard extends Wizard implements INewWizard {
 
     @Override
     public void init(final IWorkbench workbench, final IStructuredSelection selection) {
-        this.workbench = workbench;
         this.selection = selection;
     }
 

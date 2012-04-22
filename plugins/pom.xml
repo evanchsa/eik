@@ -42,7 +42,6 @@
         <module>org.apache.karaf.eclipse.workbench</module>
         <module>org.apache.karaf.eclipse.wtp.core</module>
         <module>org.apache.karaf.eclipse.wtp.ui</module>
-        <module>org.apache.karaf.eclipse.app</module>
         <module>org.apache.karaf.eclipse.smk</module>
         <module>org.apache.karaf.eclipse.app.smk</module>
         <module>org.apache.felix.eclipse</module>

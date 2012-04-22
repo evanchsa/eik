@@ -338,11 +338,11 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
                 platformModel.getParentKarafModel().getRootDirectory().toString());
 
         final StringBuffer vmArgs = new StringBuffer();
-        if (vmArgs.indexOf("-Declipse.application") == -1) { //$NON-NLS-1$
+        if (vmArgs.indexOf("-Declipse.ignoreApp") == -1) { //$NON-NLS-1$
             if (vmArgs.length() > 0) {
                 vmArgs.append(" "); //$NON-NLS-1$
             }
-            vmArgs.append(" -Declipse.application=org.apache.karaf.eclipse.app.KarafMain"); //$NON-NLS-1$
+            vmArgs.append(" -Declipse.ignoreApp=true"); //$NON-NLS-1$
         }
 
         try {

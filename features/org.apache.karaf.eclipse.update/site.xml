@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.apache.karaf.eclipse.smk.feature_0.5.1.201108281051.jar" id="org.apache.karaf.eclipse.smk.feature" version="0.5.1.201108281051">
-      <category name="Eclipse Integration for Apache ServiceMix Kernel"/>
-   </feature>
    <feature url="features/org.apache.karaf.eclipse.feature_0.5.3.201108281051.jar" id="org.apache.karaf.eclipse.feature" version="0.5.3.201108281051">
       <category name="Eclipse Integration for Apache Karaf"/>
    </feature>
@@ -15,11 +12,6 @@
    <category-def name="Eclipse Integration for Apache Karaf" label="Eclipse Integration for Apache Karaf">
       <description>
          Core functionality required to integrate Apache Karaf family of application servers inside the Eclipse IDE.
-      </description>
-   </category-def>
-   <category-def name="Eclipse Integration for Apache ServiceMix Kernel" label="Eclipse Integration for Apache ServiceMix Kernel">
-      <description>
-         Functionality required to execute application server distributions based on Apache ServiceMix Kernel
       </description>
    </category-def>
    <category-def name="Eclipse Web Tools Platform Integration for Apache Karaf" label="Eclipse Web Tools Platform Integration for Apache Karaf"/>

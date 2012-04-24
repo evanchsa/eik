@@ -215,17 +215,6 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
         }
 
         final String[] bundles = {
-                "org.apache.karaf.eclipse.app", //$NON-NLS-1$
-                "org.eclipse.core.contenttype", //$NON-NLS-1$
-                "org.eclipse.core.jobs", //$NON-NLS-1$
-                "org.eclipse.core.runtime", //$NON-NLS-1$
-                "org.eclipse.core.runtime.compatibility.auth", //$NON-NLS-1$
-                "org.eclipse.equinox.app", //$NON-NLS-1$
-                "org.eclipse.equinox.common", //$NON-NLS-1$
-                "org.eclipse.equinox.registry", //$NON-NLS-1$
-                "org.eclipse.equinox.preferences", //$NON-NLS-1$
-                "org.eclipse.osgi.services", //$NON-NLS-1$
-                "org.eclipse.osgi.util" //$NON-NLS-1$
         };
 
         final List<BundleEntry> bundleEntries = new ArrayList<BundleEntry>();

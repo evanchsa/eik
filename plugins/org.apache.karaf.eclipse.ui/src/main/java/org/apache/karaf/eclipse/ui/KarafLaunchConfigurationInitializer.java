@@ -78,7 +78,10 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
 
     @Override
     public void initialize(final ILaunchConfigurationWorkingCopy configuration) {
-        loadKarafPlatform(configuration);
+        if (!loadKarafPlatform(configuration)) {
+            // Do nothing
+            return;
+        }
 
         final File configDir =
             LaunchConfigurationHelper.getConfigurationArea(configuration);
@@ -213,18 +216,28 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      *
      * @param configuration
      */
-    protected void loadKarafPlatform(final ILaunchConfigurationWorkingCopy configuration) {
+    protected boolean loadKarafPlatform(final ILaunchConfigurationWorkingCopy configuration) {
         try {
             this.karafPlatform = KarafUIPluginActivator.findActivePlatformModel();
+            if (this.karafPlatform == null) {
+                KarafUIPluginActivator.getLogger().warn("Unable to locate the Karaf platform");
+
+                return false;
+            }
+
             this.karafPlatformFactory = KarafPlatformModelRegistry.findPlatformModelFactory(karafPlatform.getRootDirectory());
 
             this.startupSection = (StartupSection) this.karafPlatform.getAdapter(StartupSection.class);
             this.startupSection.load();
+
+            return true;
         } catch (final CoreException e) {
             KarafUIPluginActivator.getLogger().error("Unable to locate the Karaf platform", e);
 
             this.karafPlatform = null;
         }
+
+        return false;
     }
 
     /**

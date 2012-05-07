@@ -54,10 +54,10 @@
   </prerequisites>
   <properties>
     <tycho-version>0.14.0</tycho-version>
-    <platform-version-name>helios</platform-version-name>
+    <platform-version-name>indigo</platform-version-name>
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
     <wikitext-site>http://download.eclipse.org/tools/mylyn/update/weekly</wikitext-site>
-    <swtbot-site>http://download.eclipse.org/technology/swtbot/${platform-version-name}/dev-build/update-site</swtbot-site>
+    <swtbot-site>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</swtbot-site>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
 
     <apache.karaf.version>2.2.2</apache.karaf.version>

@@ -100,8 +100,8 @@ public abstract class AbstractStateBuilder extends PlatformObject implements IKa
         }
 
         try {
-            @SuppressWarnings("unchecked")
-            final Map<Object, Object> theMap = ManifestElement.parseBundleManifest(manifestStream, new HashMap<Object, Object>());
+            @SuppressWarnings(value = { "unchecked", "rawtypes" })
+            final Map<Object, Object> theMap = ManifestElement.parseBundleManifest(manifestStream, new HashMap());
             return theMap;
         } catch (final BundleException e) {
             // Intentionally left blank

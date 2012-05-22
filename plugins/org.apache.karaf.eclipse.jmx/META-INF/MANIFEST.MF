@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JMX Data Exporter for Eclipse Integration for Apache Karaf
 Bundle-SymbolicName: org.apache.karaf.eclipse.jmx
-Bundle-Version: 0.5.0.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: org.apache.karaf.eclipse.jmx.KarafJMXPlugin
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,

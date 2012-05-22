@@ -73,7 +73,7 @@ public abstract class AbstractStateBuilder extends PlatformObject implements IKa
      * @return
      * @throws IOException
      */
-    protected final Map<Object, Object> loadManifest(final File bundleLocation) throws IOException {
+    protected final Map<String, String> loadManifest(final File bundleLocation) throws IOException {
         ZipFile jarFile = null;
 
         InputStream manifestStream = null;
@@ -100,8 +100,8 @@ public abstract class AbstractStateBuilder extends PlatformObject implements IKa
         }
 
         try {
-            @SuppressWarnings(value = { "unchecked", "rawtypes" })
-            final Map<Object, Object> theMap = ManifestElement.parseBundleManifest(manifestStream, new HashMap());
+            @SuppressWarnings(value = { "unchecked" })
+            final Map<String, String> theMap = ManifestElement.parseBundleManifest(manifestStream, new HashMap<String, String>());
             return theMap;
         } catch (final BundleException e) {
             // Intentionally left blank

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.apache.karaf.eclipse.wtp.feature_0.5.2.qualifier.jar" id="org.apache.karaf.eclipse.wtp.feature" version="0.5.2.qualifier">
+   <feature url="features/org.apache.karaf.eclipse.wtp.feature_3.0.0.qualifier.jar" id="org.apache.karaf.eclipse.wtp.feature" version="3.0.0.qualifier">
       <category name="Eclipse Web Tools Platform Integration for Apache Karaf"/>
    </feature>
-   <feature url="features/org.apache.karaf.eclipse.feature_0.5.3.qualifier.jar" id="org.apache.karaf.eclipse.feature" version="0.5.3.qualifier">
+   <feature url="features/org.apache.karaf.eclipse.feature_3.0.0.qualifier.jar" id="org.apache.karaf.eclipse.feature" version="3.0.0.qualifier">
       <category name="Eclipse Integration for Apache Karaf"/>
    </feature>
-   <feature url="features/org.apache.karaf.eclipse.jmx.feature_0.5.3.qualifier.jar" id="org.apache.karaf.eclipse.jmx.feature" version="0.5.3.qualifier">
+   <feature url="features/org.apache.karaf.eclipse.jmx.feature_3.0.0.qualifier.jar" id="org.apache.karaf.eclipse.jmx.feature" version="3.0.0.qualifier">
       <category name="Eclipse Integration for Apache Karaf"/>
    </feature>
    <category-def name="Eclipse Integration for Apache Karaf" label="Eclipse Integration for Apache Karaf"/>

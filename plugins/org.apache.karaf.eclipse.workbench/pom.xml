@@ -20,12 +20,12 @@
   <parent>
     <groupId>org.apache.karaf.eclipse</groupId>
     <artifactId>eik-plugins-parent</artifactId>
-    <version>1.0.0</version>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.karaf.eclipse</groupId>
   <artifactId>org.apache.karaf.eclipse.workbench</artifactId>
-  <version>0.5.3-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
   <name>Eclipse Integration for Karaf :: EIK Workbench</name>
   <description>Advanced Eclipse workbench integration</description>

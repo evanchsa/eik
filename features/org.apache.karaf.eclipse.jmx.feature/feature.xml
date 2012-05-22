@@ -20,7 +20,7 @@
 <feature
       id="org.apache.karaf.eclipse.jmx.feature"
       label="%featureName"
-      version="0.5.3.qualifier"
+      version="3.0.0.qualifier"
       provider-name="%providerName">
 
    <description>
@@ -41,14 +41,14 @@
       <import plugin="org.eclipse.debug.core" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.ui" version="3.2.0" match="compatible"/>
-      <import plugin="org.apache.karaf.eclipse.jmx" version="0.5.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.karaf.eclipse.jmx" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.osgi.services"/>
       <import plugin="org.eclipse.jface.databinding" version="1.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface.text" version="3.6.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.editors" version="3.6.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.forms" version="3.5.2" match="greaterOrEqual"/>
-      <import plugin="org.apache.karaf.eclipse.core" version="0.5.2" match="greaterOrEqual"/>
-      <import plugin="org.apache.karaf.eclipse.ui" version="0.5.2" match="greaterOrEqual"/>
+      <import plugin="org.apache.karaf.eclipse.core" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.karaf.eclipse.ui" version="3.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

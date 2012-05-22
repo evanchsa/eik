@@ -20,7 +20,6 @@ package org.apache.karaf.eclipse.wtp.core;
 import org.apache.karaf.eclipse.core.KarafPlatformModelRegistry;
 import org.apache.karaf.eclipse.ui.KarafLaunchConfigurationInitializer;
 import org.apache.karaf.eclipse.ui.configuration.StartupSection;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
@@ -35,19 +34,22 @@ public class KarafServerLaunchConfigurationInitializer extends KarafLaunchConfig
     private IServer server;
 
     @Override
-    protected void loadKarafPlatform(final ILaunchConfigurationWorkingCopy configuration) {
+    protected boolean loadKarafPlatform(final ILaunchConfigurationWorkingCopy configuration) {
         try {
             server = ServerUtil.getServer(configuration);
 
             if (server == null) {
-                return;
+                return false;
             }
 
             this.karafPlatform = KarafPlatformModelRegistry.findPlatformModel(server.getRuntime().getLocation());
 
             this.startupSection = (StartupSection) this.karafPlatform.getAdapter(StartupSection.class);
             this.startupSection.load();
+
+            return true;
         } catch (final CoreException e) {
+            return false;
         }
     }
 }

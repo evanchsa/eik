@@ -69,7 +69,7 @@ public class StateBuilder extends AbstractStateBuilder {
     @Override
     public boolean add(final File bundleLocation) {
         try {
-            final Map<Object, Object> manifest = loadManifest(bundleLocation);
+            final Map<String, String> manifest = loadManifest(bundleLocation);
 
             if (isBundle(manifest)) {
                 final BundleDescription bundleDescription = addBundle(manifest, bundleLocation, ADD_NEW_BUNDLE_ID);
@@ -113,9 +113,9 @@ public class StateBuilder extends AbstractStateBuilder {
      * @param requestedBundleId
      * @return
      */
-    private BundleDescription addBundle(final Map<Object, Object> manifest, final File bundleLocation, final long requestedBundleId) {
+    private BundleDescription addBundle(final Map<String, String> manifest, final File bundleLocation, final long requestedBundleId) {
         try {
-            final Hashtable<Object, Object> dictionary = new Hashtable<Object, Object>();
+            final Hashtable<String, String> dictionary = new Hashtable<String, String>();
             dictionary.putAll(manifest);
 
             final long bundleId;

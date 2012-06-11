@@ -24,4 +24,3 @@ Export-Package: org.apache.karaf.eik.core,
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.apache.karaf.eik.core.internal.KarafCorePluginActivator
 Bundle-Vendor: Apache Software Foundation
-

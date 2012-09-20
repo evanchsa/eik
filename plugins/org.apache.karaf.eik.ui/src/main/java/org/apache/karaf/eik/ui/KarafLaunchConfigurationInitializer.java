@@ -90,7 +90,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
 
         // TODO: Factor this out so that it pulls the ID from this plugins
         // registry
-        configuration.setAttribute(IPDELauncherConstants.OSGI_FRAMEWORK_ID, "info.evanchik.eclipse.karaf.Framework"); //$NON-NLS-1$
+        configuration.setAttribute(IPDELauncherConstants.OSGI_FRAMEWORK_ID, "org.apache.karaf.eik.Framework"); //$NON-NLS-1$
         configuration.setAttribute(IPDEUIConstants.LAUNCHER_PDE_VERSION, "3.3"); //$NON-NLS-1$
 
         configuration.setAttribute(KarafLaunchConfigurationConstants.KARAF_LAUNCH_SOURCE_RUNTIME, karafPlatform.getRootDirectory().toOSString());

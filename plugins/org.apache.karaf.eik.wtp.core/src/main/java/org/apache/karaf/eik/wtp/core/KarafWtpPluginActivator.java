@@ -35,7 +35,7 @@ public class KarafWtpPluginActivator extends Plugin {
      * The list of runtime type identifiers that this plugin defines
      */
     public static final String[] RUNTIME_TYPE_IDS = new String[] {
-        "info.evanchik.eclipse.karaf.wtp.server.runtime.2"
+        "org.apache.karaf.eik.wtp.server.runtime.2"
     };
 
     // The shared instance

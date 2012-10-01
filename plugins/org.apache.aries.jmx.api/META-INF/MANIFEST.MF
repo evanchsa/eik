@@ -24,5 +24,4 @@ Bundle-DocURL: http://www.apache.org
 Bundle-SymbolicName: org.apache.aries.jmx.api
 Import-Package: javax.management.openmbean
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: lib/org.apache.aries.jmx.api-0.3.jar,
- .
+Bundle-ClassPath: lib/org.apache.aries.jmx.api-0.3.jar,.

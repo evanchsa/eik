@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.apache.karaf.eclipse.wtp.feature_3.0.0.qualifier.jar" id="org.apache.karaf.eclipse.wtp.feature" version="3.0.0.qualifier">
-      <category name="Eclipse Web Tools Platform Integration for Apache Karaf"/>
-   </feature>
    <feature url="features/org.apache.karaf.eclipse.feature_3.0.0.qualifier.jar" id="org.apache.karaf.eclipse.feature" version="3.0.0.qualifier">
       <category name="Eclipse Integration for Apache Karaf"/>
    </feature>
@@ -10,5 +7,4 @@
       <category name="Eclipse Integration for Apache Karaf"/>
    </feature>
    <category-def name="Eclipse Integration for Apache Karaf" label="Eclipse Integration for Apache Karaf"/>
-   <category-def name="Eclipse Web Tools Platform Integration for Apache Karaf" label="Eclipse Web Tools Platform Integration for Apache Karaf"/>
 </site>

@@ -900,7 +900,7 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.workbench' range='3.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.core' range='3.0.0'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.ui' range='3.0.0'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='info.evanchik.eclipse.karaf.wtp.feature.feature.jar' range='3.0.0'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.karaf.eik.wtp.feature.jar' range='3.0.0'>
           <filter>
             (org.eclipse.update.install.features=true)
           </filter>

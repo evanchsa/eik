@@ -26,3 +26,4 @@ Export-Package: org.apache.karaf.eik.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.apache.karaf.eik.ui.KarafUIPluginActivator
 Bundle-Vendor: Apache Software Foundation
+

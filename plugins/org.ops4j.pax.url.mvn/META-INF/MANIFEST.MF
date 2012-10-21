@@ -25,3 +25,4 @@ Import-Package: javax.net.ssl,javax.xml.parsers,org.apache.commons.log
 Bundle-ClassPath: .,
  lib/pax-url-mvn-1.2.8.jar
 Bundle-ActivationPolicy: lazy
+

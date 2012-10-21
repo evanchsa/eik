@@ -26,3 +26,4 @@ Export-Package: org.apache.karaf.eik.workbench,
 Import-Package: javax.management,
  org.apache.aries.jmx.codec;version="0.2.0.incubating",
  org.osgi.jmx.framework;version="1.5.0"
+

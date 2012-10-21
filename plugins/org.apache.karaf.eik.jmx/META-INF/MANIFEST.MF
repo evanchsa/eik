@@ -12,3 +12,4 @@ Import-Package: javax.management,
  org.osgi.framework;version="1.4.0"
 Export-Package: org.apache.karaf.eik.jmx
 Bundle-Vendor: Apache Software Foundation
+

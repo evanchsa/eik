@@ -330,3 +330,4 @@ Import-Package: javax.crypto,
  org.slf4j
 Bundle-ClassPath: lib/mina-core-2.0.1.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+

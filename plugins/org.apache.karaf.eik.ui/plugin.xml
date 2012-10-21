@@ -28,7 +28,7 @@
    <extension
          point="org.eclipse.pde.ui.osgiFrameworks">
       <framework
-            id="info.evanchik.eclipse.karaf.Framework"
+            id="org.apache.karaf.eik.Framework"
             initializer="org.apache.karaf.eik.ui.KarafLaunchConfigurationInitializer"
             launcherDelegate="org.apache.karaf.eik.ui.KarafLaunchConfigurationDelegate"
             name="Apache Karaf on Equinox">
@@ -98,7 +98,7 @@
       </wizard>
    </extension>
    <extension
-         id="info.evanchik.eclipse.karaf.KarafProjectNature"
+         id="org.apache.karaf.eik.KarafProjectNature"
          name="Apache Karaf Project Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
@@ -112,7 +112,7 @@
       <image
             icon="icons/obj16/karaf-logo-nature-16x16.png"
             id="org.apache.karaf.eik.ui.KarafProjectNatureImage"
-            natureId="info.evanchik.eclipse.karaf.KarafProjectNature">
+            natureId="org.apache.karaf.eik.KarafProjectNature">
       </image>
    </extension>
    <extension
@@ -129,7 +129,7 @@
                   type="org.eclipse.core.resources.IProject">
                <test
                      property="org.eclipse.core.resources.projectNature"
-                     value="info.evanchik.eclipse.karaf.KarafProjectNature">
+                     value="org.apache.karaf.eik.KarafProjectNature">
                </test>
             </adapt>
          </triggerPoints>
@@ -146,7 +146,7 @@
                   type="org.eclipse.core.resources.IProject">
                <test
                      property="org.eclipse.core.resources.projectNature"
-                     value="info.evanchik.eclipse.karaf.KarafProjectNature">
+                     value="org.apache.karaf.eik.KarafProjectNature">
                </test>
             </adapt>
          </triggerPoints>

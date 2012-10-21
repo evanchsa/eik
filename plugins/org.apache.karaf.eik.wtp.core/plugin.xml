@@ -6,7 +6,7 @@
       <runtimeType
             class="org.apache.karaf.eik.wtp.core.runtime.KarafRuntime"
             description="Apache Karaf OSGi Application framework"
-            id="info.evanchik.eclipse.karaf.wtp.server.runtime.2"
+            id="org.apache.karaf.eik.wtp.server.runtime.2"
             name="Apache Karaf"
             vendor="Apache"
             vendorId="apache"
@@ -30,15 +30,15 @@
       <runtimeLocator
             class="org.apache.karaf.eik.wtp.core.runtime.KarafRuntimeLocator"
             id="org.apache.karaf.eik.wtp.core.runtimeLocator"
-            typeIds="info.evanchik.eclipse.karaf.wtp.server.runtime.*">
+            typeIds="org.apache.karaf.eik.wtp.server.runtime.*">
       </runtimeLocator>
    </extension>
    <extension
          point="org.eclipse.jst.server.core.runtimeClasspathProviders">
       <runtimeClasspathProvider
             class="org.apache.karaf.eik.wtp.core.runtime.KarafRuntimeClasspathProvider"
-            id="info.evanchik.eclipse.karaf.wtp.server.runtimeTarget"
-            runtimeTypeIds="info.evanchik.eclipse.karaf.wtp.server.runtime.*">
+            id="org.apache.karaf.eik.wtp.server.runtimeTarget"
+            runtimeTypeIds="org.apache.karaf.eik.wtp.server.runtime.*">
       </runtimeClasspathProvider>
    </extension>
    <extension
@@ -48,12 +48,12 @@
             class="org.apache.karaf.eik.wtp.core.server.KarafServer"
             description="Apache Karaf server"
             hasConfiguration="true"
-            id="info.evanchik.eclipse.karaf.server.2"
+            id="org.apache.karaf.eik.server.2"
             initialState="stopped"
             launchConfigId="org.apache.karaf.eik.wtp.core.KarafServerLauncher"
             name="Apache Karaf"
             runtime="true"
-            runtimeTypeId="info.evanchik.eclipse.karaf.wtp.server.runtime.2"
+            runtimeTypeId="org.apache.karaf.eik.wtp.server.runtime.2"
             startTimeout="45000"
             stopTimeout="15000"
             supportsRemoteHosts="false">
@@ -65,14 +65,14 @@
             class="org.apache.karaf.eik.wtp.core.server.KarafServerLocator"
             id="org.apache.karaf.eik.wtp.core.server.locator"
             supportsRemoteHosts="false"
-            typeIds="info.evanchik.eclipse.karaf.server.*">
+            typeIds="org.apache.karaf.eik.karaf.server.*">
       </serverLocator>
    </extension>
    <extension
          point="org.eclipse.wst.server.core.launchableAdapters">
       <launchableAdapter
             class="org.apache.karaf.eik.wtp.core.server.KarafLaunchableAdapterDelegate"
-            id="info.evanchik.eclipse.server.karaf.web">
+            id="org.apache.karaf.eik.server.karaf.web">
       </launchableAdapter>
    </extension>
    <extension
@@ -94,21 +94,21 @@
       <publishTask
             class="org.apache.karaf.eik.wtp.core.tasks.KarafPublishTask"
             id="org.apache.karaf.eik.ui.publishTask"
-            typeIds="info.evanchik.eclipse.server.karaf.*">
+            typeIds="org.apache.karaf.eik.server.karaf.*">
       </publishTask>
    </extension>
    <extension
          point="org.eclipse.wst.common.project.facet.core.runtimes">
       <runtime-component-type
-            id="info.evanchik.eclipse.server.karaf">
+            id="org.apache.karaf.eik.server.karaf">
       </runtime-component-type>
       <runtime-component-version
-            type="info.evanchik.eclipse.server.karaf"
+            type="org.apache.karaf.eik.server.karaf"
             version="1.2">
       </runtime-component-version>
       <adapter>
          <runtime-component
-               id="info.evanchik.eclipse.server.karaf">
+               id="org.apache.karaf.eik.server.karaf">
          </runtime-component>
          <factory
                class="org.eclipse.jst.server.core.internal.RuntimeClasspathProvider$Factory">
@@ -119,7 +119,7 @@
       </adapter>
       <supported>
          <runtime-component
-               id="info.evanchik.eclipse.server.karaf"
+               id="org.apache.karaf.eik.server.karaf"
                version="1.2">
          </runtime-component>
          <facet
@@ -139,8 +139,8 @@
    <extension
          point="org.eclipse.jst.server.core.runtimeFacetMappings">
       <runtimeFacetMapping
-            runtime-component="info.evanchik.eclipse.server.karaf"
-            runtimeTypeId="info.evanchik.eclipse.server.karaf.runtime.12"
+            runtime-component="org.apache.karaf.eik.server.karaf"
+            runtimeTypeId="org.apache.karaf.eik.server.karaf.runtime.12"
             version="1.2">
       </runtimeFacetMapping>
    </extension>

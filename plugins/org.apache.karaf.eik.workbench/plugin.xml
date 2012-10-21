@@ -73,7 +73,7 @@
                   type="org.eclipse.core.resources.IProject">
                <test
                      property="org.eclipse.core.resources.projectNature"
-                     value="info.evanchik.eclipse.karaf.KarafProjectNature">
+                     value="org.apache.karaf.eik.KarafProjectNature">
                </test>
             </adapt>
          </enablement>

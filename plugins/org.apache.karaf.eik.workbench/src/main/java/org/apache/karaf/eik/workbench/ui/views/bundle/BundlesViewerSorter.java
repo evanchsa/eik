@@ -27,7 +27,7 @@ public abstract class BundlesViewerSorter extends ViewerSorter {
 
     @Override
     public int compare(Viewer viewer, Object e1, Object e2) {
-        if (e1 instanceof BundleItem == false || e1 instanceof BundleItem == false) {
+        if (e1 instanceof BundleItem == false || e2 instanceof BundleItem == false) {
             return 0;
         }
 

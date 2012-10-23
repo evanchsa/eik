@@ -28,7 +28,7 @@ public class ServicesViewerSorter extends ViewerSorter {
 
     @Override
     public int compare(Viewer viewer, Object e1, Object e2) {
-        if (e1 instanceof ServiceItem == false || e1 instanceof ServiceItem == false) {
+        if (e1 instanceof ServiceItem == false || e2 instanceof ServiceItem == false) {
             return 0;
         }
 

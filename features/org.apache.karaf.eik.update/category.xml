@@ -10,6 +10,5 @@
       <category name="Eclipse Integration for Apache Karaf"/>
    </feature>
    <category-def name="Eclipse Integration for Apache Karaf" label="Eclipse Integration for Apache Karaf"/>
-   <category-def name="Eclipse Integration for Apache ServiceMix Kernel" label="Eclipse Integration for Apache ServiceMix Kernel"/>
    <category-def name="Eclipse Web Tools Platform Integration for Apache Karaf" label="Eclipse Web Tools Platform Integration for Apache Karaf"/>
 </site>

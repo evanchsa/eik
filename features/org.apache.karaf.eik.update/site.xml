@@ -14,10 +14,5 @@
          Core functionality required to integrate Apache Karaf family of application servers inside the Eclipse IDE.
       </description>
    </category-def>
-   <category-def name="Eclipse Integration for Apache ServiceMix Kernel" label="Eclipse Integration for Apache ServiceMix Kernel">
-      <description>
-         Functionality required to execute application server distributions based on Apache ServiceMix Kernel
-      </description>
-   </category-def>
    <category-def name="Eclipse Web Tools Platform Integration for Apache Karaf" label="Eclipse Web Tools Platform Integration for Apache Karaf"/>
 </site>

@@ -63,25 +63,25 @@ import org.osgi.framework.Bundle;
 
 public class FelixLaunchConfiguration extends AbstractPDELaunchConfiguration {
 
-    public static String FELIX_FRAMEWORK_LAUNCHER = "org.apache.felix.main";
+    public static final String FELIX_FRAMEWORK_LAUNCHER = "org.apache.felix.main";
 
-    public static String FELIX_FRAMEWORK = "org.apache.felix.framework";
+    public static final String FELIX_FRAMEWORK = "org.apache.felix.framework";
 
-    public static String FELIX_SYSTEM_PROPERTIES_KEY = "felix.system.properties";
+    public static final String FELIX_SYSTEM_PROPERTIES_KEY = "felix.system.properties";
 
-    public static String FELIX_CONFIG_PROPERTIES_KEY = "felix.config.properties";
+    public static final String FELIX_CONFIG_PROPERTIES_KEY = "felix.config.properties";
 
-    public static String FELIX_AUTO_START_PREFIX = "felix.auto.start.";
+    public static final String FELIX_AUTO_START_PREFIX = "felix.auto.start.";
 
-    public static String FELIX_AUTO_INSTALL_PREFIX = "felix.auto.install.";
+    public static final String FELIX_AUTO_INSTALL_PREFIX = "felix.auto.install.";
 
-    public static String FELIX_CONFIG_PROPERTIES_FILE = "config.properties";
+    public static final String FELIX_CONFIG_PROPERTIES_FILE = "config.properties";
 
-    public static String FELIX_SYSTEM_PROPERTIES_FILE = "system.properties";
+    public static final String FELIX_SYSTEM_PROPERTIES_FILE = "system.properties";
 
-    public static int DEFAULT_START_LEVEL = 4;
+    public static final int DEFAULT_START_LEVEL = 4;
 
-    public static boolean DEFAULT_AUTOSTART = true;
+    public static final boolean DEFAULT_AUTOSTART = true;
 
     /**
      * Implementation of join using a {@link StringBuffer}

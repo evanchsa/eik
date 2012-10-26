@@ -25,9 +25,9 @@ import org.apache.karaf.eik.core.configuration.SystemSection;
 public class SystemSectionImpl extends AbstractPropertiesConfigurationSection implements
                 SystemSection {
 
-    public static String SYSTEM_SECTION_ID = "org.apache.karaf.eik.configuration.section.System";
+    public static final String SYSTEM_SECTION_ID = "org.apache.karaf.eik.configuration.section.System";
 
-    public static String SYSTEM_FILENAME = "system.properties";
+    public static final String SYSTEM_FILENAME = "system.properties";
 
     /**
      * @param parent

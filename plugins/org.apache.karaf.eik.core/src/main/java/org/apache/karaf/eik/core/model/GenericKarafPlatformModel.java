@@ -52,7 +52,7 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
     /**
      * The maximum depth to search for JARs in this model
      */
-    public static int MAX_SEARCH_DEPTH = 50;
+    public static final int MAX_SEARCH_DEPTH = 50;
 
     /**
      * The root of the Karaf platform installation

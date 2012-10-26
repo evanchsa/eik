@@ -37,7 +37,7 @@ public class KarafRuntimeLocator extends RuntimeLocatorDelegate {
     /**
      * Maximum depth to search for a Karaf server runtime
      */
-    public static int MAX_DEPTH = 4;
+    public static final int MAX_DEPTH = 4;
 
     @Override
     public void searchForRuntimes(final IPath path, final IRuntimeSearchListener listener,

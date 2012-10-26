@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="info.evanchik.eclipse.karaf.workbench" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.apache.karaf.eik.workbench" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="info.evanchik.eclipse.karaf.workbench" id="jmxConnectorProvider" name="JMX Connector Provider"/>
+         <meta.schema plugin="org.apache.karaf.eik.workbench" id="jmxConnectorProvider" name="JMX Connector Provider"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]

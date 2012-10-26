@@ -44,10 +44,6 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.Section;
 
-/**
- * @author Stephen Evanchik (evanchsa@gmail.com)
- *
- */
 public class KarafPlatformRuntimeFormPage extends FormPage {
 
     private final class BundlesTableLabelProvider extends LabelProvider implements ITableLabelProvider {

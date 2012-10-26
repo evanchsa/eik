@@ -36,9 +36,6 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
     /**
      * Simple object that models a start level and {@link BundleDescription}
      * pair.
-     *
-     * @author Stephen Evanchik (evanchsa@gmail.com)
-     *
      */
     protected class BundleStartEntry {
 

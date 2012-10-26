@@ -10,10 +10,6 @@
  */
 package org.apache.karaf.eik.core;
 
-/**
- * @author Stephen Evanchik (evanchsa@gmail.com)
- *
- */
 public enum SystemBundleNames {
     EQUINOX("org.eclipse.osgi"), FELIX("org.apache.felix.framework");
 

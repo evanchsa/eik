@@ -66,13 +66,10 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
 
     public static final String ID = "org.apache.karaf.eik.ui.karafProjectBuilder";
 
-    public KarafProjectBuilder() {
-
-    }
+    public KarafProjectBuilder() { }
 
     @Override
-    protected IProject[] build(final int kind, @SuppressWarnings("rawtypes") final Map args, final IProgressMonitor monitor)
-        throws CoreException {
+    protected IProject[] build(final int kind, @SuppressWarnings("rawtypes") final Map args, final IProgressMonitor monitor) throws CoreException {
         final IProject project = getProject();
 
         monitor.beginTask("Building Apache Karaf project: " + project.getName(), 1);
@@ -100,10 +97,8 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
     /**
      * Filters all of the JAR entries that begin with {@code org/osgi}.
      *
-     * @param karafJar
-     *            the source JAR
-     * @throws CoreException
-     *             if there is a problem filtering the input JAR's contents
+     * @param karafJar the source JAR
+     * @throws CoreException if there is a problem filtering the input JAR's contents
      */
     private void filterOsgiInterfaceClasses(final File karafJar) throws CoreException {
         final IKarafProject karafProject = getKarafProject();
@@ -192,9 +187,7 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         }
     }
 
-    private void buildRuntimeProperties(final IProgressMonitor monitor)
-        throws CoreException
-    {
+    private void buildRuntimeProperties(final IProgressMonitor monitor) throws CoreException {
         final String karafHome = getKarafPlatformModel().getRootDirectory().toOSString();
 
         final Properties combinedProperties = new Properties();
@@ -202,7 +195,7 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         combinedProperties.put("karaf.base", karafHome);
         combinedProperties.put("karaf.data", getKarafPlatformModel().getRootDirectory().append("data").toOSString());
 
-        for (final String filename : new String[] { "config.properties", "system.properties", "users.properties" }) {
+        for (final String filename : new String[]{"config.properties", "system.properties", "users.properties"}) {
             final Properties fileProperties = KarafCorePluginUtils.loadProperties(getKarafPlatformModel().getConfigurationDirectory().toFile(), filename, true);
             combinedProperties.putAll(fileProperties);
         }
@@ -214,20 +207,23 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
             runtimeFolder.create(true, true, monitor);
         }
 
-        final IPath runtimeProperties =
-            runtimeFolder.getRawLocation().append("runtime").addFileExtension("properties");
+        final IPath runtimeProperties = runtimeFolder.getRawLocation().append("runtime").addFileExtension("properties");
 
-        FileOutputStream out;
+        FileOutputStream out = null;
         try {
             out = new FileOutputStream(runtimeProperties.toFile());
             combinedProperties.store(out, "Combined interpolated runtime properties");
         } catch (final IOException e) {
             throw new CoreException(
-                    new Status(
-                            IStatus.ERROR,
-                            KarafUIPluginActivator.PLUGIN_ID,
-                            "Unable to build runtime property file",
-                            e));
+                    new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to build runtime property file", e));
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException ioException) {
+                // ignore
+            }
         }
     }
 
@@ -238,9 +234,7 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
      * @param monitor
      * @throws CoreException
      */
-    private void buildFeaturesRepositories(final IProgressMonitor monitor)
-            throws CoreException
-    {
+    private void buildFeaturesRepositories(final IProgressMonitor monitor) throws CoreException {
         final IKarafProject karafProject = getKarafProject();
         final KarafPlatformModel karafPlatformModel = getKarafPlatformModel();
 
@@ -299,14 +293,13 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
 
         monitor.subTask("Creating OBR for Apache Karaf Project: " + karafProject.getName());
 
-        final IPath obrFile =
-            karafProject.getFolder("platform").getRawLocation().append("eclipse.obr").addFileExtension("xml");
+        final IPath obrFile = karafProject.getFolder("platform").getRawLocation().append("eclipse.obr").addFileExtension("xml");
 
         final PopulateObrFileJob populateObrJob = new PopulateObrFileJob(karafProject.getName(), obrFile.toFile());
         populateObrJob.schedule();
 
         try {
-          populateObrJob.join();
+            populateObrJob.join();
         } catch (final InterruptedException e) {
             e.printStackTrace();
         }
@@ -316,12 +309,9 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
      * Copies the data of a {@link JarEntry} or {@link ZipEntry} from one JAR to
      * another
      *
-     * @param in
-     *            the source JAR {@link JarInputStream}
-     * @param out
-     *            the destination JAR {@link JarOutputStream}
-     * @throws IOException
-     *             thrown if there is a problem copying the data
+     * @param in  the source JAR {@link JarInputStream}
+     * @param out the destination JAR {@link JarOutputStream}
+     * @throws IOException thrown if there is a problem copying the data
      */
     private void copyJarEntryData(final JarInputStream in, final JarOutputStream out) throws IOException {
         final byte buffer[] = new byte[4096];
@@ -339,8 +329,7 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
 
     @SuppressWarnings("restriction")
     private void createTargetPlatform(final IProgressMonitor monitor) throws CoreException {
-        final ITargetPlatformService targetPlatformService =
-            (ITargetPlatformService) KarafUIPluginActivator.getDefault().getService(ITargetPlatformService.class.getName());
+        final ITargetPlatformService targetPlatformService = (ITargetPlatformService) KarafUIPluginActivator.getDefault().getService(ITargetPlatformService.class.getName());
 
         final IFile targetLocation = createTargetDefinitionFile();
         final ITargetHandle targetHandle = targetPlatformService.getTarget(targetLocation);
@@ -386,18 +375,18 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
     private void incrementalBuild(final IResourceDelta delta, final IProgressMonitor monitor) throws CoreException {
         try {
             delta.accept(new IResourceDeltaVisitor() {
-               @Override
-            public boolean visit(final IResourceDelta delta) {
-                  // if is a bundle file then schedule an update to the target platform file
-                  // if something in eclipse home changes then update obr
-                  // if it is a feature file update features repo
-                  return true;
-               }
+                @Override
+                public boolean visit(final IResourceDelta delta) {
+                    // if is a bundle file then schedule an update to the target platform file
+                    // if something in eclipse home changes then update obr
+                    // if it is a feature file update features repo
+                    return true;
+                }
             });
             fullBuild(monitor);
-         } catch (final CoreException e) {
+        } catch (final CoreException e) {
             e.printStackTrace();
-         }
+        }
     }
 
 }

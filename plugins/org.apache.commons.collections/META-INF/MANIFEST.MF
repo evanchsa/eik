@@ -37,3 +37,4 @@ Bundle-Vendor: The Apache Software Foundation
 Bundle-SymbolicName: org.apache.commons.collections
 Bundle-ClassPath: lib/commons-collections-3.2.1.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+

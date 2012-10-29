@@ -68,22 +68,25 @@ public class KarafRuntimePropertyBuildUnit extends AbstractKarafBuildUnit {
             runtimeFolder.create(true, true, monitor);
         }
 
-        final IPath runtimeProperties =
-            runtimeFolder.getRawLocation().append("runtime").addFileExtension("properties");
+        final IPath runtimeProperties = runtimeFolder.getRawLocation().append("runtime").addFileExtension("properties");
 
         runtimeFolder.refreshLocal(0, monitor);
 
-        FileOutputStream out;
+        FileOutputStream out = null;
         try {
             out = new FileOutputStream(runtimeProperties.toFile());
             combinedProperties.store(out, "Combined interpolated runtime properties");
         } catch (final IOException e) {
             throw new CoreException(
-                    new Status(
-                            IStatus.ERROR,
-                            KarafUIPluginActivator.PLUGIN_ID,
-                            "Unable to build runtime property file",
-                            e));
+                    new Status(IStatus.ERROR, KarafUIPluginActivator.PLUGIN_ID, "Unable to build runtime property file", e));
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException ioException) {
+                // ignore
+            }
         }
     }
 

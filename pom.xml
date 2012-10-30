@@ -34,24 +34,19 @@
     <name>Apache Karaf :: EIK</name>
 
     <properties>
-        <tycho-version>0.13.0</tycho-version>
         <platform-version-name>helios</platform-version-name>
         <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
         <wikitext-site>http://download.eclipse.org/tools/mylyn/update/weekly</wikitext-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/${platform-version-name}/dev-build/update-site
         </swtbot-site>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
-
+        <tycho-version>0.13.0</tycho-version>
         <aries.jmx.version>0.3</aries.jmx.version>
         <jansi.version>1.7</jansi.version>
-        <karaf.version>2.2.5</karaf.version>
         <mina.version>2.0.1</mina.version>
-        <nmr.version>1.0.0</nmr.version>
         <pax.url.version>1.2.8</pax.url.version>
-        <servicemix.version>4.4.0</servicemix.version>
         <sshd.version>0.5.0</sshd.version>
         <integration.version>1.0.0</integration.version>
-
         <scala.version>2.9.1</scala.version>
         <scala-plugin.version>2.15.2</scala-plugin.version>
     </properties>
@@ -103,49 +98,6 @@
             <archive>http://www.mail-archive.com/issues%40karaf.apache.org/</archive>
         </mailingList>
     </mailingLists>
-
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- Apache ServiceMix / Felix Karaf modules -->
-            <dependency>
-                <groupId>org.apache.servicemix</groupId>
-                <artifactId>apache-servicemix</artifactId>
-                <version>${servicemix.version}</version>
-                <type>tar.gz</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.servicemix</groupId>
-                <artifactId>apache-servicemix</artifactId>
-                <version>${servicemix.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.servicemix.nmr</groupId>
-                <artifactId>apache-servicemix-nmr</artifactId>
-                <version>${nmr.version}</version>
-                <type>tar.gz</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.servicemix.nmr</groupId>
-                <artifactId>apache-servicemix-nmr</artifactId>
-                <version>${nmr.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.karaf</groupId>
-                <artifactId>apache-karaf</artifactId>
-                <version>${karaf.version}</version>
-                <type>tar.gz</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.karaf</groupId>
-                <artifactId>apache-karaf</artifactId>
-                <version>${karaf.version}</version>
-                <type>zip</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <pluginManagement>

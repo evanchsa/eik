@@ -78,6 +78,12 @@
                                     <outputDirectory>plugins</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.apache.commons.collections</artifactId>
+                                    <version>${commons-collections.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
                                     <groupId>org.apache.karaf.eik.features</groupId>
                                     <artifactId>org.apache.karaf.eik.feature</artifactId>
                                     <version>${project.version}</version>

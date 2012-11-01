@@ -398,7 +398,7 @@ public class KarafLaunchConfigurationDelegate extends EquinoxLaunchConfiguration
          * org.osgi.framework.system.packages.extra property
          */
         final String extraSystemPackages = (String) equinoxProperties.get(OSGI_EXTRA_SYSTEM_PACKAGES_KEY);
-        if (extraSystemPackages.trim().isEmpty()) {
+        if (extraSystemPackages != null && extraSystemPackages.trim().isEmpty()) {
             equinoxProperties.remove(OSGI_EXTRA_SYSTEM_PACKAGES_KEY);
         }
 

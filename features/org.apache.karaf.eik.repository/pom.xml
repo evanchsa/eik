@@ -29,7 +29,7 @@
     </parent>
 
     <groupId>org.apache.karaf.eik.features</groupId>
-    <artifactId>org.apache.karaf.eik.update</artifactId>
+    <artifactId>org.apache.karaf.eik.repository</artifactId>
     <packaging>eclipse-repository</packaging>
     <name>Apache Karaf :: EIK :: Features :: Eclipse P2 Repository</name>
 

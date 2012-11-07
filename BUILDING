@@ -50,5 +50,5 @@ Building
    all located in your local maven repository. It usually takes some time for 
    maven to download required dependencies in the first build.
 
-3) The distributions will be available under "features/org.apache.karaf.eik.update/target/repository" directory.
+3) The distributions will be available under "features/org.apache.karaf.eik.repository/target/repository" directory.
 

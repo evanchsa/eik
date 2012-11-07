@@ -29,6 +29,7 @@
       <import plugin="org.eclipse.debug.ui" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.pde.ui" version="3.6.0" match="compatible"/>
+      <import plugin="org.apache.commons.lang" version="2.6.0" match="greaterOrEqual"/>
       <import plugin="org.ops4j.pax.url.mvn" version="1.2.8" match="greaterOrEqual"/>
       <import plugin="org.apache.mina.core" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="org.fusesource.jansi" version="1.5.0" match="greaterOrEqual"/>
@@ -91,5 +92,11 @@
          download-size="0"
          install-size="0"
          version="3.2.1"/>
+
+   <plugin
+         id="org.apache.commons.lang"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>

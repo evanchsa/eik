@@ -37,7 +37,7 @@
         <module>org.apache.karaf.eik.feature</module>
         <module>org.apache.karaf.eik.jmx.feature</module>
         <module>org.apache.karaf.eik.wtp.feature</module>
-        <module>org.apache.karaf.eik.update</module>
+        <module>org.apache.karaf.eik.repository</module>
     </modules>
 
 </project>

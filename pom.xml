@@ -57,6 +57,7 @@
         <module>plugins</module>
         <module>features</module>
         <module>manual</module>
+        <module>assembly</module>
     </modules>
 
     <scm>

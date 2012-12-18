@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Export-Package: org.fusesource.jansi;version="1.7"
 Ignore-Package: org.fusesource.jansi,org.fusesource.jansi.internal
 Implementation-Title: jansi
-Built-By: chirino
+Built-By: Fusesource
 Tool: Bnd-0.0.357
 Implementation-Vendor: FuseSource, Corp.
 Implementation-Vendor-Id: org.fusesource.jansi

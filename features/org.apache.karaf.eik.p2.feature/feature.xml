@@ -2,11 +2,11 @@
 <feature
         id="org.apache.karaf.eik.p2.feature"
         label="Eclipse p2 Integeration for Apache Karaf"
-        version="3.0.0.qualifier"
+        version="0.9.0.qualifier"
         provider-name="Apache Software Foundation">
 
     <copyright>
-        Copyright (c) 2010-2011 Apache Software Foundation
+        Copyright (c) 2010-2012 Apache Software Foundation
     </copyright>
 
     <license url="http://www.apache.org/license/LICENSE-2.0.txt">

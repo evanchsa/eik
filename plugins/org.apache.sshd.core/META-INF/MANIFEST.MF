@@ -1,7 +1,6 @@
 Manifest-Version: 1.0
 Archiver-Version: Plexus Archiver
-Created-By: 1.6.0_22 (Apple Inc.)
-Built-By: gnodet
+Built-By: Apache MINA Project
 Build-Jdk: 1.6.0_22
 Specification-Title: Apache Mina SSHD :: Core
 Specification-Version: 0.5.0

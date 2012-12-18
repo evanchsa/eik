@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.apache.aries.jmx.api</artifactId>
-    <version>0.3</version>
+    <version>1.0.0</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: OSGi JMX RFC Wrapper</name>
 

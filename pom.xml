@@ -57,6 +57,7 @@
     <modules>
         <module>plugins</module>
         <module>features</module>
+        <module>archetypes</module>
         <module>manual</module>
         <module>assembly</module>
     </modules>

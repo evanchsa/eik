@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Karaf :: EIK :: Plugins :: Eclipse Workbench Service Registry
 Bundle-SymbolicName: org.apache.karaf.eik.workbench;singleton:=true
-Bundle-Version: 0.9.0.qualifier
+Bundle-Version: 0.9.0
 Bundle-Activator: org.apache.karaf.eik.workbench.KarafWorkbenchActivator
 Bundle-Vendor: Apache Software Foundation
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",

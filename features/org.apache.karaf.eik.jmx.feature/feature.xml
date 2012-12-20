@@ -2,7 +2,7 @@
 <feature
       id="org.apache.karaf.eik.jmx.feature"
       label="Eclipse JMX Integration Feature for Apache Felix Karaf"
-      version="0.9.0.qualifier"
+      version="0.9.0"
       provider-name="Apache Software Foundation">
 
    <description>

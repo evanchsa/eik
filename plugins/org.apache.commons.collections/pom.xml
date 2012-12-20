@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.apache.commons.collections</artifactId>
-    <version>3.2.1</version>
+    <version>3.2.1-SNAPSHOT</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Apache Commons Collections wrapper</name>
 

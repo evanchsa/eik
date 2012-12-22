@@ -25,6 +25,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <targetPath>META-INF/spring</targetPath>
+                <directory>META-INF/spring</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

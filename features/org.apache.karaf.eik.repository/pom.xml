@@ -50,43 +50,43 @@
                                 <artifactItem>
                                     <groupId>org.apache.karaf.eik.plugins</groupId>
                                     <artifactId>org.apache.aries.jmx.api</artifactId>
-                                    <version>${aries.jmx.version}</version>
+                                    <version>${aries.jmx.version}-SNAPSHOT</version>
                                     <outputDirectory>plugins</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.karaf.eik.plugins</groupId>
                                     <artifactId>org.apache.aries.jmx.core</artifactId>
-                                    <version>${aries.jmx.version}</version>
+                                    <version>${aries.jmx.version}-SNAPSHOT</version>
                                     <outputDirectory>plugins</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.karaf.eik.plugins</groupId>
                                     <artifactId>org.fusesource.jansi</artifactId>
-                                    <version>${jansi.version}</version>
+                                    <version>${jansi.version}-SNAPSHOT</version>
                                     <outputDirectory>plugins</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.karaf.eik.plugins</groupId>
                                     <artifactId>org.ops4j.pax.url.mvn</artifactId>
-                                    <version>${pax.url.version}</version>
+                                    <version>${pax.url.version}-SNAPSHOT</version>
                                     <outputDirectory>plugins</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.karaf.eik.plugins</groupId>
                                     <artifactId>sshd-core</artifactId>
-                                    <version>${sshd.version}</version>
+                                    <version>${sshd.version}-SNAPSHOT</version>
                                     <outputDirectory>plugins</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.karaf.eik.plugins</groupId>
                                     <artifactId>org.apache.commons.collections</artifactId>
-                                    <version>${commons-collections.version}</version>
+                                    <version>${commons-collections.version}-SNAPSHOT</version>
                                     <outputDirectory>plugins</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.karaf.eik.plugins</groupId>
                                     <artifactId>org.apache.commons.lang</artifactId>
-                                    <version>${commons-lang.version}</version>
+                                    <version>${commons-lang.version}-SNAPSHOT</version>
                                     <outputDirectory>plugins</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>

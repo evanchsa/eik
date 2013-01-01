@@ -24,13 +24,13 @@
     <parent>
         <groupId>org.apache.karaf.eik</groupId>
         <artifactId>parent</artifactId>
-        <version>0.9.0</version>
+        <version>0.9.0-SNAPSHOT</version>
         <relativePath>../../parent/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.apache.karaf.eik.felix</artifactId>
-    <version>0.10.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Felix OSGi Framework</name>
 

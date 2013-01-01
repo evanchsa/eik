@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.ops4j.pax.url.mvn</artifactId>
-    <version>1.2.8-SNAPSHOT</version>
+    <version>1.2.8</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: PAX URL MVN Wrapper</name>
 
@@ -115,7 +115,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore></ignore>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -126,4 +126,10 @@
         </pluginManagement>
     </build>
 
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/karaf/eik/tags/org.ops4j.pax.url.mvn-1.2.8</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/karaf/eik/tags/org.ops4j.pax.url.mvn-1.2.8</developerConnection>
+    <url>http://svn.apache.org/repos/asf/karaf/eik/tags/org.ops4j.pax.url.mvn-1.2.8</url>
+  </scm>
 </project>

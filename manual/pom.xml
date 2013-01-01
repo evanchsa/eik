@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik</groupId>
     <artifactId>manual</artifactId>
-    <version>0.9.0-SNAPSHOT</version>
+    <version>0.9.0</version>
     <name>Apache Karaf :: EIK :: Manual</name>
     <packaging>war</packaging>
 
@@ -193,17 +193,17 @@
                                 </goals>
                                 <configuration>
                                     <tasks>
-                                        <mkdir dir="${manual.dir}"/>
-                                        <move file="${project.build.directory}/sitegen/manual.html" tofile="${manual}.html"/>
-                                        <echo message="Generating PDF using Prince XML (http://www.princexml.com/)"/>
+                                        <mkdir dir="${manual.dir}" />
+                                        <move file="${project.build.directory}/sitegen/manual.html" tofile="${manual}.html" />
+                                        <echo message="Generating PDF using Prince XML (http://www.princexml.com/)" />
                                         <exec executable="prince">
-                                            <arg value="${manual}.html"/>
-                                            <arg value="${manual}.pdf"/>
-                                            <arg value="--log"/>
-                                            <arg value="${project.build.directory}/prince.log"/>
+                                            <arg value="${manual}.html" />
+                                            <arg value="${manual}.pdf" />
+                                            <arg value="--log" />
+                                            <arg value="${project.build.directory}/prince.log" />
                                         </exec>
-                                        <attachartifact file="${manual}.html" type="html"/>
-                                        <attachartifact file="${manual}.pdf" type="pdf"/>
+                                        <attachartifact file="${manual}.html" type="html" />
+                                        <attachartifact file="${manual}.pdf" type="pdf" />
                                     </tasks>
                                 </configuration>
                             </execution>
@@ -214,4 +214,10 @@
         </profile>
     </profiles>
 
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/karaf/eik/tags/manual-0.9.0</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/karaf/eik/tags/manual-0.9.0</developerConnection>
+    <url>http://svn.apache.org/repos/asf/karaf/eik/tags/manual-0.9.0</url>
+  </scm>
 </project>

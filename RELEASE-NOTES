@@ -42,6 +42,7 @@
     * [KARAF-1987] - Eik go in NPE when org.osgi.framework.system.packages.extra is not define
     * [KARAF-2057] - NOTICE and LICENSE files are not correct
     * [KARAF-2066] - Set EIK version to 0.9.0
+    * [KARAF-2092] - Remove empty action in BundlesView
 
 ** Dependency upgrade
     * [KARAF-2055] - Upgrade to Apache POM 12

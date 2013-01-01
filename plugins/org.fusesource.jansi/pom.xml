@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.fusesource.jansi</artifactId>
-    <version>1.7</version>
+    <version>1.8-SNAPSHOT</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Jansi Wrapper</name>
 
@@ -132,11 +132,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/karaf/eik/tags/org.fusesource.jansi-1.7</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/karaf/eik/tags/org.fusesource.jansi-1.7</developerConnection>
-    <url>http://svn.apache.org/repos/asf/karaf/eik/tags/org.fusesource.jansi-1.7</url>
-  </scm>
 </project>

@@ -100,7 +100,6 @@ public class BundlesView extends FilteredViewPart {
 
         getViewSite().setSelectionProvider(treeTableViewer);
 
-        createActions();
         fillMenu();
 
         initContextMenu();
@@ -144,25 +143,6 @@ public class BundlesView extends FilteredViewPart {
     protected void updatedFilter(final String filterString) {
         nameFilter.setFilterString(filterString);
         treeTableViewer.refresh();
-    }
-
-    private void createActions() {
-        propertiesAction = new Action() {
-            @Override
-            public void run() {
-                final IStructuredSelection selection =
-                    (IStructuredSelection) treeTableViewer.getSelection();
-                if (!selection.isEmpty()) {
-                    /*
-                    final BundleItem bundle = (BundleItem) selection.getFirstElement();
-
-                    final BundlePropertiesDialog propsDialog = new BundlePropertiesDialog(getSite().getShell(), bundle);
-                    propsDialog.open();
-                    */
-                }
-            }
-        };
-        propertiesAction.setText("Properties...");
     }
 
     protected void fillMenu() {

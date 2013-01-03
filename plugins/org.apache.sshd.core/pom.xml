@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>sshd-core</artifactId>
-    <version>0.5.0-SNAPSHOT</version>
+    <version>0.5.0</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: Apache SSH Wrapper</name>
 
@@ -132,4 +132,10 @@
             </plugins>
         </pluginManagement>
     </build>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/karaf/eik/tags/sshd-core-0.5.0</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/karaf/eik/tags/sshd-core-0.5.0</developerConnection>
+    <url>http://svn.apache.org/repos/asf/karaf/eik/tags/sshd-core-0.5.0</url>
+  </scm>
 </project>

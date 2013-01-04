@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik</groupId>
     <artifactId>manual</artifactId>
-    <version>0.9.0-SNAPSHOT</version>
+    <version>0.9.0</version>
     <name>Apache Karaf :: EIK :: Manual</name>
     <packaging>war</packaging>
 
@@ -213,4 +213,10 @@
             </build>
         </profile>
     </profiles>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/karaf/eik/tags/manual-0.9.0</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/karaf/eik/tags/manual-0.9.0</developerConnection>
+    <url>http://svn.apache.org/repos/asf/karaf/eik/tags/manual-0.9.0</url>
+  </scm>
 </project>

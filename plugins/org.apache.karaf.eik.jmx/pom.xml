@@ -30,7 +30,7 @@
 
     <groupId>org.apache.karaf.eik.plugins</groupId>
     <artifactId>org.apache.karaf.eik.jmx</artifactId>
-    <version>0.9.0</version>
+    <version>0.10.0-SNAPSHOT</version>
     <packaging>eclipse-plugin</packaging>
     <name>Apache Karaf :: EIK :: Plugins :: JMX-Eclipse Bridge</name>
     <description>Bridge between JMX and Eclipse</description>
@@ -62,10 +62,4 @@
             </plugin>
         </plugins>
     </build>
-
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/karaf/eik/tags/org.apache.karaf.eik.jmx-0.9.0</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/karaf/eik/tags/org.apache.karaf.eik.jmx-0.9.0</developerConnection>
-    <url>http://svn.apache.org/repos/asf/karaf/eik/tags/org.apache.karaf.eik.jmx-0.9.0</url>
-  </scm>
 </project>

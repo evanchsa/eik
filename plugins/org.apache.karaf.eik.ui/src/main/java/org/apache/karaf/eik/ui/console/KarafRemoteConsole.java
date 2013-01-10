@@ -232,7 +232,9 @@ public class KarafRemoteConsole extends IOConsole implements IDebugEventSetListe
     protected void dispose() {
         super.dispose();
 
-        DebugPlugin.getDefault().removeDebugEventListener(this);
+        if (DebugPlugin.getDefault() != null) {
+            DebugPlugin.getDefault().removeDebugEventListener(this);
+        }
     }
 
     @Override

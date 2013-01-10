@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Karaf :: EIK :: Plugins :: Felix OSGi Framework for Eclipse PDE
 Bundle-SymbolicName: org.apache.karaf.eik.felix;singleton:=true
-Bundle-Version: 0.9.0
+Bundle-Version: 0.10.0
 Bundle-Activator: org.apache.karaf.eik.felix.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

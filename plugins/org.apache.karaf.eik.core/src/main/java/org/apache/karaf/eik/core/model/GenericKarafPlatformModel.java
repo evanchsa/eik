@@ -38,8 +38,10 @@ import org.apache.karaf.eik.core.shell.KarafSshConnectionUrl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,10 +153,19 @@ public class GenericKarafPlatformModel extends AbstractKarafPlatformModel implem
         for (final File f : files) {
             try {
                 final URL u = f.toURI().toURL();
-                urls.add(u);
+                // Mandatory to Decode URL. please see
+				// https://bugs.eclipse.org/bugs/show_bug.cgi?id=258368
+            	String urlDecoded = URLDecoder.decode(u.toString(),
+						System.getProperty("file.encoding"));
+                urls.add(new URL(urlDecoded));
             } catch (final MalformedURLException e) {
                 KarafCorePluginActivator.getLogger().error(
                                 "Unable to convert file to URL: " + f.getAbsolutePath(), e);
+            }catch (UnsupportedEncodingException e) {
+				KarafCorePluginActivator.getLogger().error(
+						"UnsupportedEncodingException to convert file path : "
+								+ f.getAbsolutePath() + "with encoding "
+								+ System.getProperty("file.encoding") , e);
             }
         }
 

@@ -21,7 +21,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-   <parent>
+    <parent>
         <groupId>org.apache.karaf.eik</groupId>
         <artifactId>parent</artifactId>
         <version>0.10.0-SNAPSHOT</version>
@@ -55,12 +55,12 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-	    <version>${scala.version}</version>
+            <version>${scala.version}</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-compiler</artifactId>
-	    <version>${scala.version}</version>
+            <version>${scala.version}</version>
         </dependency>
     </dependencies>
 
@@ -130,6 +130,35 @@
                 </dependencies>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>create-manual</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="${manual.dir}"/>
+                                <move file="${project.build.directory}/sitegen/manual.html" tofile="${manual}.html"/>
+                                <echo message="Generating PDF using Prince XML (http://www.princexml.com/)"/>
+                                <exec executable="prince">
+                                    <arg value="${manual}.html"/>
+                                    <arg value="${manual}.pdf"/>
+                                    <arg value="--log"/>
+                                    <arg value="${project.build.directory}/prince.log"/>
+                                </exec>
+                                <attachartifact file="${manual}.html" type="html"/>
+                                <attachartifact file="${manual}.pdf" type="pdf"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1</version>
                 <configuration>
@@ -180,43 +209,4 @@
         </plugins>
     </reporting>
 
-    <profiles>
-        <profile>
-            <id>manual</id>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>create-manual</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <tasks>
-                                        <mkdir dir="${manual.dir}" />
-                                        <move file="${project.build.directory}/sitegen/manual.html" tofile="${manual}.html" />
-                                        <echo message="Generating PDF using Prince XML (http://www.princexml.com/)" />
-                                        <exec executable="prince">
-                                            <arg value="${manual}.html" />
-                                            <arg value="${manual}.pdf" />
-                                            <arg value="--log" />
-                                            <arg value="${project.build.directory}/prince.log" />
-                                        </exec>
-                                        <attachartifact file="${manual}.html" type="html" />
-                                        <attachartifact file="${manual}.pdf" type="pdf" />
-                                    </tasks>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>

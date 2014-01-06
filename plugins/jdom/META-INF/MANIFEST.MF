@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-Description:  Types that extend and augment the Java Lang.
+Bundle-DocURL: http://www.apache.org/
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Karaf :: EIK :: Plugins :: JDOM
+Bundle-SymbolicName: jdom;singleton:=true
+Bundle-Vendor: The Apache Software Foundation
+Bundle-Version: 1.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: lib/jdom-1.0.jar
+Export-Package: org.jdom,
+ org.jdom.adapters,
+ org.jdom.filter,
+ org.jdom.input,
+ org.jdom.output,
+ org.jdom.transform,
+ org.jdom.xpath

@@ -27,6 +27,8 @@ public final class Bundle implements ParentAwareObject<Object> {
 
     private final String bundleUrl;
 
+    private final String startLevel;
+
     private final Element element;
 
     public Bundle(final Element element) {
@@ -35,11 +37,18 @@ public final class Bundle implements ParentAwareObject<Object> {
             throw new IllegalArgumentException("bundle element is invalid: " + element.toString());
         }
 
+        this.startLevel = element.getAttributeValue("start-level");
+
         this.element = element;
     }
 
     public String getBundleUrl() {
         return bundleUrl;
+    }
+
+
+    public String getStartLevel() {
+         return startLevel;
     }
 
     @Override

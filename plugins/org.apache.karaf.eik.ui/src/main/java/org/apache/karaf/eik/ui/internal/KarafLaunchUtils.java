@@ -18,9 +18,6 @@
  */
 package org.apache.karaf.eik.ui.internal;
 
-import org.apache.karaf.eik.core.KarafCorePluginUtils;
-import org.apache.karaf.eik.core.KarafPlatformModel;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,18 +25,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.karaf.eik.core.KarafCorePluginUtils;
+import org.apache.karaf.eik.core.KarafPlatformModel;
+import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.internal.core.target.DirectoryBundleContainer;
-import org.eclipse.pde.internal.core.target.provisional.IBundleContainer;
 
 public final class KarafLaunchUtils {
 
     private static final int MAX_DIRECTORY_RECURSE_DEPTH = 50;
 
     @SuppressWarnings("restriction")
-    public static List<IBundleContainer> getBundleContainers(final KarafPlatformModel karafPlatformModel) {
+    public static List<ITargetLocation> getBundleContainers(final KarafPlatformModel karafPlatformModel) {
         final Collection<File> directories = KarafLaunchUtils.getJarDirectories(karafPlatformModel);
 
-        final List<IBundleContainer> bundleContainers = new ArrayList<IBundleContainer>();
+        final List<ITargetLocation> bundleContainers = new ArrayList<ITargetLocation>();
         for (final File dir : directories) {
             bundleContainers.add(new DirectoryBundleContainer(dir.getAbsolutePath()));
         }

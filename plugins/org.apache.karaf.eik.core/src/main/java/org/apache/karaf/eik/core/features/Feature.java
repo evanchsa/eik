@@ -38,6 +38,8 @@ public final class Feature implements ParentAwareObject<Object> {
 
     private final Element element;
 
+    private final String startLevel;
+
     private static final class BundleOnlyPredicate implements Predicate {
         @Override
         public boolean evaluate(final Object element) {
@@ -53,6 +55,8 @@ public final class Feature implements ParentAwareObject<Object> {
         }
 
         version = element.getAttributeValue("version");
+  
+        startLevel = element.getAttributeValue("start-level");
 
         this.element = element;
     }
@@ -132,6 +136,10 @@ public final class Feature implements ParentAwareObject<Object> {
         transformedList.addAll(element.getChildren());
 
         return Collections.unmodifiableList(KarafCorePluginUtils.filterList(transformedList, new FeatureOnlyPredicate()));
+    }
+
+    public String getStartLevel() {
+        return startLevel;
     }
 
 }

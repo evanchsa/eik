@@ -18,13 +18,13 @@
  */
 package org.apache.karaf.eik.ui.project;
 
+import java.util.Properties;
+
 import org.apache.karaf.eik.core.KarafCorePluginUtils;
 import org.apache.karaf.eik.core.KarafPlatformModel;
 import org.apache.karaf.eik.core.KarafPlatformModelRegistry;
 import org.apache.karaf.eik.ui.IKarafProject;
 import org.apache.karaf.eik.ui.KarafUIPluginActivator;
-
-import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -41,6 +41,8 @@ public class KarafProject extends PlatformObject implements IKarafProject {
 
     public static final IPath ROOT_PLATFORM_PATH = ROOT_PATH.append("platform");
 
+    public static final IPath ROOT_RUNTIME_PATH = ROOT_PATH.append("runtime");
+
     /**
      * Determines if the {@link IProject} is actually an {@link IKarafProject}
      *
@@ -51,8 +53,7 @@ public class KarafProject extends PlatformObject implements IKarafProject {
      */
     public static boolean isKarafProject(final IProject project) {
         try {
-            final String karafProject = project.getPersistentProperty(
-                    new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafProject"));
+            final String karafProject = project.getPersistentProperty(new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafProject"));
 
             return karafProject != null;
         } catch (final CoreException e) {
@@ -127,7 +128,7 @@ public class KarafProject extends PlatformObject implements IKarafProject {
     public Properties getRuntimeProperties() {
         try {
             return KarafCorePluginUtils.loadProperties(
-                    project.getFolder("runtime").getRawLocation().toFile(),
+                    project.getFolder(ROOT_RUNTIME_PATH).getRawLocation().toFile(),
                     "runtime.properties");
         } catch (final CoreException e) {
             return new Properties();

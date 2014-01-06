@@ -231,10 +231,12 @@ public class GenericKarafWorkbenchService implements KarafWorkbenchService {
             final String bundleLocation =
                 KarafCorePluginUtils.getBundleLocation(b);
 
-            final BundleEntry entry =
-                new BundleEntry.Builder(bundleLocation).startLevel("1").autostart("start").build(); //$NON-NLS-1$ $NON-NLS-2$
-
-            bundleEntries.add(entry);
+            if (bundleLocation != null) {
+                final BundleEntry entry =
+                        new BundleEntry.Builder(bundleLocation).startLevel("1").autostart("start").build(); //$NON-NLS-1$ $NON-NLS-2$
+                
+                bundleEntries.add(entry);
+            }
         }
 
         return bundleEntries;

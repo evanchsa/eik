@@ -18,13 +18,13 @@
  */
 package org.apache.karaf.eik.ui.project;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.karaf.eik.core.KarafPlatformModel;
 import org.apache.karaf.eik.core.KarafWorkingPlatformModel;
 import org.apache.karaf.eik.ui.IKarafProject;
 import org.apache.karaf.eik.ui.KarafLaunchConfigurationInitializer;
 import org.apache.karaf.eik.ui.KarafUIPluginActivator;
-
-import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -36,9 +36,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.variables.IDynamicVariable;
 import org.eclipse.core.variables.VariablesPlugin;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class NewKarafProjectOperation extends WorkspaceModifyOperation {
@@ -119,16 +116,6 @@ public class NewKarafProjectOperation extends WorkspaceModifyOperation {
         newKarafProject.getProjectHandle().setPersistentProperty(
                 new QualifiedName(KarafUIPluginActivator.PLUGIN_ID, "karafModel"),
                 karafPlatformModel.getRootDirectory().toString());
-
-        final ILaunchConfigurationType launchType =
-            DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType("org.eclipse.pde.ui.EquinoxLauncher");
-
-        final ILaunchConfigurationWorkingCopy launchConfiguration =
-            launchType.newInstance(newKarafProject.getProjectHandle(), newKarafProject.getName());
-
-        KarafLaunchConfigurationInitializer.initializeConfiguration(launchConfiguration);
-
-        launchConfiguration.doSave();
     }
 
     private void createProject(final IProgressMonitor monitor) throws CoreException {

@@ -45,6 +45,7 @@
         <module>plugins/org.apache.aries.jmx.core</module>
         <module>plugins/org.apache.commons.collections</module>
         <module>plugins/org.apache.commons.lang</module>
+        <module>plugins/jdom</module>
         <module>plugins/org.apache.mina.core</module>
         <module>plugins/org.apache.sshd.core</module>
         <module>plugins/org.fusesource.jansi</module>

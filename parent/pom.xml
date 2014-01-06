@@ -35,7 +35,7 @@
     <name>Apache Karaf :: EIK :: Parent</name>
 
     <properties>
-        <platform-version-name>helios</platform-version-name>
+        <platform-version-name>juno</platform-version-name>
         <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
         <wikitext-site>http://download.eclipse.org/tools/mylyn/update/weekly</wikitext-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/${platform-version-name}/dev-build/update-site
@@ -46,6 +46,7 @@
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
         <jansi.version>1.7</jansi.version>
+        <jdom.version>1.0</jdom.version>
         <mina.version>2.0.1</mina.version>
         <pax.url.version>1.2.8</pax.url.version>
         <sshd.version>0.5.0</sshd.version>

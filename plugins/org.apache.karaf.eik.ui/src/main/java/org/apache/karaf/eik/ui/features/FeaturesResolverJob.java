@@ -119,7 +119,7 @@ public final class FeaturesResolverJob extends Job {
                     final String repos = (String) mvnConfiguration.get("org.ops4j.pax.url.mvn.repositories");
 
                     final String combinedRepos = KarafCorePluginUtils.join(Arrays.asList(new String[] { defaultRepos, repos }), ",");
-                    mvnConfiguration.put("org.ops4j.pax.url.mvn.repositories", combinedRepos);
+                    mvnConfiguration.put("org.ops4j.pax.url.mvn.repositories", removeInvalidSuffixes(combinedRepos));
                     // End: Refactor
 
                     final String repositoryName;
@@ -167,5 +167,27 @@ public final class FeaturesResolverJob extends Job {
             monitor.done();
         }
     }
+
+	private String removeInvalidSuffixes(String mergedRepositories) {
+		String[] repositories = mergedRepositories.split(",");
+		
+		for (int i = 0; i < repositories.length; i++) {
+			String repository = repositories[0];
+			String[] segments = repository.split("@");
+			StringBuilder urlBuilder = new StringBuilder(segments[0]);
+			for (int j = 0; j < segments.length; ++j)
+			{
+				String segment = segments[j];
+				if (segment.trim().equalsIgnoreCase("snapshots") || segment.trim().equalsIgnoreCase("noreleases"))
+				{
+					urlBuilder.append("@");
+					urlBuilder.append(segment);
+				}
+			}
+			repositories[i] = urlBuilder.toString();
+		}
+		
+		return KarafCorePluginUtils.join(Arrays.asList(repositories), ",");
+	}
 
 }

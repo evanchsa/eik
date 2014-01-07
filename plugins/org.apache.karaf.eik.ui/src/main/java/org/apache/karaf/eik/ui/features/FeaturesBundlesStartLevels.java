@@ -66,9 +66,9 @@ public class FeaturesBundlesStartLevels {
 					String bundleStartLevel = bundle.getStartLevel();
 					
 					String startLevel = (bundleStartLevel != null) ? bundleStartLevel : featureStartLevel; 
-					if(startLevel != null) {
+					if (startLevel != null) {
 						String symbolicName = getSymbolicName(bundle.getBundleUrl());
-						if(symbolicName != null) {
+						if (symbolicName != null) {
 							symbolicNameToStartLevel.put(symbolicName, startLevel);
 						}
 					}
@@ -92,10 +92,13 @@ public class FeaturesBundlesStartLevels {
 		return symbolicNameToStartLevel.get(bundleSymbolicName);
 	}
 	
-	private String getSymbolicName(String bundleUrl){
+	private String getSymbolicName(String bundleUrl) {
+        if (bundleUrl == null) {
+            return null;
+        }
 		File bundlePath = new File(baseBundlesDir, converter.getPath(bundleUrl));
 		BundleDescription bundleDescription = karafPlatformModel.getState().getBundleByLocation(bundlePath.getAbsolutePath());
-		if(bundleDescription != null) {
+		if (bundleDescription != null) {
 			return bundleDescription.getSymbolicName();
 		} else {
 			return null;

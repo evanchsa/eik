@@ -235,34 +235,6 @@
 
     <profiles>
         <profile>
-            <id>platform-helios</id>
-            <activation>
-                <property>
-                    <name>platform-version-name</name>
-                    <value>helios</value>
-                </property>
-            </activation>
-            <properties>
-                <eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
-                <platform-version>[3.6,3.7)</platform-version>
-                <swtbot-site>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</swtbot-site>
-            </properties>
-        </profile>
-        <profile>
-            <id>platform-indigo</id>
-            <activation>
-                <property>
-                    <name>platform-version-name</name>
-                    <value>indigo</value>
-                </property>
-            </activation>
-            <properties>
-                <eclipse-site>http://download.eclipse.org/releases/indigo</eclipse-site>
-                <platform-version>[3.7,3.8)</platform-version>
-                <swtbot-site>http://download.eclipse.org/technology/swtbot/indigo/dev-build/update-site</swtbot-site>
-            </properties>
-        </profile>
-        <profile>
             <id>platform-juno</id>
             <activation>
                 <property>
@@ -274,6 +246,20 @@
                 <eclipse-site>http://download.eclipse.org/releases/juno</eclipse-site>
                 <platform-version>[3.8,3.9)</platform-version>
                 <swtbot-site>http://download.eclipse.org/technology/swtbot/juno/dev-build/update-site</swtbot-site>
+            </properties>
+        </profile>
+        <profile>
+            <id>platform-kepler</id>
+            <activation>
+                <property>
+                    <name>platform-version-name</name>
+                    <value>kepler</value>
+                </property>
+            </activation>
+            <properties>
+                <eclipse-site>http://download.eclipse.org/releases/kepler</eclipse-site>
+                <platform-version>[4.3,5)</platform-version>
+                <swtbot-site>http://download.eclipse.org/technology/swtbot/kepler/dev-build/update-site</swtbot-site>
             </properties>
         </profile>
         <profile>

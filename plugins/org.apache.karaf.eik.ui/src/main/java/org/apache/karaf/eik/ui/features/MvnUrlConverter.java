@@ -20,26 +20,25 @@ package org.apache.karaf.eik.ui.features;
 
 public class MvnUrlConverter {
 
-	public String getPath(String mvnUrl) {
-		if(mvnUrl != null) {
-			if(mvnUrl.startsWith("mvn:")) {
-				mvnUrl = mvnUrl.substring(4);
-			}
+	public String getPath(String url) {
+		if (url != null) {
+			if (url.startsWith("mvn:")) {
+				url = url.substring(4);
+                String[] repositorySplit = url.split("!");
+                String urlWithoutRepository = repositorySplit[repositorySplit.length - 1];
 
-			String[] repositorySplit = mvnUrl.split("!");
-			String urlWithoutRepository = repositorySplit[repositorySplit.length - 1];
-			
-			String[] segments = urlWithoutRepository.split("/");
-			if(segments.length == 3) {
-				String groupId = segments[0];
-				String artifactId = segments[1];
-				String version = segments[2];
-				
-				return groupId.replace(".", "/") + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".jar";
+                String[] segments = urlWithoutRepository.split("/");
+                if (segments.length >= 3) {
+                    String groupId = segments[0];
+                    String artifactId = segments[1];
+                    String version = segments[2];
+
+                    return groupId.replace(".", "/") + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".jar";
+                }
 			}
 		}
 		
-		return null;
+		return url;
 	}
 	
 }

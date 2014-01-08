@@ -93,9 +93,6 @@ public class FeaturesBundlesStartLevels {
 	}
 	
 	private String getSymbolicName(String bundleUrl) {
-        if (bundleUrl == null) {
-            return null;
-        }
 		File bundlePath = new File(baseBundlesDir, converter.getPath(bundleUrl));
 		BundleDescription bundleDescription = karafPlatformModel.getState().getBundleByLocation(bundlePath.getAbsolutePath());
 		if (bundleDescription != null) {

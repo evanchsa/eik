@@ -2,7 +2,7 @@
 <feature
       id="org.apache.karaf.eik.jmx.feature"
       label="Eclipse JMX Integration Feature for Apache Felix Karaf"
-      version="0.10.0"
+      version="3.0.0"
       provider-name="Apache Software Foundation">
 
    <description>
@@ -10,7 +10,7 @@
    </description>
 
    <copyright>
-      Copyright (c) 2010-2012 Apache Software Foundation
+      Copyright (c) 2010-2014 Apache Software Foundation
    </copyright>
 
    <license url="http\://www.apache.org/license/LICENSE-2.0.txt">
@@ -23,14 +23,14 @@
       <import plugin="org.eclipse.debug.core" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.ui" version="3.2.0" match="compatible"/>
-      <import plugin="org.apache.karaf.eik.jmx" version="0.10.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.karaf.eik.jmx" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.osgi.services"/>
       <import plugin="org.eclipse.jface.databinding" version="1.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface.text" version="3.6.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.editors" version="3.6.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.forms" version="3.5.2" match="greaterOrEqual"/>
-      <import plugin="org.apache.karaf.eik.core" version="0.10.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.karaf.eik.ui" version="0.10.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.karaf.eik.core" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.karaf.eik.ui" version="3.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

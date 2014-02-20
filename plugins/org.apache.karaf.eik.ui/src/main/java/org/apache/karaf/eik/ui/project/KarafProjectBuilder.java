@@ -194,6 +194,8 @@ public class KarafProjectBuilder extends IncrementalProjectBuilder {
         combinedProperties.put("karaf.home", karafHome);
         combinedProperties.put("karaf.base", karafHome);
         combinedProperties.put("karaf.data", getKarafPlatformModel().getRootDirectory().append("data").toOSString());
+        // Add ref to karaf.etc for karaf-3.0.0
+        combinedProperties.put("karaf.etc", getKarafPlatformModel().getRootDirectory().append("etc").toOSString());
 
         for (final String filename : new String[]{"config.properties", "system.properties", "users.properties"}) {
             final Properties fileProperties = KarafCorePluginUtils.loadProperties(getKarafPlatformModel().getConfigurationDirectory().toFile(), filename, true);

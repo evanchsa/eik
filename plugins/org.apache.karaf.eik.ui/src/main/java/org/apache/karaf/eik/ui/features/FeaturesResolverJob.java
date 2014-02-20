@@ -55,7 +55,7 @@ public final class FeaturesResolverJob extends Job {
     private static final String ORG_OPS4J_PAX_URL_MVN_CFG = "org.ops4j.pax.url.mvn.cfg";
 
     private final List<FeaturesRepository> featuresRepositories =
-        Collections.synchronizedList(new ArrayList<FeaturesRepository>());
+            Collections.synchronizedList(new ArrayList<FeaturesRepository>());
 
     private final FeaturesSection featuresSection;
 
@@ -90,10 +90,9 @@ public final class FeaturesResolverJob extends Job {
     /**
      * Helper method that resolves Karaf Features.
      *
-     * @param monitor
-     *            the {@link IProgressMonitor} instance
+     * @param monitor the {@link IProgressMonitor} instance
      * @return the {@link Status#OK_STATUS} if the Features are successfully
-     *         resolved
+     * resolved
      */
     private IStatus resolveFeatures(final IProgressMonitor monitor) {
         monitor.beginTask("Loading Karaf Features", featuresSection.getRepositoryList().size());
@@ -108,7 +107,7 @@ public final class FeaturesResolverJob extends Job {
                 try {
                     // Begin: Refactor this out in to an OPS4j mvn URL configuration
                     final Properties mvnConfiguration =
-                        KarafCorePluginUtils.loadProperties(karafPlatformModel.getConfigurationDirectory().toFile(), ORG_OPS4J_PAX_URL_MVN_CFG);
+                            KarafCorePluginUtils.loadProperties(karafPlatformModel.getConfigurationDirectory().toFile(), ORG_OPS4J_PAX_URL_MVN_CFG);
 
                     final IKarafProject karafProject = (IKarafProject) karafPlatformModel.getAdapter(IKarafProject.class);
                     final Properties runtimeProperties = karafProject.getRuntimeProperties();
@@ -118,7 +117,15 @@ public final class FeaturesResolverJob extends Job {
                     final String defaultRepos = (String) mvnConfiguration.get("org.ops4j.pax.url.mvn.defaultRepositories");
                     final String repos = (String) mvnConfiguration.get("org.ops4j.pax.url.mvn.repositories");
 
-                    final String combinedRepos = KarafCorePluginUtils.join(Arrays.asList(new String[] { defaultRepos, repos }), ",");
+                    // In karaf-3.0.0, default repo may be null.
+                    // First check if it's null an if not then add it to repo list
+                    ArrayList<String> reposList = new ArrayList<String>();
+                    if (defaultRepos != null)
+                        reposList.add(defaultRepos);
+                    if (repos != null)
+                        reposList.add(repos);
+                    final String combinedRepos = KarafCorePluginUtils.join(reposList, ",");
+
                     mvnConfiguration.put("org.ops4j.pax.url.mvn.repositories", removeInvalidSuffixes(combinedRepos));
                     // End: Refactor
 
@@ -168,26 +175,24 @@ public final class FeaturesResolverJob extends Job {
         }
     }
 
-	private String removeInvalidSuffixes(String mergedRepositories) {
-		String[] repositories = mergedRepositories.split(",");
-		
-		for (int i = 0; i < repositories.length; i++) {
-			String repository = repositories[0];
-			String[] segments = repository.split("@");
-			StringBuilder urlBuilder = new StringBuilder(segments[0]);
-			for (int j = 0; j < segments.length; ++j)
-			{
-				String segment = segments[j];
-				if (segment.trim().equalsIgnoreCase("snapshots") || segment.trim().equalsIgnoreCase("noreleases"))
-				{
-					urlBuilder.append("@");
-					urlBuilder.append(segment);
-				}
-			}
-			repositories[i] = urlBuilder.toString();
-		}
-		
-		return KarafCorePluginUtils.join(Arrays.asList(repositories), ",");
-	}
+    private String removeInvalidSuffixes(String mergedRepositories) {
+        String[] repositories = mergedRepositories.split(",");
+
+        for (int i = 0; i < repositories.length; i++) {
+            String repository = repositories[0];
+            String[] segments = repository.split("@");
+            StringBuilder urlBuilder = new StringBuilder(segments[0]);
+            for (int j = 0; j < segments.length; ++j) {
+                String segment = segments[j];
+                if (segment.trim().equalsIgnoreCase("snapshots") || segment.trim().equalsIgnoreCase("noreleases")) {
+                    urlBuilder.append("@");
+                    urlBuilder.append(segment);
+                }
+            }
+            repositories[i] = urlBuilder.toString();
+        }
+
+        return KarafCorePluginUtils.join(Arrays.asList(repositories), ",");
+    }
 
 }

@@ -31,7 +31,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 
 public class StartupSectionImpl extends AbstractPropertiesConfigurationSection implements
-                StartupSection {
+        StartupSection {
 
     /**
      * Simple object that models a start level and {@link BundleDescription}
@@ -70,9 +70,8 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
      * Constructor. This will build the necessary data objects to support
      * querying the Karaf target platform startup state model.
      *
-     * @param karafModel
-     *            the {@link KarafPlatformModel} that will be used to build the
-     *            startup state model
+     * @param karafModel the {@link KarafPlatformModel} that will be used to build the
+     *                   startup state model
      */
     public StartupSectionImpl(KarafPlatformModel karafModel) {
         super(STARTUP_SECTION_ID, STARTUP_FILENAME, karafModel);
@@ -110,24 +109,53 @@ public class StartupSectionImpl extends AbstractPropertiesConfigurationSection i
     }
 
     /**
+     * Converts a MVN url to a file path, relative to System.
+     * Code taken from MvnUrlConverter from UI plugin.
+     * TODO: move class MvnUrlConverter inside core plugin and use it
+     * as dependency from UI plugin.
+     */
+    protected String getPath(String url) {
+        if (url != null) {
+            if (url.startsWith("mvn:")) {
+                url = url.substring(4);
+                String[] repositorySplit = url.split("!");
+                String urlWithoutRepository = repositorySplit[repositorySplit.length - 1];
+
+                String[] segments = urlWithoutRepository.split("/");
+                if (segments.length >= 3) {
+                    String groupId = segments[0];
+                    String artifactId = segments[1];
+                    String version = segments[2];
+
+                    return groupId.replace(".", "/") + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".jar";
+                }
+            }
+        }
+
+        return url;
+    }
+
+    /**
      * Populates the startup state model with the {@link BundleDescriptions} of
      * the bundles found in the startup configuration.
      */
     protected void populateStartupStateModel() {
         final File rootBundleDir = getParent().getPluginRootDirectory().toFile();
         for (Object o : getProperties().keySet()) {
-            final File bundleLocation = new File(rootBundleDir, (String) o);
+            // In karaf-3.0.0, mvn urls are sored instead of raw paths.
+            // Then first try to convert mvn urls to raw path.
+            final File bundleLocation = new File(rootBundleDir, getPath((String) o));
 
             final BundleDescription desc = getParent().getState().getBundleByLocation(
-                            bundleLocation.getAbsolutePath());
+                    bundleLocation.getAbsolutePath());
 
             if (desc == null) {
                 KarafCorePluginActivator.getLogger().error(
-                                "Unable to locate bundle description for: "
-                                                + bundleLocation.getAbsolutePath());
+                        "Unable to locate bundle description for: "
+                                + bundleLocation.getAbsolutePath());
             } else {
                 final BundleStartEntry se = new BundleStartEntry(desc, (String) getProperties()
-                                .get(o));
+                        .get(o));
                 startupStateModel.put(desc.getSymbolicName(), se);
 
             }

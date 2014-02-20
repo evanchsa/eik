@@ -30,7 +30,9 @@ public interface IKarafConstants {
 
     public static final String KARAF_DATA_PROP = "karaf.data";
 
-    public static final String KARAF_DEFAULT_BUNDLE_START_LEVEL = "60";
+    public static final String KARAF_ETC_PROP = "karaf.etc";
+
+    public static final String KARAF_DEFAULT_BUNDLE_START_LEVEL = "80";
 
     public static final String KARAF_DEFAULT_CONFIG_PROPERTIES_FILE = "config.properties";
 

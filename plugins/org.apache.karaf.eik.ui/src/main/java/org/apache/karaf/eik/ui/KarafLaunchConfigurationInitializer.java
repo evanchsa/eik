@@ -67,8 +67,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
     /**
      * Convenience method for initializing a Karaf launch configuration
      *
-     * @param configuration
-     *            the working copy of the launch configuration
+     * @param configuration the working copy of the launch configuration
      */
     public static void initializeConfiguration(final ILaunchConfigurationWorkingCopy configuration) {
         final KarafLaunchConfigurationInitializer configurationInitializer = new KarafLaunchConfigurationInitializer();
@@ -126,7 +125,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      * Karaf platform and defers the the parent for all other bundles.
      *
      * @see org.eclipse.pde.ui.launcher.OSGiLaunchConfigurationInitializer#getAutoStart
-     *      (java.lang.String)
+     * (java.lang.String)
      */
     @Override
     protected String getAutoStart(final String bundleID) {
@@ -145,7 +144,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      * provided by the parent.
      *
      * @see org.eclipse.pde.ui.launcher.OSGiLaunchConfigurationInitializer#getStartLevel
-     *      (java.lang.String)
+     * (java.lang.String)
      */
     @Override
     protected String getStartLevel(final String bundleID) {
@@ -195,8 +194,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
      * launcher. This includes registering the default boot classpath entries
      * and setting the Karaf platform default OSGi bundle start level.
      *
-     * @param configuration
-     *            the launch configuration
+     * @param configuration the launch configuration
      * @see org.eclipse.pde.ui.launcher.OSGiLaunchConfigurationInitializer#initializeFrameworkDefaults(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
      */
     @Override
@@ -252,24 +250,29 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
             String memento = workspaceTargetHandle.getMemento();
 
             IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-            IResource targetDefinitionFile = root.findMember(memento);
-            if (targetDefinitionFile != null) {
-                return targetDefinitionFile.getProject();
-            }
+            return root.getProject(getProjectNameFromMemento(memento));
+        } else {
+            return null;
         }
+    }
 
-        return null;
+    private String getProjectNameFromMemento(String memento) {
+        String[] split = memento.split("/");
+        if (split.length != 3) {
+            throw new IllegalArgumentException();
+        } else {
+            return split[1];
+        }
     }
 
     /**
      * Returns the a plugin id favoring the newest version in the target
      * platform
      *
-     * @param model
-     *            the {@link IPluginModelBase}
+     * @param model the {@link IPluginModelBase}
      * @return the string plugin identifier with an optional version set at the
-     *         newest version if there is more than one plugin that responds to
-     *         the given id
+     * newest version if there is more than one plugin that responds to
+     * the given id
      */
     private String getBundleId(final IPluginModelBase model) {
         final IPluginBase base = model.getPluginBase();
@@ -288,8 +291,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
     /**
      * Adds default VM arguments to this launch configuration
      *
-     * @param configuration
-     *            the working copy of the launch configuration
+     * @param configuration the working copy of the launch configuration
      */
     private void addDefaultVMArguments(final ILaunchConfigurationWorkingCopy configuration) {
         final StringBuffer vmArgs = new StringBuffer();
@@ -301,7 +303,7 @@ public class KarafLaunchConfigurationInitializer extends OSGiLaunchConfiguration
         // prevent terminal CTRL-characters in Eclipse console on Windows
         final String localOperatingSystem = System.getProperty("os.name"); //$NON-NLS-1$
         if (localOperatingSystem.toLowerCase().indexOf("windows") >= 0 //$NON-NLS-1$
-            && vmArgs.indexOf("-Djline.terminal") == -1) { //$NON-NLS-1$
+                && vmArgs.indexOf("-Djline.terminal") == -1) { //$NON-NLS-1$
             vmArgs.append(" -Djline.terminal=jline.UnsupportedTerminal"); //$NON-NLS-1$
         }
 

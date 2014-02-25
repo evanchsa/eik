@@ -64,7 +64,9 @@
         <module>features/org.apache.karaf.eik.jmx.feature</module>
         <module>features/org.apache.karaf.eik.wtp.feature</module>
         <module>features/org.apache.karaf.eik.feature</module>
-        <module>features/org.apache.karaf.eik.repository</module>
+
+        <!-- Repository -->
+        <module>repository</module>
 
         <!-- Archetypes -->
         <module>archetypes/eik-camel-archetype</module>

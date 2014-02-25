@@ -25,13 +25,13 @@
         <groupId>org.apache.karaf.eik</groupId>
         <artifactId>parent</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../../parent/pom.xml</relativePath>
+        <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.karaf.eik.features</groupId>
+    <groupId>org.apache.karaf.eik</groupId>
     <artifactId>org.apache.karaf.eik.repository</artifactId>
     <packaging>eclipse-repository</packaging>
-    <name>Apache Karaf :: EIK :: Features :: Eclipse P2 Repository</name>
+    <name>Apache Karaf :: EIK :: P2 Repository</name>
 
     <build>
         <plugins>

@@ -68,8 +68,7 @@ abstract public class AbstractKarafPlatformModel implements KarafPlatformModel {
         synchronized (monitor) {
             if (pdeState == null) {
                 bundleList.addAll(getPlatformBundles());
-
-                pdeState = new PDEState(bundleList.toArray(new URL[0]), false, new NullProgressMonitor());
+                pdeState = new PDEState(bundleList.toArray(new URL[0]), false, false, new NullProgressMonitor());
             }
         }
 

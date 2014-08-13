@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Karaf :: EIK :: Plugins :: Core
 Bundle-SymbolicName: org.apache.karaf.eik.core;singleton:=true
-Bundle-Version: 3.0.0
+Bundle-Version: 3.0.0.SNAPSHOT
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
  org.eclipse.core.resources;bundle-version="[3.0.0,4.0.0)",
@@ -24,5 +24,32 @@ Export-Package: org.apache.karaf.eik.core,
  org.apache.karaf.eik.core.shell
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.apache.karaf.eik.core.internal.KarafCorePluginActivator
-Bundle-Vendor: Apache Software Foundation
-
+Bundle-Vendor: The Apache Software Foundation
+Bundle-ClassPath: .,
+ ant-antlr.jar,
+ ant-apache-bcel.jar,
+ ant-apache-bsf.jar,
+ ant-apache-log4j.jar,
+ ant-apache-oro.jar,
+ ant-apache-regexp.jar,
+ ant-apache-resolver.jar,
+ ant-apache-xalan2.jar,
+ ant-commons-logging.jar,
+ ant-commons-net.jar,
+ ant-jai.jar,
+ ant-javamail.jar,
+ ant-jdepend.jar,
+ ant-jmf.jar,
+ ant-jsch.jar,
+ ant-junit.jar,
+ ant-junit4.jar,
+ ant-launcher.jar,
+ ant-netrexx.jar,
+ ant-swing.jar,
+ ant-testutil.jar,
+ ant.jar,
+ junit.jar,
+ pdebuild.jar,
+ jdi.jar,
+ jdimodel.jar,
+ jdom-1.0.jar

@@ -35,7 +35,7 @@
     <name>Apache Karaf :: EIK :: Parent</name>
 
     <properties>
-        <platform-version-name>kepler</platform-version-name>
+        <platform-version-name>luna</platform-version-name>
         <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
         <wikitext-site>http://download.eclipse.org/tools/mylyn/update/weekly</wikitext-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/${platform-version-name}/dev-build/update-site</swtbot-site>
@@ -233,6 +233,20 @@
     </repositories>
 
     <profiles>
+        <profile>
+            <id>platform-luna</id>
+            <activation>
+                <property>
+                    <name>platform-version-name</name>
+                    <value>luna</value>
+                </property>
+            </activation>
+            <properties>
+                <eclipse-site>http://download.eclipse.org/releases/luna</eclipse-site>
+                <platform-version>[4.4,5)</platform-version>
+                <swtbot-site>http://download.eclipse.org/technology/swtbot/luna/dev-build/update-site</swtbot-site>
+            </properties>
+        </profile>
         <profile>
             <id>platform-kepler</id>
             <activation>

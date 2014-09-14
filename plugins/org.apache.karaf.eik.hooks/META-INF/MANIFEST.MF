@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Karaf :: EIK :: Plugins :: Framework Extensions for Eclipse Integration for Apache Felix Karaf
+Bundle-SymbolicName: org.apache.karaf.eik.hooks;singleton:=true
+Bundle-Version: 3.0.0
+Fragment-Host: org.eclipse.osgi;bundle-version="3.4.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: Apache Software Foundation
+

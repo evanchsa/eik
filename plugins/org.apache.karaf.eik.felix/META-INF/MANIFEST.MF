@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Karaf :: EIK :: Plugins :: Felix OSGi Framework for Eclipse PDE
+Bundle-SymbolicName: org.apache.karaf.eik.felix;singleton:=true
+Bundle-Version: 3.0.0
+Bundle-Activator: org.apache.karaf.eik.felix.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.debug.ui;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.jdt.core;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.jdt.launching;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.pde;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.pde.ui;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.core.variables;bundle-version="[3.2.0,4.0.0)"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Vendor: Apache Software Foundation
+

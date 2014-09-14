@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-Description:  Types that extend and augment the Java Lang.
+Bundle-DocURL: http://www.apache.org/
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: commons-lang
+Bundle-SymbolicName: org.apache.commons.lang
+Bundle-Vendor: The Apache Software Foundation
+Bundle-Version: 2.6
+Export-Package: org.apache.commons.lang;version="2.6.0",
+ org.apache.commons.lang.builder;version="2.6.0",
+ org.apache.commons.lang.enums;version="2.6.0",
+ org.apache.commons.lang.exception;version="2.6.0",
+ org.apache.commons.lang.math;version="2.6.0",
+ org.apache.commons.lang.mutable;version="2.6.0",
+ org.apache.commons.lang.text;version="2.6.0",
+ org.apache.commons.lang.time;version="2.6.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: lib/commons-lang-2.6.jar
+Import-Package: org.apache.commons.lang;version="2.6.0",
+ org.apache.commons.lang.builder;version="2.6.0",
+ org.apache.commons.lang.enums;version="2.6.0",
+ org.apache.commons.lang.exception;version="2.6.0",
+ org.apache.commons.lang.math;version="2.6.0",
+ org.apache.commons.lang.mutable;version="2.6.0",
+ org.apache.commons.lang.text;version="2.6.0",
+ org.apache.commons.lang.time;version="2.6.0"

@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Karaf :: EIK :: Plugins :: Eclipse Workbench Service Registry
+Bundle-SymbolicName: org.apache.karaf.eik.workbench;singleton:=true
+Bundle-Version: 3.0.0
+Bundle-Activator: org.apache.karaf.eik.workbench.KarafWorkbenchActivator
+Bundle-Vendor: Apache Software Foundation
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.1.0,4.0.0)",
+ org.eclipse.debug.core;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.jdt.launching;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.jface.databinding;bundle-version="1.4.0",
+ org.eclipse.jface.text;bundle-version="3.6.1",
+ org.eclipse.ui;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.ui.editors;bundle-version="3.6.1",
+ org.eclipse.ui.forms;bundle-version="3.5.2",
+ org.eclipse.ui.navigator;bundle-version="3.5.0",
+ org.eclipse.ui.navigator.resources;bundle-version="3.4.202",
+ org.apache.karaf.eik.core;bundle-version="[3.0.0,4.0.0)",
+ org.apache.karaf.eik.jmx;bundle-version="[3.0.0,4.0.0)",
+ org.apache.karaf.eik.ui;bundle-version="[3.0.0,4.0.0)"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: org.apache.karaf.eik.workbench,
+ org.apache.karaf.eik.workbench.factory,
+ org.apache.karaf.eik.workbench.provider
+Import-Package: javax.management,
+ org.apache.aries.jmx.codec;version="0.2.0.incubating",
+ org.osgi.jmx.framework;version="1.5.0"
+

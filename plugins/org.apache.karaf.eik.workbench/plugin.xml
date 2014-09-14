@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="jmxConnectorProvider" name="JMX Connector Provider" schema="schema/jmxConnectorProvider.exsd"/>
+   <extension
+         id="runtimeData"
+         name="OSGi C&amp;C Runtime Data provider"
+         point="org.apache.karaf.eik.ui.service">
+      <launchCustomizer
+            class="org.apache.karaf.eik.workbench.factory.MBeanProviderWorkbenchServiceFactory">
+      </launchCustomizer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.apache.karaf.eik.workbench.karaf"
+            name="Apache Karaf">
+      </category>
+      <view
+            allowMultiple="false"
+            category="org.apache.karaf.eik.workbench.karaf"
+            class="org.apache.karaf.eik.workbench.ui.views.bundle.BundlesView"
+            icon="icons/obj16/bundle_obj.gif"
+            id="org.apache.karaf.eik.workbench.karafBundles"
+            name="Bundles"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="org.apache.karaf.eik.workbench.karaf"
+            class="org.apache.karaf.eik.workbench.ui.views.services.ServicesView"
+            icon="icons/obj16/generic_elements.gif"
+            id="org.apache.karaf.eik.workbench.karafServices"
+            name="Services">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.apache.karaf.eik.workbench.ui.KarafWorkbenchPerspectiveFactory"
+            icon="icons/obj16/karaf-logo-16x16.png"
+            id="org.apache.karaf.eik.workbench.karafPerspective"
+            name="Apache Karaf">
+         <description>
+            Apache Karaf
+         </description>
+      </perspective>
+   </extension>
+   <extension
+         point="org.apache.karaf.eik.workbench.jmxConnectorProvider">
+      <transport
+            class="org.apache.karaf.eik.workbench.jmx.internal.RMIConnectionProvider"
+            protocol="rmi">
+      </transport>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.apache.karaf.eik.workbench.ui.editor.KarafPlatformEditorPart"
+            default="false"
+            icon="icons/obj16/karaf-logo-16x16.png"
+            id="org.apache.karaf.eik.ui.editors.KarafPlatformEditor"
+            name="Karaf Platform">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <actionProvider
+            class="org.apache.karaf.eik.workbench.internal.WorkbenchActionProvider"
+            id="org.apache.karaf.eik.ui.navigator.workbenchActionProvider">
+         <enablement>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.apache.karaf.eik.KarafProjectNature">
+               </test>
+            </adapt>
+         </enablement>
+      </actionProvider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerActionBinding
+            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <actionExtension
+                  pattern="org.apache.karaf.eik.ui.navigator.*">
+            </actionExtension>
+         </includes>
+      </viewerActionBinding>
+   </extension>
+
+</plugin>

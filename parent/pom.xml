@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!--
+
+        Licensed to the Apache Software Foundation (ASF) under one or more
+        contributor license agreements.  See the NOTICE file distributed with
+        this work for additional information regarding copyright ownership.
+        The ASF licenses this file to You under the Apache License, Version 2.0
+        (the "License"); you may not use this file except in compliance with
+        the License.  You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+    -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache</groupId>
+        <artifactId>apache</artifactId>
+        <version>13</version>
+        <relativePath />
+    </parent>
+
+    <groupId>org.apache.karaf.eik</groupId>
+    <artifactId>parent</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Apache Karaf :: EIK :: Parent</name>
+
+    <properties>
+        <platform-version-name>luna</platform-version-name>
+        <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
+        <wikitext-site>http://download.eclipse.org/tools/mylyn/update/weekly</wikitext-site>
+        <swtbot-site>http://download.eclipse.org/technology/swtbot/${platform-version-name}/dev-build/update-site</swtbot-site>
+        <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
+        <tycho-version>0.13.0</tycho-version>
+        <aries.jmx.version>1.0.0</aries.jmx.version>
+        <commons-collections.version>3.2.1</commons-collections.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <jansi.version>1.7</jansi.version>
+        <jdom.version>1.0</jdom.version>
+        <mina.version>2.0.1</mina.version>
+        <pax.url.version>1.2.8</pax.url.version>
+        <sshd.version>0.5.0</sshd.version>
+        <integration.version>1.0.0</integration.version>
+        <scala.version>2.9.1</scala.version>
+        <scala-plugin.version>2.15.2</scala-plugin.version>
+    </properties>
+
+    <scm>
+        <connection>scm:git:https://git-wip-us.apache.org/repos/asf/karaf-eik.git</connection>
+        <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/karaf-eik.git</developerConnection>
+        <url>https://git-wip-us.apache.org/repos/asf?p=karaf-eik.git;a=summary</url>
+    </scm>
+
+    <issueManagement>
+        <system>jira</system>
+        <url>https://issues.apache.org/jira/browse/KARAF</url>
+    </issueManagement>
+
+    <mailingLists>
+        <mailingList>
+            <name>Karaf Dev</name>
+            <subscribe>dev-subscribe@karaf.apache.org</subscribe>
+            <unsubscribe>dev-unsubscribe@karaf.apache.org</unsubscribe>
+            <post>-</post>
+            <archive>http://www.mail-archive.com/dev%karaf.apache.org/</archive>
+        </mailingList>
+        <mailingList>
+            <name>Karaf User</name>
+            <subscribe>user-subscribe@karaf.apache.org</subscribe>
+            <unsubscribe>user-unsubscribe@karaf.apache.org</unsubscribe>
+            <post>-</post>
+            <archive>http://www.mail-archive.com/user%40karaf.apache.org/</archive>
+        </mailingList>
+        <mailingList>
+            <name>Karaf Commits</name>
+            <subscribe>commits-subscribe@karaf.apache.org</subscribe>
+            <unsubscribe>commits-unsubscribe@karaf.apache.org</unsubscribe>
+            <post>-</post>
+            <archive>http://www.mail-archive.com/commits%40karaf.apache.org/</archive>
+        </mailingList>
+        <mailingList>
+            <name>Karaf Issues</name>
+            <subscribe>issues-subscribe@karaf.apache.org</subscribe>
+            <unsubscribe>issues-unsubscribe@karaf.apache.org</unsubscribe>
+            <post>-</post>
+            <archive>http://www.mail-archive.com/issues%40karaf.apache.org/</archive>
+        </mailingList>
+    </mailingLists>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.2.1</version>
+                    <configuration>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <preparationGoals>clean install</preparationGoals>
+                        <goals>deploy</goals>
+                        <arguments>-Prelease</arguments>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <remoteTagging>false</remoteTagging>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-compiler-plugin</artifactId>
+                    <version>${tycho-version}</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-packaging-plugin</artifactId>
+                    <version>${tycho-version}</version>
+                    <configuration>
+                        <strictVersions>false</strictVersions>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <archive>
+                            <manifestFile>${pom.basedir}/META-INF/MANIFEST.MF</manifestFile>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.4.1</version>
+                    <configuration>
+                        <encoding>ISO-8859-1</encoding>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- enable tycho build extension -->
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-maven-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>target-platform-configuration</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <!-- configure the p2 target environments for multi-platform build -->
+                    <environments>
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                        <environment>
+                            <os>win32</os>
+                            <ws>win32</ws>
+                            <arch>x86</arch>
+                        </environment>
+                    </environments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>helios</id>
+            <layout>p2</layout>
+            <url>${eclipse-site}</url>
+        </repository>
+        <repository>
+            <id>swtbot</id>
+            <layout>p2</layout>
+            <url>${swtbot-site}</url>
+        </repository>
+        <repository>
+            <id>wikitext</id>
+            <layout>p2</layout>
+            <url>${wikitext-site}</url>
+        </repository>
+        <repository>
+            <id>orbit</id>
+            <layout>p2</layout>
+            <url>${orbit-site}</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <id>servicemix</id>
+            <name>Apache ServiceMix</name>
+            <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
+    <profiles>
+        <profile>
+            <id>platform-luna</id>
+            <activation>
+                <property>
+                    <name>platform-version-name</name>
+                    <value>luna</value>
+                </property>
+            </activation>
+            <properties>
+                <eclipse-site>http://download.eclipse.org/releases/luna</eclipse-site>
+                <platform-version>[4.4,5)</platform-version>
+                <swtbot-site>http://download.eclipse.org/technology/swtbot/luna/dev-build/update-site</swtbot-site>
+            </properties>
+        </profile>
+        <profile>
+            <id>platform-kepler</id>
+            <activation>
+                <property>
+                    <name>platform-version-name</name>
+                    <value>kepler</value>
+                </property>
+            </activation>
+            <properties>
+                <eclipse-site>http://download.eclipse.org/releases/kepler</eclipse-site>
+                <platform-version>[4.3,5)</platform-version>
+                <swtbot-site>http://download.eclipse.org/technology/swtbot/kepler/dev-build/update-site</swtbot-site>
+            </properties>
+        </profile>
+        <profile>
+            <id>platform-juno</id>
+            <activation>
+                <property>
+                    <name>platform-version-name</name>
+                    <value>juno</value>
+                </property>
+            </activation>
+            <properties>
+                <eclipse-site>http://download.eclipse.org/releases/juno</eclipse-site>
+                <platform-version>[3.8,3.9)</platform-version>
+                <swtbot-site>http://download.eclipse.org/technology/swtbot/juno/dev-build/update-site</swtbot-site>
+            </properties>
+        </profile>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <inherited>true</inherited>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.7</version>
+                        <configuration>
+                            <updateReleaseInfo>true</updateReleaseInfo>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.4</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

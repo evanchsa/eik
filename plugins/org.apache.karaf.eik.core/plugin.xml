@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="platformModel" name="Apache Felix Karaf Platform Models" schema="schema/platformModel.exsd"/>
+   <extension
+         point="org.eclipse.core.variables.dynamicVariables">
+      <variable
+            description="A variable resolver for filesystem locations of Eclipse plugins"
+            name="plugin_loc"
+            resolver="org.apache.karaf.eik.core.internal.PluginLocVariableResolver"
+            supportsArgument="true">
+      </variable>
+   </extension>
+   <extension
+         id="directoryModel"
+         name="Directory based platform for Apache Felix Karaf"
+         point="org.apache.karaf.eik.core.platformModel">
+      <model
+            class="org.apache.karaf.eik.core.internal.GenericKarafPlatformModelFactory">
+         <triggerBundle
+               symbolicName="org.apache.karaf.main"></triggerBundle>
+         <triggerBundle
+               symbolicName="org.apache.felix.karaf.jaas.boot">
+         </triggerBundle>
+         <triggerBundle
+               symbolicName="org.apache.karaf.main">
+         </triggerBundle>
+         <triggerBundle
+               symbolicName="org.apache.karaf.jass.boot">
+         </triggerBundle>
+      </model>
+   </extension>
+
+</plugin>

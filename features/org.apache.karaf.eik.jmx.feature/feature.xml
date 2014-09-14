@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.apache.karaf.eik.jmx.feature"
+      label="Eclipse JMX Integration Feature for Apache Felix Karaf"
+      version="3.0.0"
+      provider-name="Apache Software Foundation">
+
+   <description>
+      JMX Integration for Apache Karaf runtimes
+   </description>
+
+   <copyright>
+      Copyright (c) 2010-2014 Apache Software Foundation
+   </copyright>
+
+   <license url="http\://www.apache.org/license/LICENSE-2.0.txt">
+      Apache License 2.0
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.core.runtime" version="3.1.0" match="compatible"/>
+      <import plugin="org.eclipse.debug.core" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.jdt.launching" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.2.0" match="compatible"/>
+      <import plugin="org.apache.karaf.eik.jmx" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.osgi.services"/>
+      <import plugin="org.eclipse.jface.databinding" version="1.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text" version="3.6.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.6.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.forms" version="3.5.2" match="greaterOrEqual"/>
+      <import plugin="org.apache.karaf.eik.core" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.karaf.eik.ui" version="3.0.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="org.apache.karaf.eik.jmx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.karaf.eik.workbench"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.aries.jmx.api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.aries.jmx.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

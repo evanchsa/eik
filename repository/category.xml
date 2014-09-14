@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.apache.karaf.eik.wtp.feature_3.0.0.jar" id="org.apache.karaf.eik.wtp.feature" version="3.0.0">
+      <category name="Eclipse Web Tools Platform Integration for Apache Karaf"/>
+   </feature>
+   <feature url="features/org.apache.karaf.eik.feature_3.0.0.jar" id="org.apache.karaf.eik.feature" version="3.0.0">
+      <category name="Eclipse Integration for Apache Karaf"/>
+   </feature>
+   <feature url="features/org.apache.karaf.eik.jmx.feature_3.0.0.jar" id="org.apache.karaf.eik.jmx.feature" version="3.0.0">
+      <category name="Eclipse Integration for Apache Karaf"/>
+   </feature>
+   <category-def name="Eclipse Integration for Apache Karaf" label="Eclipse Integration for Apache Karaf"/>
+   <category-def name="Eclipse Web Tools Platform Integration for Apache Karaf" label="Eclipse Web Tools Platform Integration for Apache Karaf"/>
+</site>

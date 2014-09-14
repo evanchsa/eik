@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
-Export-Package: org.fusesource.jansi;version="1.5"
+Export-Package: org.fusesource.jansi;version="1.7"
 Ignore-Package: org.fusesource.jansi,org.fusesource.jansi.internal
 Implementation-Title: jansi
-Built-By: chirino
+Built-By: Fusesource
 Tool: Bnd-0.0.357
 Implementation-Vendor: FuseSource, Corp.
 Implementation-Vendor-Id: org.fusesource.jansi
@@ -15,15 +15,15 @@ Bundle-Name: jansi
 Created-By: 1.6.0_22 (Apple Inc.)
 Bundle-Vendor: FuseSource, Corp.
 Build-Jdk: 1.6.0_22
-Bundle-Version: 1.5
+Bundle-Version: 1.7
 Bnd-LastModified: 1288884946825
 Bundle-ManifestVersion: 2
 Bundle-Description: Jansi is a java library for generating and interpr
  eting ANSI escape sequences.
-Specification-Version: 1.5
+Specification-Version: 1.7
 Import-Package: sun.reflect;resolution:=optional
 Bundle-DocURL: http://fusesource.com/
 Archiver-Version: Plexus Archiver
-Bundle-ClassPath: lib/jansi-1.5.jar
+Bundle-ClassPath: lib/jansi-1.7.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 

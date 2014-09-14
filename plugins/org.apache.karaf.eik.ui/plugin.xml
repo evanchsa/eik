@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="service" name="Apache Karaf Workbench Service" schema="schema/service.exsd"/>
+   <extension
+         point="org.eclipse.ant.core.extraClasspathEntries">
+      <extraClasspathEntry
+            eclipseRuntime="false"
+            headless="true"
+            library="ant/lib/org.apache.ivy_2.2.1.alpha_20110704083644.jar">
+      </extraClasspathEntry>
+   </extension>
+   <extension
+         point="org.eclipse.pde.ui.launchShortcuts">
+      <shortcut
+            id="org.apache.karaf.eik.ui.KarafLaunchShortcut"
+            label="Launch an Apache Karaf application"
+            mode="run"
+            osgi="true">
+      </shortcut>
+      <shortcut
+            id="org.apache.karaf.eik.ui.KarafLaunchShortcut"
+            label="Launch an Apache Karaf application in Debug mode"
+            mode="debug"
+            osgi="true">
+      </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.pde.ui.osgiFrameworks">
+      <framework
+            id="org.apache.karaf.eik.Framework"
+            initializer="org.apache.karaf.eik.ui.KarafLaunchConfigurationInitializer"
+            launcherDelegate="org.apache.karaf.eik.ui.KarafLaunchConfigurationDelegate"
+            name="Apache Karaf on Equinox">
+      </framework>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabs">
+      <tab
+            class="org.apache.karaf.eik.ui.KarafConfigurationTab"
+            group="org.eclipse.pde.ui.launcher.EquinoxLauncherTabGroup"
+            id="org.apache.karaf.eik.ui.karafGeneralLaunchConfigurationTab"
+            name="Apache Karaf">
+         <placement
+               after="org.eclipse.pde.ui.launch.tab.tracing">
+         </placement>
+      </tab>
+   </extension>
+   <extension
+         id="karaf"
+         name="Default Apache Felix Karaf Workbench Services"
+         point="org.apache.karaf.eik.ui.service">
+      <launchCustomizer
+            class="org.apache.karaf.eik.ui.workbench.internal.GenericKarafWorkbenchServiceFactory">
+      </launchCustomizer>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.debug.core.ILaunchConfiguration"
+            class="org.apache.karaf.eik.ui.internal.KarafLaunchConfigurationAdapterFactory">
+         <adapter
+               type="org.apache.karaf.eik.core.KarafPlatformModel">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.eclipse.core.resources.IProject"
+            class="org.apache.karaf.eik.ui.internal.KarafLaunchConfigurationAdapterFactory">
+         <adapter
+               type="org.apache.karaf.eik.ui.IKarafProject">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.apache.karaf.eik.core.KarafPlatformModel"
+            class="org.apache.karaf.eik.ui.internal.KarafLaunchConfigurationAdapterFactory">
+         <adapter
+               type="org.apache.karaf.eik.ui.IKarafProject">
+         </adapter>
+      </factory>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.apache.karaf.eik.ui.karafWizardsCategory"
+            name="Apache Karaf">
+      </category>
+      <wizard
+            category="org.apache.karaf.eik.ui.karafWizardsCategory"
+            class="org.apache.karaf.eik.ui.wizards.NewKarafProjectWizard"
+            finalPerspective="org.eclipse.pde.ui.PDEPerspective"
+            icon="icons/obj16/karaf-logo-16x16.png"
+            id="org.apache.karaf.eik.ui.karafPlatformProject"
+            name="Apache Karaf Installation"
+            project="true">
+         <description>
+            Import an Apache Karaf installation in to the workspace.
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         id="org.apache.karaf.eik.KarafProjectNature"
+         name="Apache Karaf Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.apache.karaf.eik.ui.project.KarafProjectNature">
+         </run>
+      </runtime>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.projectNatureImages">
+      <image
+            icon="icons/obj16/karaf-logo-nature-16x16.png"
+            id="org.apache.karaf.eik.ui.KarafProjectNatureImage"
+            natureId="org.apache.karaf.eik.KarafProjectNature">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+            appearsBefore="org.eclipse.ui.navigator.resourceContent"
+            contentProvider="org.apache.karaf.eik.ui.navigator.KarafPlatformModelContentProvider"
+            icon="icons/obj16/karaf-logo-16x16.png"
+            id="org.apache.karaf.eik.ui.navigator.KarafResources"
+            labelProvider="org.apache.karaf.eik.ui.navigator.KarafPlatformModelLabelProvider"
+            name="Apache Karaf">
+         <triggerPoints>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.apache.karaf.eik.KarafProjectNature">
+               </test>
+            </adapt>
+         </triggerPoints>
+      </navigatorContent>
+      <navigatorContent
+            appearsBefore="org.apache.karaf.eik.ui.navigator.KarafResources"
+            contentProvider="org.apache.karaf.eik.ui.features.FeaturesContentProvider"
+            icon="icons/obj16/feature_obj.gif"
+            id="org.apache.karaf.eik.ui.navigator.KarafFeaturesContent"
+            labelProvider="org.apache.karaf.eik.ui.features.FeaturesLabelProvider"
+            name="Apache Karaf Features">
+         <triggerPoints>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="org.apache.karaf.eik.KarafProjectNature">
+               </test>
+            </adapt>
+         </triggerPoints>
+      </navigatorContent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerContentBinding
+            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <contentExtension
+                  pattern="org.apache.karaf.eik.ui.navigator.*">
+            </contentExtension>
+         </includes>
+      </viewerContentBinding>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.apache.karaf.eik.ui.internal.JavaFilePropertyTester"
+            id="org.apache.karaf.eik.ui.javaFilePropertyTester"
+            namespace="org.apache.karaf.eik.ui"
+            properties="name,directory,extension"
+            type="java.io.File">
+      </propertyTester>
+   </extension>
+   <extension
+         id="karafProjectBuilder"
+         name="Apache Karaf Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder>
+         <run
+               class="org.apache.karaf.eik.ui.project.KarafProjectBuilder">
+         </run>
+      </builder>
+   </extension>
+
+</plugin>

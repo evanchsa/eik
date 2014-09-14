@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.apache.aries.jmx.core
 Bundle-SymbolicName: org.apache.aries.jmx.core
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: lib/org.apache.aries.jmx.core-0.2-incubating.jar,
+Bundle-ClassPath: lib/org.apache.aries.jmx.core-1.0.0.jar,
  .
-Export-Package: org.apache.aries.jmx.codec;version="0.2.0.incubating"
+Export-Package: org.apache.aries.jmx.codec;version="1.0.0"
 Import-Package: javax.management,
  javax.management.openmbean,
  org.osgi.framework;version="1.5.0",
@@ -24,3 +24,4 @@ Import-Package: javax.management,
  org.osgi.service.startlevel;version="[1.1.0,2.0.0)",
  org.osgi.service.useradmin;version="1.1.0",
  org.osgi.util.tracker;version="[1.4.0,2.0.0)"
+

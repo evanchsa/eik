@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Karaf :: EIK :: Plugins :: Eclipse WTP UI Integration
+Bundle-SymbolicName: org.apache.karaf.eik.wtp.ui;singleton:=true
+Bundle-Version: 3.0.0
+Bundle-Activator: org.apache.karaf.eik.wtp.ui.KarafWtpUIPluginActivator
+Require-Bundle: org.eclipse.debug.ui;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.pde.ui;bundle-version="[3.2.0,4.0.0)",
+ org.eclipse.wst.common.project.facet.ui;bundle-version="[1.1.0,2.0.0)",
+ org.eclipse.wst.server.ui;bundle-version="[1.0.204,2.0.0)",
+ org.eclipse.wst.server.core;bundle-version="[1.0.204,2.0.0)",
+ org.eclipse.jdt.debug.ui;bundle-version="[3.2.0,4.0.0)",
+ org.apache.karaf.eik.core;bundle-version="[3.0.0,4.0.0)",
+ org.apache.karaf.eik.ui;bundle-version="[3.0.0,4.0.0)"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.apache.karaf.eik.wtp.ui
+

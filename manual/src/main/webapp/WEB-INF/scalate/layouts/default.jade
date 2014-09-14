@@ -1,0 +1,43 @@
+-# Licensed to the Apache Software Foundation (ASF) under one or more
+-# contributor license agreements.  See the NOTICE file distributed with
+-# this work for additional information regarding copyright ownership.
+-# The ASF licenses this file to You under the Apache License, Version 2.0
+-# (the "License"); you may not use this file except in compliance with
+-# the License.  You may obtain a copy of the License at
+-#
+-#      http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-@ var body: String
+-@ var title : String = "Apache Karaf EIK ${eik.version} Guides"
+
+- layout("/WEB-INF/scalate/layouts/headers.jade")
+  body
+    .container_12
+      .grid_12
+        .grid_4
+          img(src={uri("/images/karaf-logo.png")})
+
+        .grid_8
+          h1 Apache Karaf EIK
+
+          p.small
+            | This page is related to version ${eik.version}.
+      .clear
+
+      .grid_3.sidebar
+        = include("_navigation.conf")
+
+      .grid_9
+        !~~ body
+      .clear
+
+      .grid_12.footer
+        | &copy; 2008-2011 The Apache Software Foundation
+        br
+        | Apache Karaf, Karaf, Apache, the Apache feather logo, and the Apache Karaf project logo are trademarks of The Apache Software Foundation.
+      .clear

@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Karaf :: EIK :: Plugins :: JMX Data Exporter for Eclipse Integration
+Bundle-SymbolicName: org.apache.karaf.eik.jmx
+Bundle-Version: 3.0.0
+Bundle-Activator: org.apache.karaf.eik.jmx.KarafJMXPlugin
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
+ J2SE-1.5
+Import-Package: javax.management,
+ org.eclipse.osgi.service.resolver;version="1.4.0",
+ org.osgi.framework;version="1.4.0"
+Export-Package: org.apache.karaf.eik.jmx
+Bundle-Vendor: Apache Software Foundation
+

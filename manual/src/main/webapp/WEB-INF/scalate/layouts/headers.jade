@@ -1,0 +1,72 @@
+-# Licensed to the Apache Software Foundation (ASF) under one or more
+-# contributor license agreements.  See the NOTICE file distributed with
+-# this work for additional information regarding copyright ownership.
+-# The ASF licenses this file to You under the Apache License, Version 2.0
+-# (the "License"); you may not use this file except in compliance with
+-# the License.  You may obtain a copy of the License at
+-#
+-#      http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-@ var body: String
+-@ var title : String = "Apache Karaf EIK ${eik.version} Guides"
+-
+  response.setContentType("text/html")
+
+  // Only include the console if it's available and the engine is in dev mode.
+  val include_console = engine.isDevelopmentMode
+
+!!! Basic
+html(lang="en")
+  head
+    meta(http-equiv="Content-Type" content="text/html; charset=utf-8")
+
+    - if (include_console)
+      = include("/org/fusesource/scalate/console/console_head.scaml")
+      link(href={uri("/css/scalate/console.css")} rel="stylesheet" type="text/css")
+
+    link(href={uri("/css/reset.css")} rel="stylesheet" type="text/css")
+    link(href={uri("/css/grid.css")} rel="stylesheet" type="text/css")
+    link(href={uri("/css/style.css")} rel="stylesheet" type="text/css")
+
+    link(href={uri("/css/sh/shCore.css")} rel="stylesheet" type="text/css")
+    link(href={uri("/css/sh/shThemeDefault.css")} rel="stylesheet" type="text/css")
+    link(href={uri("/css/sh/shThemeEclipse.css")} rel="stylesheet" type="text/css")
+
+    script(type="text/javascript" src={uri("/js/jquery.js")})
+    script(type="text/javascript" src={uri("/js/sh/XRegExp.js")})
+    script(type="text/javascript" src={uri("/js/sh/shCore.js")})
+    script(type="text/javascript" src={uri("/js/sh/shBrushJava.js")})
+    script(type="text/javascript" src={uri("/js/sh/shBrushPlain.js")})
+    script(type="text/javascript" src={uri("/js/sh/shBrushXml.js")})
+    :javascript
+      $(function() {
+        // find all pre elements and add brush: java/xml to class attribute
+        $('pre').each(function(key, value) {
+          attrs = $(value).attr('class'); // old value
+          arr = attrs.split(' ');
+          $(value).attr('class', attrs + '; brush: ' + arr[0]); // just append brush..
+
+          SyntaxHighlighter.all({toolbar: true}); // paint my worl?d
+        })
+      })
+
+    - if (include_console)
+      link(href={uri("/css/scalate/console.css")} rel="stylesheet" type="text/css")
+
+    title
+      = title
+
+    - for ( css:String <- attributes.set("css") )
+      link(href={uri(css)} rel="stylesheet" type="text/css")
+    - for ( head:String <- attributes.list("head") )
+      !~~ head
+
+  !~~ body
+
+  - for ( js:String <- attributes.set("js") )
+    script(type="text/javascript" src={uri(js)})

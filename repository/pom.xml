@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!--
+
+        Licensed to the Apache Software Foundation (ASF) under one or more
+        contributor license agreements.  See the NOTICE file distributed with
+        this work for additional information regarding copyright ownership.
+        The ASF licenses this file to You under the Apache License, Version 2.0
+        (the "License"); you may not use this file except in compliance with
+        the License.  You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+    -->
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.karaf.eik</groupId>
+        <artifactId>parent</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
+
+    <groupId>org.apache.karaf.eik</groupId>
+    <artifactId>org.apache.karaf.eik.repository</artifactId>
+    <packaging>eclipse-repository</packaging>
+    <name>Apache Karaf :: EIK :: P2 Repository</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.apache.aries.jmx.api</artifactId>
+                                    <version>${aries.jmx.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.apache.aries.jmx.core</artifactId>
+                                    <version>${aries.jmx.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.fusesource.jansi</artifactId>
+                                    <version>${jansi.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.ops4j.pax.url.mvn</artifactId>
+                                    <version>${pax.url.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>sshd-core</artifactId>
+                                    <version>${sshd.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.apache.commons.collections</artifactId>
+                                    <version>${commons-collections.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>org.apache.commons.lang</artifactId>
+                                    <version>${commons-lang.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.plugins</groupId>
+                                    <artifactId>jdom</artifactId>
+                                    <version>${jdom.version}</version>
+                                    <outputDirectory>plugins</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.features</groupId>
+                                    <artifactId>org.apache.karaf.eik.feature</artifactId>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>features</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.features</groupId>
+                                    <artifactId>org.apache.karaf.eik.jmx.feature</artifactId>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>features</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf.eik.features</groupId>
+                                    <artifactId>org.apache.karaf.eik.wtp.feature</artifactId>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>features</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>target-platform-configuration</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <resolver>p2</resolver>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/repository</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>.</directory>
+                                    <includes>
+                                        <include>index.html</include>
+                                        <include>web/*</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>plugins</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>features</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <!-- this plugin configuration is used to store Eclipse m2e settings only. It doesn't affect the core Maven build -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[2.1,)</versionRange>
+                                        <goals>
+                                            <goal>copy</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

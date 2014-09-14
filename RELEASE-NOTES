@@ -1,0 +1,70 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+                    Apache Karaf EIK 0.9.0
+                    ======================
+
+  Overview
+  --------
+
+ This is the first release of Eclipse Integration for Karaf (EIK).
+ Thanks to EIK, you can run and manage Karaf directly in the Eclipse IDE.
+
+  Changelog
+  ---------
+
+ The following list shows the bug fixes and enhancements included in this release:
+
+** Bug
+    * [KARAF-1953] - Eik content.xml in update feature reference old feature
+    * [KARAF-1956] - EIk site doesn't build without Apache Commons Collections Wrapper
+    * [KARAF-1958] - EIk manifest must be terminated by a line break
+    * [KARAF-1959] - Content jar  and artifacts jar contains old reference
+    * [KARAF-1960] - Eik zip created from trunk does not work.
+    * [KARAF-1964] - Wrong check in ServicesViewerSorter BundlesViewerSorter
+    * [KARAF-1967] - An internal error occurred resolving org/ops4j/pax/url/mvn/MvnURLConnectionFactory
+    * [KARAF-1983] - EIK installation Cannot complete the install because one or more required items could not be found.
+    * [KARAF-1984] - cleanup eik pom
+    * [KARAF-1987] - Eik go in NPE when org.osgi.framework.system.packages.extra is not define
+    * [KARAF-2057] - NOTICE and LICENSE files are not correct
+    * [KARAF-2066] - Set EIK version to 0.9.0
+    * [KARAF-2092] - Remove empty action in BundlesView
+
+** Dependency upgrade
+    * [KARAF-2055] - Upgrade to Apache POM 12
+
+** Question
+    * [KARAF-1988] - Add commons-lang as EIK dependency
+    * [KARAF-2018] - org.apache.karaf.eik.app
+
+** Task
+    * [KARAF-1800] - Improve documentation EIK Building
+    * [KARAF-1847] - remove org.osgi.jmx
+    * [KARAF-1848] - remove old reference attribute
+    * [KARAF-1885] - Add src distribution
+    * [KARAF-1922] - Upgrade org.apache.aries.jmx.core from 0.3 to 1.0.0
+    * [KARAF-1929] - make pom.xml m2e friendly
+    * [KARAF-1950] - Eik pde archetype for Camel
+    * [KARAF-1961] - EIk source code cleanup from info* package
+    * [KARAF-1962] - Remove smk plugins and feature
+    * [KARAF-1969] - Remove org.apache.karaf.eik.p2.feature, org.apache.servicemix.kernel.main
+    * [KARAF-1970] - Minor Refactoring
+    * [KARAF-1979] - check manifest commons.collection in eik
+    * [KARAF-1980] - Stream Resources cleanup
+    * [KARAF-1985] - update eik build file
+    * [KARAF-1995] - Eik support matrix
+    * [KARAF-1996] - Refactoring org.apache.karaf.eik.update

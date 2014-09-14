@@ -40,7 +40,7 @@
         <wikitext-site>http://download.eclipse.org/tools/mylyn/update/weekly</wikitext-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/${platform-version-name}/dev-build/update-site</swtbot-site>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
-        <tycho-version>0.13.0</tycho-version>
+        <tycho-version>0.21.0</tycho-version>
         <aries.jmx.version>1.0.0</aries.jmx.version>
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
@@ -198,16 +198,6 @@
             <id>helios</id>
             <layout>p2</layout>
             <url>${eclipse-site}</url>
-        </repository>
-        <repository>
-            <id>swtbot</id>
-            <layout>p2</layout>
-            <url>${swtbot-site}</url>
-        </repository>
-        <repository>
-            <id>wikitext</id>
-            <layout>p2</layout>
-            <url>${wikitext-site}</url>
         </repository>
         <repository>
             <id>orbit</id>

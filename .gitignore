@@ -3,3 +3,4 @@ target
 *.i??
 .classpath
 .project
+lib

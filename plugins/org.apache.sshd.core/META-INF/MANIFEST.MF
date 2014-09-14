@@ -42,7 +42,6 @@ Export-Package: org.apache.sshd;version="0.5.0";
  org.apache.sshd.agent;version="0.5.0";
   uses:="org.apache.sshd.common.util,
    org.apache.sshd.common,
-   org.apache.tomcat.jni,
    org.apache.sshd.common.future,
    org.apache.sshd.server.session,
    org.apache.sshd.client.future,
@@ -128,7 +127,7 @@ Export-Package: org.apache.sshd;version="0.5.0";
    org.apache.sshd.common.util,
    javax.crypto.spec,
    javax.crypto",
- org.apache.sshd.common.compression;version="0.5.0";uses:="org.apache.sshd.common,org.apache.sshd.common.util,com.jcraft.jzlib",
+ org.apache.sshd.common.compression;version="0.5.0";uses:="org.apache.sshd.common,org.apache.sshd.common.util",
  org.apache.sshd.common.digest;version="0.5.0";uses:="org.apache.sshd.common.util,org.apache.sshd.common",
  org.apache.sshd.common.future;version="0.5.0";uses:="org.apache.mina.util",
  org.apache.sshd.common.kex;version="0.5.0";
@@ -139,14 +138,13 @@ Export-Package: org.apache.sshd;version="0.5.0";
  org.apache.sshd.common.keyprovider;version="0.5.0";
   uses:="org.apache.sshd.common,
    org.apache.sshd.common.util,
-   org.bouncycastle.openssl,
    org.slf4j",
  org.apache.sshd.common.mac;version="0.5.0";
   uses:="org.apache.sshd.common.util,
    javax.crypto.spec,
    org.apache.sshd.common,
    javax.crypto",
- org.apache.sshd.common.random;version="0.5.0";uses:="org.apache.sshd.common,org.bouncycastle.crypto.prng",
+ org.apache.sshd.common.random;version="0.5.0";uses:="org.apache.sshd.common",
  org.apache.sshd.common.session;version="0.5.0";
   uses:="org.apache.sshd.common.future,
    org.apache.mina.core.future,
@@ -161,7 +159,6 @@ Export-Package: org.apache.sshd;version="0.5.0";
   uses:="org.apache.sshd.common,
    org.apache.mina.core.buffer,
    org.slf4j,
-   org.bouncycastle.jce.provider,
    javax.crypto",
  org.apache.sshd.server;version="0.5.0";uses:="org.apache.sshd.server.session,org.apache.sshd.common,org.apache.sshd.common.util",
  org.apache.sshd.server.auth;version="0.5.0";
@@ -204,8 +201,7 @@ Export-Package: org.apache.sshd;version="0.5.0";
  org.apache.sshd.server.keyprovider;version="0.5.0";
   uses:="org.apache.sshd.common.util,
    org.apache.sshd.common.keyprovider,
-   org.slf4j,
-   org.bouncycastle.openssl",
+   org.slf4j",
  org.apache.sshd.server.session;version="0.5.0";
   uses:="org.apache.sshd.common.future,
    org.apache.mina.core.future,
@@ -268,8 +264,7 @@ Bundle-Description: The Apache Software Foundation provides support fo
  ire to create high quality software that leads the way in its field. 
     We consider ourselves not simply a group of projects sharing a ser
  ver, but rather a community of developers    and users.
-Import-Package: com.jcraft.jzlib;resolution:=optional,
- javax.crypto,
+Import-Package: javax.crypto,
  javax.crypto.interfaces,
  javax.crypto.spec,
  javax.security.auth,
@@ -284,10 +279,6 @@ Import-Package: com.jcraft.jzlib;resolution:=optional,
  org.apache.mina.transport.socket;version="[2.0,3)",
  org.apache.mina.transport.socket.nio;version="[2.0,3)",
  org.apache.mina.util;version="[2.0,3)",
- org.apache.tomcat.jni;resolution:=optional,
- org.bouncycastle.crypto.prng;resolution:=optional,
- org.bouncycastle.jce.provider;resolution:=optional,
- org.bouncycastle.openssl;resolution:=optional,
  org.slf4j;version="[1.5,2)"
 Bundle-SymbolicName: sshd-core
 Bundle-DocURL: http://www.apache.org/

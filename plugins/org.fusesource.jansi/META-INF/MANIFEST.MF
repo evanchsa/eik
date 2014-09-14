@@ -21,7 +21,6 @@ Bundle-ManifestVersion: 2
 Bundle-Description: Jansi is a java library for generating and interpr
  eting ANSI escape sequences.
 Specification-Version: 1.7
-Import-Package: sun.reflect;resolution:=optional
 Bundle-DocURL: http://fusesource.com/
 Archiver-Version: Plexus Archiver
 Bundle-ClassPath: lib/jansi-1.7.jar

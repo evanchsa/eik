@@ -36,14 +36,14 @@
     <properties>
         <manual.dir>${project.build.directory}/manual</manual.dir>
         <manual>${manual.dir}/eik-manual-${project.version}</manual>
-        <scalate.version>1.5.1</scalate.version>
+        <scalate.version>1.6.1</scalate.version>
         <eik.version>${project.version}</eik.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.fusesource.scalate</groupId>
-            <artifactId>scalate-wikitext</artifactId>
+            <artifactId>scalate-wikitext_2.9</artifactId>
             <version>${scalate.version}</version>
         </dependency>
         <dependency>
@@ -96,7 +96,7 @@
 
             <plugin>
                 <groupId>org.fusesource.scalate</groupId>
-                <artifactId>maven-scalate-plugin</artifactId>
+                <artifactId>maven-scalate-plugin_2.9</artifactId>
                 <version>${scalate.version}</version>
                 <executions>
                     <execution>
